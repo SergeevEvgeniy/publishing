@@ -1,0 +1,42 @@
+{
+  "name": "cloud_publishing",
+  "version": "1.0.0",
+  "description": "Artezio Cloud Publishing",
+  "scripts": {
+    "start": "webpack --config ./config/webpack.dev.config.js --watch",
+    "build": "webpack --config ./config/webpack.dev.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/arteziointernship/cloud-publishing.git"
+  },
+  "keywords": [
+    "Artezio"
+  ],
+  "author": "Nikolai Tishkevich",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/arteziointernship/cloud-publishing#readme",
+  "devDependencies": {
+    "css-loader": "^0.28.9",
+    "eslint": "^4.16.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
+    "handlebars-loader": "^1.6.0",
+    "style-loader": "^0.19.1",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-select": "^1.12.4",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+    "handlebars": "^4.0.11",
+    "jquery": "^3.3.1",
+    "moment": "^2.21.0",
+    "popper.js": "^1.12.9"
+  }
+}
