@@ -4,8 +4,7 @@
   "description": "Artezio Cloud Publishing",
   "scripts": {
     "start": "webpack --config ./config/webpack.dev.config.js --watch",
-    "build": "webpack --config ./config/webpack.dev.config.js",
-    "dev": "webpack-dev-server --config ./config/webpack.dev.config.js"
+    "build": "webpack --config ./config/webpack.dev.config.js"
   },
   "repository": {
     "type": "git",
