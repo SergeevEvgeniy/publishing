@@ -553,8 +553,6 @@ bh_unicode_properties.cache
 # Sublime-github package stores a github token in this file
 # https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
-.eslintrc.json
-/config/eslint.config.js
-.editorconfig
-package-lock.json
+#.eslintrc.json
+#/config/eslint.config.js
 /config/backend-config.js
