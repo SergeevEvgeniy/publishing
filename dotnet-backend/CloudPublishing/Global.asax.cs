@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using CloudPublishing.Models.Employees.Util;
 
 namespace CloudPublishing
 {
@@ -9,7 +10,7 @@ namespace CloudPublishing
     {
         protected void Application_Start()
         {
-            
+            EmployeeAutofacConfiguration.ConfigureContainer();
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

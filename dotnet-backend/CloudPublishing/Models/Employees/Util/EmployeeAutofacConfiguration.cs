@@ -21,7 +21,7 @@ namespace CloudPublishing.Models.Employees.Util
             builder.RegisterType<EducationRepository>().As<IAsyncRepository<Education>>();
 
             builder.RegisterType<EmployeeService>().As<IEmployeeService>();
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter("connectionString", "CloudPublishingEmployeeContext");
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter("connectionString", "EmployeeContext");
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

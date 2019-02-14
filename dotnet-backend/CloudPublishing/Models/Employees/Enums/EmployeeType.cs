@@ -1,6 +1,6 @@
 ﻿namespace CloudPublishing.Models.Employees.Enums
 {
-    public enum Type
+    public enum EmployeeType
     {
         E,
         J
