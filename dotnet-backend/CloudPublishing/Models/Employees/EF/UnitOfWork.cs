@@ -6,7 +6,7 @@ using CloudPublishing.Models.Employees.Repositories.Interfaces;
 
 namespace CloudPublishing.Models.Employees.EF
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly EmployeeContext context;
         private IAsyncRepository<Employee> employeeRepository;
