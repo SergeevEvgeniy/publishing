@@ -30,7 +30,7 @@ namespace CloudPublishing.Models.Employees.Repositories
             return await context.Employees.Include(x => x.Education).Where(predicate).OrderBy(x => x.Id).ToListAsync();
         }
 
-        public async Task Update(Employee entity)
+        public async Task<int> Update(Employee entity)
         {
             if (entity.ChiefEditor)
             {
@@ -39,14 +39,14 @@ namespace CloudPublishing.Models.Employees.Repositories
             }
 
             context.Entry(entity).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            return await context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task<int> Delete(int id)
         {
             var employee = await context.Employees.FindAsync(id);
             context.Employees.Remove(employee ?? throw new InvalidOperationException());
-            await context.SaveChangesAsync();
+            return await context.SaveChangesAsync();
         }
 
         public async Task<Employee> Create(Employee entity)

@@ -12,9 +12,9 @@ namespace CloudPublishing.Models.Employees.Repositories.Interfaces
 
         Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate);
 
-        Task Update(T entity);
+        Task<int> Update(T entity);
 
-        Task Delete(int id);
+        Task<int> Delete(int id);
 
         Task<T> Create(T entity);
     }

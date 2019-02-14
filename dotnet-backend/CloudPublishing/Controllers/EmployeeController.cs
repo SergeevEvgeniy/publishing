@@ -51,10 +51,15 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public async Task<ActionResult> List()
         {
-            var list = await service.GetEmployeeList();
+            var result = await service.GetEmployeeList();
+            if (!result.IsSuccessful)
+            {
+                // TODO: Реализовать сообщение об ошибке
+                return null;
+            }
 
             return View(new MapperConfiguration(cfg => cfg.CreateMap<EmployeeDTO, EmployeeViewModel>()).CreateMapper()
-                .Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(list.ToList()).Select(x =>
+                .Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.GetContent().ToList()).Select(x =>
                 {
                     // TODO: Enum.TryParse
                     x.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), x.Type)];
@@ -68,21 +73,33 @@ namespace CloudPublishing.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Не указан идентификатор");
             var result = await service.GetEmployeeById(id.Value);
+            if (!result.IsSuccessful)
+            {
+                return null;
+            }
+
             var model = new MapperConfiguration(cfg => cfg.CreateMap<EmployeeDTO, EmployeeEditModel>())
-                .CreateMapper().Map<EmployeeDTO, EmployeeEditModel>(result);
+                .CreateMapper().Map<EmployeeDTO, EmployeeEditModel>(result.GetContent());
             model.TypeList = GetEmployeeTypeSelectList();
-            model.EducationList = (await service.GetEducationList())
-                .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.Title}).ToList();
+            var educationsResult = await service.GetEducationList();
+            model.EducationList = !educationsResult.IsSuccessful
+                ? new List<SelectListItem>()
+                : educationsResult.GetContent()
+                    .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.Title}).ToList();
+
             return View(model);
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            var result = await service.GetEducationList();
             var model = new EmployeeCreateModel
             {
-                EducationList = (await service.GetEducationList())
-                    .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.Title}).ToList(),
+                EducationList = !result.IsSuccessful
+                    ? new List<SelectListItem>()
+                    : result.GetContent()
+                        .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Title }).ToList(),
                 TypeList = GetEmployeeTypeSelectList()
             };
             return View(model);
@@ -95,8 +112,11 @@ namespace CloudPublishing.Controllers
             {
                 var model = new MapperConfiguration(cfg => cfg.CreateMap<EmployeeModel, EmployeeCreateModel>())
                     .CreateMapper().Map<EmployeeModel, EmployeeCreateModel>(employee);
-                model.EducationList = (await service.GetEducationList())
-                    .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.Title}).ToList();
+                var educationsResult = await service.GetEducationList();
+                model.EducationList = !educationsResult.IsSuccessful
+                    ? new List<SelectListItem>()
+                    : educationsResult.GetContent()
+                        .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Title }).ToList();
                 model.TypeList = GetEmployeeTypeSelectList();
 
                 return View(model);
@@ -106,7 +126,10 @@ namespace CloudPublishing.Controllers
                 await service.CreateEmployee(
                     new MapperConfiguration(cfg => cfg.CreateMap<EmployeeModel, EmployeeDTO>())
                         .CreateMapper().Map<EmployeeModel, EmployeeDTO>(employee));
-
+            if (!result.IsSuccessful)
+            {
+                return null;
+            }
             return RedirectToAction("List");
         }
     }
