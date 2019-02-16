@@ -17,8 +17,8 @@ namespace CloudPublishing.Models.Employees.Util
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            builder.RegisterType<EmployeeRepository>().As<IAsyncRepository<Employee>>();
-            builder.RegisterType<EducationRepository>().As<IAsyncRepository<Education>>();
+            builder.RegisterType<EmployeeRepository>().As<IRepository<Employee>>();
+            builder.RegisterType<EducationRepository>().As<IRepository<Education>>();
 
             builder.RegisterType<EmployeeService>().As<IEmployeeService>();
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter("connectionString", "EmployeeContext");
