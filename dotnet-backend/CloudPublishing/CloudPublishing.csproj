@@ -173,7 +173,7 @@
     <Compile Include="Models\Employees\Enums\EmployeeType.cs" />
     <Compile Include="Models\Employees\Repositories\EducationRepository.cs" />
     <Compile Include="Models\Employees\Repositories\EmployeeRepository.cs" />
-    <Compile Include="Models\Employees\Repositories\Interfaces\IAsyncRepository.cs" />
+    <Compile Include="Models\Employees\Repositories\Interfaces\IRepository.cs" />
     <Compile Include="Models\Employees\Results\BadResult.cs" />
     <Compile Include="Models\Employees\Results\Interfaces\IResult.cs" />
     <Compile Include="Models\Employees\Results\SuccessfulResult.cs" />

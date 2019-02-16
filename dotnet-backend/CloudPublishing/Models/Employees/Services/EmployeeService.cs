@@ -30,9 +30,9 @@ namespace CloudPublishing.Models.Employees.Services
         {
             try
             {
-                var list = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
+                var list = await Task.Run(() => new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
                     .Map<IEnumerable<Employee>, List<EmployeeDTO>>(
-                        await unitOfWork.Employees.FindAllAsync(x => true));
+                        unitOfWork.Employees.FindAll(x => true)));
                 return new SuccessfulResult<IEnumerable<EmployeeDTO>>(list);
             }
             catch (DbException e)
@@ -45,9 +45,9 @@ namespace CloudPublishing.Models.Employees.Services
         {
             try
             {
-                var list = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper()
-                    .Map<IEnumerable<Education>, List<EducationDTO>>(
-                        await unitOfWork.Education.FindAllAsync(x => true));
+                var list = await Task.Run(() => new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>())
+                    .CreateMapper()
+                    .Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Education.FindAll(x => true)));
                 return new SuccessfulResult<IEnumerable<EducationDTO>>(list);
             }
             catch (DbException e)
@@ -60,9 +60,16 @@ namespace CloudPublishing.Models.Employees.Services
         {
             try
             {
-                var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
-                var employee = await unitOfWork.Employees.Create(mapper.Map<EmployeeDTO, Employee>(entity));
-                return new SuccessfulResult<EmployeeDTO>(mapper.Map<Employee, EmployeeDTO>(employee));
+                var employee = await Task.Run(() =>
+                {
+                    var target = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
+                        .Map<EmployeeDTO, Employee>(entity);
+                    unitOfWork.Employees.Create(target);
+                    unitOfWork.SaveAsync();
+                    return new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
+                        .Map<Employee, EmployeeDTO>(target);
+                });
+                return new SuccessfulResult<EmployeeDTO>(employee);
             }
             catch (DbException e)
             {
@@ -74,8 +81,9 @@ namespace CloudPublishing.Models.Employees.Services
         {
             try
             {
-                var employee = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                    .Map<Employee, EmployeeDTO>(await unitOfWork.Employees.FindAsync(id));
+                var employee = await Task.Run(() =>
+                    new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
+                        .Map<Employee, EmployeeDTO>(unitOfWork.Employees.Find(id)));
                 return new SuccessfulResult<EmployeeDTO>(employee);
             }
             catch (DbException e)
@@ -88,9 +96,13 @@ namespace CloudPublishing.Models.Employees.Services
         {
             try
             {
-                var rows = await unitOfWork.Employees.Update(
-                    new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile()))
-                        .CreateMapper().Map<EmployeeDTO, Employee>(entity));
+                var rows = await Task.Run(() =>
+                {
+                    unitOfWork.Employees.Update(
+                        new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile()))
+                            .CreateMapper().Map<EmployeeDTO, Employee>(entity));
+                    return unitOfWork.SaveAsync();
+                });
                 return new SuccessfulResult<int>(rows);
             }
             catch (DbException e)
@@ -103,7 +115,12 @@ namespace CloudPublishing.Models.Employees.Services
         {
             try
             {
-                return new SuccessfulResult<int>(await unitOfWork.Employees.Delete(id));
+                var rows = await Task.Run(() =>
+                {
+                    unitOfWork.Employees.Delete(id);
+                    return unitOfWork.SaveAsync();
+                });
+                return new SuccessfulResult<int>(rows);
             }
             catch (DbException e)
             {

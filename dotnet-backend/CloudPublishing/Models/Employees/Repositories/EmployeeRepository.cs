@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using CloudPublishing.Models.Employees.EF;
 using CloudPublishing.Models.Employees.Entities;
 using CloudPublishing.Models.Employees.Repositories.Interfaces;
 
 namespace CloudPublishing.Models.Employees.Repositories
 {
-    public class EmployeeRepository : IAsyncRepository<Employee>
+    public class EmployeeRepository : IRepository<Employee>
     {
         private readonly EmployeeContext context;
 
@@ -19,47 +18,43 @@ namespace CloudPublishing.Models.Employees.Repositories
             this.context = context;
         }
 
-        public async Task<Employee> FindAsync(int id)
+        public Employee Find(int id)
         {
-            return await context.Employees.Include(x => x.Education).FirstOrDefaultAsync(x => x.Id == id);
+            return context.Employees.Include(x => x.Education).FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Employee>> FindAllAsync(
+        public IEnumerable<Employee> FindAll(
             Expression<Func<Employee, bool>> predicate)
         {
-            return await context.Employees.Include(x => x.Education).Where(predicate).OrderBy(x => x.Id).ToListAsync();
+            return context.Employees.Include(x => x.Education).Where(predicate).OrderBy(x => x.Id).ToList();
         }
 
-        public async Task<int> Update(Employee entity)
+        public void Update(Employee entity)
         {
             if (entity.ChiefEditor)
             {
-                var chiefEditor = await context.Employees.FirstOrDefaultAsync(x => x.ChiefEditor);
+                var chiefEditor = context.Employees.FirstOrDefault(x => x.ChiefEditor);
                 if (chiefEditor != null && chiefEditor.Id != entity.Id) chiefEditor.ChiefEditor = false;
             }
 
             context.Entry(entity).State = EntityState.Modified;
-            return await context.SaveChangesAsync();
         }
 
-        public async Task<int> Delete(int id)
+        public void Delete(int id)
         {
-            var employee = await context.Employees.FindAsync(id);
+            var employee = context.Employees.Find(id);
             context.Employees.Remove(employee ?? throw new InvalidOperationException());
-            return await context.SaveChangesAsync();
         }
 
-        public async Task<Employee> Create(Employee entity)
+        public void Create(Employee entity)
         {
             if (entity.ChiefEditor)
             {
-                var chiefEditor = await context.Employees.Where(x => x.ChiefEditor).FirstOrDefaultAsync();
+                var chiefEditor = context.Employees.FirstOrDefault(x => x.ChiefEditor);
                 if (chiefEditor != null) chiefEditor.ChiefEditor = false;
             }
 
             context.Employees.Add(entity);
-            await context.SaveChangesAsync();
-            return entity;
         }
     }
 }
