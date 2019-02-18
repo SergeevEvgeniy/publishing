@@ -1,8 +1,6 @@
 ﻿using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
-using CloudPublishing.Models.Employees.EF;
-using CloudPublishing.Models.Employees.EF.Interfaces;
 using CloudPublishing.Models.Employees.Entities;
 using CloudPublishing.Models.Employees.Repositories;
 using CloudPublishing.Models.Employees.Repositories.Interfaces;
@@ -17,11 +15,9 @@ namespace CloudPublishing.Models.Employees.Util
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            builder.RegisterType<EmployeeRepository>().As<IRepository<Employee>>();
-            builder.RegisterType<EducationRepository>().As<IRepository<Education>>();
+            builder.RegisterType<EmployeeRepository>().As<IEmployeeRepository>().WithParameter("connectionString", "EmployeeContext");
 
             builder.RegisterType<EmployeeService>().As<IEmployeeService>();
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter("connectionString", "EmployeeContext");
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

@@ -89,48 +89,5 @@ namespace CloudPublishing.Controllers
 
             return View(model);
         }
-
-        [HttpGet]
-        public async Task<ActionResult> Create()
-        {
-            var result = await service.GetEducationList();
-            var model = new EmployeeCreateModel
-            {
-                EducationList = !result.IsSuccessful
-                    ? new List<SelectListItem>()
-                    : result.GetContent()
-                        .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Title }).ToList(),
-                TypeList = GetEmployeeTypeSelectList()
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Create(EmployeeModel employee)
-        {
-            if (!ModelState.IsValid)
-            {
-                var model = new MapperConfiguration(cfg => cfg.CreateMap<EmployeeModel, EmployeeCreateModel>())
-                    .CreateMapper().Map<EmployeeModel, EmployeeCreateModel>(employee);
-                var educationsResult = await service.GetEducationList();
-                model.EducationList = !educationsResult.IsSuccessful
-                    ? new List<SelectListItem>()
-                    : educationsResult.GetContent()
-                        .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Title }).ToList();
-                model.TypeList = GetEmployeeTypeSelectList();
-
-                return View(model);
-            }
-
-            var result =
-                await service.CreateEmployee(
-                    new MapperConfiguration(cfg => cfg.CreateMap<EmployeeModel, EmployeeDTO>())
-                        .CreateMapper().Map<EmployeeModel, EmployeeDTO>(employee));
-            if (!result.IsSuccessful)
-            {
-                return null;
-            }
-            return RedirectToAction("List");
-        }
     }
 }

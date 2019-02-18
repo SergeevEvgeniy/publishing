@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CloudPublishing.Models.Accounts.Entities;
 using CloudPublishing.Models.Employees.DTO;
 using CloudPublishing.Models.Employees.Entities;
 
@@ -14,9 +13,6 @@ namespace CloudPublishing.Models.Employees.Util
 
             CreateMap<EducationDTO, Education>();
             CreateMap<EmployeeDTO, Employee>();
-
-            CreateMap<EmployeeDTO, IdentityUser>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
         }
     }
 }

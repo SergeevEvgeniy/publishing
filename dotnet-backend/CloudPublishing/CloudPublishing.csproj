@@ -176,19 +176,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Accounts\Cryptography\EmployeePasswordHasher.cs" />
-    <Compile Include="Models\Accounts\Cryptography\Encrypt.cs" />
-    <Compile Include="Models\Accounts\Entities\IdentityUser.cs" />
-    <Compile Include="Models\Accounts\Identity\EmployeeUserStore.cs" />
-    <Compile Include="Models\Accounts\Services\AccountService.cs" />
-    <Compile Include="Models\Accounts\Services\Interfaces\IAccountService.cs" />
     <Compile Include="Models\Employees\DTO\EducationDTO.cs" />
     <Compile Include="Models\Employees\DTO\EmployeeDTO.cs" />
     <Compile Include="Models\Employees\Entities\BasicEntity.cs" />
