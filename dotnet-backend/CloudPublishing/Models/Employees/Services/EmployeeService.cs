@@ -3,8 +3,8 @@ using System.Data.Common;
 using System.Threading.Tasks;
 using AutoMapper;
 using CloudPublishing.Models.Employees.DTO;
-using CloudPublishing.Models.Employees.EF.Interfaces;
 using CloudPublishing.Models.Employees.Entities;
+using CloudPublishing.Models.Employees.Repositories.Interfaces;
 using CloudPublishing.Models.Employees.Results;
 using CloudPublishing.Models.Employees.Results.Interfaces;
 using CloudPublishing.Models.Employees.Services.Interfaces;
@@ -14,16 +14,16 @@ namespace CloudPublishing.Models.Employees.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IEmployeeRepository repository;
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        public EmployeeService(IEmployeeRepository repository)
         {
-            this.unitOfWork = unitOfWork;
+            this.repository = repository;
         }
 
         public void Dispose()
         {
-            unitOfWork?.Dispose();
+            repository?.Dispose();
         }
 
         public async Task<IResult<IEnumerable<EmployeeDTO>>> GetEmployeeList()
@@ -32,7 +32,7 @@ namespace CloudPublishing.Models.Employees.Services
             {
                 var list = await Task.Run(() => new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
                     .Map<IEnumerable<Employee>, List<EmployeeDTO>>(
-                        unitOfWork.Employees.FindAll(x => true)));
+                        repository.GetEmployeeList()));
                 return new SuccessfulResult<IEnumerable<EmployeeDTO>>(list);
             }
             catch (DbException e)
@@ -47,33 +47,12 @@ namespace CloudPublishing.Models.Employees.Services
             {
                 var list = await Task.Run(() => new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>())
                     .CreateMapper()
-                    .Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Education.FindAll(x => true)));
+                    .Map<IEnumerable<Education>, List<EducationDTO>>(repository.GetEducationList()));
                 return new SuccessfulResult<IEnumerable<EducationDTO>>(list);
             }
             catch (DbException e)
             {
                 return new BadResult<IEnumerable<EducationDTO>>(e);
-            }
-        }
-
-        public async Task<IResult<EmployeeDTO>> CreateEmployee(EmployeeDTO entity)
-        {
-            try
-            {
-                var employee = await Task.Run(() =>
-                {
-                    var target = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                        .Map<EmployeeDTO, Employee>(entity);
-                    unitOfWork.Employees.Create(target);
-                    unitOfWork.SaveAsync();
-                    return new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                        .Map<Employee, EmployeeDTO>(target);
-                });
-                return new SuccessfulResult<EmployeeDTO>(employee);
-            }
-            catch (DbException e)
-            {
-                return new BadResult<EmployeeDTO>(e);
             }
         }
 
@@ -83,48 +62,12 @@ namespace CloudPublishing.Models.Employees.Services
             {
                 var employee = await Task.Run(() =>
                     new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                        .Map<Employee, EmployeeDTO>(unitOfWork.Employees.Find(id)));
+                        .Map<Employee, EmployeeDTO>(repository.Find(id)));
                 return new SuccessfulResult<EmployeeDTO>(employee);
             }
             catch (DbException e)
             {
                 return new BadResult<EmployeeDTO>(e);
-            }
-        }
-
-        public async Task<IResult<int>> EditEmployee(EmployeeDTO entity)
-        {
-            try
-            {
-                var rows = await Task.Run(() =>
-                {
-                    unitOfWork.Employees.Update(
-                        new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile()))
-                            .CreateMapper().Map<EmployeeDTO, Employee>(entity));
-                    return unitOfWork.SaveAsync();
-                });
-                return new SuccessfulResult<int>(rows);
-            }
-            catch (DbException e)
-            {
-                return new BadResult<int>(e);
-            }
-        }
-
-        public async Task<IResult<int>> DeleteEmployee(int id)
-        {
-            try
-            {
-                var rows = await Task.Run(() =>
-                {
-                    unitOfWork.Employees.Delete(id);
-                    return unitOfWork.SaveAsync();
-                });
-                return new SuccessfulResult<int>(rows);
-            }
-            catch (DbException e)
-            {
-                return new BadResult<int>(e);
             }
         }
     }

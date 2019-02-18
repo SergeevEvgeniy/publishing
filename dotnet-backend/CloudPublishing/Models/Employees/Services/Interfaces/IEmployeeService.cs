@@ -12,12 +12,6 @@ namespace CloudPublishing.Models.Employees.Services.Interfaces
 
         Task<IResult<IEnumerable<EducationDTO>>> GetEducationList();
 
-        Task<IResult<EmployeeDTO>> CreateEmployee(EmployeeDTO entity);
-
         Task<IResult<EmployeeDTO>> GetEmployeeById(int id);
-
-        Task<IResult<int>> EditEmployee(EmployeeDTO entity);
-
-        Task<IResult<int>> DeleteEmployee(int id);
     }
 }

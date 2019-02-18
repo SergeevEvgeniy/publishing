@@ -9,13 +9,13 @@ using CloudPublishing.Models.Employees.Repositories.Interfaces;
 
 namespace CloudPublishing.Models.Employees.Repositories
 {
-    public class EmployeeRepository : IRepository<Employee>
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly EmployeeContext context;
 
-        public EmployeeRepository(EmployeeContext context)
+        public EmployeeRepository(string connectionString)
         {
-            this.context = context;
+            context = new EmployeeContext(connectionString);
         }
 
         public Employee Find(int id)
@@ -55,6 +55,26 @@ namespace CloudPublishing.Models.Employees.Repositories
             }
 
             context.Employees.Add(entity);
+        }
+
+        public void Dispose()
+        {
+            context?.Dispose();
+        }
+
+        public IEnumerable<Employee> GetEmployeeList()
+        {
+            return context.Employees.ToList();
+        }
+
+        public IEnumerable<Education> GetEducationList()
+        {
+            return context.Educations.ToList();
+        }
+
+        public int SaveChanges()
+        {
+            return context.SaveChanges();
         }
     }
 }
