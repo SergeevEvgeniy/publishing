@@ -13,9 +13,9 @@ namespace CloudPublishing.Models.Employees.Repositories
     {
         private readonly EmployeeContext context;
 
-        public EmployeeRepository(string connectionString)
+        public EmployeeRepository()
         {
-            context = new EmployeeContext(connectionString);
+            context = new EmployeeContext();
         }
 
         public Employee Find(int id)

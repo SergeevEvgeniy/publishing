@@ -15,7 +15,7 @@ namespace CloudPublishing.Models.Employees.Util
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            builder.RegisterType<EmployeeRepository>().As<IEmployeeRepository>().WithParameter("connectionString", "EmployeeContext");
+            builder.RegisterType<EmployeeRepository>().As<IEmployeeRepository>();
 
             builder.RegisterType<EmployeeService>().As<IEmployeeService>();
 

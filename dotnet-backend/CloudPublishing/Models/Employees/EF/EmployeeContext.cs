@@ -5,8 +5,8 @@ namespace CloudPublishing.Models.Employees.EF
 {
     public class EmployeeContext : DbContext
     {
-        public EmployeeContext(string connectionString)
-            : base(connectionString)
+        public EmployeeContext()
+            : base("EmployeeContext")
         {
         }
 
