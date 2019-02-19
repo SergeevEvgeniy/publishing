@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using CloudPublishing.Models.Accounts;
+using CloudPublishing.Models.Accounts.Identity;
 using CloudPublishing.Models.Employees.DTO;
 using CloudPublishing.Models.Employees.Entities;
-using CloudPublishing.Models.Identity;
 
 namespace CloudPublishing.Models.Employees.Util
 {
@@ -12,17 +13,22 @@ namespace CloudPublishing.Models.Employees.Util
             CreateMap<EducationDTO, Education>();
             CreateMap<EmployeeDTO, Employee>();
 
-            CreateMap<EmployeeDTO, EmployeeIdentity>()
+            CreateMap<EmployeeDTO, EmployeeUser>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
 
-            CreateMap<EmployeeIdentity, Employee>()
+            CreateMap<EmployeeUser, Employee>()
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserName));
 
-            CreateMap<Employee, EmployeeIdentity>()
+            CreateMap<Employee, EmployeeUser>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
                 .ForMember(dest => dest.Password, opt => opt.Ignore());
+
+            CreateMap<EmployeeUser, EmployeeDTO>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserName));
+
+            CreateMap<EmployeeUserCreateModel, EmployeeUser>();
         }
     }
 }

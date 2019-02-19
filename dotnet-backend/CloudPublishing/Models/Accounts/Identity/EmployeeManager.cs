@@ -3,11 +3,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 
-namespace CloudPublishing.Models.Identity
+namespace CloudPublishing.Models.Accounts.Identity
 {
-    public class EmployeeManager : UserManager<EmployeeIdentity, int>
+    public class EmployeeManager : UserManager<EmployeeUser, int>
     {
-        public EmployeeManager(IUserStore<EmployeeIdentity, int> store) : base(store)
+        public EmployeeManager(IUserStore<EmployeeUser, int> store) : base(store)
         {
         }
 

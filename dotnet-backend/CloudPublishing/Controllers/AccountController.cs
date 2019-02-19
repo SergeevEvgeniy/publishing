@@ -5,8 +5,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using CloudPublishing.Models.Accounts.Identity;
 using CloudPublishing.Models.Employees.ViewModels;
-using CloudPublishing.Models.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -19,23 +19,8 @@ namespace CloudPublishing.Controllers
 
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
-        public async Task<ActionResult> Login(string url)
+        public ActionResult Login(string url)
         {
-            //var user = new EmployeeIdentity()
-            //{
-            //    Type = "J",
-            //    Password = "123456",
-            //    ChiefEditor = false,
-            //    UserName = "evgeniu.chepinsky@mymail.com",
-            //    Address = "ул. Пожарная д.13 кв. 51",
-            //    BirthYear = 1990,
-            //    EducationId = 1,
-            //    FirstName = "Евгений",
-            //    LastName = "Чепинский",
-            //    MiddleName = "Дмитриевич",
-            //    Sex = "M"
-            //};
-            //var result = await UserManager.CreateAsync(user, user.Password);
             ViewBag.ReturnURL = url;
             return View();
         }

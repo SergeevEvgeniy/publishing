@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using CloudPublishing.Models.Employees.DTO;
+using Microsoft.AspNet.Identity;
 
-namespace CloudPublishing.Models.Identity
+namespace CloudPublishing.Models.Accounts.Identity
 {
-    public class EmployeeIdentity : IUser<int>
+    public class EmployeeUser : IUser<int>
     {
         public int Id { get; set; }
 
@@ -27,6 +28,8 @@ namespace CloudPublishing.Models.Identity
         public string Type { get; set; }
 
         public int? EducationId { get; set; }
+
+        public EducationDTO Education { get; set; }
 
         public bool ChiefEditor { get; set; }
     }

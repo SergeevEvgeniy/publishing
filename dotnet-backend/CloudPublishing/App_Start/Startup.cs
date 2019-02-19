@@ -1,5 +1,5 @@
-﻿using CloudPublishing.Models.Employees.EF;
-using CloudPublishing.Models.Identity;
+﻿using CloudPublishing.Models.Accounts.Identity;
+using CloudPublishing.Models.Employees.EF;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
