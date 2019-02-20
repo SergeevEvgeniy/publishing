@@ -1,7 +1,9 @@
-﻿using CloudPublishing.Models.Employees.DTO;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using CloudPublishing.Models.Employees.DTO;
 using Microsoft.AspNet.Identity;
 
-namespace CloudPublishing.Models.Accounts.Identity
+namespace CloudPublishing.Models.Accounts.Identity.Entities
 {
     public class EmployeeUser : IUser<int>
     {
@@ -32,5 +34,12 @@ namespace CloudPublishing.Models.Accounts.Identity
         public EducationDTO Education { get; set; }
 
         public bool ChiefEditor { get; set; }
+
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<EmployeeUser, int> manager, string authenticationType)
+        {
+            var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
+            // Add custom user claims here
+            return userIdentity;
+        }
     }
 }

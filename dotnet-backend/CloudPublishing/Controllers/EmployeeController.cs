@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
+using CloudPublishing.Models.Accounts.Enums;
 using CloudPublishing.Models.Employees.DTO;
 using CloudPublishing.Models.Employees.Enums;
 using CloudPublishing.Models.Employees.Services.Interfaces;
@@ -47,7 +48,6 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult> List()
         {
             var result = await service.GetEmployeeList();

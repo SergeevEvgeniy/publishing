@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CloudPublishing.Models.Accounts.Enums;
+using CloudPublishing.Models.Accounts.Identity.Entities;
 using CloudPublishing.Models.Employees.EF;
 using CloudPublishing.Models.Employees.Entities;
 using CloudPublishing.Models.Employees.Util;
 using Microsoft.AspNet.Identity;
 
-namespace CloudPublishing.Models.Accounts.Identity
+namespace CloudPublishing.Models.Accounts.Identity.Stores
 {
-    public class EmployeeStore : IUserPasswordStore<EmployeeUser, int>, IQueryableUserStore<EmployeeUser, int>
+    public class EmployeeStore : IUserPasswordStore<EmployeeUser, int>, IQueryableUserStore<EmployeeUser, int>,
+        IUserRoleStore<EmployeeUser, int>
     {
         private readonly EmployeeContext context;
 
@@ -18,6 +22,11 @@ namespace CloudPublishing.Models.Accounts.Identity
         {
             this.context = context;
         }
+
+        public IQueryable<EmployeeUser> Users =>
+            new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
+                .Map<IQueryable<Employee>, List<EmployeeUser>>(context.Employees.Include(x => x.Education))
+                .AsQueryable();
 
         public void Dispose()
         {
@@ -58,7 +67,7 @@ namespace CloudPublishing.Models.Accounts.Identity
         {
             return Task.Run(() =>
             {
-                var employee = context.Employees.Include(x=>x.Education).FirstOrDefault(x=>x.Id == userId);
+                var employee = context.Employees.Include(x => x.Education).FirstOrDefault(x => x.Id == userId);
                 return new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
                     .Map<Employee, EmployeeUser>(employee);
             });
@@ -89,8 +98,48 @@ namespace CloudPublishing.Models.Accounts.Identity
             return Task.FromResult(user.Password != null);
         }
 
-        public IQueryable<EmployeeUser> Users =>
-            new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                .Map<IQueryable<Employee>, List<EmployeeUser>>(context.Employees.Include(x=>x.Education)).AsQueryable();
+        public Task AddToRoleAsync(EmployeeUser user, string roleName)
+        {
+            return Task.FromResult<object>(null);
+        }
+
+        public Task RemoveFromRoleAsync(EmployeeUser user, string roleName)
+        {
+            return Task.FromResult<object>(null);
+        }
+
+        public Task<IList<string>> GetRolesAsync(EmployeeUser user)
+        {
+            IList<string> result = new List<string>();
+            if (user.ChiefEditor) result.Add(EmployeeUserRole.ChiefEditor.ToString());
+            if (user.Type == "J")
+                result.Add(EmployeeUserRole.Journalist.ToString());
+            else if (user.Type == "E") result.Add(EmployeeUserRole.Editor.ToString());
+
+            return Task.FromResult(result);
+        }
+
+        public Task<bool> IsInRoleAsync(EmployeeUser user, string roleName)
+        {
+            var result = Task.FromResult(false);
+            if (!Enum.TryParse(roleName, out EmployeeUserRole role)) return result;
+            switch (role)
+            {
+                case EmployeeUserRole.ChiefEditor:
+                    result = Task.FromResult(user.ChiefEditor);
+                    break;
+                case EmployeeUserRole.Editor:
+                    result = Task.FromResult(user.Type == "E");
+                    break;
+                case EmployeeUserRole.Journalist:
+                    result = Task.FromResult(user.Type == "J");
+                    break;
+                default:
+                    result = Task.FromResult(false);
+                    break;
+            }
+
+            return result;
+        }
     }
 }

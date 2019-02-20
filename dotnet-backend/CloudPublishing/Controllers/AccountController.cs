@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CloudPublishing.Models.Accounts.Identity;
+using CloudPublishing.Models.Accounts.Identity.Managers;
 using CloudPublishing.Models.Employees.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -15,7 +16,7 @@ namespace CloudPublishing.Controllers
 {
     public class AccountController : Controller
     {
-        private EmployeeManager UserManager => HttpContext.GetOwinContext().GetUserManager<EmployeeManager>();
+        private EmployeeUserManager UserManager => HttpContext.GetOwinContext().GetUserManager<EmployeeUserManager>();
 
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 

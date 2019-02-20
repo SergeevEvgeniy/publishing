@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CloudPublishing.Models.Accounts;
 using CloudPublishing.Models.Accounts.Identity;
+using CloudPublishing.Models.Accounts.Identity.Entities;
 using CloudPublishing.Models.Employees.DTO;
 using CloudPublishing.Models.Employees.Entities;
 
