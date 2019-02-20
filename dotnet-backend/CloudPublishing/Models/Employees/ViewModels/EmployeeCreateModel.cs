@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CloudPublishing.Models.Accounts
+namespace CloudPublishing.Models.Employees.ViewModels
 {
-    public class EmployeeUserCreateModel
+    public class EmployeeCreateModel
     {
         [Required]
         [StringLength(255)]

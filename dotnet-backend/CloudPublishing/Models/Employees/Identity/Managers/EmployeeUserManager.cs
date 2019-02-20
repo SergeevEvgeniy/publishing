@@ -1,11 +1,11 @@
-﻿using CloudPublishing.Models.Accounts.Identity.Entities;
-using CloudPublishing.Models.Accounts.Identity.Stores;
-using CloudPublishing.Models.Employees.EF;
+﻿using CloudPublishing.Models.Employees.EF;
+using CloudPublishing.Models.Employees.Identity.Entities;
+using CloudPublishing.Models.Employees.Identity.Stores;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 
-namespace CloudPublishing.Models.Accounts.Identity.Managers
+namespace CloudPublishing.Models.Employees.Identity.Managers
 {
     public class EmployeeUserManager : UserManager<EmployeeUser, int>
     {

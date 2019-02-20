@@ -1,4 +1,4 @@
-﻿namespace CloudPublishing.Models.Accounts.Enums
+﻿namespace CloudPublishing.Models.Employees.Enums
 {
     public enum EmployeeUserRole
     {

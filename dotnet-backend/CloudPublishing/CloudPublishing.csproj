@@ -202,22 +202,21 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Accounts\EmployeeUserCreateModel.cs" />
-    <Compile Include="Models\Accounts\Enums\EmployeeUserRole.cs" />
-    <Compile Include="Models\Accounts\Identity\Managers\EmployeeRoleManager.cs" />
-    <Compile Include="Models\Accounts\Identity\Entities\EmployeeRole.cs" />
-    <Compile Include="Models\Accounts\Identity\Stores\EmployeeRoleStore.cs" />
-    <Compile Include="Models\Accounts\OAuth\CustomOAuthProvider.cs" />
+    <Compile Include="Models\Employees\ViewModels\EmployeeCreateModel.cs" />
+    <Compile Include="Models\Employees\Enums\EmployeeUserRole.cs" />
+    <Compile Include="Models\Employees\Identity\Managers\EmployeeRoleManager.cs" />
+    <Compile Include="Models\Employees\Identity\Entities\EmployeeRole.cs" />
+    <Compile Include="Models\Employees\Identity\Stores\EmployeeRoleStore.cs" />
+    <Compile Include="Models\Employees\OAuth\CustomOAuthProvider.cs" />
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
-    <Compile Include="Models\Accounts\Identity\Entities\EmployeeUser.cs" />
-    <Compile Include="Models\Accounts\Identity\Managers\EmployeeUserManager.cs" />
-    <Compile Include="Models\Accounts\Identity\Stores\EmployeeStore.cs" />
+    <Compile Include="Models\Employees\Identity\Entities\EmployeeUser.cs" />
+    <Compile Include="Models\Employees\Identity\Managers\EmployeeUserManager.cs" />
+    <Compile Include="Models\Employees\Identity\Stores\EmployeeStore.cs" />
     <Compile Include="Models\Employees\DTO\EducationDTO.cs" />
     <Compile Include="Models\Employees\DTO\EmployeeDTO.cs" />
     <Compile Include="Models\Employees\Entities\BasicEntity.cs" />
@@ -322,7 +321,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Publishing\List.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Employee\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

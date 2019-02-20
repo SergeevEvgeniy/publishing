@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudPublishing.Models.Accounts.Enums;
-using CloudPublishing.Models.Accounts.Identity.Entities;
+using CloudPublishing.Models.Employees.Enums;
+using CloudPublishing.Models.Employees.Identity.Entities;
 using Microsoft.AspNet.Identity;
 
-namespace CloudPublishing.Models.Accounts.Identity.Stores
+namespace CloudPublishing.Models.Employees.Identity.Stores
 {
     public class EmployeeRoleStore : IRoleStore<EmployeeRole, int>
     {

@@ -1,12 +1,10 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using CloudPublishing.Models.Accounts.Identity;
-using CloudPublishing.Models.Accounts.Identity.Managers;
+﻿using System.Threading.Tasks;
+using CloudPublishing.Models.Employees.Identity.Managers;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 
-namespace CloudPublishing.Models.Accounts.OAuth
+namespace CloudPublishing.Models.Employees.OAuth
 {
     public class CustomOAuthProvider : OAuthAuthorizationServerProvider
     {

@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
-using CloudPublishing.Models.Accounts.Enums;
 using CloudPublishing.Models.Employees.DTO;
 using CloudPublishing.Models.Employees.Enums;
+using CloudPublishing.Models.Employees.Identity.Managers;
 using CloudPublishing.Models.Employees.Services.Interfaces;
 using CloudPublishing.Models.Employees.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 
 namespace CloudPublishing.Controllers
 {
@@ -38,6 +42,10 @@ namespace CloudPublishing.Controllers
             this.service = service;
         }
 
+        private EmployeeUserManager UserManager => HttpContext.GetOwinContext().GetUserManager<EmployeeUserManager>();
+
+        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
+
         private static List<SelectListItem> GetEmployeeTypeSelectList()
         {
             return new List<SelectListItem>
@@ -61,6 +69,46 @@ namespace CloudPublishing.Controllers
                     x.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), x.Sex)];
                     return x;
                 }));
+        }
+
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await UserManager.FindAsync(model.Email, model.Password);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Неверный логин или пароль.");
+                return View(model);
+            }
+
+            var claim = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignOut();
+            AuthenticationManager.SignIn(new AuthenticationProperties
+            {
+                IsPersistent = model.CheckOut
+            }, claim);
+
+            return RedirectToAction("List", "Employee");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Create()
+        {
+            var model = new E
+            return View();
         }
     }
 }

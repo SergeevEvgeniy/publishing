@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using CloudPublishing.Models.Employees.DTO;
 using Microsoft.AspNet.Identity;
 
-namespace CloudPublishing.Models.Accounts.Identity.Entities
+namespace CloudPublishing.Models.Employees.Identity.Entities
 {
     public class EmployeeUser : IUser<int>
     {

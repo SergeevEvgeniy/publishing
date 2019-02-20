@@ -4,14 +4,14 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using CloudPublishing.Models.Accounts.Enums;
-using CloudPublishing.Models.Accounts.Identity.Entities;
 using CloudPublishing.Models.Employees.EF;
 using CloudPublishing.Models.Employees.Entities;
+using CloudPublishing.Models.Employees.Enums;
+using CloudPublishing.Models.Employees.Identity.Entities;
 using CloudPublishing.Models.Employees.Util;
 using Microsoft.AspNet.Identity;
 
-namespace CloudPublishing.Models.Accounts.Identity.Stores
+namespace CloudPublishing.Models.Employees.Identity.Stores
 {
     public class EmployeeStore : IUserPasswordStore<EmployeeUser, int>, IQueryableUserStore<EmployeeUser, int>,
         IUserRoleStore<EmployeeUser, int>

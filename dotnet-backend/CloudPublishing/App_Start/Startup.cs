@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Configuration;
 using System.Web.Http;
-using CloudPublishing.Models.Accounts.Identity;
-using CloudPublishing.Models.Accounts.Identity.Managers;
-using CloudPublishing.Models.Accounts.OAuth;
 using CloudPublishing.Models.Employees.EF;
+using CloudPublishing.Models.Employees.Identity.Managers;
+using CloudPublishing.Models.Employees.OAuth;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -30,8 +29,8 @@ namespace CloudPublishing
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Login"),
-                LogoutPath = new PathString("/Account/LogOff"),
+                LoginPath = new PathString("/Employee/Login"),
+                // LogoutPath = new PathString("/Account/LogOff"),
                 ExpireTimeSpan = TimeSpan.FromMinutes(5.0),
             });
 
@@ -43,7 +42,7 @@ namespace CloudPublishing
             {
                 TokenEndpointPath = new PathString("/api/token"),
                 Provider = new CustomOAuthProvider(),
-                //AuthorizeEndpointPath = new PathString("/Account/ExternalLogin"),
+                // AuthorizeEndpointPath = new PathString("/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(4),
                 AllowInsecureHttp = true //Don't do this in production ONLY FOR DEVELOPING: ALLOW INSECURE HTTP!  
             });
