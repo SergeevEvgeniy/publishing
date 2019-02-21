@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CloudPublishing.Models.Employees.DTO
+namespace CloudPublishing.Models.Shared.DTO
 {
     public class EmployeeDTO
     {
-        [Key]
         public int Id { get; set; }
 
         [Required]

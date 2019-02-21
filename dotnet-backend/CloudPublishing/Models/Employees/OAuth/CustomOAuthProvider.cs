@@ -21,7 +21,7 @@ namespace CloudPublishing.Models.Employees.OAuth
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-            var userManager = context.OwinContext.GetUserManager<EmployeeUserManager>();
+            var userManager = context.OwinContext.GetUserManager<EmployeeManager>();
 
             var user = await userManager.FindAsync(context.UserName, context.Password);
 

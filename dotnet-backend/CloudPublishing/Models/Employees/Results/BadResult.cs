@@ -12,6 +12,10 @@ namespace CloudPublishing.Models.Employees.Results
             message = exception.Message;
         }
 
+        public BadResult(string message)
+        {
+            this.message = message;
+        }
 
         public bool IsSuccessful => false;
 

@@ -207,18 +207,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Employees\Services\Interfaces\IOwinEmployeeService.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeCreateModel.cs" />
     <Compile Include="Models\Employees\Enums\EmployeeUserRole.cs" />
     <Compile Include="Models\Employees\Identity\Managers\EmployeeRoleManager.cs" />
     <Compile Include="Models\Employees\Identity\Entities\EmployeeRole.cs" />
     <Compile Include="Models\Employees\Identity\Stores\EmployeeRoleStore.cs" />
     <Compile Include="Models\Employees\OAuth\CustomOAuthProvider.cs" />
+    <Compile Include="Models\Employees\ViewModels\EmployeeEditModel.cs" />
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
-    <Compile Include="Models\Employees\Identity\Entities\EmployeeUser.cs" />
-    <Compile Include="Models\Employees\Identity\Managers\EmployeeUserManager.cs" />
+    <Compile Include="Models\Employees\Identity\Managers\EmployeeManager.cs" />
     <Compile Include="Models\Employees\Identity\Stores\EmployeeStore.cs" />
-    <Compile Include="Models\Employees\DTO\EducationDTO.cs" />
-    <Compile Include="Models\Employees\DTO\EmployeeDTO.cs" />
+    <Compile Include="Models\Shared\DTO\EducationDTO.cs" />
+    <Compile Include="Models\Shared\DTO\EmployeeDTO.cs" />
     <Compile Include="Models\Employees\Entities\BasicEntity.cs" />
     <Compile Include="Models\Employees\Entities\Education.cs" />
     <Compile Include="Models\Employees\Entities\Employee.cs" />

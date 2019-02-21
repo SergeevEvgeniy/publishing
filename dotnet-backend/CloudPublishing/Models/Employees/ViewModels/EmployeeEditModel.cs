@@ -5,8 +5,11 @@ using System.Web.Mvc;
 
 namespace CloudPublishing.Models.Employees.ViewModels
 {
-    public class EmployeeCreateModel
+    public class EmployeeEditModel
     {
+        [Key]
+        public int Id { get; set; }
+
         [Required]
         [StringLength(255)]
         [DisplayName("Имя")]
@@ -27,7 +30,6 @@ namespace CloudPublishing.Models.Employees.ViewModels
         [DisplayName("E-mail")]
         public string Email { get; set; }
 
-        [Required]
         [StringLength(255)]
         [DataType(DataType.Password)]
         [DisplayName("Пароль")]

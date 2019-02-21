@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using CloudPublishing.Models.Employees.EF;
 using CloudPublishing.Models.Employees.Entities;
 using CloudPublishing.Models.Employees.Enums;
-using CloudPublishing.Models.Employees.Identity.Entities;
-using CloudPublishing.Models.Employees.Util;
 using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Models.Employees.Identity.Stores
 {
-    public class EmployeeStore : IUserPasswordStore<EmployeeUser, int>, IQueryableUserStore<EmployeeUser, int>,
-        IUserRoleStore<EmployeeUser, int>
+    public class EmployeeStore : IUserPasswordStore<Employee, int>, IUserRoleStore<Employee, int>
     {
         private readonly EmployeeContext context;
 
@@ -23,92 +18,76 @@ namespace CloudPublishing.Models.Employees.Identity.Stores
             this.context = context;
         }
 
-        public IQueryable<EmployeeUser> Users =>
-            new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                .Map<IQueryable<Employee>, List<EmployeeUser>>(context.Employees.Include(x => x.Education))
-                .AsQueryable();
-
         public void Dispose()
         {
             context?.Dispose();
         }
 
-        public async Task CreateAsync(EmployeeUser user)
+        public async Task CreateAsync(Employee user)
         {
-            var employee = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                .Map<EmployeeUser, Employee>(user);
-            context.Employees.Add(employee);
-            await context.SaveChangesAsync();
-        }
-
-        public async Task UpdateAsync(EmployeeUser user)
-        {
-            var employee = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                .Map<EmployeeUser, Employee>(user);
             if (user.ChiefEditor)
             {
                 var chiefEditor = await context.Employees.FirstOrDefaultAsync(x => x.ChiefEditor);
                 if (chiefEditor != null) chiefEditor.ChiefEditor = false;
             }
 
-            context.Entry(employee).State = EntityState.Modified;
+            context.Employees.Add(user);
             await context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(EmployeeUser user)
+        public async Task UpdateAsync(Employee user)
         {
-            var employee = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                .Map<EmployeeUser, Employee>(user);
-            context.Entry(employee).State = EntityState.Deleted;
+            var chiefEditor = await context.Employees.FirstOrDefaultAsync(x => x.ChiefEditor);
+            if (chiefEditor != null && chiefEditor.Id != user.Id && user.ChiefEditor) chiefEditor.ChiefEditor = false;
+
+            context.Entry(user).State = EntityState.Modified;
+
+            await context.SaveChangesAsync();
+        }
+
+        public Task DeleteAsync(Employee user)
+        {
+            context.Entry(user).State = EntityState.Deleted;
             return context.SaveChangesAsync();
         }
 
-        public Task<EmployeeUser> FindByIdAsync(int userId)
+        public Task<Employee> FindByIdAsync(int userId)
         {
-            return Task.Run(() =>
-            {
-                var employee = context.Employees.Include(x => x.Education).FirstOrDefault(x => x.Id == userId);
-                return new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                    .Map<Employee, EmployeeUser>(employee);
-            });
+            return context.Employees.Include(x => x.Education).FirstOrDefaultAsync(x => x.Id == userId);
         }
 
-        public Task<EmployeeUser> FindByNameAsync(string userName)
+        public Task<Employee> FindByNameAsync(string userName)
         {
-            return Task.Run(() =>
-            {
-                var employee = context.Employees.Include(x => x.Education).FirstOrDefault(x => x.Email == userName);
-                return new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper()
-                    .Map<Employee, EmployeeUser>(employee);
-            });
+            return context.Employees.Include(x => x.Education).FirstOrDefaultAsync(x => x.UserName == userName);
         }
 
-        public Task SetPasswordHashAsync(EmployeeUser user, string passwordHash)
+        public Task SetPasswordHashAsync(Employee user, string passwordHash)
         {
             return Task.FromResult(user.PasswordHash = passwordHash);
         }
 
-        public Task<string> GetPasswordHashAsync(EmployeeUser user)
+        public async Task<string> GetPasswordHashAsync(Employee user)
         {
-            return Task.FromResult(user.PasswordHash);
+            return (await context.Employees.AsNoTracking().FirstOrDefaultAsync(x => x.Id == user.Id))?.PasswordHash;
         }
 
-        public Task<bool> HasPasswordAsync(EmployeeUser user)
+        public async Task<bool> HasPasswordAsync(Employee user)
         {
-            return Task.FromResult(user.Password != null);
+            return (await context.Employees.AsNoTracking().FirstOrDefaultAsync(x => x.Id == user.Id))?.PasswordHash !=
+                   null;
         }
 
-        public Task AddToRoleAsync(EmployeeUser user, string roleName)
-        {
-            return Task.FromResult<object>(null);
-        }
-
-        public Task RemoveFromRoleAsync(EmployeeUser user, string roleName)
+        public Task AddToRoleAsync(Employee user, string roleName)
         {
             return Task.FromResult<object>(null);
         }
 
-        public Task<IList<string>> GetRolesAsync(EmployeeUser user)
+        public Task RemoveFromRoleAsync(Employee user, string roleName)
+        {
+            return Task.FromResult<object>(null);
+        }
+
+        public Task<IList<string>> GetRolesAsync(Employee user)
         {
             IList<string> result = new List<string>();
             if (user.ChiefEditor) result.Add(EmployeeUserRole.ChiefEditor.ToString());
@@ -119,27 +98,18 @@ namespace CloudPublishing.Models.Employees.Identity.Stores
             return Task.FromResult(result);
         }
 
-        public Task<bool> IsInRoleAsync(EmployeeUser user, string roleName)
+        public Task<bool> IsInRoleAsync(Employee user, string roleName)
         {
-            var result = Task.FromResult(false);
-            if (!Enum.TryParse(roleName, out EmployeeUserRole role)) return result;
-            switch (role)
+            var roleIsValid = Enum.TryParse(roleName, out EmployeeUserRole role);
+            if (!roleIsValid) return Task.FromResult(false);
+            var roles = new Dictionary<EmployeeUserRole, bool>
             {
-                case EmployeeUserRole.ChiefEditor:
-                    result = Task.FromResult(user.ChiefEditor);
-                    break;
-                case EmployeeUserRole.Editor:
-                    result = Task.FromResult(user.Type == "E");
-                    break;
-                case EmployeeUserRole.Journalist:
-                    result = Task.FromResult(user.Type == "J");
-                    break;
-                default:
-                    result = Task.FromResult(false);
-                    break;
-            }
+                {EmployeeUserRole.ChiefEditor, user.ChiefEditor},
+                {EmployeeUserRole.Editor, user.Type == "E"},
+                {EmployeeUserRole.Journalist, user.Type == "J"}
+            };
 
-            return result;
+            return Task.FromResult(roles[role]);
         }
     }
 }

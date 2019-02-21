@@ -15,9 +15,9 @@ namespace CloudPublishing.Models.Employees.Identity.Stores
         {
             roles = new List<EmployeeRole>
             {
-                new EmployeeRole{Id = 1, Name = EmployeeUserRole.ChiefEditor.ToString()},
-                new EmployeeRole{Id = 2, Name = EmployeeUserRole.Editor.ToString()},
-                new EmployeeRole{Id = 3, Name = EmployeeUserRole.Journalist.ToString()}
+                new EmployeeRole{Id = (int)EmployeeUserRole.ChiefEditor, Name = EmployeeUserRole.ChiefEditor.ToString()},
+                new EmployeeRole{Id = (int)EmployeeUserRole.Editor, Name = EmployeeUserRole.Editor.ToString()},
+                new EmployeeRole{Id = (int)EmployeeUserRole.Journalist, Name = EmployeeUserRole.Journalist.ToString()}
             };
         }
 

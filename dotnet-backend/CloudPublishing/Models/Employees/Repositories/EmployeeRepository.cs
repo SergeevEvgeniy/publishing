@@ -20,13 +20,13 @@ namespace CloudPublishing.Models.Employees.Repositories
 
         public Employee Find(int id)
         {
-            return context.Employees.Include(x => x.Education).FirstOrDefault(x => x.Id == id);
+            return context.Employees.Include(x => x.Education).AsNoTracking().FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<Employee> FindAll(
             Expression<Func<Employee, bool>> predicate)
         {
-            return context.Employees.Include(x => x.Education).Where(predicate).OrderBy(x => x.Id).ToList();
+            return context.Employees.Include(x => x.Education).Where(predicate).OrderBy(x => x.Id).AsNoTracking().ToList();
         }
 
         public void Update(Employee entity)
@@ -64,12 +64,12 @@ namespace CloudPublishing.Models.Employees.Repositories
 
         public IEnumerable<Employee> GetEmployeeList()
         {
-            return context.Employees.ToList();
+            return context.Employees.AsNoTracking().ToList();
         }
 
         public IEnumerable<Education> GetEducationList()
         {
-            return context.Educations.ToList();
+            return context.Educations.AsNoTracking().ToList();
         }
 
         public int SaveChanges()

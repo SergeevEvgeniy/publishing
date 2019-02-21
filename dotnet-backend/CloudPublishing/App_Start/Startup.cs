@@ -23,7 +23,7 @@ namespace CloudPublishing
         public void Configuration(IAppBuilder app)
         {
             app.CreatePerOwinContext(()=>new EmployeeContext());
-            app.CreatePerOwinContext<EmployeeUserManager>(EmployeeUserManager.Create);
+            app.CreatePerOwinContext<EmployeeManager>(EmployeeManager.Create);
             app.CreatePerOwinContext<EmployeeRoleManager>(EmployeeRoleManager.Create);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions

@@ -37,11 +37,11 @@ namespace CloudPublishing.Models.Employees.EF
                 .IsUnicode(false);
 
             modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.Email)
+                .Property(e => e.UserName)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.Password)
+                .Property(e => e.PasswordHash)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Entities.Employee>()
