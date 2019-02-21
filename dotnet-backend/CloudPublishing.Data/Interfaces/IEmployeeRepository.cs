@@ -3,8 +3,8 @@ using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Data.Interfaces
 {
-    public interface IEducationRepository
+    public interface IEmployeeRepository : IRepository<Employee>
     {
-        IEnumerable<Education> GetAll();
+        IEnumerable<Education> GetEducationList();
     }
 }

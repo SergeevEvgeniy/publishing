@@ -12,7 +12,6 @@ namespace CloudPublishing.Data.Repositories
         {
             context = new CloudPublishingContext(connectionString);
             Employees = new EmployeeRepository(context);
-            Educations = new EducationRepository(context);
         }
 
         public void Dispose()
@@ -20,13 +19,11 @@ namespace CloudPublishing.Data.Repositories
             context?.Dispose();
         }
 
-        public IRepository<Employee> Employees { get; }
+        public IEmployeeRepository Employees { get; }
 
-        public IEducationRepository Educations { get; }
-
-        public void Save()
+        public int Save()
         {
-            context.SaveChanges();
+            return context.SaveChanges();
         }
     }
 }

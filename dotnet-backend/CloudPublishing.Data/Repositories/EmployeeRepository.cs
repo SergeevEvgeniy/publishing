@@ -8,7 +8,7 @@ using CloudPublishing.Data.Interfaces;
 
 namespace CloudPublishing.Data.Repositories
 {
-    public class EmployeeRepository : IRepository<Employee>
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly CloudPublishingContext context;
 
@@ -46,6 +46,11 @@ namespace CloudPublishing.Data.Repositories
         {
             var entity = context.Employees.Find(id);
             if (entity != null) context.Employees.Remove(entity);
+        }
+
+        public IEnumerable<Education> GetEducationList()
+        {
+            return context.Educations.ToList();
         }
     }
 }

@@ -5,10 +5,8 @@ namespace CloudPublishing.Data.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Employee> Employees { get; }
+        IEmployeeRepository Employees { get; }
 
-        IEducationRepository Educations { get; }
-
-        void Save();
+        int Save();
     }
 }
