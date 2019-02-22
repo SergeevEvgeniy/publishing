@@ -9,6 +9,7 @@ namespace CloudPublishing.Models.Employees.Util
         public EmployeeMapProfile()
         {
             CreateMap<EmployeeDTO, EmployeeEditModel>();
+            CreateMap<EmployeeEditModel, EmployeeDTO>();
 
             CreateMap<EmployeeCreateModel, EmployeeDTO>();
         }

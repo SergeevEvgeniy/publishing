@@ -45,7 +45,7 @@ namespace CloudPublishing.Business.Services
         {
             try
             {
-                var list = mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Educations.GetAll());
+                var list = mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Employees.GetEducationList());
                 return new SuccessfulResult<IEnumerable<EducationDTO>>(list);
             }
             catch (InvalidOperationException e)
@@ -101,7 +101,7 @@ namespace CloudPublishing.Business.Services
                 var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
                 if (chiefEditor != null && !entity.ChiefEditor && chiefEditor.Id == entity.Id)
                     return new BadResult<int>("Сначала необходимо указать другого главного редактора");
-                if (chiefEditor != null && entity.ChiefEditor)
+                if (chiefEditor != null && entity.ChiefEditor && chiefEditor.Id != entity.Id)
                 {
                     chiefEditor.ChiefEditor = false;
                     unitOfWork.Employees.Update(chiefEditor);

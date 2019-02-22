@@ -8,7 +8,6 @@ using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.Enums;
-using CloudPublishing.Models.Employees.Identity.Managers;
 using CloudPublishing.Models.Employees.Util;
 using CloudPublishing.Models.Employees.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -45,10 +44,6 @@ namespace CloudPublishing.Controllers
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
         }
 
-        private EmployeeManager UserManager => HttpContext.GetOwinContext().GetUserManager<EmployeeManager>();
-
-        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
-
         private static List<SelectListItem> GetEmployeeTypeSelectList()
         {
             return new List<SelectListItem>
@@ -62,7 +57,7 @@ namespace CloudPublishing.Controllers
         {
             var list = service.GetEducationList();
             return list.IsSuccessful
-                ? list.GetContent().Select(x => new SelectListItem { Text = x.Title, Value = x.Id.ToString() })
+                ? list.GetContent().Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()})
                     .ToList()
                 : new List<SelectListItem>();
         }
@@ -90,24 +85,9 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model)
+        public ActionResult Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
-            var user = await UserManager.FindAsync(model.Email, model.Password);
-
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Неверный логин или пароль.");
-                return View(model);
-            }
-
-            var claim = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignOut();
-            AuthenticationManager.SignIn(new AuthenticationProperties
-            {
-                IsPersistent = model.CheckOut
-            }, claim);
 
             return RedirectToAction("List", "Employee");
         }

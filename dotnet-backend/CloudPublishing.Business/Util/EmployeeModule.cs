@@ -10,7 +10,7 @@ namespace CloudPublishing.Business.Util
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();// TODO: Общий вообще то
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter("connectionString", "EmployeeContext");// TODO: Общий вообще то
             builder.RegisterType<EmployeeService>().As<IEmployeeService>();
         }
     }

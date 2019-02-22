@@ -2,10 +2,6 @@
 using Autofac;
 using Autofac.Integration.Mvc;
 using CloudPublishing.Business.Util;
-using CloudPublishing.Models.Employees.Repositories;
-using CloudPublishing.Models.Employees.Repositories.Interfaces;
-using CloudPublishing.Models.Employees.Services;
-using CloudPublishing.Models.Employees.Services.Interfaces;
 
 namespace CloudPublishing.Infrastructure
 {
