@@ -1,7 +1,7 @@
 ﻿using System;
-using CloudPublishing.Models.Employees.Results.Interfaces;
+using CloudPublishing.Business.Results.Interfaces;
 
-namespace CloudPublishing.Models.Employees.Results
+namespace CloudPublishing.Business.Results
 {
     public class BadResult<T> : IResult<T>
     {

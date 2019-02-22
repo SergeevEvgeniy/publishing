@@ -1,13 +1,8 @@
-﻿using CloudPublishing.Models.Employees.DTO;
-using Microsoft.AspNet.Identity;
-
-namespace CloudPublishing.Models.Accounts.Identity
+﻿namespace CloudPublishing.Business.DTO
 {
-    public class EmployeeUser : IUser<int>
+    public class EmployeeDTO
     {
         public int Id { get; set; }
-
-        public string UserName { get; set; }
 
         public string FirstName { get; set; }
 
@@ -15,9 +10,9 @@ namespace CloudPublishing.Models.Accounts.Identity
 
         public string MiddleName { get; set; }
 
-        public string Password { get; set; }
+        public string Email { get; set; }
 
-        public string PasswordHash { get; set; }
+        public string Password { get; set; }
 
         public string Sex { get; set; }
 
@@ -29,8 +24,8 @@ namespace CloudPublishing.Models.Accounts.Identity
 
         public int? EducationId { get; set; }
 
-        public EducationDTO Education { get; set; }
-
         public bool ChiefEditor { get; set; }
+
+        public EducationDTO Education { get; set; }
     }
 }

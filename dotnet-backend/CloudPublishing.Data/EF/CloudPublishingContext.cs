@@ -1,12 +1,12 @@
 using System.Data.Entity;
-using CloudPublishing.Models.Employees.Entities;
+using CloudPublishing.Data.Entities;
 
-namespace CloudPublishing.Models.Employees.EF
+namespace CloudPublishing.Data.EF
 {
-    public class EmployeeContext : DbContext
+    public class CloudPublishingContext : DbContext
     {
-        public EmployeeContext()
-            : base("EmployeeContext")
+        public CloudPublishingContext(string connectionString)
+            : base(connectionString)
         {
         }
 
@@ -37,11 +37,11 @@ namespace CloudPublishing.Models.Employees.EF
                 .IsUnicode(false);
 
             modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.UserName)
+                .Property(e => e.Email)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.PasswordHash)
+                .Property(e => e.Password)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Entities.Employee>()
