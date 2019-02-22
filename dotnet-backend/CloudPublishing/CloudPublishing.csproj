@@ -218,7 +218,8 @@
     <Compile Include="Models\Employees\Results\Interfaces\IResult.cs" />
     <Compile Include="Models\Employees\Results\SuccessfulResult.cs" />
     <Compile Include="Infrastructure\AutofacConfiguration.cs" />
-    <Compile Include="Models\Employees\Util\EmployeeMapProfile.cs" />
+    <Compile Include="Util\AjaxOnlyAttribute.cs" />
+    <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Models\Publishings\Entities\Publishing.cs" />
     <Compile Include="Models\Publishings\Entities\Topic.cs" />
@@ -311,7 +312,6 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Publishing\List.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Review\Index.cshtml" />
     <Content Include="Views\Review\_ReviewLayout.cshtml" />
     <Content Include="Views\Review\InvalidModel.cshtml" />
@@ -319,6 +319,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\Employees\Util\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />

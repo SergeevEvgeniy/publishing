@@ -120,5 +120,24 @@ namespace CloudPublishing.Business.Services
                 return new BadResult<int>(e);
             }
         }
+
+        public IResult<int> DeleteEmployee(int? id)
+        {
+            if (id == null) return new BadResult<int>("Отсутствует идентификатор сущности");
+            try
+            {
+                var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
+                if (chiefEditor != null && chiefEditor.Id == id.Value)
+                    return new BadResult<int>("Сначала необходимо указать другого главного редактора");
+
+                unitOfWork.Employees.Delete(id.Value);
+
+                return new SuccessfulResult<int>(unitOfWork.Save());
+            }
+            catch (InvalidOperationException e)
+            {
+                return new BadResult<int>(e);
+            }
+        }
     }
 }
