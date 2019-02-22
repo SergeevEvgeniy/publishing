@@ -96,7 +96,6 @@ namespace CloudPublishing.Controllers
                 TypeList = GetEmployeeTypeSelectList(),
                 EducationList = GetEmployeeEducationList()
             };
-            if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
             return View(model);
         }
 
@@ -119,7 +118,7 @@ namespace CloudPublishing.Controllers
             TempData["Message"] = "Пользователь успешно создан. Количество измененных пользователей: " +
                                   result.GetContent();
 
-            return RedirectToAction("Create");
+            return RedirectToAction("List");
         }
 
         [HttpGet]
@@ -149,20 +148,27 @@ namespace CloudPublishing.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
             var result = service.EditEmployee(user);
+            if (!result.IsSuccessful)
+            {
+                ModelState.AddModelError("", result.GetFailureMessage());
+                return View(model);
+            }
+
             TempData["Message"] = "Данные пользователя успешно обновлены. Количество измененных пользователей: " +
                                   result.GetContent();
 
-            return !result.IsSuccessful ? RedirectToAction("Edit", new {id = model.Id}) : RedirectToAction("List");
+            return RedirectToAction("List");
         }
 
-        [HttpPost]
         [AjaxOnly]
         public ActionResult Delete(int? id)
         {
             var result = service.DeleteEmployee(id);
 
-            TempData["Message"] = !result.IsSuccessful ? result.GetFailureMessage() : "Пользователь успешно удален";
-            return null;
+            return Json(new {
+                isSuccessful = result.IsSuccessful,
+                message = result.IsSuccessful ? "Сотрудник успешно удален" : result.GetFailureMessage()
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

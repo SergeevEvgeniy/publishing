@@ -112,7 +112,6 @@ namespace CloudPublishing.Business.Services
                 }
 
                 unitOfWork.Employees.Update(employee);
-
                 return new SuccessfulResult<int>(unitOfWork.Save());
             }
             catch (InvalidOperationException e)

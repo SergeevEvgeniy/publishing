@@ -3,7 +3,7 @@ using System.Web.Http;
 
 namespace CloudPublishing.Controllers.RestApi
 {
-    [RoutePrefix("api/")]
+    [RoutePrefix("api")]
     public class EmployeeController : ApiController
     {
         [Route("journalists/{id:int}/statistics")]
