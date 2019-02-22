@@ -7,6 +7,8 @@ namespace CloudPublishing.Data.Interfaces
     {
         IEmployeeRepository Employees { get; }
 
+        IReviewRepository Reviews { get; }
+
         int Save();
     }
 }

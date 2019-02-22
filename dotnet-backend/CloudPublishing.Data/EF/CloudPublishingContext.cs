@@ -12,6 +12,7 @@ namespace CloudPublishing.Data.EF
 
         public virtual DbSet<Education> Educations { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Review> Review { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -54,6 +55,10 @@ namespace CloudPublishing.Data.EF
 
             modelBuilder.Entity<Entities.Employee>()
                 .Property(e => e.Type)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Review>()
+                .Property(e => e.Content)
                 .IsUnicode(false);
         }
     }

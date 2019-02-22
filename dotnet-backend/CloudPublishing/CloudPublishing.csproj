@@ -226,12 +226,6 @@
     <Compile Include="Models\Publishings\Repositories\IPublishingRepository.cs" />
     <Compile Include="Models\Publishings\Repositories\PublishingRepository.cs" />
     <Compile Include="Models\Publishings\Util\PublishingAutofacConfiguration.cs" />
-    <Compile Include="Models\Reviews\Entities\Review.cs" />
-    <Compile Include="Models\Reviews\EF\ReviewContext.cs" />
-    <Compile Include="Models\Reviews\Repositories\IReviewRepository.cs" />
-    <Compile Include="Models\Reviews\Repositories\ReviewRepository.cs" />
-    <Compile Include="Models\Reviews\Util\ReviewAutofacConfig.cs" />
-    <Compile Include="Models\Reviews\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +313,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\Reviews\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />

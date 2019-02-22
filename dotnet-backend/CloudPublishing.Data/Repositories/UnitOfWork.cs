@@ -12,6 +12,7 @@ namespace CloudPublishing.Data.Repositories
         {
             context = new CloudPublishingContext(connectionString);
             Employees = new EmployeeRepository(context);
+            Reviews = new ReviewRepository(context);
         }
 
         public void Dispose()
@@ -20,6 +21,8 @@ namespace CloudPublishing.Data.Repositories
         }
 
         public IEmployeeRepository Employees { get; }
+
+        public IReviewRepository Reviews { get; }
 
         public int Save()
         {

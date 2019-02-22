@@ -1,6 +1,4 @@
-﻿using CloudPublishing.Models.Reviews;
-using CloudPublishing.Models.Reviews.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,7 +7,7 @@ using System.Web.Mvc;
 namespace CloudPublishing.Controllers
 {
     // [Authorize(Roles = "redactor")]
-    public class ReviewController : Controller
+    /*public class ReviewController : Controller
     {
         private IReviewRepository repo;
 
@@ -116,5 +114,5 @@ namespace CloudPublishing.Controllers
         }
 
 
-    }
+    }*/
 }
