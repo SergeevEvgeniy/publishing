@@ -218,8 +218,6 @@
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\Employees\Identity\Managers\EmployeeManager.cs" />
     <Compile Include="Models\Employees\Identity\Stores\EmployeeStore.cs" />
-    <Compile Include="Models\Shared\DTO\EducationDTO.cs" />
-    <Compile Include="Models\Shared\DTO\EmployeeDTO.cs" />
     <Compile Include="Models\Employees\Entities\BasicEntity.cs" />
     <Compile Include="Models\Employees\Entities\Education.cs" />
     <Compile Include="Models\Employees\Entities\Employee.cs" />
@@ -234,7 +232,7 @@
     <Compile Include="Models\Employees\Results\SuccessfulResult.cs" />
     <Compile Include="Models\Employees\Services\EmployeeService.cs" />
     <Compile Include="Models\Employees\Services\Interfaces\IEmployeeService.cs" />
-    <Compile Include="Models\Employees\Util\EmployeeAutofacConfiguration.cs" />
+    <Compile Include="Infrastructure\AutofacConfiguration.cs" />
     <Compile Include="Models\Employees\Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Models\Publishings\Entities\Publishing.cs" />
@@ -345,6 +343,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CloudPublishing.Business\CloudPublishing.Business.csproj">
+      <Project>{d4b92165-ef15-4c6b-9838-a251b00fba58}</Project>
+      <Name>CloudPublishing.Business</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

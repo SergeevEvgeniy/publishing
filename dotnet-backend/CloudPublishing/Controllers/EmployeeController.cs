@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
+using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.Enums;
 using CloudPublishing.Models.Employees.Identity.Managers;
-using CloudPublishing.Models.Employees.Services.Interfaces;
 using CloudPublishing.Models.Employees.Util;
 using CloudPublishing.Models.Employees.ViewModels;
-using CloudPublishing.Models.Shared.DTO;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -58,9 +58,9 @@ namespace CloudPublishing.Controllers
             };
         }
 
-        private async Task<List<SelectListItem>> GetEmployeeEducationList()
+        private List<SelectListItem> GetEmployeeEducationList()
         {
-            var list = await service.GetEducationList();
+            var list = service.GetEducationList();
             return list.IsSuccessful
                 ? list.GetContent().Select(x => new SelectListItem { Text = x.Title, Value = x.Id.ToString() })
                     .ToList()
@@ -68,9 +68,9 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> List()
+        public ActionResult List()
         {
-            var result = await service.GetEmployeeList();
+            var result = service.GetEmployeeList();
             if (!result.IsSuccessful) return null;
 
             return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.GetContent().ToList())
@@ -113,12 +113,12 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
             var model = new EmployeeCreateModel
             {
                 TypeList = GetEmployeeTypeSelectList(),
-                EducationList = await GetEmployeeEducationList()
+                EducationList = GetEmployeeEducationList()
             };
             if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
             return View(model);
@@ -126,13 +126,13 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(EmployeeCreateModel model)
+        public ActionResult Create(EmployeeCreateModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
-            var result = await service.CreateEmployee(HttpContext.GetOwinContext(), user);
+            var result = service.CreateEmployee(user);
 
             if (!result.IsSuccessful)
             {
@@ -146,16 +146,16 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null) return null;
 
-            var result = await service.GetEmployeeById(id.Value);
+            var result = service.GetEmployeeById(id.Value);
             if (!result.IsSuccessful) return null;
 
             var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result.GetContent());
             model.TypeList = GetEmployeeTypeSelectList();
-            model.EducationList = await GetEmployeeEducationList();
+            model.EducationList = GetEmployeeEducationList();
 
             if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
 
@@ -164,14 +164,14 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(EmployeeEditModel model)
+        public ActionResult Edit(EmployeeEditModel model)
         {
             model.TypeList = GetEmployeeTypeSelectList();
-            model.EducationList = await GetEmployeeEducationList();
+            model.EducationList = GetEmployeeEducationList();
 
             if (!ModelState.IsValid) return View(model);
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
-            var result = await service.EditEmployee(HttpContext.GetOwinContext(), user);
+            var result = service.EditEmployee(user);
             TempData["Message"] = result.GetContent();
 
             return !result.IsSuccessful ? RedirectToAction("Edit", new {id = model.Id}) : RedirectToAction("List");

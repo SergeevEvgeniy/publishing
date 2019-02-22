@@ -59,7 +59,7 @@
     <Compile Include="Results\SuccessfulResult.cs" />
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
-    <Compile Include="Util\EmployeeBusinessAutofacConfiguration.cs" />
+    <Compile Include="Util\EmployeeModule.cs" />
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>
