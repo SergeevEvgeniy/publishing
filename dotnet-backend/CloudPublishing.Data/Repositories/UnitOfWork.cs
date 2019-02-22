@@ -1,5 +1,4 @@
 ﻿using CloudPublishing.Data.EF;
-using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 
 namespace CloudPublishing.Data.Repositories

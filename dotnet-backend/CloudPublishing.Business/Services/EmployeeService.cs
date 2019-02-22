@@ -77,7 +77,11 @@ namespace CloudPublishing.Business.Services
                 if (entity.ChiefEditor)
                 {
                     var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
-                    if (chiefEditor != null) chiefEditor.ChiefEditor = false;
+                    if (chiefEditor != null)
+                    {
+                        chiefEditor.ChiefEditor = false;
+                        unitOfWork.Employees.Update(chiefEditor);
+                    }
                 }
 
                 var employee = mapper.Map<EmployeeDTO, Employee>(entity);
@@ -99,7 +103,7 @@ namespace CloudPublishing.Business.Services
             {
                 var employee = mapper.Map<EmployeeDTO, Employee>(entity);
                 var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
-                if (chiefEditor != null && !entity.ChiefEditor && chiefEditor.Id == entity.Id)
+                if (chiefEditor != null && chiefEditor.Id == entity.Id && !entity.ChiefEditor)
                     return new BadResult<int>("Сначала необходимо указать другого главного редактора");
                 if (chiefEditor != null && entity.ChiefEditor && chiefEditor.Id != entity.Id)
                 {
