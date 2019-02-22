@@ -16,5 +16,7 @@ namespace CloudPublishing.Business.Services.Interfaces
         IResult<int> CreateEmployee(EmployeeDTO entity);
 
         IResult<int> EditEmployee(EmployeeDTO entity);
+
+        IResult<int> DeleteEmployee(int? id);
     }
 }

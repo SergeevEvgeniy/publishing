@@ -29,7 +29,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Employee> Find(Func<Employee, bool> predicate)
         {
-            return context.Employees.Include(x => x.Education).AsEnumerable().Where(predicate);
+            return context.Employees.Include(x => x.Education).AsNoTracking().AsEnumerable().Where(predicate);
         }
 
         public void Create(Employee item)
@@ -39,6 +39,10 @@ namespace CloudPublishing.Data.Repositories
 
         public void Update(Employee item)
         {
+            if (item.Password == null)
+            {
+                item.Password = context.Employees.AsNoTracking().FirstOrDefault(x => x.Id == item.Id)?.Password;
+            }
             context.Entry(item).State = EntityState.Modified;
         }
 
@@ -50,7 +54,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Education> GetEducationList()
         {
-            return context.Educations.ToList();
+            return context.Educations.AsNoTracking().ToList();
         }
     }
 }

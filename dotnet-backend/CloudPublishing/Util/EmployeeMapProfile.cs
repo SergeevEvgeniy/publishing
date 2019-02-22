@@ -2,7 +2,7 @@
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Models.Employees.ViewModels;
 
-namespace CloudPublishing.Models.Employees.Util
+namespace CloudPublishing.Util
 {
     public class EmployeeMapProfile : Profile
     {

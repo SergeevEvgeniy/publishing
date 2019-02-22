@@ -8,7 +8,8 @@ namespace CloudPublishing.Business.Util
     {
         public EmployeeBusinessMapProfile()
         {
-            CreateMap<Employee, EmployeeDTO>();
+            CreateMap<Employee, EmployeeDTO>()
+                .ForMember(dest => dest.Password, opt => opt.Ignore());
             CreateMap<Education, EducationDTO>();
         }
     }

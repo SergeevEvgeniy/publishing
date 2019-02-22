@@ -77,7 +77,11 @@ namespace CloudPublishing.Business.Services
                 if (entity.ChiefEditor)
                 {
                     var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
-                    if (chiefEditor != null) chiefEditor.ChiefEditor = false;
+                    if (chiefEditor != null)
+                    {
+                        chiefEditor.ChiefEditor = false;
+                        unitOfWork.Employees.Update(chiefEditor);
+                    }
                 }
 
                 var employee = mapper.Map<EmployeeDTO, Employee>(entity);
@@ -99,7 +103,7 @@ namespace CloudPublishing.Business.Services
             {
                 var employee = mapper.Map<EmployeeDTO, Employee>(entity);
                 var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
-                if (chiefEditor != null && !entity.ChiefEditor && chiefEditor.Id == entity.Id)
+                if (chiefEditor != null && chiefEditor.Id == entity.Id && !entity.ChiefEditor)
                     return new BadResult<int>("Сначала необходимо указать другого главного редактора");
                 if (chiefEditor != null && entity.ChiefEditor && chiefEditor.Id != entity.Id)
                 {
@@ -108,6 +112,25 @@ namespace CloudPublishing.Business.Services
                 }
 
                 unitOfWork.Employees.Update(employee);
+
+                return new SuccessfulResult<int>(unitOfWork.Save());
+            }
+            catch (InvalidOperationException e)
+            {
+                return new BadResult<int>(e);
+            }
+        }
+
+        public IResult<int> DeleteEmployee(int? id)
+        {
+            if (id == null) return new BadResult<int>("Отсутствует идентификатор сущности");
+            try
+            {
+                var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
+                if (chiefEditor != null && chiefEditor.Id == id.Value)
+                    return new BadResult<int>("Сначала необходимо указать другого главного редактора");
+
+                unitOfWork.Employees.Delete(id.Value);
 
                 return new SuccessfulResult<int>(unitOfWork.Save());
             }

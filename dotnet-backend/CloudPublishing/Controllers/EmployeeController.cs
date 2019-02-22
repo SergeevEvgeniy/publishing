@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.Enums;
-using CloudPublishing.Models.Employees.Util;
 using CloudPublishing.Models.Employees.ViewModels;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
+using CloudPublishing.Util;
 
 namespace CloudPublishing.Controllers
 {
@@ -65,6 +60,7 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult List()
         {
+            if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
             var result = service.GetEmployeeList();
             if (!result.IsSuccessful) return null;
 
@@ -120,7 +116,8 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            TempData["Message"] = result.GetContent();
+            TempData["Message"] = "Пользователь успешно создан. Количество измененных пользователей: " +
+                                  result.GetContent();
 
             return RedirectToAction("Create");
         }
@@ -152,9 +149,20 @@ namespace CloudPublishing.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
             var result = service.EditEmployee(user);
-            TempData["Message"] = result.GetContent();
+            TempData["Message"] = "Данные пользователя успешно обновлены. Количество измененных пользователей: " +
+                                  result.GetContent();
 
             return !result.IsSuccessful ? RedirectToAction("Edit", new {id = model.Id}) : RedirectToAction("List");
+        }
+
+        [HttpPost]
+        [AjaxOnly]
+        public ActionResult Delete(int? id)
+        {
+            var result = service.DeleteEmployee(id);
+
+            TempData["Message"] = !result.IsSuccessful ? result.GetFailureMessage() : "Пользователь успешно удален";
+            return null;
         }
     }
 }
