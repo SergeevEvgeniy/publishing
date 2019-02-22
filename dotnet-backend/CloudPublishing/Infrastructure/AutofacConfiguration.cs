@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
-using CloudPublishing.Business.Util;
+using CloudPublishing.Business.Infrastructure;
 
 namespace CloudPublishing.Infrastructure
 {
@@ -11,6 +11,7 @@ namespace CloudPublishing.Infrastructure
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            builder.RegisterModule<BusinessModule>();
             builder.RegisterModule<EmployeeModule>();
 
             var container = builder.Build();
