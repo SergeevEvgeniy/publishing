@@ -2,7 +2,10 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using CloudPublishing.Infrastructure;
+using Autofac;
+using Autofac.Integration.Mvc;
+using AutofacConfig;
+using CloudPublishing.AutofacConfig;
 
 namespace CloudPublishing
 {
@@ -10,13 +13,24 @@ namespace CloudPublishing
     {
         protected void Application_Start()
         {
-            AutofacConfiguration.ConfigureContainer();
+            ConfigureContainer();
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        private void ConfigureContainer()
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new GlobalModule());
+            builder.RegisterModule(new WebModule());
+
+            var container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            //GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver((IContainer)container);
         }
     }
 }

@@ -2,9 +2,9 @@
 using CloudPublishing.Business.Services;
 using CloudPublishing.Business.Services.Interfaces;
 
-namespace CloudPublishing.Business.Infrastructure
+namespace CloudPublishing.Business.AutofacConfig
 {
-    public class EmployeeModule : Module
+    public class BusinessModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
