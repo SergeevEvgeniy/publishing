@@ -89,10 +89,6 @@
     <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Jwt, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\Microsoft.Owin.Security.Jwt.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
@@ -179,10 +175,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Thinktecture.IdentityModel.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\Thinktecture.IdentityModel.Core.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
       <Private>True</Private>
@@ -203,7 +195,6 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
-    <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Controllers\RestApi\EmployeeController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Global.asax.cs">
@@ -219,12 +210,6 @@
     <Compile Include="Util\AjaxOnlyAttribute.cs" />
     <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
-    <Compile Include="Models\Publishings\Entities\Publishing.cs" />
-    <Compile Include="Models\Publishings\Entities\Topic.cs" />
-    <Compile Include="Models\Publishings\PublishingContext.cs" />
-    <Compile Include="Models\Publishings\Repositories\IPublishingRepository.cs" />
-    <Compile Include="Models\Publishings\Repositories\PublishingRepository.cs" />
-    <Compile Include="Models\Publishings\Util\PublishingAutofacConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -309,7 +294,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Publishing\List.cshtml" />
     <Content Include="Views\Review\Index.cshtml" />
     <Content Include="Views\Review\_ReviewLayout.cshtml" />
     <Content Include="Views\Review\InvalidModel.cshtml" />
