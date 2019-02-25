@@ -7,9 +7,6 @@
 <div class="row justify-content-end mb-3">
     <a href="@Url.Action("Create")" class="btn btn-success"><i class="fas fa-user-plus"></i>Новый сотрудник</a>
 </div>
-<div id="alertContainer">
-    @Html.Raw(ViewBag.Message)
-</div>
 <table class="table" id="listContainer">
     <thead>
         <tr>
@@ -53,66 +50,37 @@
                 <td>
                     <div>
                         <a href="@Url.Action("Edit", new {id = item.Id})" class="btn btn-default"><i class="fas fa-edit"></i></a>
-                        <button type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" class="btn btn-danger remove-button"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<div id="alertContainer" class="container" style="position: fixed; bottom: 0;">
+    
+</div>
 
 @section scripts
 {
+    @Scripts.Render("~/bundles/employeeScripts")
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var table = document.getElementById('listContainer');
-            var tbody = table.tBodies[0];
-            tbody.addEventListener('click', function (event) {
-                var target = event.target;
-                while (target !== this) {
-                    if (target.tagName === 'BUTTON') {
-                        var row = target.parentNode.parentNode.parentNode;
-                        $.ajax({
-                            type: "GET",
-                            url: "/Employee/Delete?id=" + row.id,
-                            contentType: "application/json",
-                            success: function (result) {
-                                if (result.isSuccessful) {
-                                    tbody.removeChild(row);
-                                }
-                                displayResult(result);
-                            },
-                            error: function () {
-                                displayResult("Неизвестная ошибка, пользователь не был удален");
-                            }
-                        });
-                    }
-                    target = target.parentNode;
-                }
+            var alertComponent = new AlertComponent(document.getElementById('alertContainer'), 2000);
+            var tableComponent = new AjaxTableComponent(document.getElementById('listContainer'),
+                'remove-button',
+                "/Employee/Delete?id=");
+
+            tableComponent.onElementRemove(function(result) {
+                alertComponent.showAlert(result.isSuccessful, result.message);
             });
+
+            var content = '@ViewBag.Message';
+
+            if (content) {
+                alertComponent.showAlert(true, content);
+            }
         });
 
-        function displayResult(result) {
-            var container = document.getElementById('alertContainer');
-            $(container).empty();
-            var div = document.createElement('DIV');
-            var button = document.createElement('BUTTON');
-            var i = document.createElement('I');
-            var text = document.createElement('SPAN');
-            button.appendChild(i);
-            div.appendChild(text);
-            div.appendChild(button);
-            div.className = 'alert alert-dismissible fade show';
-            div.classList.add(result.isSuccessful ? 'alert-success' : 'alert-danger');
-            div.setAttribute('role', 'alert');
-            text.textContent = result.message;
-            button.dataset.dismiss = 'alert';
-            button.className = 'close';
-            button.type = 'button';
-            button.setAttribute('aria-label', 'Close');
-            i.className = "fas fa-times";
-            i.setAttribute('aria-hidden', 'true');
-            container.appendChild(div);
-        }
     </script>
 }

@@ -103,7 +103,12 @@ namespace CloudPublishing.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(EmployeeCreateModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                model.TypeList = GetEmployeeTypeSelectList();
+                model.EducationList = GetEmployeeEducationList();
+                return View(model);
+            }
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
@@ -112,11 +117,14 @@ namespace CloudPublishing.Controllers
             if (!result.IsSuccessful)
             {
                 ModelState.AddModelError("", result.GetFailureMessage());
+                model.TypeList = GetEmployeeTypeSelectList();
+                model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
 
             TempData["Message"] = "Пользователь успешно создан. Количество измененных пользователей: " +
                                   result.GetContent();
+
 
             return RedirectToAction("List");
         }
@@ -142,15 +150,19 @@ namespace CloudPublishing.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EmployeeEditModel model)
         {
-            model.TypeList = GetEmployeeTypeSelectList();
-            model.EducationList = GetEmployeeEducationList();
-
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                model.TypeList = GetEmployeeTypeSelectList();
+                model.EducationList = GetEmployeeEducationList();
+                return View(model);
+            }
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
             var result = service.EditEmployee(user);
             if (!result.IsSuccessful)
             {
                 ModelState.AddModelError("", result.GetFailureMessage());
+                model.TypeList = GetEmployeeTypeSelectList();
+                model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
 
@@ -165,7 +177,8 @@ namespace CloudPublishing.Controllers
         {
             var result = service.DeleteEmployee(id);
 
-            return Json(new {
+            return Json(new
+            {
                 isSuccessful = result.IsSuccessful,
                 message = result.IsSuccessful ? "Сотрудник успешно удален" : result.GetFailureMessage()
             }, JsonRequestBehavior.AllowGet);
