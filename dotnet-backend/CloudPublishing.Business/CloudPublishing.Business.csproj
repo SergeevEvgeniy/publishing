@@ -51,8 +51,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\AdvertisingDTO.cs" />
+    <Compile Include="DTO\ArticleDTO.cs" />
     <Compile Include="DTO\EducationDTO.cs" />
     <Compile Include="DTO\EmployeeDTO.cs" />
+    <Compile Include="DTO\IssueDTO.cs" />
+    <Compile Include="DTO\MailingDTO.cs" />
+    <Compile Include="DTO\MailingResultDTO.cs" />
+    <Compile Include="DTO\MailingSubscriberDTO.cs" />
+    <Compile Include="DTO\PublishingDTO.cs" />
+    <Compile Include="DTO\ReviewDTO.cs" />
+    <Compile Include="DTO\TopicDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\BadResult.cs" />
     <Compile Include="Results\Interfaces\IResult.cs" />
