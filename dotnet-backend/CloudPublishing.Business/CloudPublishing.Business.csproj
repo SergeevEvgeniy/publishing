@@ -57,7 +57,9 @@
     <Compile Include="Results\BadResult.cs" />
     <Compile Include="Results\Interfaces\IResult.cs" />
     <Compile Include="Results\SuccessfulResult.cs" />
+    <Compile Include="Services\EmployeeApiService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\Interfaces\IEmployeeApiService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
     <Compile Include="Infrastructure\BusinessModule.cs" />
     <Compile Include="Infrastructure\EmployeeModule.cs" />

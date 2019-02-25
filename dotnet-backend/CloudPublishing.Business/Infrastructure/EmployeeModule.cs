@@ -9,6 +9,7 @@ namespace CloudPublishing.Business.Infrastructure
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<EmployeeService>().As<IEmployeeService>();
+            builder.RegisterType<EmployeeApiService>().As<IEmployeeApiService>();
         }
     }
 }

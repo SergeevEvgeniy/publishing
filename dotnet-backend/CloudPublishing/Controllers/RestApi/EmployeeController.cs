@@ -1,11 +1,19 @@
 ﻿using System.Web;
 using System.Web.Http;
+using CloudPublishing.Business.Services.Interfaces;
 
 namespace CloudPublishing.Controllers.RestApi
 {
     [RoutePrefix("api")]
     public class EmployeeController : ApiController
     {
+        private readonly IEmployeeApiService service;
+
+        public EmployeeController(IEmployeeApiService service)
+        {
+            this.service = service;
+        }
+
         [Route("journalists/{id:int}/statistics")]
         public IHttpActionResult GetEmployeeStatistics(int? id)
         {
