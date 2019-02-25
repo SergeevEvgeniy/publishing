@@ -8,7 +8,9 @@ namespace CloudPublishing
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/libs").Include(
-                "~/Scripts/jquery-3.0.0.js", 
+                "~/Scripts/jquery-3.0.0.js",
+                "~/Scripts/jquery.validate.js",
+                "~/Scripts/jquery.validate.unobtrusive.js",
                 "~/Scripts/bootstrap.js"));
 
             //Новые скрипты добавлять в этот бандл, а лучше новый бандл для каждой страницы
