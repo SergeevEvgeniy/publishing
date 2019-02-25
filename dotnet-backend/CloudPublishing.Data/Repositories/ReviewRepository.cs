@@ -27,12 +27,12 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Review> GetUserReviews(int reviewerId)
         {
-            return context.Review.Where(x => x.Reviwer_id == reviewerId);
+            return context.Review.Where(x => x.ReviwerId == reviewerId);
         }
 
         public Review Get(int articleId, int reviewerId)
         {
-            return context.Review.FirstOrDefault(x => x.Article_id == articleId && x.Reviwer_id == reviewerId);
+            return context.Review.FirstOrDefault(x => x.ArticleId == articleId && x.ReviwerId == reviewerId);
         }
 
         public void Update(Review item)

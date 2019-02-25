@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using CloudPublishing.Data.EF.EntityConfigurations;
 using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Data.EF
@@ -16,50 +17,9 @@ namespace CloudPublishing.Data.EF
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Education>()
-                .Property(e => e.Title)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Education>()
-                .HasMany(e => e.Employees)
-                .WithOptional(e => e.Education)
-                .HasForeignKey(e => e.EducationId);
-
-            modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.FirstName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.LastName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.MiddleName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.Email)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.Password)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.Sex)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.Address)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Entities.Employee>()
-                .Property(e => e.Type)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Review>()
-                .Property(e => e.Content)
-                .IsUnicode(false);
+            modelBuilder.Configurations.Add(new EmployeeEntityConfiguration());
+            modelBuilder.Configurations.Add(new EducationEntityConfiguration());
+            modelBuilder.Configurations.Add(new ReviewEntityConfiguration());
         }
     }
 }

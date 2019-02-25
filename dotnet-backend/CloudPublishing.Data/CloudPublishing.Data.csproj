@@ -57,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EF\CloudPublishingContext.cs" />
+    <Compile Include="EF\EntityConfigurations\EducationEntityConfiguration.cs" />
+    <Compile Include="EF\EntityConfigurations\EmployeeEntityConfiguration.cs" />
+    <Compile Include="EF\EntityConfigurations\ReviewEntityConfiguration.cs" />
     <Compile Include="Entities\Education.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\Publishing.cs" />
