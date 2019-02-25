@@ -9,8 +9,6 @@ namespace CloudPublishing.Data.Interfaces
 
         T Get(int id);
 
-        IEnumerable<T> Find(Func<T, bool> predicate);
-
         void Create(T item);
 
         void Update(T item);
