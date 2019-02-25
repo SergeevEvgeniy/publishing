@@ -7,11 +7,12 @@ namespace CloudPublishing.Data.Repositories
     {
         private readonly CloudPublishingContext context;
 
+        private readonly IEmployeeRepository employees = null;
+        private readonly IReviewRepository reviews = null;
+
         public UnitOfWork(string connectionString)
         {
             context = new CloudPublishingContext(connectionString);
-            Employees = new EmployeeRepository(context);
-            Reviews = new ReviewRepository(context);
         }
 
         public void Dispose()
@@ -19,9 +20,9 @@ namespace CloudPublishing.Data.Repositories
             context?.Dispose();
         }
 
-        public IEmployeeRepository Employees { get; }
+        public IEmployeeRepository Employees => employees?? new EmployeeRepository(context);
 
-        public IReviewRepository Reviews { get; }
+        public IReviewRepository Reviews => reviews ?? new ReviewRepository(context);
 
         public int Save()
         {
