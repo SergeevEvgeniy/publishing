@@ -2,7 +2,6 @@
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
-using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 
 namespace CloudPublishing

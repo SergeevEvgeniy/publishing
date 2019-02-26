@@ -55,9 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacConfig\BusinessModule.cs" />
-    <Compile Include="Converters\ConvertersExtention.cs" />
     <Compile Include="DTO\AdvertisingDTO.cs" />
     <Compile Include="DTO\ArticleDTO.cs" />
+    <Compile Include="DTO\DetailedReviewDTO.cs" />
     <Compile Include="DTO\EducationDTO.cs" />
     <Compile Include="DTO\EmployeeDTO.cs" />
     <Compile Include="DTO\IssueDTO.cs" />
@@ -75,8 +75,8 @@
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeApiService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
-    <Compile Include="Services\Interfaces\IPublishingService.cs" />
-    <Compile Include="Services\PublishingService.cs" />
+    <Compile Include="Services\Interfaces\IReviewService.cs" />
+    <Compile Include="Services\ReviewService.cs" />
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>
