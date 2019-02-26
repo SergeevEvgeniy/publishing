@@ -74,6 +74,7 @@
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeApiService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
+    <Compile Include="Services\Interfaces\IReviewService.cs" />
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>
