@@ -3,29 +3,56 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-collapse collapse">
-                @*<ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                </ul>*@
-            </div>
-        </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Cloud <i class="fas fa-cloud-sun"></i> Publishing</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="employeeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                    Сотрудники
+                </a>
+                <div class="dropdown-menu" aria-labelledby="employeeDropdown">
+                    @Html.ActionLink("Список сотрудников", "List", "Employee", null, new { @class = "dropdown-item" })
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
+                    {
+                        @Html.ActionLink("Добавить сотрудника", "Create", "Employee", null, new { @class = "dropdown-item" })
+                    }
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav my-lg-0">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <li class="nav-item active">
+                    @Html.ActionLink("Авторизация","Login","Employee", null, new {@class="nav-link"})
+                </li>
+            }
+            else
+            {
+                <li class="nav-item dropdown">
+
+                </li>
+            }
+        </ul>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
-    @Scripts.Render("~/bundles/libs")
-    @RenderSection("scripts", required: false)
+</nav>
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Cloud Publishing</p>
+    </footer>
+</div>
+@Scripts.Render("~/bundles/libs")
+@RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,6 +1,11 @@
 ﻿@using CloudPublishing.Models.Employees.Enums
 @model CloudPublishing.Models.Employees.ViewModels.EmployeeEditModel
 
+@{
+    ViewBag.Title = "Редактирование сотрудника" + Model.Email;
+}
+
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()

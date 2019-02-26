@@ -1,5 +1,9 @@
 ﻿@model CloudPublishing.Models.Employees.ViewModels.LoginViewModel
 
+@{
+    ViewBag.Title = "Авторизация";
+}
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()

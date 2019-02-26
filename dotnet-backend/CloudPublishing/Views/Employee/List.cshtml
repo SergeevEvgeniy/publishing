@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CloudPublishing.Models.Employees.ViewModels.EmployeeViewModel>
 
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "Список сотрудников";
 }
 
 <div class="row justify-content-end mb-3">
@@ -9,78 +9,83 @@
 </div>
 <table class="table" id="listContainer">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayName("Имя")
-            </th>
-            <th>
-                @Html.DisplayName("Фамилия")
-            </th>
-            <th>
-                @Html.DisplayName("Пол")
-            </th>
-            <th>
-                @Html.DisplayName("Год рождения")
-            </th>
-            <th>
-                @Html.DisplayName("Тип сотрудника")
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayName("Имя")
+        </th>
+        <th>
+            @Html.DisplayName("Фамилия")
+        </th>
+        <th>
+            @Html.DisplayName("Пол")
+        </th>
+        <th>
+            @Html.DisplayName("Год рождения")
+        </th>
+        <th>
+            @Html.DisplayName("Тип сотрудника")
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr id="@item.Id">
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sex)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BirthYear)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Type)
-                </td>
-                <td>
-                    <div>
-                        <a href="@Url.Action("Edit", new {id = item.Id})" class="btn btn-default"><i class="fas fa-edit"></i></a>
-                        <button type="button" class="btn btn-danger remove-button"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                </td>
-            </tr>
-        }
+    @foreach (var item in Model)
+    {
+        <tr id="@item.Id">
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthYear)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                <div>
+                    <a href="@Url.Action("Edit", new {id = item.Id})" class="btn btn-default">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button type="button" class="btn btn-danger remove-button">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
-<div id="alertContainer" class="container" style="position: fixed; bottom: 0;">
-    
+<div id="alertContainer" class="container" style="bottom: 0; position: fixed;">
+
 </div>
 
 @section scripts
 {
     @Scripts.Render("~/bundles/employeeScripts")
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var alertComponent = new AlertComponent(document.getElementById('alertContainer'), 2000);
-            var tableComponent = new AjaxTableComponent(document.getElementById('listContainer'),
-                'remove-button',
-                "/Employee/Delete?id=");
+        document.addEventListener('DOMContentLoaded',
+            function() {
+                var alertComponent = new AlertComponent(document.getElementById('alertContainer'), 2000);
+                var tableComponent = new AjaxTableComponent(document.getElementById('listContainer'),
+                    'remove-button',
+                    "/Employee/Delete?id=");
 
-            tableComponent.onElementRemove(function(result) {
-                alertComponent.showAlert(result.isSuccessful, result.message);
+                tableComponent.onElementRemove(function(result) {
+                    alertComponent.showAlert(result.isSuccessful, result.message);
+                });
+
+                var content = '@ViewBag.Message';
+
+                if (content) {
+                    alertComponent.showAlert(true, content);
+                }
             });
-
-            var content = '@ViewBag.Message';
-
-            if (content) {
-                alertComponent.showAlert(true, content);
-            }
-        });
 
     </script>
 }
