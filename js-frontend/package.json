@@ -17,6 +17,7 @@
   "license": "MIT",
   "homepage": "https://bitbucket.org/arteziointernship/cloud-publishing#readme",
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.7.2",
     "css-loader": "^2.0.2",
     "eslint": "^5.12.1",
     "eslint-config-standard": "^11.0.0",
