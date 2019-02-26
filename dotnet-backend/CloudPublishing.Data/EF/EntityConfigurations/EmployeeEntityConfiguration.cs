@@ -67,7 +67,7 @@ namespace CloudPublishing.Data.EF.EntityConfigurations
 
             Property(e => e.EducationId).HasColumnName("education_id");
 
-            Property(e => e.EducationId).HasColumnName("chief_editor");
+            Property(e => e.ChiefEditor).HasColumnName("chief_editor");
         }
     }
 }
