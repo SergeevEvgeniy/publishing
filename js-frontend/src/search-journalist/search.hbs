@@ -1,0 +1,57 @@
+<form>
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 class="form-title">Поиск журналистов</h4>
+        </div>
+        <div class="col-sm-6">
+            <div class="row input-block">
+                <label class="col-sm-4 text-right font-weight-bold">Издание:</label>
+                <div class="col-sm-8" id="publishing">
+                    <select name="publishing" class="form-control">
+                        <option disabled selected>Выберите издание</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row input-block d-none">
+                <label class="col-sm-4 text-right font-weight-bold">Выпуск:</label>
+                <div class="col-sm-8" id="issue">
+                    <select name="issue" class="form-control">
+                        <option disabled selected>Выберите выпуск</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row input-block">
+                <label class="col-sm-4 text-right font-weight-bold">Фамилия:</label>
+                <div class="col-sm-8">
+                    <input name="last_name" class="form-control" id="lastName" type="text"
+                           placeholder="Введите фамилию или её часть">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6" id="topicBlock">
+            <div class="row input-block">
+                <label class="col-sm-4 text-right font-weight-bold">Рубрика:</label>
+                <div class="col-sm-8" id="topic">
+                    <select name="topic" class="form-control">
+                        <option disabled selected>Выберите рубрику</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row input-block">
+                <label class="col-sm-4 text-right font-weight-bold">Название статьи:</label>
+                <div class="col-sm-8">
+                    <input name="article" class="form-control" id="article" type="text"
+                           placeholder="Введите название статьи или её часть">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 text-right">
+            <button type="submit" class="btn btn-primary" id="searchJournalist">
+                <i class="fas fa-search"></i>
+                Найти
+            </button>
+            <button class="btn btn-primary" id="clearJournalistSearch">Очистить</button>
+        </div>
+    </div>
+</form>
+<div id="searchResult"></div>

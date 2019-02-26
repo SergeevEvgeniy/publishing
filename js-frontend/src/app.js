@@ -1,8 +1,10 @@
 var $ = require('jquery');
-var homeComponent = require('./home/home-component');
-
+//var homeComponent = require('./home/home-component');
+var SearchJournalistComponent = require('./search-journalist/search-component');
 $(function onReady() {
-    homeComponent.render();
+    var $app = $('#app');
+    var searchComponent = new SearchJournalistComponent($app);
+    searchComponent.render();
 });
 
 require('bootstrap/dist/css/bootstrap.css');
