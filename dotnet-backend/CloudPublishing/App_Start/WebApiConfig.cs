@@ -1,4 +1,8 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http.Formatting;
+using System.Web.Http;
+using Autofac;
+using Autofac.Integration.WebApi;
+using Newtonsoft.Json.Serialization;
 
 namespace CloudPublishing
 {
@@ -16,6 +20,12 @@ namespace CloudPublishing
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            var formatter = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            formatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            config.Formatters.Clear();
+            config.Formatters.Add(formatter);
         }
     }
 }

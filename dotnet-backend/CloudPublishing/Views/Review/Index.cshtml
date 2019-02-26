@@ -1,0 +1,69 @@
+﻿@model IEnumerable<CloudPublishing.Models.Reviews.ViewModels.DetailedReviewVM>
+@{
+    ViewBag.Title = "Рецензии";
+    Layout = "~/Views/Review/_ReviewLayout.cshtml";
+}
+<div class="container">
+
+    <div class="row mb-2">
+        <div class="col-12 text-right pr-0">
+            <button class="btn btn-success" onclick="location.href='@Url.Action("Create", "Review")'">Добавить</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Журнал/Газета</th>
+                    <th>Рубрика</th>
+                    <th>Автор</th>
+                    <th>Статья</th>
+                    <th>В публикацию</th>
+                    <th>@*Кнопки*@</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Publishing)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Topic)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Author)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Article)
+                        </td>
+                        <td class="text-center">
+                            @*Картинка будет заменена на подходящую*@
+                            @if (item.Approved)
+                            {
+                                <img src="@Url.Content("~/favicon.ico")" />
+                            }
+                        </td>
+                        <td>
+                            @*Картинки будут заменены*@
+                            @if (item.Approved)
+                            {
+                                @*onclick="location.href='@Url.Action("Detail", "Review", new { id = item.ArticleId })'"*@
+                                <button class="btn button-detail btn-lg"><i class="fas fa-map"></i></button>
+                            }
+                            else
+                            {
+                                <button class="btn button-edit"></button>
+                                <button class="btn button-delete"></button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@*Будет вынесено в макет*@
+@Scripts.Render("~/Scripts/custom/review-scripts.js")
