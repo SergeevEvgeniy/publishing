@@ -197,6 +197,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AutofacConfig\WebModule.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\RestApi\EmployeeController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
@@ -209,7 +210,6 @@
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\Employees\Enums\Sex.cs" />
     <Compile Include="Models\Employees\Enums\EmployeeType.cs" />
-    <Compile Include="Infrastructure\AutofacConfiguration.cs" />
     <Compile Include="Util\AjaxOnlyAttribute.cs" />
     <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
@@ -326,6 +326,10 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AutofacConfig\AutofacConfig.csproj">
+      <Project>{2293efe1-da26-4d63-847b-838dfdb810d8}</Project>
+      <Name>AutofacConfig</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CloudPublishing.Business\CloudPublishing.Business.csproj">
       <Project>{d4b92165-ef15-4c6b-9838-a251b00fba58}</Project>
       <Name>CloudPublishing.Business</Name>
