@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CloudPublishing.Models.Publishings.PublishingTableViewModel>
+@{
+    ViewBag.Title = "Журналы";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table>
+    <tr>
+        <th>Название</th>
+        <th>Тип</th>
+        <th>Тематика</th>
+        <th>Рубрики</th>
+        <th></th>
+    </tr>
+    @foreach (var publishing in Model)
+    {
+        <tr>
+            <td>@publishing.Title</td>
+            <td>@publishing.Type</td>
+            <td>@publishing.Subjects</td>
+            <td>@publishing.Topics</td>
+            <td width="110px">
+                <button type="button" class="btn btn-outline-secondary btn-sm">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </td>
+        </tr>
+    }
+</table>

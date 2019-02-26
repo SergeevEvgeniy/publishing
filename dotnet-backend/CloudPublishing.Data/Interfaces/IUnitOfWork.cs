@@ -9,6 +9,10 @@ namespace CloudPublishing.Data.Interfaces
 
         IReviewRepository Reviews { get; }
 
+        IPublishingRepository Publishings { get; }
+
+        ITopicRepository Topics { get; }
+
         int Save();
     }
 }
