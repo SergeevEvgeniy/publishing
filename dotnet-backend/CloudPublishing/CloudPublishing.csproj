@@ -192,6 +192,8 @@
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\Employees\Enums\Sex.cs" />
     <Compile Include="Models\Employees\Enums\EmployeeType.cs" />
+    <Compile Include="Models\Reviews\ViewModels\DetailedReviewVM.cs" />
+    <Compile Include="Models\Reviews\ViewModels\ReviewVM.cs" />
     <Compile Include="Util\AjaxOnlyAttribute.cs" />
     <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
@@ -217,6 +219,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\custom\employeeComponents.js" />
+    <Content Include="Scripts\custom\review-scripts.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -283,10 +286,10 @@
     <Content Include="Views\Review\_ReviewLayout.cshtml" />
     <Content Include="Views\Review\InvalidModel.cshtml" />
     <Content Include="Views\Employee\Login.cshtml" />
+    <Content Include="Views\Review\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\Reviews\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />

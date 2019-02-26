@@ -1,61 +1,35 @@
-﻿using System;
+﻿using AutoMapper;
+using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Services.Interfaces;
+using CloudPublishing.Models.Reviews.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CloudPublishing.Controllers
 {
     // [Authorize(Roles = "redactor")]
-    /*public class ReviewController : Controller
+    public class ReviewController : Controller
     {
-        private IReviewRepository repo;
+        private IReviewService reviewService;
 
-        public ReviewController(IReviewRepository repo)
+        public ReviewController(IReviewService service)
         {
-            this.repo = repo;
+            reviewService = service;
         }
 
         // GET: Review
         public ActionResult Index()
         {
-            // Получение текущего пользователя
+            // Заглушка. Будет заменено на получение id текущего пользователя
             int userId = 1;
 
-            List<Review> reviews = repo.GetUserReviews(userId).ToList();
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DetailedReviewDTO, DetailedReviewVM>()).CreateMapper();
+            List<DetailedReviewVM> list = mapper.Map<IEnumerable<DetailedReviewDTO>, List<DetailedReviewVM>>
+                (reviewService.CreateDetailedReviewList(userId));
 
-            // Запрос за статьями по полю article_id
-            // Пример модели для работы
-            List<ViewModel> reviewsList = new List<ViewModel>();
-            reviewsList.Add(new ViewModel
-            {
-                Publishing = "Садоводство",
-                Topic = "Урожай",
-                Author = "Коваленко М.О.",
-                Article = "Садим тыкву, садим вместе",
-                ArticleId = 1,
-                Approved = false
-            });
-            reviewsList.Add(new ViewModel
-            {
-                Publishing = "Садоводство",
-                Topic = "Урожай",
-                Author = "Петров П.П.",
-                Article = "Огурцы - кладовая витаминов",
-                ArticleId = 2,
-                Approved = false
-            });
-            reviewsList.Add(new ViewModel
-            {
-                Publishing = "Садоводство",
-                Topic = "Дача",
-                Author = "Коваленко М.О.",
-                Article = "Готовим на природе",
-                ArticleId = 3,
-                Approved = true
-            });
+            return View(list);
 
-            return View(reviewsList);
         }
 
         [HttpGet]
@@ -64,9 +38,16 @@ namespace CloudPublishing.Controllers
             return View();
         }
 
-        // Методы обработки запросов для построения списков
-
         [HttpPost]
+        public ActionResult Create(ReviewVM review)
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<ReviewVM, ReviewDTO>()).CreateMapper();
+            reviewService.CreateReview(mapper.Map<ReviewVM, ReviewDTO>(review));
+
+            return View("Index");
+        }
+
+        /*[HttpPost]
         public ActionResult Create(Review review)
         {
             if(!ModelState.IsValid)
@@ -76,6 +57,8 @@ namespace CloudPublishing.Controllers
             repo.Create(review);
             return View("Index");
         }
+
+        // Тут будут методы обработки запросов для построения списков
 
         public ActionResult Details(int articleId)
         {
@@ -111,8 +94,8 @@ namespace CloudPublishing.Controllers
             }
             repo.Update(review);
             return View("Index");
-        }
+        }*/
 
 
-    }*/
+    }
 }

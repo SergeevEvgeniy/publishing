@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CloudPublishing.Models.Reviews.ViewModel>
+﻿@model IEnumerable<CloudPublishing.Models.Reviews.ViewModels.DetailedReviewVM>
 @{
     ViewBag.Title = "Рецензии";
     Layout = "~/Views/Review/_ReviewLayout.cshtml";
@@ -7,7 +7,7 @@
 
     <div class="row mb-2">
         <div class="col-12 text-right pr-0">
-            <button class="btn btn-success">Добавить</button>
+            <button class="btn btn-success" onclick="location.href='@Url.Action("Create", "Review")'">Добавить</button>
         </div>
     </div>
 
@@ -51,7 +51,7 @@
                             @if (item.Approved)
                             {
                                 @*onclick="location.href='@Url.Action("Detail", "Review", new { id = item.ArticleId })'"*@
-                                <button class="btn button-detail"></button>
+                                <button class="btn button-detail btn-lg"><i class="fas fa-map"></i></button>
                             }
                             else
                             {
@@ -65,3 +65,5 @@
         </table>
     </div>
 </div>
+@*Будет вынесено в макет*@
+@Scripts.Render("~/Scripts/custom/review-scripts.js")

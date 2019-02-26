@@ -57,6 +57,7 @@
     <Compile Include="AutofacConfig\BusinessModule.cs" />
     <Compile Include="DTO\AdvertisingDTO.cs" />
     <Compile Include="DTO\ArticleDTO.cs" />
+    <Compile Include="DTO\DetailedReviewDTO.cs" />
     <Compile Include="DTO\EducationDTO.cs" />
     <Compile Include="DTO\EmployeeDTO.cs" />
     <Compile Include="DTO\IssueDTO.cs" />

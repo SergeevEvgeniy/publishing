@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CloudPublishing.Business.Services.Interfaces
 {
-    interface IReviewService
+    public interface IReviewService
     {
         IEnumerable<PublishingDTO> GetPublishingList();
 
@@ -13,7 +13,11 @@ namespace CloudPublishing.Business.Services.Interfaces
 
         IEnumerable<ArticleDTO> GetArticleList(int publishingId, int topicId, int authorId);
 
+        IEnumerable<DetailedReviewDTO> CreateDetailedReviewList(int reviewerId);
+
         ReviewDTO GetReview(int articleId, int authorId);
+
+        void CreateReview(ReviewDTO review);
 
         void UpdateReview(ReviewDTO review);
 
