@@ -5,9 +5,9 @@
 ### Back-end:
 
 1. [ASP NET MVC 5](https://metanit.com/sharp/mvc5/) 
-    * Модель, представление, контроллер
-    * Маршрутизация
-    * Фильтры
+    * Модель, представление, контроллер 
+    * [Маршрутизация](https://metanit.com/sharp/mvc5/6.1.php), [Routing in MVC](https://www.tutorialsteacher.com/mvc/routing-in-mvc), [Attribute Routing With ASP.net MVC 5](http://sampathloku.blogspot.com/2013/11/attribute-routing-with-aspnet-mvc-5.html)
+    * [Фильтры](https://professorweb.ru/my/ASP_NET/mvc/level5/5_1.php)
     * Cookie
     * Identity(базово)
     * Реализация базовой CRUD-функциональности
@@ -28,8 +28,9 @@
     * Реализация базовой CRUD-функциональности
     
 1. [Внедрение зависимостей в ASP NET MVC.](https://metanit.com/sharp/mvc5/21.4.php)
-    * IoC-контейнер
-    * Autofac, StructureMap или т.п.
+    * IoC-контейнер,
+    * [Принцип инверсии зависимости](https://blog.byndyu.ru/2009/12/blog-post.html)
+    * [Autofac](https://autofac.readthedocs.io/en/latest/index.html), StructureMap или т.п.
 
 1. [MySQL Workbench](https://www.mysql.com/products/workbench/) - для администрирования БД.
 
