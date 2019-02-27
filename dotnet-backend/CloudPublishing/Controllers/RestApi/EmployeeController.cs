@@ -30,10 +30,10 @@ namespace CloudPublishing.Controllers.RestApi
 
         [HttpPost]
         [Route("journalists")]
-        public async Task<IHttpActionResult> GetJournalistList([FromBody]int? publishingId)
+        public async Task<IHttpActionResult> GetJournalistList(JournalistListFilterDTO filter)
         {
             HttpContext.Current.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return Json(await service.GetJournalistList(mapper.Map<JournalistListFilterModel, JournalistListFilterDTO>(new JournalistListFilterModel())));
+            return Json(await service.GetJournalistList(filter));
         }
     }
 }

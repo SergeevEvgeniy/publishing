@@ -59,10 +59,6 @@
     <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="CloudPublishing.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\CloudPublishing.Business.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -320,6 +316,10 @@
     <ProjectReference Include="..\AutofacConfig\AutofacConfig.csproj">
       <Project>{2293efe1-da26-4d63-847b-838dfdb810d8}</Project>
       <Name>AutofacConfig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudPublishing.Business\CloudPublishing.Business.csproj">
+      <Project>{d4b92165-ef15-4c6b-9838-a251b00fba58}</Project>
+      <Name>CloudPublishing.Business</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
