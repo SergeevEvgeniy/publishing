@@ -181,6 +181,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacConfig\WebModule.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Controllers\RestApi\EmployeeController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Global.asax.cs">
@@ -192,6 +193,7 @@
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\Employees\Enums\Sex.cs" />
     <Compile Include="Models\Employees\Enums\EmployeeType.cs" />
+    <Compile Include="Models\Publishings\PublishingTableViewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\DetailedReviewVM.cs" />
     <Compile Include="Models\Reviews\ViewModels\ReviewVM.cs" />
     <Compile Include="Util\AjaxOnlyAttribute.cs" />
@@ -287,6 +289,7 @@
     <Content Include="Views\Review\InvalidModel.cshtml" />
     <Content Include="Views\Employee\Login.cshtml" />
     <Content Include="Views\Review\Create.cshtml" />
+    <Content Include="Views\Publishing\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
