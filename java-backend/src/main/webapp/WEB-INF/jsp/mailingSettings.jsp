@@ -15,7 +15,7 @@
         <select id="mailingSelect" onchange="location = this.value">
             <option value="NONE"> --- Выберите журнал/газету --- </option>
             <c:forEach var="item" items="${publishingList}">
-                <option data-id="${item.getId()}" value="./settings/${item.getId()}">
+                <option data-id="${item.getId()}" value="mailing/settings/${item.getId()}">
                         ${item.getTitle()}
                 </option>
             </c:forEach>
@@ -23,7 +23,12 @@
     </form>
     <span>Список рассылки</span>
     <table>
-
+        <tr>
+            <td>Журнал/газета</td>
+            <td>Журнал/газета</td>
+            <td>Журнал/газета</td>
+            <td>Результат</td>
+        </tr>
     </table>
 </body>
 </html>

@@ -5,3 +5,7 @@ INSERT INTO employee VALUES
 (4,'Ann', 'Polaris','Resp', 'ann@mail.com', 'admin', 'F',2000,'Tokio','G','2',1),
 (5,'Joy', 'Brown','Com', 'joy@mail.com', 'admin', 'M',1901,'Gamburg','R','1',0);
 
+insert into education values
+(1, 'middle'),
+(2, 'special middle'),
+(3, 'high');

@@ -2,6 +2,9 @@ package by.artezio.cloud.publishing.dao.user;
 
 import by.artezio.cloud.publishing.domain.User;
 import java.sql.ResultSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,13 +34,14 @@ public class UserDao {
     };
 
     public User getUserByLoginPass(String email, String password) {
-        try {
-            return this.jdbcTemplate
-                    .queryForObject("SELECT * FROM employee where email = ? and password = ?",
-                            new Object[]{email, password}, mapper);
-        } catch (EmptyResultDataAccessException ex) {
-            return null;
-        }
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("email", email);
+        map.put("password", password);
+        return this.jdbcTemplate.queryForObject(
+            "SELECT * FROM employee where email = :email and password = :password",
+            map,
+            mapper
+        );
     }
 
 }
