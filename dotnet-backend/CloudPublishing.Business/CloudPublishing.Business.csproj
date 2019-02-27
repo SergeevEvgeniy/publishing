@@ -78,17 +78,9 @@
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeApiService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
-<<<<<<< HEAD
-<<<<<<< HEAD
     <Compile Include="Util\EmployeeBusinessApiMapProfile.cs" />
-=======
     <Compile Include="Services\Interfaces\IReviewService.cs" />
     <Compile Include="Services\ReviewService.cs" />
->>>>>>> 9a3333a3321262c276ecd642a0478d70b2766b80
-=======
-    <Compile Include="Services\Interfaces\IReviewService.cs" />
-    <Compile Include="Services\ReviewService.cs" />
->>>>>>> 9a3333a3321262c276ecd642a0478d70b2766b80
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>
