@@ -35,7 +35,7 @@
             <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -70,12 +70,14 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        
+
+        <!-- MySQL connector -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.15</version>
         </dependency>
+        <!-- MySQL connector -->
         
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -85,7 +87,7 @@
         </dependency>                        
     </dependencies>
 
-    <!--profiles>
+    <profiles>
         <profile>
             <id>build-profile</id>
             <activation>
@@ -113,5 +115,5 @@
                 </plugins>
             </build> 
         </profile>
-    </profiles--> 
+    </profiles> 
 </project>

@@ -10,13 +10,13 @@
     <!-- При необходимости добавить необходимые java бины,
     связанные с слоем доступа к данным, слоем сервисов, добавляем сюда-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="${db.driver}"/>
-        <property name="url" value="${db.url}" />
-        <property name="username" value="${db.user}"/>
-        <property name="password" value="${db.password}"/>
+        <property name="driverClassName" value="${database.driver}"/>
+        <property name="url" value="${database.url}" />
+        <property name="username" value="${database.login}"/>
+        <property name="password" value="${database.password}"/>
     </bean>
-  
-    <bean id="JdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
     </bean>
 </beans>

@@ -2,18 +2,17 @@ package by.artezio.cloud.publishing.dao.user;
 
 import by.artezio.cloud.publishing.domain.User;
 import java.sql.ResultSet;
-import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserDao {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    NamedParameterJdbcTemplate jdbcTemplate;
 
     RowMapper<User> mapper = (ResultSet rs, int rowNum) -> {
         return new User(

@@ -5,5 +5,6 @@
   </head>
   <body>
     Index Page
+    <a href="./mailing">emailList</a>
   </body>
 </html>
