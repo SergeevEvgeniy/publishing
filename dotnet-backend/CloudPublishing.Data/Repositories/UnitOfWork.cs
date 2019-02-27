@@ -9,6 +9,8 @@ namespace CloudPublishing.Data.Repositories
 
         private readonly IEmployeeRepository employees = null;
         private readonly IReviewRepository reviews = null;
+        private readonly IPublishingRepository publishings = null;
+        private readonly ITopicRepository topics = null;
 
         public UnitOfWork(string connectionString)
         {
@@ -23,6 +25,10 @@ namespace CloudPublishing.Data.Repositories
         public IEmployeeRepository Employees => employees?? new EmployeeRepository(context);
 
         public IReviewRepository Reviews => reviews ?? new ReviewRepository(context);
+
+        public IPublishingRepository Publishings => publishings ?? new PublishingRepository(context);
+
+        public ITopicRepository Topics => topics ?? new TopicRepository(context);
 
         public int Save()
         {

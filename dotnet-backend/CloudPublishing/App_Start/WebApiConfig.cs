@@ -21,11 +21,7 @@ namespace CloudPublishing
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            var formatter = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
-            formatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-
-            config.Formatters.Clear();
-            config.Formatters.Add(formatter);
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         }
     }
 }

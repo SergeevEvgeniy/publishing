@@ -57,6 +57,7 @@
     <Compile Include="AutofacConfig\BusinessModule.cs" />
     <Compile Include="DTO\AdvertisingDTO.cs" />
     <Compile Include="DTO\ArticleDTO.cs" />
+    <Compile Include="DTO\DetailedReviewDTO.cs" />
     <Compile Include="DTO\EducationDTO.cs" />
     <Compile Include="DTO\EmployeeDTO.cs" />
     <Compile Include="DTO\IssueDTO.cs" />
@@ -64,6 +65,9 @@
     <Compile Include="DTO\MailingResultDTO.cs" />
     <Compile Include="DTO\MailingSubscriberDTO.cs" />
     <Compile Include="DTO\PublishingDTO.cs" />
+    <Compile Include="DTO\RestApi\JournalistListFilterDTO.cs" />
+    <Compile Include="DTO\RestApi\JournalistListItemDTO.cs" />
+    <Compile Include="DTO\RestApi\JournalistStatisticsDTO.cs" />
     <Compile Include="DTO\ReviewDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +78,17 @@
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeApiService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
+<<<<<<< HEAD
+<<<<<<< HEAD
+    <Compile Include="Util\EmployeeBusinessApiMapProfile.cs" />
+=======
+    <Compile Include="Services\Interfaces\IReviewService.cs" />
+    <Compile Include="Services\ReviewService.cs" />
+>>>>>>> 9a3333a3321262c276ecd642a0478d70b2766b80
+=======
+    <Compile Include="Services\Interfaces\IReviewService.cs" />
+    <Compile Include="Services\ReviewService.cs" />
+>>>>>>> 9a3333a3321262c276ecd642a0478d70b2766b80
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>

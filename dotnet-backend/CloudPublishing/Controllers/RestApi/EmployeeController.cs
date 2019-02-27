@@ -1,7 +1,11 @@
 ﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using AutoMapper;
+using CloudPublishing.Business.DTO.RestApi;
 using CloudPublishing.Business.Services.Interfaces;
+using CloudPublishing.Models.Employees.RestApi;
+using CloudPublishing.Util;
 
 namespace CloudPublishing.Controllers.RestApi
 {
@@ -9,24 +13,27 @@ namespace CloudPublishing.Controllers.RestApi
     public class EmployeeController : ApiController
     {
         private readonly IEmployeeApiService service;
+        private readonly IMapper mapper;
 
         public EmployeeController(IEmployeeApiService service)
         {
             this.service = service;
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeApiMapProfile())).CreateMapper();
         }
 
-        [Route("journalists/{id:int}/statistics")]
-        public IHttpActionResult GetEmployeeStatistics(int? id)
+        [Route("journalists/{id}/statistics")]
+        public async Task<IHttpActionResult> GetJournalistStatistics(int? id)
         {
             HttpContext.Current.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return Ok("u know why u can't see content? Cuz it's nothing");
+            return Json(await service.GetJournalistStatistics(id));
         }
 
-        [Route("{id}")]
-        public async Task<IHttpActionResult> GetPublishing(int? id)
+        [HttpPost]
+        [Route("journalists")]
+        public async Task<IHttpActionResult> GetJournalistList([FromBody]int? publishingId)
         {
-            var tmp = await service.GetEmployeeArticleCount(0);
-            return Ok();
+            HttpContext.Current.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return Json(await service.GetJournalistList(mapper.Map<JournalistListFilterModel, JournalistListFilterDTO>(new JournalistListFilterModel())));
         }
     }
 }

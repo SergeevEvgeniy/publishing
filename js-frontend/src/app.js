@@ -7,3 +7,4 @@ $(function onReady() {
 
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap/dist/js/bootstrap');
+require('@fortawesome/fontawesome-free/css/all.css');

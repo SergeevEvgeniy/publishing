@@ -59,6 +59,10 @@
     <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="CloudPublishing.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\CloudPublishing.Business.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -186,13 +190,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Employees\RestApi\JournalistListFilterModel.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeCreateModel.cs" />
     <Compile Include="Models\Employees\Enums\EmployeeUserRole.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeEditModel.cs" />
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\Employees\Enums\Sex.cs" />
     <Compile Include="Models\Employees\Enums\EmployeeType.cs" />
+    <Compile Include="Models\Reviews\ViewModels\DetailedReviewVM.cs" />
+    <Compile Include="Models\Reviews\ViewModels\ReviewVM.cs" />
     <Compile Include="Util\AjaxOnlyAttribute.cs" />
+    <Compile Include="Util\EmployeeApiMapProfile.cs" />
     <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -217,6 +225,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\custom\employeeComponents.js" />
+    <Content Include="Scripts\custom\review-scripts.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -283,10 +292,10 @@
     <Content Include="Views\Review\_ReviewLayout.cshtml" />
     <Content Include="Views\Review\InvalidModel.cshtml" />
     <Content Include="Views\Employee\Login.cshtml" />
+    <Content Include="Views\Review\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\Reviews\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
@@ -311,10 +320,6 @@
     <ProjectReference Include="..\AutofacConfig\AutofacConfig.csproj">
       <Project>{2293efe1-da26-4d63-847b-838dfdb810d8}</Project>
       <Name>AutofacConfig</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CloudPublishing.Business\CloudPublishing.Business.csproj">
-      <Project>{d4b92165-ef15-4c6b-9838-a251b00fba58}</Project>
-      <Name>CloudPublishing.Business</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

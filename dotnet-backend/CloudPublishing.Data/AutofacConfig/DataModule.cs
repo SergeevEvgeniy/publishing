@@ -11,7 +11,7 @@ namespace CloudPublishing.Data.AutofacConfig
             builder.RegisterType<MySql.Data.MySqlClient.MySqlProviderServices>().As<MySql.Data.MySqlClient.MySqlProviderServices>();
 
             // Для тестирования менть строку, но перед пушем возвращать обратно (временное решение)
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter("connectionString", "EmployeeContext");
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter("connectionString", "PublishingContext");
         }
     }
 }
