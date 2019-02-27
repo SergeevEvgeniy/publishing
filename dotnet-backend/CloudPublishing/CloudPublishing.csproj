@@ -195,7 +195,6 @@
     <Compile Include="Models\Reviews\ViewModels\DetailedReviewVM.cs" />
     <Compile Include="Models\Reviews\ViewModels\ReviewVM.cs" />
     <Compile Include="Util\AjaxOnlyAttribute.cs" />
-    <Compile Include="Util\EmployeeApiMapProfile.cs" />
     <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,11 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using AutoMapper;
 using CloudPublishing.Business.DTO.RestApi;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Models.Employees.RestApi;
-using CloudPublishing.Util;
 
 namespace CloudPublishing.Controllers.RestApi
 {
@@ -13,12 +10,10 @@ namespace CloudPublishing.Controllers.RestApi
     public class EmployeeController : ApiController
     {
         private readonly IEmployeeApiService service;
-        private readonly IMapper mapper;
 
         public EmployeeController(IEmployeeApiService service)
         {
             this.service = service;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeApiMapProfile())).CreateMapper();
         }
 
         [Route("journalists/{id}/statistics")]
