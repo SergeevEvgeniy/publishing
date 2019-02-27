@@ -71,6 +71,7 @@
     <Compile Include="Entities\Publishing.cs" />
     <Compile Include="Entities\Review.cs" />
     <Compile Include="Entities\Topic.cs" />
+    <Compile Include="Interfaces\IArticleRepository.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
     <Compile Include="Interfaces\IPublishingRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Interfaces\ITopicRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ArticleRepository.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\PublishingRepository.cs" />
     <Compile Include="Repositories\ReviewRepository.cs" />
