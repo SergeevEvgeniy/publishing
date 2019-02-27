@@ -186,7 +186,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Employees\RestApi\JournalistListFilterModel.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeCreateModel.cs" />
     <Compile Include="Models\Employees\Enums\EmployeeUserRole.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeEditModel.cs" />
