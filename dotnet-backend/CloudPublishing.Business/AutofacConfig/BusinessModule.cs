@@ -11,6 +11,7 @@ namespace CloudPublishing.Business.AutofacConfig
             builder.RegisterType<EmployeeService>().As<IEmployeeService>();
             builder.RegisterType<EmployeeApiService>().As<IEmployeeApiService>();
             builder.RegisterType<ReviewService>().As<IReviewService>();
+            builder.RegisterType<PublishingService>().As<IPublishingService>();
         }
     }
 }
