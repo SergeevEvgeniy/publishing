@@ -12,10 +12,23 @@ namespace CloudPublishing.Controllers
     public class ReviewController : Controller
     {
         private IReviewService reviewService;
+        private IMapper mapper;
 
         public ReviewController(IReviewService service)
         {
             reviewService = service;
+
+            MapperConfiguration mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<DetailedReviewDTO, DetailedReviewVM>();
+                cfg.CreateMap<ReviewVM, ReviewDTO>();
+                cfg.CreateMap<ReviewDTO, ReviewVM>();
+                cfg.CreateMap<PublishingDTO, ShortPublishingModel>();
+                cfg.CreateMap<TopicDTO, TopicModel>();
+                cfg.CreateMap<EmployeeDTO, AuthorModel>();
+                cfg.CreateMap<ArticleDTO, ArticleModel>();
+            });
+            mapper = mapperConfig.CreateMapper();
         }
 
         // GET: Review
@@ -24,7 +37,6 @@ namespace CloudPublishing.Controllers
             // Заглушка. Будет заменено на получение id текущего пользователя
             int userId = 1;
 
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<DetailedReviewDTO, DetailedReviewVM>()).CreateMapper();
             List<DetailedReviewVM> list = mapper.Map<IEnumerable<DetailedReviewDTO>, List<DetailedReviewVM>>
                 (reviewService.CreateDetailedReviewList(userId));
 
@@ -35,44 +47,68 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            var pl = reviewService.GetPublishingList();
+            var model = new CreateReviewModel()
+            {
+                publishingList = new SelectList(pl, "Id", "Title", 1)
+            };
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult GetTopicList(int? publishingId)
+        {
+            List<TopicModel> topicList = mapper.Map<IEnumerable<TopicDTO>, List<TopicModel>>
+                (reviewService.GetTopicList(publishingId));
+            return PartialView(topicList);
+        }
+
+        [HttpGet]
+        public ActionResult GetAuthorList(int? publishingId, int? topicId)
+        {
+            List<AuthorModel> authorList = mapper.Map<IEnumerable<EmployeeDTO>, List<AuthorModel>>
+                (reviewService.GetAuthorList(publishingId, topicId));
+            return PartialView(authorList);
+        }
+
+        [HttpGet]
+        public ActionResult GetArticleList(int? publishingId, int? topicId, int? authorId)
+        {
+            List<ArticleModel> authorList = mapper.Map<IEnumerable<ArticleDTO>, List<ArticleModel>>
+                (reviewService.GetArticleList(publishingId, topicId, authorId));
+            return PartialView(authorList);
         }
 
         [HttpPost]
         public ActionResult Create(ReviewVM review)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<ReviewVM, ReviewDTO>()).CreateMapper();
             reviewService.CreateReview(mapper.Map<ReviewVM, ReviewDTO>(review));
 
             return View("Index");
         }
 
-        /*[HttpPost]
-        public ActionResult Create(Review review)
-        {
-            if(!ModelState.IsValid)
-            {
-                return View("InvalidModel");
-            }
-            repo.Create(review);
-            return View("Index");
-        }
-
         // Тут будут методы обработки запросов для построения списков
+
+        public ActionResult Test()
+        {
+            var list = new List<ReviewDTO>
+            {
+                new ReviewDTO{ArticleId = 1, Approved = true, Content = string.Empty, ReviwerId = 1}
+            };
+            return View();
+            //return Json(new { id})
+        }
 
         public ActionResult Details(int articleId)
         {
-            // Получение id пользователя
+            // Будет заменено на получение id пользователя
             int userId = 1;
-            Review review = repo.Get(articleId, userId);
-            if (review == null)
-            {
-                return HttpNotFound();
-            }
+
+            var review = mapper.Map<ReviewDTO, ReviewVM>(reviewService.GetReview(articleId, userId));
             return View(review);
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public ActionResult Edit(int articleId)
         {
             // Получение id пользователя

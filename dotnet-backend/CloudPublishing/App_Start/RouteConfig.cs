@@ -18,6 +18,21 @@ namespace CloudPublishing
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                name: "Authors list",
+                url: "{controller}/{action}/{publishingId}/{topicId}",
+                defaults: new { controller = "Review", action = "GetAuthorList",
+                    publishingId = UrlParameter.Optional,
+                    topicId = UrlParameter.Optional }
+            );
+            routes.MapRoute(
+                name: "Articles list",
+                url: "{controller}/{action}/{publishingId}/{topicId}/{authorId}",
+                defaults: new { controller = "Review", action = "GetArticleList",
+                    publishingId = UrlParameter.Optional,
+                    topicId = UrlParameter.Optional,
+                    authorId = UrlParameter.Optional }
+            );
         }
     }
 }

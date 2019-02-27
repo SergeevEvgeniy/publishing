@@ -192,8 +192,13 @@
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\Employees\Enums\Sex.cs" />
     <Compile Include="Models\Employees\Enums\EmployeeType.cs" />
+    <Compile Include="Models\Reviews\ViewModels\ArticleModel.cs" />
+    <Compile Include="Models\Reviews\ViewModels\AuthorModel.cs" />
+    <Compile Include="Models\Reviews\ViewModels\CreateReviewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\DetailedReviewVM.cs" />
+    <Compile Include="Models\Reviews\ViewModels\ShortPublishingModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\ReviewVM.cs" />
+    <Compile Include="Models\Reviews\ViewModels\TopicModel.cs" />
     <Compile Include="Util\AjaxOnlyAttribute.cs" />
     <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
@@ -287,6 +292,10 @@
     <Content Include="Views\Review\InvalidModel.cshtml" />
     <Content Include="Views\Employee\Login.cshtml" />
     <Content Include="Views\Review\Create.cshtml" />
+    <Content Include="Views\Review\Details.cshtml" />
+    <Content Include="Views\Review\GetTopicList.cshtml" />
+    <Content Include="Views\Review\GetAuthorList.cshtml" />
+    <Content Include="Views\Review\GetArticleList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

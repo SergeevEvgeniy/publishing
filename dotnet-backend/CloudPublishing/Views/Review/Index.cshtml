@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<CloudPublishing.Models.Reviews.ViewModels.DetailedReviewVM>
 @{
     ViewBag.Title = "Рецензии";
-    Layout = "~/Views/Review/_ReviewLayout.cshtml";
+    @*Layout = "~/Views/Review/_ReviewLayout.cshtml";*@
 }
 <div class="container">
 
     <div class="row mb-2">
         <div class="col-12 text-right pr-0">
-            <button class="btn btn-success" onclick="location.href='@Url.Action("Create", "Review")'">Добавить</button>
+            <button class="btn btn-success" onclick="location.href='@Url.Action("Create", "Review")'"><i class="fas fa-plus"></i> Добавить</button>
         </div>
     </div>
 
@@ -40,23 +40,29 @@
                             @Html.DisplayFor(modelItem => item.Article)
                         </td>
                         <td class="text-center">
-                            @*Картинка будет заменена на подходящую*@
                             @if (item.Approved)
                             {
-                                <img src="@Url.Content("~/favicon.ico")" />
+                                <i class="fas fa-check text-success"></i>
                             }
                         </td>
-                        <td>
-                            @*Картинки будут заменены*@
+                        <td class="text-left">
                             @if (item.Approved)
                             {
-                                @*onclick="location.href='@Url.Action("Detail", "Review", new { id = item.ArticleId })'"*@
-                                <button class="btn button-detail btn-lg"><i class="fas fa-map"></i></button>
+                                <button class="btn btn-sm border border-secondary"
+                                        onclick="location.href='@Url.Action("Details", "Review", new { articleId = @item.ArticleId })'">
+                                    <i class="far fa-eye text-secondary"></i>
+                                </button>
                             }
                             else
                             {
-                                <button class="btn button-edit"></button>
-                                <button class="btn button-delete"></button>
+                                <button class="btn btn-sm border border-secondary"
+                                        onclick="location.href='@Url.Action("Edit", "Review", new { id = @item.ArticleId })'">
+                                    <i class="far fa-edit text-secondary"></i>
+                                </button>
+                                <button class="btn btn-sm border border-danger"
+                                        onclick="location.href='@Url.Action("Delete", "Review", new { id = @item.ArticleId })'">
+                                    <i class="fas fa-trash-alt text-danger"></i>
+                                </button>
                             }
                         </td>
                     </tr>
@@ -65,5 +71,3 @@
         </table>
     </div>
 </div>
-@*Будет вынесено в макет*@
-@Scripts.Render("~/Scripts/custom/review-scripts.js")

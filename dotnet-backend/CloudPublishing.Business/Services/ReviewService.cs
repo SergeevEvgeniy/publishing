@@ -19,25 +19,41 @@ namespace CloudPublishing.Business.Services
         public IEnumerable<PublishingDTO> GetPublishingList()
         {
             // Заглушка. Будет реализован запрос
-            return null;
+            return new List<PublishingDTO>()
+            {
+                new PublishingDTO(){Id = 1, Title = "Садоводство"},
+                new PublishingDTO(){Id = 2, Title = "Цивилизация"}
+            };
         }
 
-        public IEnumerable<TopicDTO> GetTopicList(int publishingId)
+        public IEnumerable<TopicDTO> GetTopicList(int? publishingId)
         {
             // Заглушка. Будет реализован запрос
-            return null;
+            return new List<TopicDTO>()
+            {
+                new TopicDTO(){Id = 1, Name = "Урожай"},
+                new TopicDTO(){Id = 2, Name = "Дача"}
+            };
         }
 
-        public IEnumerable<EmployeeDTO> GetAuthorList(int publishingId, int topicId)
+        public IEnumerable<EmployeeDTO> GetAuthorList(int? publishingId, int? topicId)
         {
             // Заглушка. Будет реализован запрос
-            return null;
+            return new List<EmployeeDTO>()
+            {
+                new EmployeeDTO(){Id = 1, LastName = "Коваленко"},
+                new EmployeeDTO(){Id = 2, LastName = "Петров"}
+            };
         }
 
-        public IEnumerable<ArticleDTO> GetArticleList(int publishingId, int topicId, int authorId)
+        public IEnumerable<ArticleDTO> GetArticleList(int? publishingId, int? topicId, int? authorId)
         {
             // Заглушка. Будет реализован запрос
-            return null;
+            return new List<ArticleDTO>()
+            {
+                new ArticleDTO(){Id = 1, Title = "Садим тыкву, садим вместе"},
+                new ArticleDTO(){Id = 2, Title = "Тайны великих пирамид"}
+            };
         }
 
         public IEnumerable<DetailedReviewDTO> CreateDetailedReviewList(int reviewerId)

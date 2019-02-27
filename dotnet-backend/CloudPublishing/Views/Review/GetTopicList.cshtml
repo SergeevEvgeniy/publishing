@@ -1,0 +1,9 @@
+﻿@using CloudPublishing.Models.Reviews.ViewModels
+@model IEnumerable<TopicModel>
+
+<option value="0">Выберите элемент</option>
+@foreach (TopicModel t in Model)
+{
+    <option value="@t.Id">@t.Name</option>
+}
+

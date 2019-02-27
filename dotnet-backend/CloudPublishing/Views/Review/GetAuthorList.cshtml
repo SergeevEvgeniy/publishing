@@ -1,0 +1,10 @@
+﻿@using CloudPublishing.Models.Reviews.ViewModels
+@model IEnumerable<AuthorModel>
+
+<option value="0">Выберите элемент</option>
+@foreach (AuthorModel t in Model)
+{
+    <option value="@t.Id">@t.LastName</option>
+}
+
+
