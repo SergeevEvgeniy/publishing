@@ -10,7 +10,7 @@ namespace CloudPublishing.Business.Util
         {
             CreateMap<Employee, JournalistStatisticsDTO>();
 
-            CreateMap<Employee, JournalistListItemDTO>();
+            CreateMap<Employee, JournalistDTO>();
         }
     }
 }

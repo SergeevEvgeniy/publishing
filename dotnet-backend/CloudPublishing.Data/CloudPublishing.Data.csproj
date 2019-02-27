@@ -69,6 +69,7 @@
     <Compile Include="Entities\Education.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\Publishing.cs" />
+    <Compile Include="Entities\RestApi\Journalist.cs" />
     <Compile Include="Entities\Review.cs" />
     <Compile Include="Entities\Topic.cs" />
     <Compile Include="Interfaces\IArticleRepository.cs" />

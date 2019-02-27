@@ -66,7 +66,7 @@
     <Compile Include="DTO\MailingSubscriberDTO.cs" />
     <Compile Include="DTO\PublishingDTO.cs" />
     <Compile Include="DTO\RestApi\JournalistListFilterDTO.cs" />
-    <Compile Include="DTO\RestApi\JournalistListItemDTO.cs" />
+    <Compile Include="DTO\RestApi\JournalistDTO.cs" />
     <Compile Include="DTO\RestApi\JournalistStatisticsDTO.cs" />
     <Compile Include="DTO\ReviewDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />

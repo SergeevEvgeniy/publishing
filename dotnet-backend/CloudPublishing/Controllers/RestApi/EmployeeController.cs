@@ -31,7 +31,22 @@ namespace CloudPublishing.Controllers.RestApi
                 return BadRequest(result.GetFailureMessage());
             }
 
-            return Json(result.GetContent(), new JsonSerializerSettings{ContractResolver = new CamelCasePropertyNamesContractResolver()});
+            return Json(result.GetContent(),
+                new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+        }
+
+        [HttpPost]
+        [Route("journalists")]
+        public async Task<IHttpActionResult> FilterJournalists(JournalistListFilterDTO filter)
+        {
+            var result = await service.GetJournalistList(filter);
+            if (!result.IsSuccessful)
+            {
+                return BadRequest(result.GetFailureMessage());
+            }
+
+            return Json(result.GetContent(),
+                new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
         }
     }
 }

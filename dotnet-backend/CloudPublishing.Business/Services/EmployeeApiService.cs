@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -59,31 +60,32 @@ namespace CloudPublishing.Business.Services
 
         }
 
-        public async Task<IResult<IEnumerable<JournalistListItemDTO>>> GetJournalistList(JournalistListFilterDTO filter)
+        public async Task<IResult<IEnumerable<JournalistDTO>>> GetJournalistList(JournalistListFilterDTO filter)
         {
             if (filter == null)
             {
-                return new BadResult<IEnumerable<JournalistListItemDTO>>("Отсутствует фильтр");
+                return new BadResult<IEnumerable<JournalistDTO>>("Отсутствует фильтр");
             }
 
             try
             {
-                var result = new List<int>
+                var journalistsInfo = await unitOfWork.Articles.GetJournalistFilteredList(filter.PublishingId,
+                    filter.IssueId, filter.TopicId, filter.ArticleTitle);
+                var journalist = mapper.Map<IEnumerable<Employee>, List<JournalistDTO>>(unitOfWork.Employees.Find(x => journalistsInfo.ContainsKey(x.Id)));
+                
+                return await Task.FromResult(new SuccessfulResult<IEnumerable<JournalistDTO>>(journalist.Select(x =>
                 {
-                    1,2
-                };
-
-                var journalists = unitOfWork.Employees.Find(x => result.Contains(x.Id));
-
-                return new SuccessfulResult<IEnumerable<JournalistListItemDTO>>(mapper.Map<IEnumerable<Employee>, List<JournalistListItemDTO>>(journalists));
+                    x.ArticlesCount = journalistsInfo[x.Id];
+                    return x;
+                })));
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<IEnumerable<JournalistListItemDTO>>(e);
+                return new BadResult<IEnumerable<JournalistDTO>>(e);
             }
             catch (HttpRequestException e)
             {
-                return new BadResult<IEnumerable<JournalistListItemDTO>>(e);
+                return new BadResult<IEnumerable<JournalistDTO>>(e);
             }
         }
     }
