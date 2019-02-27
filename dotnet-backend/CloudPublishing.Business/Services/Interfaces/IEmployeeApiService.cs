@@ -10,6 +10,6 @@ namespace CloudPublishing.Business.Services.Interfaces
     {
         Task<IResult<JournalistStatisticsDTO>> GetJournalistStatistics(int? id);
 
-        Task<IResult<IEnumerable<JournalistListItemDTO>>> GetJournalistList(JournalistListFilterDTO filter);
+        Task<IResult<IEnumerable<JournalistDTO>>> GetJournalistList(JournalistListFilterDTO filter);
     }
 }

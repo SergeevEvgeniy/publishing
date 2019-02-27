@@ -181,6 +181,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacConfig\WebModule.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Controllers\RestApi\EmployeeController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Global.asax.cs">
@@ -195,6 +196,7 @@
     <Compile Include="Models\Reviews\ViewModels\ArticleModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\AuthorModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\CreateReviewModel.cs" />
+    <Compile Include="Models\Publishings\PublishingTableViewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\DetailedReviewVM.cs" />
     <Compile Include="Models\Reviews\ViewModels\ShortPublishingModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\ReviewVM.cs" />
@@ -296,6 +298,7 @@
     <Content Include="Views\Review\GetTopicList.cshtml" />
     <Content Include="Views\Review\GetAuthorList.cshtml" />
     <Content Include="Views\Review\GetArticleList.cshtml" />
+    <Content Include="Views\Publishing\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

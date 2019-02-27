@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacConfig\BusinessModule.cs" />
+    <Compile Include="Converters\ConvertersExtention.cs" />
     <Compile Include="DTO\AdvertisingDTO.cs" />
     <Compile Include="DTO\ArticleDTO.cs" />
     <Compile Include="DTO\DetailedReviewDTO.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="DTO\MailingSubscriberDTO.cs" />
     <Compile Include="DTO\PublishingDTO.cs" />
     <Compile Include="DTO\RestApi\JournalistListFilterDTO.cs" />
-    <Compile Include="DTO\RestApi\JournalistListItemDTO.cs" />
+    <Compile Include="DTO\RestApi\JournalistDTO.cs" />
     <Compile Include="DTO\RestApi\JournalistStatisticsDTO.cs" />
     <Compile Include="DTO\ReviewDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />
@@ -78,6 +79,8 @@
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeApiService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
+    <Compile Include="Services\Interfaces\IPublishingService.cs" />
+    <Compile Include="Services\PublishingService.cs" />
     <Compile Include="Util\EmployeeBusinessApiMapProfile.cs" />
     <Compile Include="Services\Interfaces\IReviewService.cs" />
     <Compile Include="Services\ReviewService.cs" />

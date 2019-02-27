@@ -13,6 +13,10 @@ namespace CloudPublishing.Data.Interfaces
 
         ITopicRepository Topics { get; }
 
+        // RESTful api's repositories
+
+        IArticleRepository Articles { get; }
+
         int Save();
     }
 }
