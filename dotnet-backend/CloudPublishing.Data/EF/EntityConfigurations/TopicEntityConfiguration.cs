@@ -10,7 +10,7 @@ namespace CloudPublishing.Data.EF.EntityConfigurations
             ToTable("topic");
             HasKey(x => x.Id);
             Property(x => x.Id).HasColumnName("id");
-            Property(x => x.Name).HasColumnName("name").IsRequired();
+            Property(x => x.Name).HasMaxLength(255).HasColumnName("name").IsRequired();
         }
     }
 }
