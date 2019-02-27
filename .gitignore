@@ -479,6 +479,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+nb-configuration.xml
 ### NotepadPP template
 # Notepad++ backups #
 *.bak
