@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Сервис для удовлетворения потребностей, связанных со страницей настройки рассылки.
+ * @author vgamezo
+ */
 @Component
 public class MailingSettingsService {
 
@@ -17,11 +21,20 @@ public class MailingSettingsService {
     @Autowired
     private MailingDao mailingDao;
 
+    /**
+     * Возвращает список всех публикаций {@link Publishing}, доступных издательству.
+     * @return список объектов {@link Publishing}
+     */
     public List<Publishing> getPublishingList() {
         return publishingDao.getPublishingList();
     }
 
-    public List<String> getEmailListByPublishingId(int id) {
+    /**
+     * Возвращает список email-адресов, которые принимали участие в последней рассылке публикации с id == {@param is}.
+     * @param id id публикации
+     * @return Список email-адресов
+     */
+    public List<String> getEmailListByPublishingId(final int id) {
         return mailingDao.getEmailListByPublishingId(id);
     }
 }

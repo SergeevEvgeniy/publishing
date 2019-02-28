@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Publishing DAO, который дает возможность получать данные, связанные с публикациями {@link Publishing}.
+ *
+ * @author vgamezo
+ */
 @Component
 public class PublishingDao {
 
@@ -20,16 +25,29 @@ public class PublishingDao {
         rs.getString("subjects")
     );
 
-    public PublishingDao(NamedParameterJdbcTemplate jdbcTemplate) {
+    /**
+     * Конструктор с параметром {@param jdbcTemplate}.
+     * @param jdbcTemplate Объект, который дает доступ к базе данных.
+     */
+    public PublishingDao(final NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Возвращает список Publishing {@link Publishing} объектов, которые имеются в издательстве.
+     * @return список всех Publishing {@link Publishing} объектов
+     */
     public List<Publishing> getPublishingList() {
         return jdbcTemplate.query(
             "select * from publishing", publishingRowMapper);
     }
 
-    public Publishing getPublishingById(int id) {
+    /**
+     * Возвращает объект публикации {@link Publishing} c id == {@param id}.
+     * @param id - publishing id
+     * @return Publishing объект, если он существует, иначе <code>null</code>.
+     */
+    public Publishing getPublishingById(final int id) {
         return jdbcTemplate.queryForObject(
             "select * from publishing where id = :id",
             Collections.singletonMap("id", id),
