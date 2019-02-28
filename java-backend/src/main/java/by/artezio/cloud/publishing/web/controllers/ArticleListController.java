@@ -17,23 +17,19 @@ import java.util.List;
 public class ArticleListController {
 
     /**
-     * Метод возвращает пользователю домашнюю страницу.
-     *
-     * @return имя домашней jsp страницы
+     * Возвращает пользователю страницу со списком статей.
+     * @param model Model
+     * @param request HttpServletRequest
+     * @return ModelAndView
      */
     @GetMapping(path = "/article_list")
-    public final ModelAndView articleList(Model model, HttpServletRequest request) {
+    public final ModelAndView articleList(final Model model, final HttpServletRequest request) {
 
-//        HttpSession session = request.getSession();
-//
-//        int id = (int) session.getAttribute("userId");
-
-//        List<ArticleListDTO> list = new UnknownService().getCollectionOfArticleListDTOByEmployeeId(id);
         List<ArticleListDTO> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
 
             ArticleListDTO dto = new ArticleListDTO();
-            dto.setAuthor("author " + i);
+            dto.setAuthorFullName("author " + i);
             dto.setPublishing("mishutka");
             dto.setTitle("title " + i);
             dto.setTopic("horror");

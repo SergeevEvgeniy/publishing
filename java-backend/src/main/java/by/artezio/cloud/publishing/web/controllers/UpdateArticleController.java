@@ -9,9 +9,17 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Контроллер, возвращающий jsp страницы.
+ */
 @Controller
 public class UpdateArticleController {
 
+    /**
+     * Возвращает пользователю страницу для создания/редактирования статьи.
+     *
+     * @return ModelAndView
+     */
     @GetMapping(path = "/update")
     public final ModelAndView updateArticle() {
         ModelAndView mav = new ModelAndView();

@@ -4,6 +4,11 @@ import by.artezio.cloud.publishing.domain.Review;
 
 import java.util.List;
 
+/**
+ * Класс для переноса данных из контроллера в update_article.jsp.
+ *
+ * @author Denis Shubin
+ */
 public class UpdateArticleDTO {
 
     private List<String> publishings;
@@ -14,59 +19,129 @@ public class UpdateArticleDTO {
     private List<String> availableCoauthors;
     private List<Review> reviews;
 
+    /**
+     * Возвращает список журналов/газет.
+     *
+     * @return List<String>
+     */
     public List<String> getPublishings() {
         return publishings;
     }
 
-    public void setPublishings(List<String> publishings) {
+    /**
+     * Устанавливает список журналов/газет.
+     *
+     * @param publishings List<String>
+     */
+    public void setPublishings(final List<String> publishings) {
         this.publishings = publishings;
     }
 
+    /**
+     * Возвращает список рубрик.
+     *
+     * @return List<String>
+     */
     public List<String> getTopics() {
         return topics;
     }
 
-    public void setTopics(List<String> topics) {
+    /**
+     * Устанавливает список рубрик.
+     *
+     * @param topics List<String>
+     */
+    public void setTopics(final List<String> topics) {
         this.topics = topics;
     }
 
+    /**
+     * Возвращает название статьи.
+     *
+     * @return String
+     */
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    /**
+     * Устанавливает название статьи.
+     *
+     * @param title String
+     */
+    public void setTitle(final String title) {
         this.title = title;
     }
 
+    /**
+     * Возвращает текст статьи.
+     *
+     * @return String
+     */
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    /**
+     * Устанавливает текст статьи.
+     *
+     * @param content String
+     */
+    public void setContent(final String content) {
         this.content = content;
     }
 
+    /**
+     * Возвращает список утверждённых соавторов.
+     *
+     * @return List<String>
+     */
     public List<String> getCurrentCoauthors() {
         return currentCoauthors;
     }
 
-    public void setCurrentCoauthors(List<String> currentCoauthors) {
+    /**
+     * Устанавливает список утверждённых соавторов.
+     *
+     * @param currentCoauthors List<String>
+     */
+    public void setCurrentCoauthors(final List<String> currentCoauthors) {
         this.currentCoauthors = currentCoauthors;
     }
 
+    /**
+     * Возвращает список возможных соавторов.
+     *
+     * @return List<String>
+     */
     public List<String> getAvailableCoauthors() {
         return availableCoauthors;
     }
 
-    public void setAvailableCoauthors(List<String> availableCoauthors) {
+    /**
+     * Устанавливает список возможных соавторов.
+     *
+     * @param availableCoauthors List<String>
+     */
+    public void setAvailableCoauthors(final List<String> availableCoauthors) {
         this.availableCoauthors = availableCoauthors;
     }
 
+    /**
+     * Возвращает список рецензий.
+     *
+     * @return List<String>
+     */
     public List<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    /**
+     * Устанавливает список рецензий.
+     *
+     * @param reviews List<Review>
+     */
+    public void setReviews(final List<Review> reviews) {
         this.reviews = reviews;
     }
 }

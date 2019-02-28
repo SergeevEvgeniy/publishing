@@ -32,7 +32,7 @@
                 <td>${element.title}</td>
                 <td>${element.publishing}</td>
                 <td>${element.topic}</td>
-                <td>${element.author}</td>
+                <td>${element.authorFullName}</td>
                 <td>
                     <ul>
                         <c:forEach items="${element.coauthors}" var="coauthor">

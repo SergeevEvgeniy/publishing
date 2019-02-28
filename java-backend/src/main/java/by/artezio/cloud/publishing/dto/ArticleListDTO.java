@@ -2,50 +2,106 @@ package by.artezio.cloud.publishing.dto;
 
 import java.util.List;
 
+/**
+ * Класс для переноса данных из контроллера в article_list.jsp.
+ *
+ * @author Denis Shubin
+ */
 public class ArticleListDTO {
+
     private String title;
     private String publishing;
     private String topic;
-    private String author;
+    private String authorFullName;
     private List<String> coauthors;
 
+    /**
+     * Возвращает название статьи.
+     *
+     * @return String
+     */
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    /**
+     * Устанавливает название статьи.
+     *
+     * @param title String
+     */
+    public void setTitle(final String title) {
         this.title = title;
     }
 
+    /**
+     * Возвращает название журнала/газеты.
+     *
+     * @return String
+     */
     public String getPublishing() {
         return publishing;
     }
 
-    public void setPublishing(String publishing) {
+    /**
+     * Устанавливает название журнала/газеты.
+     *
+     * @param publishing String
+     */
+    public void setPublishing(final String publishing) {
         this.publishing = publishing;
     }
 
+    /**
+     * Возвращает рубрику статьи.
+     *
+     * @return String
+     */
     public String getTopic() {
         return topic;
     }
 
-    public void setTopic(String topic) {
+    /**
+     * Устанавливает рубрику статьи.
+     *
+     * @param topic String
+     */
+    public void setTopic(final String topic) {
         this.topic = topic;
     }
 
-    public String getAuthor() {
-        return author;
+    /**
+     * Возвращает полное имя автора статьи.
+     *
+     * @return String
+     */
+    public String getAuthorFullName() {
+        return authorFullName;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    /**
+     * Устанавливает полное имя автора статьи.
+     *
+     * @param authorFullName String
+     */
+    public void setAuthorFullName(final String authorFullName) {
+        this.authorFullName = authorFullName;
     }
 
+    /**
+     * Возвращает список полных имён соавторов.
+     *
+     * @return List<String>
+     */
     public List<String> getCoauthors() {
         return coauthors;
     }
 
-    public void setCoauthors(List<String> coauthors) {
+    /**
+     * Устанавливает список соавторов.
+     *
+     * @param coauthors List<String>
+     */
+    public void setCoauthors(final List<String> coauthors) {
         this.coauthors = coauthors;
     }
 }
