@@ -45,6 +45,7 @@ public class MailingSettingsController {
      */
     @GetMapping("/{id}")
     public String getEmailList(@PathVariable final int id, final Model model) {
+        model.addAttribute("id", id);
         model.addAttribute("emailList", mailingSettingsService.getEmailListByPublishingId(id));
         model.addAttribute("publishingList", mailingSettingsService.getPublishingList());
         return "mailingSettings";

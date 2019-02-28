@@ -13,22 +13,30 @@
             Журнал
         </label>
         <select id="mailingSelect" onchange="location = this.value">
-            <option value="NONE"> --- Выберите журнал/газету --- </option>
+            <option data-id="0"
+                <c:if test="${id != null}">
+                    <c:out value="value=../settings"/>
+                </c:if>
+            >
+                --- Выберите журнал/газету ---
+            </option>
             <c:forEach var="item" items="${publishingList}">
-                <option data-id="${item.getId()}" value="mailing/settings/${item.getId()}">
-                        ${item.getTitle()}
+                <option
+                    <c:set var="link" value="settings/"/>
+                    <c:if test="${id == null}">
+                        <c:out value="${link = 'value=settings/'.concat(item.id)}"/>
+                    </c:if>
+                    <c:if test="${id != null}">
+                        <c:out value="${link = 'value=../settings/'.concat(item.id)}"/>
+                    </c:if>
+                    <c:if test="${id == item.id}">
+                        <c:out value="selected"/>
+                    </c:if>
+                >
+                    <c:out value="${item.title}"/>
                 </option>
             </c:forEach>
         </select>
     </form>
-    <span>Список рассылки</span>
-    <table>
-        <tr>
-            <td>Журнал/газета</td>
-            <td>Журнал/газета</td>
-            <td>Журнал/газета</td>
-            <td>Результат</td>
-        </tr>
-    </table>
 </body>
 </html>
