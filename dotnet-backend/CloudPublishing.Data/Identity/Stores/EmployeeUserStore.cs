@@ -46,36 +46,31 @@ namespace CloudPublishing.Data.Identity.Stores
             });
         }
 
-        public Task UpdateAsync(EmployeeUser user)
+        public async Task UpdateAsync(EmployeeUser user)
         {
-            return Task.Run(() =>
+            var employee = mapper.Map<EmployeeUser, Employee>(user);
+            var chiefEditor = context.Employees.AsNoTracking().FirstOrDefault(x => x.ChiefEditor);
+            if (chiefEditor != null && chiefEditor.Id != employee.Id && employee.ChiefEditor) chiefEditor.ChiefEditor = false;
+            if (chiefEditor?.Id != employee.Id)
             {
-                var employee = mapper.Map<EmployeeUser, Employee>(user);
-                var chiefEditor = context.Employees.FirstOrDefault(x => x.ChiefEditor);
-                if (chiefEditor != null && chiefEditor.Id != employee.Id && employee.ChiefEditor) chiefEditor.ChiefEditor = false;
-                context.Entry(employee).State = EntityState.Modified;
-                context.SaveChanges();
-            });
+                context.Entry(chiefEditor).State = EntityState.Modified;
+            }
+            context.Entry(employee).State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
 
         public Task DeleteAsync(EmployeeUser user)
         {
-            return Task.Run(() =>
-            {
-                var employee = context.Employees.FirstOrDefault();
-                if (employee != null)
-                {
-                    context.Entry(employee).State = EntityState.Deleted;
-                }
-                context.SaveChanges();
-            });
+            var employee = mapper.Map<EmployeeUser, Employee>(user);
+            context.Entry(employee).State = EntityState.Deleted;
+            return context.SaveChangesAsync();
         }
 
         public Task<EmployeeUser> FindByIdAsync(int userId)
         {
             return Task.Run(() =>
             {
-                var user = context.Employees.Find(userId);
+                var user = context.Employees.AsNoTracking().FirstOrDefault(x=> x.Id == userId);
                 return mapper.Map<Employee, EmployeeUser>(user);
             });
         }
@@ -84,7 +79,7 @@ namespace CloudPublishing.Data.Identity.Stores
         {
             return Task.Run(() =>
             {
-                var user = context.Employees.FirstOrDefault(x => x.Email == userName);
+                var user = context.Employees.AsNoTracking().FirstOrDefault(x => x.Email == userName);
                 return mapper.Map<Employee, EmployeeUser>(user);
             });
         }

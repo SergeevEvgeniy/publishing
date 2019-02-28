@@ -15,6 +15,9 @@ namespace CloudPublishing.Business.Util
 
             CreateMap<EmployeeDTO, EmployeeUser>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
+
+            CreateMap<EmployeeUser, EmployeeDTO>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserName));
         }
     }
 }

@@ -25,7 +25,7 @@ namespace CloudPublishing.Data.Repositories
 
         public Task<IdentityResult> UpdateAsync(EmployeeUser user)
         {
-            return manager.UpdateAsync(user);
+            return manager.UpdateAsync(user, user.Password);
         }
 
         public Task<EmployeeUser> FindByIdAsync(int id)
