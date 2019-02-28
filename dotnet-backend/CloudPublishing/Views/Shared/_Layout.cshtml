@@ -33,14 +33,20 @@
             @if (!User.Identity.IsAuthenticated)
             {
                 <li class="nav-item active">
-                    @Html.ActionLink("Авторизация","Login","Employee", null, new {@class="nav-link"})
+                    @Html.ActionLink("Авторизация", "Login", "Employee", null, new { @class = "nav-link" })
                 </li>
             }
             else
             {
                 <li class="nav-item dropdown">
-
+                    <a class="nav-link dropdown-toggle" id="employeeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                        @User.Identity.Name
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="employeeDropdown">
+                        @Html.ActionLink("Выход", "Logout", "Employee", null, new { @class = "dropdown-item" })
+                    </div>
                 </li>
+                
             }
         </ul>
     </div>

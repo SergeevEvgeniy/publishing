@@ -104,13 +104,20 @@ namespace CloudPublishing.Controllers
             AuthenticationManager.SignOut();
             AuthenticationManager.SignIn(new AuthenticationProperties
             {
-                IsPersistent = model.CheckOut
+                IsPersistent = true // model.CheckOut
             }, result.GetContent());
 
             return RedirectToAction("List", "Employee");
         }
 
+        public ActionResult Logout()
+        {
+            AuthenticationManager.SignOut();
+            return RedirectToAction("List");
+        }
+
         [HttpGet]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Create()
         {
             var model = new EmployeeCreateModel
@@ -123,6 +130,7 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ChiefEditor")]
         public async Task<ActionResult> Create(EmployeeCreateModel model)
         {
             if (!ModelState.IsValid)
@@ -151,6 +159,7 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Edit(int? id)
         {
             if (id == null) return null;
@@ -169,6 +178,7 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ChiefEditor")]
         public async Task<ActionResult> Edit(EmployeeEditModel model)
         {
             if (!ModelState.IsValid)
@@ -193,6 +203,7 @@ namespace CloudPublishing.Controllers
         }
 
         [AjaxOnly]
+        [Authorize(Roles = "ChiefEditor")]
         public async Task<ActionResult> Delete(int? id)
         {
             var result = await Service.DeleteEmployeeAsync(id);

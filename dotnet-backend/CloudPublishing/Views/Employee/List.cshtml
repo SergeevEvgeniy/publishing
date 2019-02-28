@@ -5,7 +5,7 @@
 }
 
 <div class="row justify-content-end mb-3">
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
     {
         <a href="@Url.Action("Create")" class="btn btn-success"><i class="fas fa-user-plus"></i>Новый сотрудник</a>
     }
@@ -28,7 +28,10 @@
         <th>
             @Html.DisplayName("Тип сотрудника")
         </th>
-        <th></th>
+        @if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
+        {
+            <th></th>
+        }
     </tr>
     </thead>
     <tbody>
@@ -50,16 +53,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
-            <td>
-                <div>
-                    <a href="@Url.Action("Edit", new {id = item.Id})" class="btn btn-default">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <button type="button" class="btn btn-danger remove-button">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </div>
-            </td>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
+            {
+                <td>
+                    <div>
+                        <a href="@Url.Action("Edit", new {id = item.Id})" class="btn btn-default">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button type="button" class="btn btn-danger remove-button">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </td>
+            }
         </tr>
     }
     </tbody>
