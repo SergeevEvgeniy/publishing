@@ -9,12 +9,12 @@ var $searchPage = $('<div>', {
 $searchPage.append(searchTemplate());
 
 function SearchJournalistComponent($parentElement) {
-    var publishingElementSelector = '#publishing';
+    var publishingElementSelector = '#publishing select';
     var searchButtonSelector = '#searchJournalist';
     var clearButtonSelector = '#clearJournalistSearch';
 
     var $issueElement = $searchPage.find('#issue');
-    var $publishingElement = $searchPage.find(publishingElementSelector);
+    var $publishingElement = $searchPage.find('#publishing');
     var $topicElement = $searchPage.find('#topic');
     var $articleElement = $searchPage.find('#article');
     var $lastNameElement = $searchPage.find('#lastName');
@@ -26,11 +26,7 @@ function SearchJournalistComponent($parentElement) {
     //var journalistResult = new JournalistResultComponent($searchElement);
 
     function onPublishingChangeEvent(event) {
-        var publishingSelect = event.target.closest('select');
-        if (!publishingSelect) {
-            return;
-        }
-        api.getIssueList(publishingSelect.value).then(function renderIssueList(response) {
+        api.getIssueList(event.target.value).then(function renderIssueList(response) {
             var $issuePanel = $issueElement.closest('.input-block');
             if ($issuePanel.hasClass('d-none')) {
                 $issuePanel.removeClass('d-none');
