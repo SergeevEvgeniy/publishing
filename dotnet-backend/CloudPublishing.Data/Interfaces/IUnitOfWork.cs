@@ -1,6 +1,7 @@
 ﻿using System;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Identity.Entities;
+using CloudPublishing.Data.Identity.Managers;
 using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Data.Interfaces
@@ -21,7 +22,7 @@ namespace CloudPublishing.Data.Interfaces
 
         // Identity
 
-        UserManager<EmployeeUser, int> UserManager { get; }
+        IUserRepository Users { get; }
 
         int Save();
     }

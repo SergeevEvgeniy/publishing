@@ -90,8 +90,10 @@
     <Compile Include="Results\SuccessfulResult.cs" />
     <Compile Include="Services\EmployeeApiService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\EmployeeServiceCreator.cs" />
     <Compile Include="Services\Interfaces\IEmployeeApiService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
+    <Compile Include="Services\Interfaces\IEmployeeServiceCreator.cs" />
     <Compile Include="Services\Interfaces\IPublishingService.cs" />
     <Compile Include="Services\PublishingService.cs" />
     <Compile Include="Util\EmployeeBusinessApiMapProfile.cs" />

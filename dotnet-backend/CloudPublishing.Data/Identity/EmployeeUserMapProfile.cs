@@ -14,7 +14,8 @@ namespace CloudPublishing.Data.Identity
 
             CreateMap<Employee, EmployeeUser>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+                .ForMember(dest => dest.Password, opt => opt.Ignore());
         }
     }
 }

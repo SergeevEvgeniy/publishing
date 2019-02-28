@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Results;
@@ -8,7 +10,9 @@ using CloudPublishing.Business.Results.Interfaces;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
+using CloudPublishing.Data.Identity.Entities;
 using CloudPublishing.Data.Interfaces;
+using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Business.Services
 {
@@ -45,7 +49,8 @@ namespace CloudPublishing.Business.Services
         {
             try
             {
-                var list = mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Employees.GetEducationList());
+                var list = mapper.Map<IEnumerable<Education>, List<EducationDTO>>(
+                    unitOfWork.Employees.GetEducationList());
                 return new SuccessfulResult<IEnumerable<EducationDTO>>(list);
             }
             catch (InvalidOperationException e)
@@ -68,74 +73,86 @@ namespace CloudPublishing.Business.Services
             }
         }
 
-        public IResult<int> CreateEmployee(EmployeeDTO entity)
+        public async Task<IResult<string>> CreateEmployeeAsync(EmployeeDTO entity)
         {
-            if (entity == null) return new BadResult<int>("Отсутствует сущность");
+            var user = mapper.Map<EmployeeDTO, EmployeeUser>(entity);
+            if (user == null) return new BadResult<string>("Пользователь не указан");
 
             try
             {
-                if (entity.ChiefEditor)
-                {
-                    var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
-                    if (chiefEditor != null)
-                    {
-                        chiefEditor.ChiefEditor = false;
-                        unitOfWork.Employees.Update(chiefEditor);
-                    }
-                }
-
-                var employee = mapper.Map<EmployeeDTO, Employee>(entity);
-
-                unitOfWork.Employees.Create(employee);
-
-                return new SuccessfulResult<int>(unitOfWork.Save());
+                var result = await unitOfWork.Users.CreateAsync(user);
+                return !result.Succeeded
+                    ? (IResult<string>) new BadResult<string>(result.Errors.Aggregate((resultError, error) =>
+                        error + "\n"))
+                    : new SuccessfulResult<string>("Пользователь " + user.UserName + " успешно создан");
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<int>(e);
+                return new BadResult<string>(e);
             }
         }
 
-        public IResult<int> EditEmployee(EmployeeDTO entity)
+        public async Task<IResult<string>> EditEmployeeAsync(EmployeeDTO entity)
         {
-            if (entity == null) return new BadResult<int>("Отсутствует сущность");
+            if (entity == null) return new BadResult<string>("Отсутствует сущность");
             try
             {
-                var employee = mapper.Map<EmployeeDTO, Employee>(entity);
-                var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
-                if (chiefEditor != null && chiefEditor.Id == entity.Id && !entity.ChiefEditor)
-                    return new BadResult<int>("Сначала необходимо указать другого главного редактора");
-                if (chiefEditor != null && entity.ChiefEditor && chiefEditor.Id != entity.Id)
-                {
-                    chiefEditor.ChiefEditor = false;
-                    unitOfWork.Employees.Update(chiefEditor);
-                }
-
-                unitOfWork.Employees.Update(employee);
-                return new SuccessfulResult<int>(unitOfWork.Save());
+                var user = mapper.Map<EmployeeDTO, EmployeeUser>(entity);
+                var result = await unitOfWork.Users.UpdateAsync(user);
+                return !result.Succeeded
+                    ? (IResult<string>) new BadResult<string>(result.Errors.Aggregate((resultError, error) =>
+                        error + "\n"))
+                    : new SuccessfulResult<string>("Данные пользователя" + user.UserName + " успешно обновлены");
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<int>(e);
+                return new BadResult<string>(e);
             }
         }
 
-        public IResult<int> DeleteEmployee(int? id)
+        public async Task<IResult<string>> DeleteEmployeeAsync(int? id)
         {
-            if (id == null) return new BadResult<int>("Отсутствует идентификатор сущности");
+            if (id == null) return new BadResult<string>("Отсутствует идентификатор сущности");
             try
             {
-                var chiefEditor = unitOfWork.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
-                if (chiefEditor != null && chiefEditor.Id == id.Value)
-                    return new BadResult<int>("Сначала необходимо указать другого главного редактора");
+                var target = await unitOfWork.Users.FindByIdAsync(id.Value);
+                if (target == null)
+                {
+                    return new BadResult<string>("Такого пользователя не существует");
+                }
+                if (target.ChiefEditor)
+                {
+                    return new BadResult<string>("Сначала необходимо указать другого главного редактора");
+                }
 
-                unitOfWork.Employees.Delete(id.Value);
-
-                return new SuccessfulResult<int>(unitOfWork.Save());
+                var result = await unitOfWork.Users.DeleteAsync(target);
+                if (!result.Succeeded)
+                {
+                    return new BadResult<string>(result.Errors.Aggregate((resultError, error) => error + "\n"));
+                }
+                return new SuccessfulResult<string>("Пользователь " + target.UserName + "успешно удален");
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<int>(e);
+                return new BadResult<string>(e);
+            }
+        }
+
+        public async Task<IResult<ClaimsIdentity>> AuthenticateUserAsync(EmployeeDTO entity)
+        {
+            if (entity == null) return new BadResult<ClaimsIdentity>("Отсутствует сущность");
+            try
+            {
+                var user = mapper.Map<EmployeeDTO, EmployeeUser>(entity);
+                var claims = await unitOfWork.Users.AuthenticateAsync(user);
+                return claims == null
+                    ? (IResult<ClaimsIdentity>) new BadResult<ClaimsIdentity>(
+                        "Ошибка аутентификации. Были введены неверные данные")
+                    : new SuccessfulResult<ClaimsIdentity>(claims);
+            }
+            catch (InvalidOperationException e)
+            {
+                return new BadResult<ClaimsIdentity>(e);
             }
         }
     }

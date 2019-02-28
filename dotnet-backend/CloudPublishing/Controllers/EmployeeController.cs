@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
@@ -8,16 +10,20 @@ using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.Enums;
 using CloudPublishing.Models.Employees.ViewModels;
 using CloudPublishing.Util;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 
 namespace CloudPublishing.Controllers
 {
     public class EmployeeController : Controller
     {
+        private IEmployeeService Service => HttpContext.GetOwinContext().GetUserManager<IEmployeeService>();
+
+        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
+
         private static readonly IDictionary<EmployeeType, string> Types;
         private static readonly IDictionary<Sex, string> Sexes;
         private readonly IMapper mapper;
-
-        private readonly IEmployeeService service;
 
         static EmployeeController()
         {
@@ -33,9 +39,8 @@ namespace CloudPublishing.Controllers
             };
         }
 
-        public EmployeeController(IEmployeeService service)
+        public EmployeeController()
         {
-            this.service = service;
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
         }
 
@@ -50,7 +55,7 @@ namespace CloudPublishing.Controllers
 
         private List<SelectListItem> GetEmployeeEducationList()
         {
-            var list = service.GetEducationList();
+            var list = Service.GetEducationList();
             return list.IsSuccessful
                 ? list.GetContent().Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()})
                     .ToList()
@@ -61,7 +66,7 @@ namespace CloudPublishing.Controllers
         public ActionResult List()
         {
             if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
-            var result = service.GetEmployeeList();
+            var result = Service.GetEmployeeList();
             if (!result.IsSuccessful) return null;
 
             return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.GetContent().ToList())
@@ -81,9 +86,26 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model)
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
+            var result = await Service.AuthenticateUserAsync(new EmployeeDTO
+            {
+                Email = model.Email,
+                Password = model.Password
+            });
+
+            if (!result.IsSuccessful)
+            {
+                ModelState.AddModelError("", result.GetFailureMessage());
+                model.Password = string.Empty;
+                return View(model);
+            }
+            AuthenticationManager.SignOut();
+            AuthenticationManager.SignIn(new AuthenticationProperties
+            {
+                IsPersistent = model.CheckOut
+            }, result.GetContent());
 
             return RedirectToAction("List", "Employee");
         }
@@ -101,7 +123,7 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(EmployeeCreateModel model)
+        public async Task<ActionResult> Create(EmployeeCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -112,7 +134,7 @@ namespace CloudPublishing.Controllers
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
-            var result = service.CreateEmployee(user);
+            var result = await Service.CreateEmployeeAsync(user);
 
             if (!result.IsSuccessful)
             {
@@ -122,8 +144,7 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            TempData["Message"] = "Пользователь успешно создан. Количество измененных пользователей: " +
-                                  result.GetContent();
+            TempData["Message"] = result.GetContent();
 
 
             return RedirectToAction("List");
@@ -134,7 +155,7 @@ namespace CloudPublishing.Controllers
         {
             if (id == null) return null;
 
-            var result = service.GetEmployeeById(id.Value);
+            var result = Service.GetEmployeeById(id.Value);
             if (!result.IsSuccessful) return null;
 
             var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result.GetContent());
@@ -148,7 +169,7 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(EmployeeEditModel model)
+        public async Task<ActionResult> Edit(EmployeeEditModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -157,7 +178,7 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
-            var result = service.EditEmployee(user);
+            var result = await Service.EditEmployeeAsync(user);
             if (!result.IsSuccessful)
             {
                 ModelState.AddModelError("", result.GetFailureMessage());
@@ -166,21 +187,20 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            TempData["Message"] = "Данные пользователя успешно обновлены. Количество измененных пользователей: " +
-                                  result.GetContent();
+            TempData["Message"] = result.GetContent();
 
             return RedirectToAction("List");
         }
 
         [AjaxOnly]
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
-            var result = service.DeleteEmployee(id);
+            var result = await Service.DeleteEmployeeAsync(id);
 
             return Json(new
             {
                 isSuccessful = result.IsSuccessful,
-                message = result.IsSuccessful ? "Сотрудник успешно удален" : result.GetFailureMessage()
+                message = result.IsSuccessful ? result.GetContent() : result.GetFailureMessage()
             }, JsonRequestBehavior.AllowGet);
         }
     }

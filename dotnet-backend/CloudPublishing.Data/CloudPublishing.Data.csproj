@@ -104,6 +104,7 @@
     <Compile Include="Entities\Publishing.cs" />
     <Compile Include="Entities\Review.cs" />
     <Compile Include="Entities\Topic.cs" />
+    <Compile Include="Identity\Enums\Role.cs" />
     <Compile Include="Identity\Managers\EmployeeUserManager.cs" />
     <Compile Include="Identity\EmployeeUserMapProfile.cs" />
     <Compile Include="Identity\Entities\EmployeeRole.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Interfaces\IReviewRepository.cs" />
     <Compile Include="Interfaces\ITopicRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ArticleRepository.cs" />
     <Compile Include="Repositories\EmployeeRepository.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="Repositories\ReviewRepository.cs" />
     <Compile Include="Repositories\TopicRepository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

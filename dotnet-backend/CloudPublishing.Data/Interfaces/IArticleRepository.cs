@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using CloudPublishing.Data.Entities.RestApi;
 
 namespace CloudPublishing.Data.Interfaces
 {
