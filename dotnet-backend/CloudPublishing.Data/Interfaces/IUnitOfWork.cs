@@ -1,5 +1,7 @@
 ﻿using System;
 using CloudPublishing.Data.Entities;
+using CloudPublishing.Data.Identity.Entities;
+using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Data.Interfaces
 {
@@ -16,6 +18,10 @@ namespace CloudPublishing.Data.Interfaces
         // RESTful api's repositories
 
         IArticleRepository Articles { get; }
+
+        // Identity
+
+        UserManager<EmployeeUser, int> UserManager { get; }
 
         int Save();
     }

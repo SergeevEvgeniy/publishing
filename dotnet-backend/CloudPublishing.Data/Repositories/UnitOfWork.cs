@@ -1,6 +1,10 @@
 ﻿using System.Net.Http;
 using CloudPublishing.Data.EF;
+using CloudPublishing.Data.Identity.Entities;
+using CloudPublishing.Data.Identity.Managers;
+using CloudPublishing.Data.Identity.Stores;
 using CloudPublishing.Data.Interfaces;
+using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Data.Repositories
 {
@@ -19,6 +23,7 @@ namespace CloudPublishing.Data.Repositories
         public UnitOfWork(string connectionString)
         {
             context = new CloudPublishingContext(connectionString);
+            UserManager = new EmployeeUserManager(new EmployeeUserStore(context));
             client = new HttpClient();
         }
 
@@ -26,6 +31,7 @@ namespace CloudPublishing.Data.Repositories
         {
             context?.Dispose();
             client?.Dispose();
+            UserManager?.Dispose();
         }
 
         public IEmployeeRepository Employees => employees?? new EmployeeRepository(context);
@@ -38,6 +44,8 @@ namespace CloudPublishing.Data.Repositories
 
 
         public IArticleRepository Articles => articles ?? new ArticleRepository(client);
+
+        public UserManager<EmployeeUser, int> UserManager { get; }
 
         public int Save()
         {

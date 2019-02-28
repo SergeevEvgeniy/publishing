@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Data.Identity.Stores
 {
-    public class EmployeeUserStore : IUserStore<EmployeeUser, int>
+    public class EmployeeUserStore : IUserPasswordStore<EmployeeUser, int>
     {
         private readonly IMapper mapper;
         private readonly CloudPublishingContext context;
@@ -74,6 +74,21 @@ namespace CloudPublishing.Data.Identity.Stores
                 var user = context.Employees.FirstOrDefault(x => x.Email == userName);
                 return mapper.Map<Employee, EmployeeUser>(user);
             });
+        }
+
+        public Task SetPasswordHashAsync(EmployeeUser user, string passwordHash)
+        {
+            return Task.FromResult(user.PasswordHash = passwordHash);
+        }
+
+        public Task<string> GetPasswordHashAsync(EmployeeUser user)
+        {
+            return Task.FromResult(user.PasswordHash);
+        }
+
+        public Task<bool> HasPasswordAsync(EmployeeUser user)
+        {
+            return Task.FromResult(user.Password != null);
         }
     }
 }
