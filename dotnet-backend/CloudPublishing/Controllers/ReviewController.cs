@@ -2,6 +2,7 @@
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Reviews.ViewModels;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -74,9 +75,16 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult GetArticleList(int? publishingId, int? topicId, int? authorId)
         {
-            List<ArticleModel> authorList = mapper.Map<IEnumerable<ArticleDTO>, List<ArticleModel>>
+            List<ArticleModel> articleList = mapper.Map<IEnumerable<ArticleDTO>, List<ArticleModel>>
                 (reviewService.GetArticleList(publishingId, topicId, authorId));
-            return PartialView(authorList);
+            return PartialView(articleList);
+        }
+
+        [HttpGet]
+        public ActionResult GetArticleContent(int? articleId)
+        {
+            // Заглушка для тестирования
+            return Json("Content", JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -85,18 +93,6 @@ namespace CloudPublishing.Controllers
             reviewService.CreateReview(mapper.Map<ReviewVM, ReviewDTO>(review));
 
             return View("Index");
-        }
-
-        // Тут будут методы обработки запросов для построения списков
-
-        public ActionResult Test()
-        {
-            var list = new List<ReviewDTO>
-            {
-                new ReviewDTO{ArticleId = 1, Approved = true, Content = string.Empty, ReviwerId = 1}
-            };
-            return View();
-            //return Json(new { id})
         }
 
         public ActionResult Details(int articleId)

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CloudPublishing.Data.Entities.RestApi;
 using CloudPublishing.Data.Interfaces;
 
 namespace CloudPublishing.Data.Repositories
