@@ -1,9 +1,15 @@
 package by.artezio.cloud.publishing.dao;
 
+import by.artezio.cloud.publishing.domain.MailingInfo;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +20,20 @@ import java.util.List;
  */
 @Repository
 public class MailingDao {
+
+    private RowMapper<MailingInfo> mailingInfoRowMapper = new RowMapper<MailingInfo>() {
+        @Override
+        public MailingInfo mapRow(ResultSet rs, int i) throws SQLException {
+            System.out.println(rs.getDate("date"));
+            return new MailingInfo(
+                rs.getInt("mailing_id"),
+                rs.getInt("publishing_id"),
+                rs.getInt("issue_id"),
+                rs.getTimestamp("date").toLocalDateTime(),
+                rs.getString("result")
+            );
+        }
+    };
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -42,6 +62,15 @@ public class MailingDao {
                 + "        group by publishing_id) maxid on maxid.id = ms.mailing_id;",
             new MapSqlParameterSource(Collections.singletonMap("publishingId", publishingId)),
             (rs, rowNum) -> rs.getString(1)
+        );
+    }
+
+    public List<MailingInfo> getAllMailingInfo() {
+        return jdbcTemplate.query(
+            "select mailing_id, publishing_id, issue_id, `date`, result\n"
+            + "from mailing\n"
+            + "       join mailing_result on mailing.id = mailing_result.mailing_id",
+            mailingInfoRowMapper
         );
     }
 }

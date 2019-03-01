@@ -22,12 +22,11 @@
         </option>
         <c:forEach var="item" items="${publishingList}">
             <option
-                <c:set var="link" value="settings/"/>
                 <c:if test="${id == null}">
-                    <c:out value="${link = 'value=settings/'.concat(item.id)}"/>
+                    <c:out value="${'value=settings/'.concat(item.id)}"/>
                 </c:if>
                 <c:if test="${id != null}">
-                    <c:out value="${link = 'value=../settings/'.concat(item.id)}"/>
+                    <c:out value="${'value=../settings/'.concat(item.id)}"/>
                 </c:if>
                 <c:if test="${id == item.id}">
                     <c:out value="selected"/>
@@ -37,6 +36,19 @@
             </option>
         </c:forEach>
     </select>
+    <table border="2px">
+        <tr>
+            <td>Email адрес</td>
+            <td>Кнопочка для удаления</td>
+        </tr>
+        <c:forEach var="email" items="${emailList}">
+            <tr>
+                <td>${email}</td>
+                <%--TODO Сделать кнопочку--%>
+                <td>КНОПОЧКА</td>
+            </tr>
+        </c:forEach>
+    </table>
 </form>
 </body>
 </html>

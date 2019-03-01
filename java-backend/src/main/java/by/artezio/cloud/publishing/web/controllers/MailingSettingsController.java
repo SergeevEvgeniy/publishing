@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MailingSettingsController {
 
     @Autowired
-    private PublishingDao publishingDao;
-
-    @Autowired
     private MailingSettingsService mailingSettingsService;
 
     /**

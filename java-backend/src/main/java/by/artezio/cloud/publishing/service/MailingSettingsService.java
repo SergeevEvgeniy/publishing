@@ -4,7 +4,7 @@ import by.artezio.cloud.publishing.dao.MailingDao;
 import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.domain.Publishing;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * Сервис для удовлетворения потребностей, связанных со страницей настройки рассылки.
  * @author vgamezo
  */
-@Component
+@Service
 public class MailingSettingsService {
 
     @Autowired
