@@ -12,6 +12,12 @@ public class Publishing {
     private String subjects;
 
     /**
+     * Конструктор по умолчанию.
+     */
+    public Publishing() {
+    }
+
+    /**
      * Конструктор с полным набором параметров для создания сущности Публикация.
      * @param id id публикации
      * @param title название
