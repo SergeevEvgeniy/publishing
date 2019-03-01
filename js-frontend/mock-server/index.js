@@ -10,7 +10,7 @@ app
         extended: true
     }))
     .get('/', (req, res) => {
-        res.send("hello");
+        res.send('hello');
     })
     .get('/api/publishings', (req, res) => {
         var publishings = require('./data/publishings');

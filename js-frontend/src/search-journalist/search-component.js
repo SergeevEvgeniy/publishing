@@ -2,7 +2,7 @@ var searchTemplate = require('./search.hbs');
 var api = require('../api/journalist-api');
 var $ = require('jquery');
 var PickListComponent = require('../picklist/picklist-component');
-//var JournalistResultComponent = require('../search-journalist-result/journalist-result-component');
+var JournalistResultComponent = require('../search-journalist-result/journalist-result-component');
 var $searchPage = $('<div>', {
     id: 'searchJournalist'
 });
@@ -16,14 +16,14 @@ function SearchJournalistComponent($parentElement) {
     var $issueElement = $searchPage.find('#issue');
     var $publishingElement = $searchPage.find('#publishing');
     var $topicElement = $searchPage.find('#topic');
-    var $articleElement = $searchPage.find('#article');
-    var $lastNameElement = $searchPage.find('#lastName');
-    var $searchElement = $searchPage.find('#searchResult');
+    var $articleInputElement = $searchPage.find('#article');
+    var $lastNameInputElement = $searchPage.find('#lastName');
+    var $searchResultElement = $searchPage.find('#searchResult');
 
     var issueList = new PickListComponent($issueElement, 'issue', 'Выбирите выпуск');
     var publishingList = new PickListComponent($publishingElement, 'publishing', 'Выберите издание');
     var topicList = new PickListComponent($topicElement, 'topic', 'Выберите рубрику');
-    //var journalistResult = new JournalistResultComponent($searchElement);
+    var journalistResult = new JournalistResultComponent($searchResultElement);
 
     function onPublishingChangeEvent(event) {
         api.getIssueList(event.target.value).then(function renderIssueList(response) {
@@ -31,7 +31,6 @@ function SearchJournalistComponent($parentElement) {
             if ($issuePanel.hasClass('d-none')) {
                 $issuePanel.removeClass('d-none');
             }
-            issueList.clear();
             issueList.render(response);
         });
     }
@@ -41,20 +40,22 @@ function SearchJournalistComponent($parentElement) {
         var formData = form.serializeArray();
         event.preventDefault();
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
-            console.log(response);
-            //journalistResult.render(response);
+            if (response.length === 0) {
+                $searchResultElement.text('Отсутствуют результаты поиска.');
+            } else {
+                journalistResult.render(response);
+            }
         });
     }
 
     function onSearchClearEvent(event) {
         event.preventDefault();
         $issueElement.closest('.input-block').addClass('d-none');
-        issueList.clear();
         topicList.selectDefault();
         publishingList.selectDefault();
-        $articleElement.val('');
-        $lastNameElement.val('');
-        $searchElement.empty();
+        $articleInputElement.val('');
+        $lastNameInputElement.val('');
+        $searchResultElement.empty();
     }
 
     $searchPage.on('change', publishingElementSelector, onPublishingChangeEvent);
@@ -64,11 +65,9 @@ function SearchJournalistComponent($parentElement) {
     this.render = function render() {
         $parentElement.append($searchPage);
         api.getPublishingList().then(function handleResponse(response) {
-            $publishingElement.empty();
             publishingList.render(response);
         });
         api.getTopicList().then(function handleResponse(response) {
-            $topicElement.empty();
             topicList.render(response);
         });
     };
