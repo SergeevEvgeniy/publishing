@@ -53,7 +53,7 @@
         <c:forEach items="${model.currentCoauthors}" var="currentCoauthor">
             <tr>
                 <td>
-                    ${currentCoauthor}
+                        ${currentCoauthor}
                     <button>Удалить</button>
                 </td>
             </tr>
@@ -72,7 +72,9 @@
                 </select>
             </tr>
             <tr>
-                <textarea></textarea>
+                <td>
+                    <textarea></textarea>
+                </td>
             </tr>
             </tbody>
         </table>
