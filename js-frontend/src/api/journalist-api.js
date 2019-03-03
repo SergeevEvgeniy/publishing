@@ -30,20 +30,14 @@ function JournalistApiComponent() {
     this.getIssueList = function getIssueList(id) {
         return new Promise(function resolvePromise(resolve) {
             $.get(URL + '/api/issues?id=' + id, function getResponse(response) {
-                var issueList = response.issues.map(function convertToOptionFormat(issue) {
-                    return {
-                        value: issue.issueId,
-                        text: issue.issue
-                    };
-                });
-                resolve(issueList);
+                resolve(response);
             });
         });
     };
 
     this.postSearchJournalistForm = function postSearchJournalistForm(formData) {
         return new Promise(function resolvePromise(resolve) {
-            $.post(URL + '/api/journalists', formData).done(function response(journalistList) {
+            $.post(URL + '/api/journalists', formData).done(function getResponse(journalistList) {
                 resolve(journalistList);
             });
         });

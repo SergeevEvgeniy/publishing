@@ -1,12 +1,12 @@
-var optionList = require('./journalist-list.hbs');
+var journalistListTemplate = require('./journalist-list.hbs');
 var $ = require('jquery');
 
-function OptionListComponent($parentElement) {
+function JournalistListComponent($parentElement) {
     this.render = function render(elementList) {
-        $($parentElement).empty().append(optionList({
-            elementList: elementList
+        $($parentElement).empty().append(journalistListTemplate({
+            journalistList: elementList
         }));
     };
 }
 
-module.exports = OptionListComponent;
+module.exports = JournalistListComponent;
