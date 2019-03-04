@@ -25,7 +25,7 @@ public class LogoutController {
      * @throws java.io.IOException io
      */
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html");

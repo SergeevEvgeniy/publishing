@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Класс-сущность, представляет строку из таблицы "Employee".
  *
- * @author Denis Shubin
+ * @author Denis Shubin / Sergeev Evgeniy
  */
 public class Employee {
 
@@ -15,12 +15,18 @@ public class Employee {
     private String middleName;
     private String email;
     private String password;
-    private String sex;
+    private Character sex;
     private Integer birthYear;
     private String address;
     private Character type;
     private Integer educationId;
     private Boolean chiefEditor;
+
+    /**
+     * Конструктор по умолчанию.
+     */
+    public Employee() {
+    }
 
     /**
      * Возвращает id сотрудника.
@@ -135,7 +141,7 @@ public class Employee {
      *
      * @return String
      */
-    public String getSex() {
+    public Character getSex() {
         return sex;
     }
 
@@ -144,7 +150,7 @@ public class Employee {
      *
      * @param sex String
      */
-    public void setSex(final String sex) {
+    public void setSex(final Character sex) {
         this.sex = sex;
     }
 
@@ -234,7 +240,7 @@ public class Employee {
      *
      * @param chiefEditor boolean
      */
-    public void setChiefEditor(final boolean chiefEditor) {
+    public void setChiefEditor(final Boolean chiefEditor) {
         this.chiefEditor = chiefEditor;
     }
 
@@ -248,22 +254,22 @@ public class Employee {
         }
         Employee employee = (Employee) o;
         return id.equals(employee.id)
-            && birthYear.equals(employee.birthYear)
-            && chiefEditor == employee.chiefEditor
-            && Objects.equals(firstName, employee.firstName)
-            && Objects.equals(lastName, employee.lastName)
-            && Objects.equals(middleName, employee.middleName)
-            && Objects.equals(email, employee.email)
-            && Objects.equals(password, employee.password)
-            && Objects.equals(sex, employee.sex)
-            && Objects.equals(address, employee.address)
-            && Objects.equals(type, employee.type)
-            && Objects.equals(educationId, employee.educationId);
+                && birthYear.equals(employee.birthYear)
+                && chiefEditor.equals(employee.chiefEditor)
+                && Objects.equals(firstName, employee.firstName)
+                && Objects.equals(lastName, employee.lastName)
+                && Objects.equals(middleName, employee.middleName)
+                && Objects.equals(email, employee.email)
+                && Objects.equals(password, employee.password)
+                && Objects.equals(sex, employee.sex)
+                && Objects.equals(address, employee.address)
+                && Objects.equals(type, employee.type)
+                && Objects.equals(educationId, employee.educationId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, middleName,
-            email, password, sex, birthYear, address, type, educationId, chiefEditor);
+                email, password, sex, birthYear, address, type, educationId, chiefEditor);
     }
 }
