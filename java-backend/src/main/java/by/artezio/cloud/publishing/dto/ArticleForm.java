@@ -5,11 +5,13 @@ import by.artezio.cloud.publishing.domain.Review;
 import java.util.List;
 
 /**
- * Класс для переноса данных из контроллера в update_article.jsp.
+ * Класс, содержащий детальную информацию о статье.
+ *
+ * <p>Используется для отображения статей на странице <code>update_article.jsp</code>.
  *
  * @author Denis Shubin
  */
-public class UpdateArticleDTO {
+public class ArticleForm {
 
     private List<String> publishings;
     private List<String> topics;

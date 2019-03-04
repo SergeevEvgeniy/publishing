@@ -1,45 +1,49 @@
 package by.artezio.cloud.publishing.domain;
 
-import java.util.Objects;
+import java.util.Set;
 
 /**
- * Класс-сущность, представляет строку из таблицы"Articles".
+ * Класс-сущность, представляет строку из таблицы "Articles".
  *
  * @author Denis Shubin.
  */
 public class Article {
 
     private int id;
-    private int publishingId;
-    private int topicId;
+    private Publishing publishing;
+    private Topic topic;
     private String title;
     private String content;
-    private int authorId;
+    private Employee author;
+    private Set<Employee> coauthors;
 
     /**
-     * Конструктор, создаёт класс с стандартными значениями полей.
+     * Конструктор, создаёт класс со стандартными значениями полей.
      */
     public Article() {
     }
 
     /**
-     * Конструктор для создания сущности с указанными значениями полей.
+     * Конструктор для создания объекта с указанными значениями полей.
      *
-     * @param id           - id статьи.
-     * @param publishingId - id журнала.
-     * @param topicId      - id рубрики.
-     * @param title        - название статьи.
-     * @param content      - содержимое статьи.
-     * @param authorId     - id автора.
+     * @param id         идентификатор статьи
+     * @param publishing {@link Publishing} журнал/газета, в котором печатается эта статья
+     * @param topic      {@link Topic} рубрика статьи
+     * @param title      название статьи
+     * @param content    текст статьи
+     * @param author     {@link Employee} автор статьи
+     * @param coauthors  множество соавторов {@link Employee} статьи
      */
-    public Article(final int id, final int publishingId, final int topicId, final String title,
-                   final String content, final int authorId) {
+    public Article(final int id, final Publishing publishing, final Topic topic,
+                   final String title, final String content, final Employee author,
+                   final Set<Employee> coauthors) {
         this.id = id;
-        this.publishingId = publishingId;
-        this.topicId = topicId;
+        this.publishing = publishing;
+        this.topic = topic;
         this.title = title;
         this.content = content;
-        this.authorId = authorId;
+        this.author = author;
+        this.coauthors = coauthors;
     }
 
     /**
@@ -60,41 +64,6 @@ public class Article {
         this.id = id;
     }
 
-    /**
-     * Возвращает id журнала, в котором опубликована статья.
-     *
-     * @return int
-     */
-    public int getPublishingId() {
-        return publishingId;
-    }
-
-    /**
-     * Устанавливает значение publishingId.
-     *
-     * @param publishingId int
-     */
-    public void setPublishingId(final int publishingId) {
-        this.publishingId = publishingId;
-    }
-
-    /**
-     * Возвращает id рубрики.
-     *
-     * @return int
-     */
-    public int getTopicId() {
-        return topicId;
-    }
-
-    /**
-     * Устанавливает значение topicId.
-     *
-     * @param topicId int
-     */
-    public void setTopicId(final int topicId) {
-        this.topicId = topicId;
-    }
 
     /**
      * Возвращает название статьи.
@@ -133,63 +102,74 @@ public class Article {
     }
 
     /**
-     * Возвращает id автора статьи.
+     * Возвращает журнал/газету статьи.
      *
-     * @return int
+     * @return объект класса {@link Publishing}
      */
-    public int getAuthorId() {
-        return authorId;
+    public Publishing getPublishing() {
+        return publishing;
     }
 
     /**
-     * Устанавливает id автора статьи.
+     * Устанавливает журнал/газету статьи.
      *
-     * @param authorId int
+     * @param publishing объект класса {@link Publishing}
      */
-    public void setAuthorId(final int authorId) {
-        this.authorId = authorId;
+    public void setPublishing(final Publishing publishing) {
+        this.publishing = publishing;
     }
 
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Article article = (Article) o;
-        return id == article.id
-            && publishingId == article.publishingId
-            && topicId == article.topicId
-            && authorId == article.authorId
-            && Objects.equals(title, article.title)
-            && Objects.equals(content, article.content);
+    /**
+     * Возвращает рубрику статьи.
+     *
+     * @return объект класса {@link Topic}
+     */
+    public Topic getTopic() {
+        return topic;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, publishingId, topicId, title, content, authorId);
+    /**
+     * Устанавливает рубрику статьи.
+     *
+     * @param topic объект класса {@link Topic}
+     */
+    public void setTopic(final Topic topic) {
+        this.topic = topic;
     }
 
-    @Override
-    public String toString() {
-        return "Article{"
-            + "id="
-            + id
-            + ", publishingId="
-            + publishingId
-            + ", topicId="
-            + topicId
-            + ", title='"
-            + title
-            + '\''
-            + ", content='"
-            + content
-            + '\''
-            + ", authorId="
-            + authorId
-            + '}';
+    /**
+     * Возвращает автора статьи.
+     *
+     * @return объект класса {@link Employee}
+     */
+    public Employee getAuthor() {
+        return author;
+    }
+
+    /**
+     * Устанавливает автора статьи.
+     *
+     * @param author объект класса {@link Employee}
+     */
+    public void setAuthor(final Employee author) {
+        this.author = author;
+    }
+
+    /**
+     * Возвращает множество соавторов статьи.
+     *
+     * @return {@link Set} объектов {@link Employee}
+     */
+    public Set<Employee> getCoauthors() {
+        return coauthors;
+    }
+
+    /**
+     * Устанавливает множество соавторов статьи.
+     *
+     * @param coauthors {@link Set} объектов {@link Employee}
+     */
+    public void setCoauthors(final Set<Employee> coauthors) {
+        this.coauthors = coauthors;
     }
 }

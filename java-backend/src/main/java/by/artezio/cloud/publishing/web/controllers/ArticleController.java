@@ -1,7 +1,7 @@
 package by.artezio.cloud.publishing.web.controllers;
 
-import by.artezio.cloud.publishing.dto.ArticleListDTO;
-import by.artezio.cloud.publishing.dto.UpdateArticleDTO;
+import by.artezio.cloud.publishing.dto.ArticleForm;
+import by.artezio.cloud.publishing.dto.ArticleInfo;
 import by.artezio.cloud.publishing.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +17,12 @@ import java.util.List;
 @Controller
 public class ArticleController {
 
+    private ArticleService service;
+
     @Autowired
-    ArticleService service;
+    public ArticleController(ArticleService service) {
+        this.service = service;
+    }
 
     /**
      * Возвращает пользователю страницу со списком статей.
@@ -30,7 +34,7 @@ public class ArticleController {
     @GetMapping(path = "/article_list")
     public final String articleList(final Model model, final HttpServletRequest request) {
 
-        List<ArticleListDTO> data = service.getArticleListDto(request);
+        List<ArticleInfo> data = service.getArticleInfoList(request);
         model.addAttribute("list", data);
         return "article_list";
     }
@@ -42,7 +46,7 @@ public class ArticleController {
      */
     @GetMapping(path = "/update")
     public final String updateArticle(final Model model, HttpServletRequest request) {
-        UpdateArticleDTO data = service.getUpdateArticleDto(request);
+        ArticleForm data = service.getArticleForm(request);
         model.addAttribute("model", data);
         return "update_article";
     }

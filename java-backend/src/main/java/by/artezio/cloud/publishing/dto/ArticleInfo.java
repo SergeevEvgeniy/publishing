@@ -1,19 +1,20 @@
 package by.artezio.cloud.publishing.dto;
 
-import java.util.List;
+import java.util.Set;
 
 /**
- * Класс для переноса данных из контроллера в article_list.jsp.
+ * Класс, содержащий краткую информацию о статье.
+ * Используется для отображения списка статей на странице article_list.jsp.
  *
  * @author Denis Shubin
  */
-public class ArticleListDTO {
+public class ArticleInfo {
 
     private String title;
     private String publishing;
     private String topic;
     private String authorFullName;
-    private List<String> coauthors;
+    private Set<String> coauthors;
 
     /**
      * Возвращает название статьи.
@@ -90,18 +91,18 @@ public class ArticleListDTO {
     /**
      * Возвращает список полных имён соавторов.
      *
-     * @return List<String>
+     * @return Set<String>
      */
-    public List<String> getCoauthors() {
+    public Set<String> getCoauthors() {
         return coauthors;
     }
 
     /**
      * Устанавливает список соавторов.
      *
-     * @param coauthors List<String>
+     * @param coauthors Set<String>
      */
-    public void setCoauthors(final List<String> coauthors) {
+    public void setCoauthors(final Set<String> coauthors) {
         this.coauthors = coauthors;
     }
 }
