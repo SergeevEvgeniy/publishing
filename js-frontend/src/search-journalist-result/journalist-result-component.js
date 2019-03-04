@@ -7,7 +7,6 @@ var $resultPage = $('<div>', {
 $resultPage.append(resultTemplate());
 
 function JournalistResultComponent($parentElement) {
-    //var journalistListData;
     var $paginationElement = $resultPage.find('#pagination');
     var $journalistListElement = $resultPage.find('tbody');
 
@@ -18,9 +17,9 @@ function JournalistResultComponent($parentElement) {
         $parentElement.empty().append($resultPage);
         pagination.setItemsQuantity(journalistQuantity);
         pagination.onPageChange(function pageChangeListener(itemsDisplayQuantity, activePageNumber) {
-            console.log(itemsDisplayQuantity + ' activePageNumber = ' + activePageNumber);
-            var endElement = itemsDisplayQuantity * activePageNumber;
-            journalistList.render(data.slice(endElement - itemsDisplayQuantity, endElement));
+            var startItemIndex = itemsDisplayQuantity * activePageNumber - itemsDisplayQuantity;
+            var endItemIndex = itemsDisplayQuantity * activePageNumber;
+            journalistList.render(data.slice(startItemIndex, endItemIndex));
         });
         pagination.render();
     };
