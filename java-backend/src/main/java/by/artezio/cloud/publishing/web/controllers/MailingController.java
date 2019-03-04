@@ -37,7 +37,7 @@ public class MailingController {
      * @param model модель, с помощью которой можно взаимодейстовать с отображаемым контентом.
      * @return вьюха настроек
      */
-    @GetMapping("/setting")
+    @GetMapping("/settings")
     public String initListPublishing(final Model model) {
         model.addAttribute("publishingList", mailingService.getPublishingList());
         return "mailingSettings";
@@ -50,7 +50,7 @@ public class MailingController {
      * @param model модель, с помощью которой можно взаимодействовать с отображаемым контентом
      * @return вьюха настроек
      */
-    @GetMapping("setting/{id}")
+    @GetMapping("settings/{id}")
     public String getEmailList(@PathVariable final int id, final Model model) {
         model.addAttribute("id", id);
         model.addAttribute("emailList", mailingService.getEmailListByPublishingId(id));
