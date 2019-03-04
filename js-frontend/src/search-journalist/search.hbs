@@ -22,12 +22,10 @@
             </div>
             <div class="row input-block">
                 <label class="col-sm-4 text-right font-weight-bold">Фамилия:</label>
-                <div class="col-sm-8">
-                    <input name="last_name" class="form-control" id="lastName" type="text"
+                <div class="col-sm-8" id="lastName">
+                    <input name="last_name" class="form-control" type="text"
                         placeholder="Введите фамилию или её часть">
-                    <div class="invalid-feedback">
-                        Please provide a valid city.
-                    </div>
+                    <small class="form-text text-danger d-none">Фамилия должна содержать только русские символы</small>
                 </div>
             </div>
         </div>
@@ -45,10 +43,11 @@
                 <div class="col-sm-8">
                     <input name="article" class="form-control" id="article" type="text"
                         placeholder="Введите название статьи или её часть">
+                    <small class="form-text text-danger d-none">Название статьи должно содержать только русские символы</small>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 text-right">
+        <div class="col-sm-12 text-right submit-area">
             <div class="spinner-border text-primary align-middle d-none" role="status">
                 <span class="sr-only">Loading...</span>
             </div>

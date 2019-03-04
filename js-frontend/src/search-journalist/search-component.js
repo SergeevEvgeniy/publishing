@@ -9,15 +9,17 @@ var $searchPage = $('<div>', {
 $searchPage.append(searchTemplate());
 
 function SearchJournalistComponent($parentElement) {
+    var hiddenClass = 'd-none';
     var publishingElementSelector = '#publishing select';
     var searchButtonSelector = '#searchJournalist';
     var clearButtonSelector = '#clearJournalistSearch';
+    var inputElementSelector = 'input';
 
     var $issueElement = $searchPage.find('#issue');
     var $publishingElement = $searchPage.find('#publishing');
     var $topicElement = $searchPage.find('#topic');
     var $articleInputElement = $searchPage.find('#article');
-    var $lastNameInputElement = $searchPage.find('#lastName');
+    var $lastNameInputElement = $searchPage.find('#lastName>input');
     var $searchResultElement = $searchPage.find('#searchResult');
     var $searchFormElement = $searchPage.find('form');
     var $loadingElement = $searchPage.find('.spinner-border');
@@ -30,8 +32,8 @@ function SearchJournalistComponent($parentElement) {
     function onPublishingChangeEvent(event) {
         api.getIssueList(event.target.value).then(function renderIssueList(response) {
             var $issuePanel = $issueElement.closest('.input-block');
-            if ($issuePanel.hasClass('d-none')) {
-                $issuePanel.removeClass('d-none');
+            if ($issuePanel.hasClass(hiddenClass)) {
+                $issuePanel.removeClass(hiddenClass);
             }
             issueList.render(response);
         });
@@ -42,21 +44,21 @@ function SearchJournalistComponent($parentElement) {
         var searchButton = event.target;
         event.preventDefault();
         searchButton.disabled = true;
-        $loadingElement.removeClass('d-none');
+        $loadingElement.removeClass(hiddenClass);
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
             if (response.length !== 0) {
                 journalistResult.render(response);
             } else {
                 $searchResultElement.text('Отсутствуют результаты поиска.');
             }
-            $loadingElement.addClass('d-none');
+            $loadingElement.addClass(hiddenClass);
             searchButton.disabled = false;
         });
     }
 
     function onSearchClearEvent(event) {
         event.preventDefault();
-        $issueElement.closest('.input-block').addClass('d-none');
+        $issueElement.closest('.input-block').addClass(hiddenClass);
         topicList.selectDefault();
         publishingList.selectDefault();
         $articleInputElement.val('');
@@ -64,9 +66,23 @@ function SearchJournalistComponent($parentElement) {
         $searchResultElement.empty();
     }
 
+    function onInputBlurEvent(event) {
+        var $inputElementParent = $(event.target.parentElement);
+        var $validationMessage = $inputElementParent.find('small');
+        var pattern = /[A-z0-9]/;
+        var inputElementValue = event.target.value;
+        console.log(pattern.test(event.target.textContent));
+        if (pattern.test(inputElementValue)) {
+            $validationMessage.removeClass(hiddenClass);
+        } else {
+            $validationMessage.addClass(hiddenClass);
+        }
+    }
+
     $searchPage.on('change', publishingElementSelector, onPublishingChangeEvent);
     $searchPage.on('click', searchButtonSelector, onSearchSubmitEvent);
     $searchPage.on('click', clearButtonSelector, onSearchClearEvent);
+    $searchPage.on('blur', inputElementSelector, onInputBlurEvent);
 
     this.render = function render() {
         $parentElement.append($searchPage);
