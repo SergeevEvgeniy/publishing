@@ -17,9 +17,9 @@ namespace CloudPublishing.Controllers
 {
     public class EmployeeController : Controller
     {
-        private IEmployeeService Service => HttpContext.GetOwinContext().GetUserManager<IEmployeeService>();
+        private readonly IEmployeeService service;
 
-        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
+        private readonly IAuthenticationManager authenticationManager;
 
         private static readonly IDictionary<EmployeeType, string> Types;
         private static readonly IDictionary<Sex, string> Sexes;
@@ -39,8 +39,10 @@ namespace CloudPublishing.Controllers
             };
         }
 
-        public EmployeeController()
+        public EmployeeController(IEmployeeService service, IAuthenticationManager authenticationManager)
         {
+            this.service = service;
+            this.authenticationManager = authenticationManager;
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
         }
 
@@ -55,7 +57,7 @@ namespace CloudPublishing.Controllers
 
         private List<SelectListItem> GetEmployeeEducationList()
         {
-            var list = Service.GetEducationList();
+            var list = service.GetEducationList();
             return list.IsSuccessful
                 ? list.GetContent().Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()})
                     .ToList()
@@ -66,7 +68,7 @@ namespace CloudPublishing.Controllers
         public ActionResult List()
         {
             if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
-            var result = Service.GetEmployeeList();
+            var result = service.GetEmployeeList();
             if (!result.IsSuccessful) return null;
 
             return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.GetContent().ToList())
@@ -89,7 +91,7 @@ namespace CloudPublishing.Controllers
         public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var result = await Service.AuthenticateUserAsync(new EmployeeDTO
+            var result = await service.AuthenticateUserAsync(new EmployeeDTO
             {
                 Email = model.Email,
                 Password = model.Password
@@ -101,8 +103,8 @@ namespace CloudPublishing.Controllers
                 model.Password = string.Empty;
                 return View(model);
             }
-            AuthenticationManager.SignOut();
-            AuthenticationManager.SignIn(new AuthenticationProperties
+            authenticationManager.SignOut();
+            authenticationManager.SignIn(new AuthenticationProperties
             {
                 IsPersistent = true // model.CheckOut
             }, result.GetContent());
@@ -112,7 +114,7 @@ namespace CloudPublishing.Controllers
 
         public ActionResult Logout()
         {
-            AuthenticationManager.SignOut();
+            authenticationManager.SignOut();
             return RedirectToAction("List");
         }
 
@@ -142,7 +144,7 @@ namespace CloudPublishing.Controllers
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
-            var result = await Service.CreateEmployeeAsync(user);
+            var result = await service.CreateEmployeeAsync(user);
 
             if (!result.IsSuccessful)
             {
@@ -164,7 +166,7 @@ namespace CloudPublishing.Controllers
         {
             if (id == null) return null;
 
-            var result = Service.GetEmployeeById(id.Value);
+            var result = service.GetEmployeeById(id.Value);
             if (!result.IsSuccessful) return null;
 
             var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result.GetContent());
@@ -188,7 +190,7 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
-            var result = await Service.EditEmployeeAsync(user);
+            var result = await service.EditEmployeeAsync(user);
             if (!result.IsSuccessful)
             {
                 ModelState.AddModelError("", result.GetFailureMessage());
@@ -206,7 +208,7 @@ namespace CloudPublishing.Controllers
         [Authorize(Roles = "ChiefEditor")]
         public async Task<ActionResult> Delete(int? id)
         {
-            var result = await Service.DeleteEmployeeAsync(id);
+            var result = await service.DeleteEmployeeAsync(id);
 
             return Json(new
             {
