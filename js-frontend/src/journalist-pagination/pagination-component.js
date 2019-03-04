@@ -15,9 +15,11 @@ function PaginationComponent($parentElement) {
     var pageChangeListener = null;
 
     var pageStartNumber = 1;
-    var pageQuantity = 1;
-    var itemsQuantity = 40;
+    var pageQuantity;
+    var itemsQuantity;
     var itemsDisplayQuantity = 5;
+    var pagesVisibleBeforeActive = 2;
+    var pagesVisibleAftereActive = 2;
 
     var dropdownElementSelector = '.dropdown-item';
     var pageItemSelector = '.page';
@@ -32,17 +34,21 @@ function PaginationComponent($parentElement) {
 
     function renderPages(pageNumber) {
         var activePageNumber = pageNumber || 1;
-        var i = activePageNumber - 2;
+        var i = activePageNumber - pagesVisibleBeforeActive;
         var pageList = {
             pageList: []
         };
+        if (pageChangeListener) {
+            pageChangeListener(itemsDisplayQuantity, activePageNumber);
+        }
+
         pageQuantity = Math.ceil(itemsQuantity / itemsDisplayQuantity);
         if (pageQuantity === 1) {
             $pagesElement.empty();
             return;
         }
 
-        for (; i <= activePageNumber + 2; i++) {
+        for (; i <= activePageNumber + pagesVisibleAftereActive; i++) {
             if (i >= pageStartNumber && i <= pageQuantity) {
                 pageList.pageList.push({
                     pageNumber: i
@@ -52,9 +58,6 @@ function PaginationComponent($parentElement) {
         pagesComponent.activePageNumber = activePageNumber;
         pagesComponent.setPageList(pageList);
         pagesComponent.render();
-        if (pageChangeListener) {
-            pageChangeListener(itemsDisplayQuantity, activePageNumber);
-        }
 
         if (activePageNumber === pageStartNumber) {
             $paginationBlock.find(prevPageItemSelector).addClass('disabled');
@@ -110,8 +113,7 @@ function PaginationComponent($parentElement) {
     };
 
     this.render = function render() {
-        console.log($parentElement);
-        $('#pagination').append($paginationBlock);
+        $parentElement.append($paginationBlock);
         renderPages();
     };
 }
