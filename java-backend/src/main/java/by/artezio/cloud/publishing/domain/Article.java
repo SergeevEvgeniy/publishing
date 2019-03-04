@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class Article {
 
-    private int id;
+    private Integer id;
     private Publishing publishing;
     private Topic topic;
     private String title;
@@ -34,7 +34,7 @@ public class Article {
      * @param author     {@link Employee} автор статьи
      * @param coauthors  множество соавторов {@link Employee} статьи
      */
-    public Article(final int id, final Publishing publishing, final Topic topic,
+    public Article(final Integer id, final Publishing publishing, final Topic topic,
                    final String title, final String content, final Employee author,
                    final Set<Employee> coauthors) {
         this.id = id;
@@ -51,7 +51,7 @@ public class Article {
      *
      * @return int id.
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -60,7 +60,7 @@ public class Article {
      *
      * @param id int.
      */
-    public void setId(final int id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 

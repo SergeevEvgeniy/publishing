@@ -4,29 +4,30 @@ import java.util.Objects;
 
 /**
  * Класс-сущность, представляет строку из таблицы "Employee".
+ *
  * @author Denis Shubin
  */
 public class Employee {
 
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String middleName;
     private String email;
     private String password;
     private String sex;
-    private int birthYear;
+    private Integer birthYear;
     private String address;
-    private String type;
-    private String educationId;
-    private boolean chiefEditor;
+    private Character type;
+    private Integer educationId;
+    private Boolean chiefEditor;
 
     /**
      * Возвращает id сотрудника.
      *
      * @return int
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -35,7 +36,7 @@ public class Employee {
      *
      * @param id int
      */
-    public void setId(final int id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -152,7 +153,7 @@ public class Employee {
      *
      * @return int
      */
-    public int getBirthYear() {
+    public Integer getBirthYear() {
         return birthYear;
     }
 
@@ -161,7 +162,7 @@ public class Employee {
      *
      * @param birthYear int
      */
-    public void setBirthYear(final int birthYear) {
+    public void setBirthYear(final Integer birthYear) {
         this.birthYear = birthYear;
     }
 
@@ -188,7 +189,7 @@ public class Employee {
      *
      * @return String
      */
-    public String getType() {
+    public Character getType() {
         return type;
     }
 
@@ -197,7 +198,7 @@ public class Employee {
      *
      * @param type String
      */
-    public void setType(final String type) {
+    public void setType(final Character type) {
         this.type = type;
     }
 
@@ -206,7 +207,7 @@ public class Employee {
      *
      * @return int
      */
-    public String getEducationId() {
+    public Integer getEducationId() {
         return educationId;
     }
 
@@ -215,7 +216,7 @@ public class Employee {
      *
      * @param educationId int
      */
-    public void setEducationId(final String educationId) {
+    public void setEducationId(final Integer educationId) {
         this.educationId = educationId;
     }
 
@@ -224,7 +225,7 @@ public class Employee {
      *
      * @return boolean
      */
-    public boolean isChiefEditor() {
+    public Boolean isChiefEditor() {
         return chiefEditor;
     }
 
@@ -246,8 +247,8 @@ public class Employee {
             return false;
         }
         Employee employee = (Employee) o;
-        return id == employee.id
-            && birthYear == employee.birthYear
+        return id.equals(employee.id)
+            && birthYear.equals(employee.birthYear)
             && chiefEditor == employee.chiefEditor
             && Objects.equals(firstName, employee.firstName)
             && Objects.equals(lastName, employee.lastName)
