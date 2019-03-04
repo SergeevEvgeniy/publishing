@@ -1,15 +1,12 @@
 package by.artezio.cloud.publishing.dao;
 
-import by.artezio.cloud.publishing.domain.MailingInfo;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import by.artezio.cloud.publishing.dto.MailingInfo;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,18 +18,15 @@ import java.util.List;
 @Repository
 public class MailingDao {
 
-    private RowMapper<MailingInfo> mailingInfoRowMapper = new RowMapper<MailingInfo>() {
-        @Override
-        public MailingInfo mapRow(ResultSet rs, int i) throws SQLException {
-            System.out.println(rs.getDate("date"));
-            return new MailingInfo(
-                rs.getInt("mailing_id"),
-                rs.getInt("publishing_id"),
-                rs.getInt("issue_id"),
-                rs.getTimestamp("date").toLocalDateTime(),
-                rs.getString("result")
-            );
-        }
+    private RowMapper<MailingInfo> mailingInfoRowMapper = (rs, i) -> {
+        System.out.println(rs.getDate("date"));
+        return new MailingInfo(
+            rs.getInt("mailing_id"),
+            rs.getInt("publishing_id"),
+            rs.getInt("issue_id"),
+            Timestamp.valueOf(rs.getTimestamp("date").toLocalDateTime()),
+            rs.getString("result")
+        );
     };
 
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -65,6 +59,10 @@ public class MailingDao {
         );
     }
 
+    /**
+     * Возвращает список объектов {@link MailingInfo}.
+     * @return список объектов {@link MailingInfo}.
+     */
     public List<MailingInfo> getAllMailingInfo() {
         return jdbcTemplate.query(
             "select mailing_id, publishing_id, issue_id, `date`, result\n"
