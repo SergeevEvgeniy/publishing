@@ -55,7 +55,7 @@ function PaginationComponent($parentElement) {
                 });
             }
         }
-        pagesComponent.activePageNumber = activePageNumber;
+        pagesComponent.setActivePageNumber(activePageNumber);
         pagesComponent.setPageList(pageList);
         pagesComponent.render();
 
@@ -68,20 +68,20 @@ function PaginationComponent($parentElement) {
 
     function onPageClickEvent(event) {
         var activePageNumber = +event.target.textContent;
-        if (activePageNumber !== pagesComponent.activePageNumber) {
+        if (activePageNumber !== pagesComponent.getActivePageNumber()) {
             renderPages(activePageNumber);
         }
     }
 
     function onPrevPageClickEvent() {
-        var activePageNumber = pagesComponent.activePageNumber - 1;
+        var activePageNumber = pagesComponent.getActivePageNumber() - 1;
         if (activePageNumber >= pageStartNumber) {
             renderPages(activePageNumber);
         }
     }
 
     function onNextPageClickEvent() {
-        var activePageNumber = pagesComponent.activePageNumber + 1;
+        var activePageNumber = pagesComponent.getActivePageNumber() + 1;
         if (activePageNumber <= pageQuantity) {
             renderPages(activePageNumber);
         }
