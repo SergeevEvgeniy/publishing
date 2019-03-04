@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
  */
 public class MailingResult {
 
-    private int mailingId;
-    private int issueId;
+    private Integer mailingId;
+    private Integer issueId;
     private LocalDateTime date;
     private String result;
 
@@ -17,7 +17,7 @@ public class MailingResult {
      * Возвращает id рассылки.
      * @return id рассылки
      */
-    public int getMailingId() {
+    public Integer getMailingId() {
         return mailingId;
     }
 
@@ -25,7 +25,7 @@ public class MailingResult {
      * Устанавливает id рассылки.
      * @param mailingId id рассылки
      */
-    public void setMailingId(final int mailingId) {
+    public void setMailingId(final Integer mailingId) {
         this.mailingId = mailingId;
     }
 
@@ -33,7 +33,7 @@ public class MailingResult {
      * Возвращает id номера, который был задействован в рассылке.
      * @return id номера
      */
-    public int getIssueId() {
+    public Integer getIssueId() {
         return issueId;
     }
 
@@ -41,7 +41,7 @@ public class MailingResult {
      * Устанавливает id номера, который был задействован в рассылке.
      * @param issueId id номера
      */
-    public void setIssueId(final int issueId) {
+    public void setIssueId(final Integer issueId) {
         this.issueId = issueId;
     }
 

@@ -6,9 +6,9 @@ package by.artezio.cloud.publishing.domain;
  */
 public class Publishing {
 
-    private int id;
+    private Integer id;
     private String title;
-    private char type;
+    private Character type;
     private String subjects;
 
     /**
@@ -24,7 +24,7 @@ public class Publishing {
      * @param type тип публикации. Газета или Журнал.
      * @param subjects тематика публикации
      */
-    public Publishing(final int id, final String title, final char type, final String subjects) {
+    public Publishing(final Integer id, final String title, final Character type, final String subjects) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -35,7 +35,7 @@ public class Publishing {
      * Возвращает id публикации.
      * @return id публикации
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -43,7 +43,7 @@ public class Publishing {
      * Устанавливает id публикации.
      * @param id id публикации
      */
-    public void setId(final int id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -67,7 +67,7 @@ public class Publishing {
      * Возвращает тип публикации.
      * @return тип публикации
      */
-    public char getType() {
+    public Character getType() {
         return type;
     }
 
@@ -75,7 +75,7 @@ public class Publishing {
      * Устанавливает тип публикации.
      * @param type тип публикации
      */
-    public void setType(final char type) {
+    public void setType(final Character type) {
         this.type = type;
     }
 

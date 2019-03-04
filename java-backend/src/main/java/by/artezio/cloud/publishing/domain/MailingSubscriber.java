@@ -6,14 +6,20 @@ package by.artezio.cloud.publishing.domain;
  */
 public class MailingSubscriber {
 
-    private int mailingId;
+    private Integer mailingId;
     private String email;
+
+    /**
+     * Конструктор по умолчанию.
+     */
+    public MailingSubscriber() {
+    }
 
     /**
      * Возвращает id рассылки {@link Mailing}.
      * @return id рассылки
      */
-    public int getMailingId() {
+    public Integer getMailingId() {
         return mailingId;
     }
 
@@ -21,7 +27,7 @@ public class MailingSubscriber {
      * Устанавливает id рассылки {@link Mailing}.
      * @param mailingId id рассылки
      */
-    public void setMailingId(final int mailingId) {
+    public void setMailingId(final Integer mailingId) {
         this.mailingId = mailingId;
     }
 

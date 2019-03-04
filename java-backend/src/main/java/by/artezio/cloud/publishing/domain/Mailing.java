@@ -6,14 +6,20 @@ package by.artezio.cloud.publishing.domain;
  */
 public class Mailing {
 
-    private int id;
-    private int publishingId;
+    private Integer id;
+    private Integer publishingId;
+
+    /**
+     * Конструктор по умолчанию.
+     */
+    public Mailing() {
+    }
 
     /**
      * Возвращает id рассылки.
      * @return id рассылки
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -21,7 +27,7 @@ public class Mailing {
      * Устанавливает id рассылки.
      * @param id id рассылки
      */
-    public void setId(final int id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -29,7 +35,7 @@ public class Mailing {
      * Возвращает id публикации {@link Publishing}, на которую была сделана данная рассылка.
      * @return id публикации {@link Publishing}
      */
-    public int getPublishingId() {
+    public Integer getPublishingId() {
         return publishingId;
     }
 
@@ -37,7 +43,7 @@ public class Mailing {
      * Устанавливает id публикации {@link Publishing}, на которую была сделана данная рассылка.
      * @param publishingId id публикации {@link Publishing}
      */
-    public void setPublishingId(final int publishingId) {
+    public void setPublishingId(final Integer publishingId) {
         this.publishingId = publishingId;
     }
 }
