@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CloudPublishing.Business.DTO.RestApi;
+using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Results.Interfaces;
 
 namespace CloudPublishing.Business.Services.Interfaces
 {
     public interface IEmployeeApiService : IDisposable
     {
-        Task<IResult<JournalistStatisticsDTO>> GetJournalistStatistics(int? id);
-
-        Task<IResult<IEnumerable<JournalistDTO>>> GetJournalistList(JournalistListFilterDTO filter);
+        IResult<IEnumerable<EmployeeDTO>> GetEmployeeInformation(List<int> employeeIdList);
     }
 }

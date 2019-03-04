@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
-using CloudPublishing.Business.DTO.RestApi;
+using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Results;
 using CloudPublishing.Business.Results.Interfaces;
 using CloudPublishing.Business.Services.Interfaces;
@@ -17,75 +17,30 @@ namespace CloudPublishing.Business.Services
 {
     public class EmployeeApiService : IEmployeeApiService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork unit;
         private readonly IMapper mapper;
 
-        public EmployeeApiService(IUnitOfWork unitOfWork)
+        public EmployeeApiService(IUnitOfWork unit)
         {
-            this.unitOfWork = unitOfWork;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessApiMapProfile())).CreateMapper();
+            this.unit = unit;
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessMapProfile())).CreateMapper();
         }
 
         public void Dispose()
         {
-            unitOfWork?.Dispose();
+            unit?.Dispose();
         }
 
-        public async Task<IResult<JournalistStatisticsDTO>> GetJournalistStatistics(int? id)
+        public IResult<IEnumerable<EmployeeDTO>> GetEmployeeInformation(List<int> employeeIdList)
         {
-            if (id == null)
-            {
-                return new BadResult<JournalistStatisticsDTO>("Отсутствует идентификатор сотрудника");
-            }
-
             try
             {
-                // TODO: обработать null
-                var journalist = unitOfWork.Employees.Get(id.Value);
-                var statistics = mapper.Map<Employee, JournalistStatisticsDTO>(journalist);
-                statistics.ArticleCount = await unitOfWork.Articles.GetJournalistArticleCount(id.Value);
-                statistics.PublishingArticles =
-                    await unitOfWork.Articles.GetJournalistArticleCountByPublishings(id.Value);
-                statistics.TopicArticles = await unitOfWork.Articles.GetJournalistArticleCountByTopics(id.Value);
-                return new SuccessfulResult<JournalistStatisticsDTO>(statistics);
+                var list = unit.Employees.Find(x => employeeIdList.Contains(x.Id));
+                return new SuccessfulResult<IEnumerable<EmployeeDTO>>(mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list));
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<JournalistStatisticsDTO>(e);
-            }
-            catch (HttpRequestException e)
-            {
-                return new BadResult<JournalistStatisticsDTO>(e);
-            }
-
-        }
-
-        public async Task<IResult<IEnumerable<JournalistDTO>>> GetJournalistList(JournalistListFilterDTO filter)
-        {
-            if (filter == null)
-            {
-                return new BadResult<IEnumerable<JournalistDTO>>("Отсутствует фильтр");
-            }
-
-            try
-            {
-                var journalistsInfo = await unitOfWork.Articles.GetJournalistFilteredList(filter.PublishingId,
-                    filter.IssueId, filter.TopicId, filter.ArticleTitle);
-                var journalist = mapper.Map<IEnumerable<Employee>, List<JournalistDTO>>(unitOfWork.Employees.Find(x => journalistsInfo.ContainsKey(x.Id)));
-                
-                return await Task.FromResult(new SuccessfulResult<IEnumerable<JournalistDTO>>(journalist.Select(x =>
-                {
-                    x.ArticlesCount = journalistsInfo[x.Id];
-                    return x;
-                })));
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<JournalistDTO>>(e);
-            }
-            catch (HttpRequestException e)
-            {
-                return new BadResult<IEnumerable<JournalistDTO>>(e);
+                return new BadResult<IEnumerable<EmployeeDTO>>(e);
             }
         }
     }

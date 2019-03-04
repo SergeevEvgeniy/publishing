@@ -66,9 +66,6 @@
     <Compile Include="DTO\MailingResultDTO.cs" />
     <Compile Include="DTO\MailingSubscriberDTO.cs" />
     <Compile Include="DTO\PublishingDTO.cs" />
-    <Compile Include="DTO\RestApi\JournalistListFilterDTO.cs" />
-    <Compile Include="DTO\RestApi\JournalistDTO.cs" />
-    <Compile Include="DTO\RestApi\JournalistStatisticsDTO.cs" />
     <Compile Include="DTO\ReviewDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,7 +78,6 @@
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
     <Compile Include="Services\Interfaces\IPublishingService.cs" />
     <Compile Include="Services\PublishingService.cs" />
-    <Compile Include="Util\EmployeeBusinessApiMapProfile.cs" />
     <Compile Include="Services\Interfaces\IReviewService.cs" />
     <Compile Include="Services\ReviewService.cs" />
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
