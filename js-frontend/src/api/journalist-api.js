@@ -30,7 +30,13 @@ function JournalistApiComponent() {
     this.getIssueList = function getIssueList(id) {
         return new Promise(function resolvePromise(resolve) {
             $.get(URL + '/api/issues?id=' + id, function getResponse(response) {
-                resolve(response);
+                var issueList = response.issues.map(function convertToOptionFormat(issue) {
+                    return {
+                        value: issue.issueId,
+                        text: issue.issue
+                    };
+                });
+                resolve(issueList);
             });
         });
     };
@@ -38,7 +44,11 @@ function JournalistApiComponent() {
     this.postSearchJournalistForm = function postSearchJournalistForm(formData) {
         return new Promise(function resolvePromise(resolve) {
             $.post(URL + '/api/journalists', formData).done(function getResponse(journalistList) {
-                resolve(journalistList);
+                //journalistList = [];
+                setTimeout(function resolveRequest() {
+                    resolve(journalistList);
+                }, 3000);
+                //resolve(journalistList);
             });
         });
     };

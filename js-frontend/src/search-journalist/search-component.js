@@ -19,6 +19,8 @@ function SearchJournalistComponent($parentElement) {
     var $articleInputElement = $searchPage.find('#article');
     var $lastNameInputElement = $searchPage.find('#lastName');
     var $searchResultElement = $searchPage.find('#searchResult');
+    var $searchFormElement = $searchPage.find('form');
+    var $loadingElement = $searchPage.find('.spinner-border');
 
     var issueList = new PickListComponent($issueElement, 'issue', 'Выбирите выпуск');
     var publishingList = new PickListComponent($publishingElement, 'publishing', 'Выберите издание');
@@ -36,15 +38,19 @@ function SearchJournalistComponent($parentElement) {
     }
 
     function onSearchSubmitEvent(event) {
-        var form = $parentElement.find('form');
-        var formData = form.serializeArray();
+        var formData = $searchFormElement.serializeArray();
+        var searchButton = event.target;
         event.preventDefault();
+        searchButton.disabled = true;
+        $loadingElement.removeClass('d-none');
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
-            if (response.length === 0) {
-                $searchResultElement.text('Отсутствуют результаты поиска.');
-            } else {
+            if (response.length !== 0) {
                 journalistResult.render(response);
+            } else {
+                $searchResultElement.text('Отсутствуют результаты поиска.');
             }
+            $loadingElement.addClass('d-none');
+            searchButton.disabled = false;
         });
     }
 
