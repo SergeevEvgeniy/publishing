@@ -4,8 +4,8 @@
 <html>
 <head>
     <title>Настройка</title>
-    <script src="${pageContext.request.contextPath}/resources/js/libs/jquery.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
 </head>
 <body>
 <form>
@@ -13,9 +13,9 @@
         Журнал
     </label>
     <select id="mailingSelect" onchange="location = this.value">
-        <option data-id="0"
+        <option
             <c:if test="${id != null}">
-                <c:out value="value=../settings"/>
+                value="../settings"
             </c:if>
         >
             --- Выберите журнал/газету ---
@@ -36,7 +36,7 @@
             </option>
         </c:forEach>
     </select>
-    <table border="2px">
+    <table class="table " border="2px">
         <tr>
             <td>Email адрес</td>
             <td>Кнопочка для удаления</td>

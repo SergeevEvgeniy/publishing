@@ -23,22 +23,25 @@ import java.util.Set;
 @Service
 public class ArticleService {
 
-    private final ArticleDao articleDao;
-    private final TopicDao topicDao;
-
-    /**
-     * Конструктор для создания объекта с указанными значениями полей.
-     *
-     * @param articleDao объект класса {@link ArticleDao} для взаимодействия с
-     * таблицей "article"
-     * @param topicDao объект класса {@link TopicDao} для взаимодействия с
-     * таблицей "topic"
-     */
     @Autowired
-    public ArticleService(final ArticleDao articleDao, final TopicDao topicDao) {
-        this.articleDao = articleDao;
-        this.topicDao = topicDao;
-    }
+    private ArticleDao articleDao;
+
+    @Autowired
+    private TopicDao topicDao;
+
+//    /**
+//     * Конструктор для создания объекта с указанными значениями полей.
+//     *
+//     * @param articleDao объект класса {@link ArticleDao} для взаимодействия с
+//     * таблицей "article"
+//     * @param topicDao объект класса {@link TopicDao} для взаимодействия с
+//     * таблицей "topic"
+//     */
+//    @Autowired
+//    public ArticleService(final ArticleDao articleDao, final TopicDao topicDao) {
+//        this.articleDao = articleDao;
+//        this.topicDao = topicDao;
+//    }
 
     /**
      * Получение списка объектов {@link ArticleInfo}.

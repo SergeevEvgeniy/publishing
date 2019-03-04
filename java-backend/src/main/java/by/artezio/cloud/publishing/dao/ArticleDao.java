@@ -22,8 +22,13 @@ import java.util.List;
 @Repository
 public class ArticleDao {
 
+    @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
+
+    @Autowired
     private ArticleService service;
+
+    @Autowired
     private TopicDao topicDao;
 
     private RowMapper<Article> rowMapper = (rs, i) -> {
@@ -51,19 +56,19 @@ public class ArticleDao {
         return t;
     };
 
-    /**
-     * Конструктор с параметрами.
-     *
-     * @param jdbcTemplate объект класса NamedParameterJdbcTemplate
-     * @param service      объект класса ArticleService
-     * @param topicDao     объект класса TopicDao
-     */
-    @Autowired
-    public ArticleDao(final NamedParameterJdbcTemplate jdbcTemplate, final ArticleService service, final TopicDao topicDao) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.service = service;
-        this.topicDao = topicDao;
-    }
+//    /**
+//     * Конструктор с параметрами.
+//     *
+//     * @param jdbcTemplate объект класса NamedParameterJdbcTemplate
+//     * @param service      объект класса ArticleService
+//     * @param topicDao     объект класса TopicDao
+//     */
+//    @Autowired
+//    public ArticleDao(final NamedParameterJdbcTemplate jdbcTemplate, final ArticleService service, final TopicDao topicDao) {
+//        this.jdbcTemplate = jdbcTemplate;
+//        this.service = service;
+//        this.topicDao = topicDao;
+//    }
 
     /**
      * Получение списка статей по идентификатору автора.
