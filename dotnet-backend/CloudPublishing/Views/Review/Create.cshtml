@@ -5,52 +5,48 @@
 
 @using (Html.BeginForm("Create", "Review", FormMethod.Post))
 {
-    <div class="container mt-5">
-        <div class="form-group">
-            <div class="row form-group">
-                <label class="col-sm-2 col-form-label">Журнал/газета</label>
-                @*ajax-запрос по загрузке страницы и заполнение option-ов по аналогии с остальными select?*@
-                @Html.DropDownListFor(
-                    x => x.publishingList, 
-                    Model.publishingList, 
-                    "Выберите элемент", 
-                    htmlAttributes: new { @class = "form-control col-sm-4", id = "publishing" })
-            </div>
-            <div class="row form-group">
-                <label class="col-sm-2 col-form-label">Рубрика</label>
-                <select class="form-control col-sm-4" type="text" id="topic" disabled></select>
-            </div>
-            <div class="row form-group">
-                <label class="col-sm-2 col-form-label">Автор</label>
-                <select class="form-control col-sm-4" type="text" id="author" disabled></select>
-            </div>
-            <div class="row form-group">
-                <label class="col-sm-2 col-form-label">Статья</label>
-                <select class="form-control col-sm-4" type="text" id="article" name="ArticleId" disabled></select>
-            </div>
+    <div class="row form-group">
+        <label class="col-sm-2 col-form-label">Журнал/газета</label>
+        @*ajax-запрос по загрузке страницы и заполнение option-ов по аналогии с остальными select?*@
+        @Html.DropDownListFor(
+            x => x.publishingList,
+            Model.publishingList,
+            "Выберите элемент",
+            htmlAttributes: new { @class = "form-control col-sm-4", id = "publishing" })
+    </div>
+    <div class="row form-group">
+        <label class="col-sm-2 col-form-label">Рубрика</label>
+        <select class="form-control col-sm-4" type="text" id="topic" disabled></select>
+    </div>
+    <div class="row form-group">
+        <label class="col-sm-2 col-form-label">Автор</label>
+        <select class="form-control col-sm-4" type="text" id="author" disabled></select>
+    </div>
+    <div class="row form-group">
+        <label class="col-sm-2 col-form-label">Статья</label>
+        <select class="form-control col-sm-4" type="text" id="article" name="ArticleId" disabled></select>
+    </div>
+    <div class="form-group">
+        <label class="col-form-label">Содержание</label>
+        <textarea class="form-control col-sm-6" rows="6" id="article_content" disabled></textarea>
+    </div>
+    <div class="form-group">
+        <label class="col-form-label">Рецензия</label>
+        <textarea class="form-control col-sm-6" rows="6" name="Content" id="review_content"></textarea>
+    </div>
+    <div class="form-group">
+        <div class="form-check">
+            <label class="cursor-pointer">
+                <input class="form-check-input" type="checkbox" name="Approved" value="true" checked="checked">В публикацию
+            </label>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class=" "></div>
+        <div class="col-sm-6 text-right pr-0">
             <div class="form-group">
-                <label class="col-form-label">Содержание</label>
-                <textarea class="form-control col-sm-6" rows="6" id="article_content" disabled></textarea>
-            </div>
-            <div class="form-group">
-                <label class="col-form-label">Рецензия</label>
-                <textarea class="form-control col-sm-6" rows="6" name="Content" id="review_content"></textarea>
-            </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <label class="cursor-pointer">
-                        <input class="form-check-input" type="checkbox" name="Approved" value="true" checked="checked">В публикацию
-                    </label>
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class=" "></div>
-                <div class="col-sm-6 text-right pr-0">
-                    <div class="form-group">
-                        <input type="reset" class="btn btn-secondary mr-2" value="Отменить">
-                        <input type="submit" class="btn btn-primary" value="Сохранить">
-                    </div>
-                </div>
+                <input type="reset" class="btn btn-secondary mr-2" value="Отменить">
+                <input type="submit" class="btn btn-primary" value="Сохранить">
             </div>
         </div>
     </div>
@@ -70,7 +66,7 @@
                     $("#topic").append(data);
                     $("#topic").prop("disabled", false);
 
-                    // Если значение первого выпадающего списка было повторно выбрано, 
+                    // Если значение первого выпадающего списка было повторно выбрано,
                     // то сбрасываются и отключаются все, кроме последующего и удаляется содержимое статьи
                     $("#author").prop("disabled", true).val(0);
                     $("#article").prop("disabled", true).val(0);

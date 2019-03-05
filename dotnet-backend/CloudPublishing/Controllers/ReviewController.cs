@@ -106,12 +106,12 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int articleId)
+        public ActionResult Edit(int id)
         {
             // Будет заменено на получение id пользователя
             int userId = 1;
 
-            var review = mapper.Map<ReviewDTO, ReviewVM>(reviewService.GetReview(articleId, userId));
+            var review = mapper.Map<ReviewDTO, ReviewVM>(reviewService.GetReview(id, userId));
 
             return View(review);
         }
@@ -119,18 +119,21 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         public ActionResult Edit(ReviewVM review)
         {
+            // Будет заменено на получение id пользователя
+            review.ReviwerId = 1;
+
             reviewService.UpdateReview(mapper.Map<ReviewDTO>(review));
 
             return Redirect("/Review/Index");
         }
 
         [HttpPost]
-        public ActionResult Delete(int articleId)
+        public ActionResult Delete(int id)
         {
             // Будет заменено на получение id пользователя
             int userId = 1;
 
-            reviewService.DeleteReview(articleId, userId);
+            reviewService.DeleteReview(id, userId);
 
             return Redirect("/Review/Index");
         }
