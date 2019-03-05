@@ -12,19 +12,23 @@
             <div class="row form-group">
                 <label class="col-sm-2 col-form-label">Журнал/газета</label>
                 @*ajax-запрос по загрузке страницы и заполнение option-ов по аналогии с остальными select?*@
-                @Html.DropDownListFor(x => x.publishingList, Model.publishingList, "Выберите элемент" ,htmlAttributes: new { @class = "form-control col-sm-4", id = "publishing" })
+                @Html.DropDownListFor(
+                    x => x.publishingList, 
+                    Model.publishingList, 
+                    "Выберите элемент", 
+                    htmlAttributes: new { @class = "form-control col-sm-4", id = "publishing" })
             </div>
             <div class="row form-group">
                 <label class="col-sm-2 col-form-label">Рубрика</label>
-                <select class="form-control col-sm-4" type="text" id="topic"></select>
+                <select class="form-control col-sm-4" type="text" id="topic" disabled></select>
             </div>
             <div class="row form-group">
                 <label class="col-sm-2 col-form-label">Автор</label>
-                <select class="form-control col-sm-4" type="text" id="author"></select>
+                <select class="form-control col-sm-4" type="text" id="author" disabled></select>
             </div>
             <div class="row form-group">
                 <label class="col-sm-2 col-form-label">Статья</label>
-                <select class="form-control col-sm-4" type="text" id="article"></select>
+                <select class="form-control col-sm-4" type="text" id="article" disabled></select>
             </div>
             <div class="form-group">
                 <label class="col-form-label">Содержание</label>
@@ -53,8 +57,10 @@
         </div>
     </div>
 }
-<script src="~/Scripts/jquery-3.0.0.min.js"></script>
-<script>
+
+@section Scripts
+{
+    <script>
     $(function () {
         $("#publishing").change(function () {
             var publishingId = $(this).val();
@@ -62,9 +68,15 @@
                 type: "GET",
                 url: "@Url.Action("GetTopicList")/" + publishingId,
                 success: function (data) {
-                    //$("#topic").replaceWith(data);
-                    $("#topic *").remove();
+                    $("#topic").empty();
                     $("#topic").append(data);
+                    $("#topic").prop("disabled", false);
+
+                    // Если значение первого выпадающего списка было повторно выбрано, 
+                    // то сбрасываются и отключаются все, кроме последующего и удаляется содержимое статьи
+                    $("#author").prop("disabled", true).val(0);
+                    $("#article").prop("disabled", true).val(0);
+                    $("#article_content").empty();
                 }
             });
         });
@@ -75,8 +87,11 @@
                 type: "GET",
                 url: "@Url.Action("GetAuthorList")/" + publishingId + "/" + topicId,
                 success: function (data) {
-                    $("#author *").remove();
+                    $("#author").empty();
                     $("#author").append(data);
+                    $("#author").prop("disabled", false);
+                    $("#article").prop("disabled", true).val(0);
+                    $("#article_content").empty();
                 }
             })
         });
@@ -88,16 +103,42 @@
                 type: "GET",
                 url: "@Url.Action("GetArticleList")/" + publishingId + "/" + topicId + "/" + authorId,
                 success: function (data) {
-                    $("#article *").remove();
+                    $("#article").empty();
                     $("#article").append(data);
-                    /*$(data).each(function (index, title) {
-                        var option = document.createElement('OPTION');
-                        option.value = title.id;
-                        option.textContent = title.text;
-                        $(this).append(option);
-                    });*/
+                    $("#article").prop("disabled", false);
+                    $("#article_content").empty();
                 }
             })
         });
+        $("#article").change(function () {
+            var articleId = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetArticleContent")/" + articleId,
+                success: function (data) {
+                    $("#article_content").empty();
+                    $("#article_content").append(data);
+                }
+            })
+        });
+
+        // Построение option-ов при получении Json из контроллена
+        // Не используется, контроллер возвращает partial view, который вставляется в select
+        function appendOption(target, data, keyProperty, textProperty) {
+            $(target).empty();
+
+            $("<option></option>", {
+                value: 0,
+                text: "Выберите элемент"
+            }).appendTo(target);
+
+            $(data).each(function (index, item) {
+                $("<option></option>", {
+                    value: item[keyProperty],
+                    text: item[textProperty]
+                }).appendTo(target);
+            });
+        }
     });
-</script>
+    </script>
+}
