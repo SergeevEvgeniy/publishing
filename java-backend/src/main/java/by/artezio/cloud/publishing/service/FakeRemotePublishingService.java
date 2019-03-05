@@ -2,6 +2,7 @@ package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.domain.Topic;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,10 @@ public class FakeRemotePublishingService implements PublishingService {
 
     public List<Publishing> getPublishingList() {
         return publishingDao.getPublishingList();
+    }
+
+    public List<Topic> getPublishingToppics(int publishingId) {
+        return publishingDao.getPublishingTopics(publishingId);
     }
 
 }

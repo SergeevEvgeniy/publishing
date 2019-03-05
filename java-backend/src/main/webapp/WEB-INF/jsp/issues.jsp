@@ -7,12 +7,17 @@
 </head>
 <body>
 <c:url value="#" var="issuesURL"/>
-<sf:form method="post" action="#{issuesURL}" modelAttribute="issueFormDto">
+<sf:form method="post" action="${issuesURL}" modelAttribute="issueFormDto">
     <sf:select path="publishingId">
+        <option></option>
         <c:forEach var="p" items="${publishing}">
             <sf:option value="${p.id}">${p.title}</sf:option>
         </c:forEach>
     </sf:select>
+    <select></select>
+    <select></select>
+    <select></select>
+    <input type="submit" value="Проверка">
 </sf:form>
 </body>
 </html>

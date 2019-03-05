@@ -1,0 +1,31 @@
+    /*Тестовые данные для таблицы publishing*/
+insert into publishing values (1, "Олимпиец", "Г", "Спорт");
+insert into publishing values (2, "Time news", "Г", "Политика");
+insert into publishing values (3, "Народный доктор", "Ж", "Здоровье");
+insert into publishing values (4, "Ботаник", "Ж", "Природа");
+
+    /*Тестовые данные для таблицы topic*/
+insert into topic values (1, "Биатлон");
+insert into topic values (2, "Футбол");
+insert into topic values (3, "Растения");
+insert into topic values (4, "Цветы");
+insert into topic values (5, "Лечебные зелья");
+insert into topic values (6, "Клизмы");
+insert into topic values (7, "Международные войны");
+insert into topic values (8, "Финансовые кризисы");
+insert into topic values (9, "Диктаторы");
+
+    /*Тестовые данные для таблицы publishing_topic*/
+insert into publishing_topic values (1, 1);
+insert into publishing_topic values (1, 2);
+insert into publishing_topic values (2, 7);
+insert into publishing_topic values (2, 8);
+insert into publishing_topic values (3, 5);
+insert into publishing_topic values (3, 6);
+insert into publishing_topic values (4, 3);
+insert into publishing_topic values (4, 4);
+
+select id, name from topic
+join publishing_topic pt
+on topic.id = pt.topic_id
+where pt.publishing_id = 1;
