@@ -1,8 +1,10 @@
 var $ = require('jquery');
 var homeComponent = require('./home/home-component');
+var { JournalistStatComponent } = require('./journalist-info/journalist-component');
 
 $(function onReady() {
-    homeComponent.render();
+    var journalistComponent = new JournalistStatComponent($('#app'));
+    journalistComponent.appendComponent();
 });
 
 require('bootstrap/dist/css/bootstrap.css');

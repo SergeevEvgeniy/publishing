@@ -1,0 +1,84 @@
+<div class='articles container'>
+    <form id='searchArticles' class='form-horizontal' method='POST' action=''> 
+        <div class='row'>
+            <div class='col-md-4'>
+                <div class='form-group row'>
+                    <label for='edition' class='col-sm-4 col-form-label'>Издание</label>
+                    <div class='col-sm-8'>
+                         <select class='form-control' id='edition'>
+                            <option selected disabled>Выберите издание</option>
+                            {{#each data.edition}}
+                                <option value={{id}}>{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class='form-group row' id='releaseBody'>
+                </div>
+                <div class='form-group row'>
+                    <label for='heading' class='col-sm-4 col-form-label'>Рубрика</label>
+                    <div class='col-sm-8'>
+                         <select class='form-control' id='heading'>
+                            <option selected disabled>Выберите рубрику</option>
+                            {{#each data.heading}}
+                                <option value={{id}}>{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-8'>
+                <div class='form-group row'>
+                    <label for='articleName' class='col-sm-4 col-form-label'>Название статьи</label>
+                    <div class='col-sm-8'>
+                        <input type='email' class='form-control' 
+                        id='articleName'
+                        placeholder='Введите название или часть названия статьи'/>
+                    </div>
+                </div>
+                <div class='form-group row'>
+                    <label for='date' class='col-sm-4 col-form-label'>Дата</label>
+                    <div class='col-sm-8 row'>
+                        <div class='col-sm-6 input-group'>
+                            <input type='date' class='form-control' id='date'>
+                            <div class='input-group-prepend'>
+                                <div class='input-group-text'>
+                                    <i class='fa fa-calendar' aria-hidden='true'></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-sm-6 input-group'>
+                            <input type='date' class='form-control' id='date'>
+                            <div class='input-group-prepend'>
+                                <div class='input-group-text'>
+                                    <i class='fa fa-calendar' aria-hidden='true'></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='text-center'>
+                        <button type='submit' class='btn btn-primary' id='findArticle'>
+                            <i class='fa fa-search'></i>
+                            Найти
+                        </button>
+                        <button type='button' class='btn btn-primary' id='clearFields'>
+                            Очистить
+                        </button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div id='searchResultBody'>
+    </div>
+</div>
+<style>
+    .articles label {
+       font-weight: bold;
+    }
+    #searchResultBody {
+        margin: 20px 0 0 0;
+    }
+</style>

@@ -1,0 +1,38 @@
+<div class="container" id="journalistBody">
+    <h2>{{data.firstName}} {{data.lastName}} {{data.middleName}}</h2>
+    <section class="info-body">
+        <ul class="nav nav-tabs">
+            <li class="nav-item" data-type="Info">
+                <a href="#" class="nav-link">Информация</a>
+            </li>
+            <li class="nav-item" data-type="Statistics">
+                <a href="#" class="nav-link">Статистика</a>
+            </li>
+            <li class="nav-item" data-type="Articles">
+                <a href="#" class="nav-link">Статьи</a>
+            </li>
+        </ul>
+        <!--Это будет отдельным компонентом. Наверно. Стили потом-->
+        <div id="journalistInfo">
+        </div>
+        <button class="btn btn-primary"> 
+            <i class="fas fa-arrow-left mr-1"></i>Вернуться
+        </button>
+    </section>
+</div>
+<script>
+    
+</script>
+<style>
+    .info-body {
+        margin: 25px 0 0 0;
+        border-top: 1px solid gray;
+    }
+    .nav {
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
+    #journalistInfo {
+        margin: 20px 0 0 0;
+    }
+</style>
