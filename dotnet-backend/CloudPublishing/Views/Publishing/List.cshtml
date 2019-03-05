@@ -3,14 +3,16 @@
     ViewBag.Title = "Журналы";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<table>
+<div class="row justify-content-end mb-3">
+    <a href="#" class="btn btn-success"><i class="fas fa-plus"></i>Добавить</a>
+</div>
+<table class="table table-bordered">
     <tr>
         <th>Название</th>
         <th>Тип</th>
         <th>Тематика</th>
         <th>Рубрики</th>
-        <th></th>
+        <th style="padding-left: 100px;"></th>
     </tr>
     @foreach (var publishing in Model)
     {
@@ -20,12 +22,12 @@
             <td>@publishing.Subjects</td>
             <td>@publishing.Topics</td>
             <td width="110px">
-                <button type="button" class="btn btn-outline-secondary btn-sm">
-                    <span class="glyphicon glyphicon-edit"></span>
-                </button>
-                <button type="button" class="btn btn-outline-danger btn-sm">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </button>
+                <a href="#" class="btn">
+                <i class="fas fa-edit"></i>
+                </a>
+                <a href="#" class="btn btn-outline-danger">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
             </td>
         </tr>
     }
