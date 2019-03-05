@@ -51,7 +51,7 @@ namespace CloudPublishing.Data.Identity.Stores
             var employee = mapper.Map<EmployeeUser, Employee>(user);
             var chiefEditor = context.Employees.AsNoTracking().FirstOrDefault(x => x.ChiefEditor);
             if (chiefEditor != null && chiefEditor.Id != employee.Id && employee.ChiefEditor) chiefEditor.ChiefEditor = false;
-            if (chiefEditor?.Id != employee.Id)
+            if (chiefEditor != null && chiefEditor?.Id != employee.Id)
             {
                 context.Entry(chiefEditor).State = EntityState.Modified;
             }

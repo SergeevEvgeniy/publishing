@@ -49,6 +49,16 @@ namespace CloudPublishing.Business.Services
             if (entity == null) return new BadResult<string>("Отсутствует сущность");
             try
             {
+                var target = await unit.Users.FindByIdAsync(entity.Id);
+                if (target == null)
+                {
+                    return new BadResult<string>("Такого пользователя не существует");
+                }
+                if (target.ChiefEditor && !entity.ChiefEditor)
+                {
+                    return new BadResult<string>("Сначала необходимо указать другого главного редактора");
+                }
+
                 var user = mapper.Map<EmployeeDTO, EmployeeUser>(entity);
                 var result = await unit.Users.UpdateAsync(user);
                 return !result.Succeeded
