@@ -8,6 +8,6 @@ namespace CloudPublishing.Business.DTO
         public string Title { get; set; }
         public string Type { get; set; }
         public string Subjects { get; set; }
-        public List<TopicDTO> Topics { get; set; }
+        public ICollection<TopicDTO> Topics { get; set; }
     }
 }

@@ -1,0 +1,85 @@
+<div>
+    <table class="table table-striped">
+        <tr>
+            <td class="">
+                Имя
+            </td>
+            <td class="">
+                {{#if data.firstName}}
+                    <span class="journ-info">{{data.firstName}}</span>
+                {{else}}
+                    <span class="missing-info">не указано</span>
+                {{/if}}
+            </td>
+        </tr>
+        <tr>
+            <td class="">
+                Отчество
+            </td>
+            <td class="">
+                {{#if data.middleName}}
+                    <span class="journ-info">{{data.middleName}}</span>
+                {{else}}
+                    <span class="missing-info">не указано</span>
+                {{/if}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Фамилия
+            </td>
+            <td>
+                {{#if data.lastName}}
+                    <span class="journ-info">{{data.lastName}}</span>
+                {{else}}
+                    <span class="missing-info">не указано</span>
+                {{/if}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                E-mail
+            </td>
+            <td>
+                {{#if data.email}}
+                    <span class="journ-info">{{data.email}}</span>
+                {{else}}
+                    <span class="missing-info">не указано</span>
+                {{/if}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Пол
+            </td>
+            <td>
+                {{#if data.Sex}}
+                   <span class="journ-info">{{data.Sex}}</span>
+                {{else}}
+                    <span class="missing-info">не указано</span>
+                {{/if}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Год рождения
+            </td>
+            <td>
+                {{#if data.birthday}}
+                    <span class="journ-info">{{data.birthday}}</span>
+                {{else}}
+                    <span class="missing-info">не указано</span>
+                {{/if}}
+            </td>
+        </tr>
+    </table>
+</div>
+<style>
+    .journ-info {
+        font-weight: bold;
+    }
+    .missing-info {
+        font-style: italic;
+        color: gray;
+    }
+</style>

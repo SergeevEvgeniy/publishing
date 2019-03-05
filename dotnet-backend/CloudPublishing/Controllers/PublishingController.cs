@@ -19,5 +19,10 @@ namespace CloudPublishing.Controllers
             var publishings = publishingService.GetAllPublishings().Select(x => new PublishingTableViewModel(x));
             return View(publishings);
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
     }
 }

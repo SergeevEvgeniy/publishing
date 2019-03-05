@@ -1,0 +1,24 @@
+{{#if page}}
+    <li class="page-item" data-type="option">
+        <a class="page-link" href="#" draggable="false" data-type='back'>
+            &#171;
+        </a>
+    </li>
+    {{#each page}}
+    
+    <li class="{{class}}">
+        <a class="page-link" draggable="false" href="#" data-type={{type}}>
+            {{type}}
+        </a>
+    </li>
+    {{/each}}
+    <li class="page-item" data-type="option">
+        <a class="page-link" draggable="false" href="#" data-type='next'>
+            &#187;
+        </a>
+    </li>
+{{/if}}
+
+<style>
+
+</style>

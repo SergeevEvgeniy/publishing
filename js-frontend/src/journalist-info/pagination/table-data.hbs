@@ -1,0 +1,22 @@
+{{#if data}}
+    {{#each data}}
+    <tr>
+        <td>
+            <a href="#">
+                {{title}}
+            </a>
+        </td>
+        <td>
+            {{name}}
+        </td>
+        <td>
+            {{number}}
+        </td>
+        <td>
+            {{date}}
+        </td>
+    </tr>
+    {{/each}}
+{{else}}
+    <h3>Отсуствуют результаты поиска</h3>
+{{/if}}

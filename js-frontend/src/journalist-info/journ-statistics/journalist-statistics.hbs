@@ -1,0 +1,61 @@
+<div class="statistics">
+    {{#if data.count}}
+        <h3>Статей (всего): 
+            <span class="articles-count">
+                {{data.count}}
+            </span>
+        </h3>
+            <table class="table table-striped journ-statistics">
+                <caption>
+                    По изданиям
+                </caption>
+                <tbody>
+                    {{#each data.edition}}
+                    <tr>
+                        <td>
+                            {{name}}
+                        </td>
+                        <td>
+                            {{title}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <table class="table table-striped journ-statistics">
+                <caption>
+                    По рубрикам
+                </caption>
+                <tbody>
+                    {{#each data.heading}}
+                    <tr>
+                        <td>
+                            {{name}}
+                        </td>
+                        <td>
+                            {{title}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+    {{else}}
+        <p class='alert alert-danger'>
+            Пока что, у вас нет опубликованных статей.
+        </p>
+    {{/if}}
+</div>
+<style>
+    .articles-count {
+        font-weight: bold;
+    }
+    .statistics table td {
+        width: 50%;
+    }
+    .statistics caption {
+        font-size: 30px;
+    }
+    .journ-statistics td:nth-child(2)  {
+        font-weight: bold;
+    }
+</style>

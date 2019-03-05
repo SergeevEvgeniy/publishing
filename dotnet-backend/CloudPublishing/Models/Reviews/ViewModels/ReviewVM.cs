@@ -9,7 +9,7 @@ namespace CloudPublishing.Models.Reviews.ViewModels
     {
         public int ArticleId { get; set; }
 
-        public int ReviewerId { get; set; }
+        public int ReviwerId { get; set; }
 
         public string Content { get; set; }
 

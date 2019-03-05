@@ -10,10 +10,18 @@ namespace CloudPublishing.Business.Services
     class ReviewService : IReviewService
     {
         private IUnitOfWork db;
+        private IMapper mapper;
 
         public ReviewService(IUnitOfWork db)
         {
             this.db = db;
+
+            MapperConfiguration mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Review, ReviewDTO>();
+                cfg.CreateMap<ReviewDTO, Review>();
+            });
+            mapper = mapperConfig.CreateMapper();
         }
 
         public IEnumerable<PublishingDTO> GetPublishingList()
@@ -93,19 +101,25 @@ namespace CloudPublishing.Business.Services
 
         public ReviewDTO GetReview(int articleId, int authorId)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Review, ReviewDTO>()).CreateMapper();
-            return mapper.Map<Review, ReviewDTO>(db.Reviews.Get(articleId, authorId));
+            /*var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Review, ReviewDTO>()).CreateMapper();
+            return mapper.Map<Review, ReviewDTO>(db.Reviews.Get(articleId, authorId));*/
+            // Заглушка для тестирования
+            return new ReviewDTO()
+            {
+                ReviwerId = 1,
+                ArticleId = 1,
+                Content = "Review content",
+                Approved = false
+            };
         }
 
         public void CreateReview(ReviewDTO review)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<ReviewDTO, Review>()).CreateMapper();
             db.Reviews.Create(mapper.Map<ReviewDTO, Review>(review));
         }
 
         public void UpdateReview(ReviewDTO review)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<ReviewDTO, Review>()).CreateMapper();
             db.Reviews.Update(mapper.Map<ReviewDTO, Review>(review));
         }
 

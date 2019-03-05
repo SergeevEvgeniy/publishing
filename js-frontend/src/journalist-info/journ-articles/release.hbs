@@ -1,0 +1,9 @@
+<label for='release' class='col-sm-4 col-form-label'>Выпуск</label>
+<div class='col-sm-8'>
+        <select class='form-control' id='release'>
+        <option selected disabled>Выберите выпуск</option>
+        {{#each data}}
+            <option value={{id}}>{{name}}</option>
+        {{/each}}
+    </select>
+</div>
