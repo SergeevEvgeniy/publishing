@@ -1,4 +1,4 @@
-package by.artezio.cloud.publishing.util.filter;
+package by.artezio.cloud.publishing.util;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -14,19 +14,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ *
+ * @author Sergeev Evgeniy
+ */
 @WebFilter(value = "/*")
 public class AuthenticationFilter implements Filter {
 
     private static final Logger LOG = Logger.getLogger(AuthenticationFilter.class.getName());
 
     @Override
-    public void init(FilterConfig fConfig) throws ServletException {
+    public void init(final FilterConfig fConfig) throws ServletException {
         LOG.info("AuthenticationFilter initialized");
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
+    public void doFilter(final ServletRequest request, final ServletResponse response,
+            final FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;

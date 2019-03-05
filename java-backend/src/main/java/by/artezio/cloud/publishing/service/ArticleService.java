@@ -8,10 +8,8 @@ import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
-import by.artezio.cloud.publishing.web.controllers.ArticleController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -25,27 +23,35 @@ import java.util.Set;
 @Service
 public class ArticleService {
 
+    @Autowired
     private ArticleDao articleDao;
+
+    @Autowired
     private TopicDao topicDao;
 
-    /**
-     * Конструктор для создания объекта с указанными значениями полей.
-     *
-     * @param articleDao объект класса {@link ArticleDao} для взаимодействия с таблицей "article"
-     * @param topicDao   объект класса {@link TopicDao} для взаимодействия с таблицей "topic"
-     */
-    @Autowired
-    public ArticleService(final ArticleDao articleDao, final TopicDao topicDao) {
-        this.articleDao = articleDao;
-        this.topicDao = topicDao;
-    }
+//    /**
+//     * Конструктор для создания объекта с указанными значениями полей.
+//     *
+//     * @param articleDao объект класса {@link ArticleDao} для взаимодействия с
+//     * таблицей "article"
+//     * @param topicDao объект класса {@link TopicDao} для взаимодействия с
+//     * таблицей "topic"
+//     */
+//    @Autowired
+//    public ArticleService(final ArticleDao articleDao, final TopicDao topicDao) {
+//        this.articleDao = articleDao;
+//        this.topicDao = topicDao;
+//    }
 
     /**
      * Получение списка объектов {@link ArticleInfo}.
      *
-     * <p>Используется для получения данных в контроллере {@link ArticleController}</p>
+     * <p>
+     * Используется для получения данных в контроллере
+     * {@link ArticleController}</p>
      *
-     * @param request запрос пользователя, объект класса {@link HttpServletRequest}
+     * @param request запрос пользователя, объект класса
+     * {@link HttpServletRequest}
      * @return список объектов класса {@link ArticleInfo}
      */
     public List<ArticleInfo> getArticleInfoList(final HttpServletRequest request) {
@@ -55,7 +61,7 @@ public class ArticleService {
         String email = "";
 
         if (cookies != null
-            || cookies.length != 0) {
+                || cookies.length != 0) {
             for (Cookie c : cookies) {
                 if ("user".equalsIgnoreCase(c.getName())) {
                     email = c.getValue();
@@ -103,23 +109,25 @@ public class ArticleService {
     /**
      * Получение объекта с данными.
      *
-     * <p>Используется для заполнения формы и для хранения данных при создании новой, или редактировании старой статьи.
+     * <p>
+     * Используется для заполнения формы и для хранения данных при создании
+     * новой, или редактировании старой статьи.
      *
-     * @param request запрос пользователя, объект класса {@link HttpServletRequest}
-     * @return объект класса {@link ArticleForm} с данными для заполнения формы на странице update_article.jsp
+     * @param request запрос пользователя, объект класса
+     * {@link HttpServletRequest}
+     * @return объект класса {@link ArticleForm} с данными для заполнения формы
+     * на странице update_article.jsp
      */
     public ArticleForm getArticleForm(final HttpServletRequest request) {
 
         String action = request.getParameter("action");
         ArticleForm dto = new ArticleForm();
 
-
         if ("create".equalsIgnoreCase(action)) {
             dto = createNewArticleDto();
         } else {
             dto = prepareArticleDtoForUpdate(request);
         }
-
 
         return null;
     }
@@ -137,7 +145,8 @@ public class ArticleService {
     /**
      * Получение множества ФИО соавторов.
      *
-     * @param coauthors множество соавторов ({@link Set}&lt;{@link Employee}&gt;)
+     * @param coauthors множество соавторов
+     * ({@link Set}&lt;{@link Employee}&gt;)
      * @return множество ФИО соавторов ({@link Set}&lt;{@link String}&gt;)
      */
     private Set<String> getCoauthorsShortNames(final Set<Employee> coauthors) {
@@ -152,21 +161,22 @@ public class ArticleService {
     /**
      * Получение сокращённого полного имени сотрудника (Фамилия И. О.)
      * <p>
-     * Если у сотрудника не указано отчество, то метод вернёт фамилию и первую букву имени
+     * Если у сотрудника не указано отчество, то метод вернёт фамилию и первую
+     * букву имени
      *
      * @param e сотрудник, объект класса {@link Employee}
      * @return ФИО в формате "Фамилия И. О."
      */
     private String getEmployeeShortName(final Employee e) {
         StringBuilder bldr = new StringBuilder()
-            .append(e.getLastName())
-            .append(" ")
-            .append(e.getFirstName().charAt(0))
-            .append(". ");
+                .append(e.getLastName())
+                .append(" ")
+                .append(e.getFirstName().charAt(0))
+                .append(". ");
         if (e.getMiddleName() != null
-            && !e.getMiddleName().isEmpty()) {
+                && !e.getMiddleName().isEmpty()) {
             bldr.append(e.getMiddleName().charAt(0))
-                .append(".");
+                    .append(".");
         }
         return bldr.toString();
     }
@@ -175,7 +185,8 @@ public class ArticleService {
      * Получение списка соавторов по идентификатору статьи.
      *
      * @param id идентификатор статьи
-     * @return список сотрудников {@link Employee}, которые являются соавторами статьи.
+     * @return список сотрудников {@link Employee}, которые являются соавторами
+     * статьи.
      */
     private List<Employee> getCoauthorsByArticleId(final int id) {
         List<ArticleCoauthor> coautors = articleDao.getArticleCoauthorsByArticleId(id);
@@ -198,7 +209,8 @@ public class ArticleService {
     /**
      * Создание объекта {@link ArticleForm} для обновления существующей статьи.
      *
-     * @param request запрос пользователя, объект класса {@link HttpServletRequest}
+     * @param request запрос пользователя, объект класса
+     * {@link HttpServletRequest}
      * @return объект {@link ArticleForm} с детальными данными о статье
      */
     private ArticleForm prepareArticleDtoForUpdate(final HttpServletRequest request) {

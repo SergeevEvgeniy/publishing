@@ -33,11 +33,6 @@ namespace CloudPublishing.Data.Repositories
 
         public void Update(Publishing publishing)
         {
-            //var oldPublishing = context.Publishings.FirstOrDefault(x => x.Id == publishing.Id);
-            //if(oldPublishing == null)
-            //{
-            //    throw new Exception("Publishing with is not found");
-            //}
             context.Entry(publishing).State = System.Data.Entity.EntityState.Modified;
             context.SaveChanges();
         }
