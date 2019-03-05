@@ -4,7 +4,6 @@ import by.artezio.cloud.publishing.dao.MailingDao;
 import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.dto.MailingInfo;
 import by.artezio.cloud.publishing.domain.Publishing;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +15,18 @@ import java.util.List;
 @Service
 public class MailingService {
 
-    @Autowired
     private MailingDao mailingDao;
-
-    @Autowired
     private PublishingDao publishingDao;
+
+    /**
+     * Конструктор с параметрами.
+     * @param mailingDao mailingDao
+     * @param publishingDao publishingDao
+     */
+    public MailingService(final MailingDao mailingDao, final PublishingDao publishingDao) {
+        this.mailingDao = mailingDao;
+        this.publishingDao = publishingDao;
+    }
 
     /**
      * Метод, возвращающий список всех рассылок.

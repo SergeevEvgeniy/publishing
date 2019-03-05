@@ -10,43 +10,48 @@
 <body>
 
 <div class="container">
-    <span class="h3">Список рассылки</span>
-    <button type="button" class="btn btn-lg btn-success pull-right">
-        <a href="mailing/settings">
-            <span class="glyphicon glyphicon-cog"/>
-            Settings
-        </a>
-    </button>
+    <div class="row panel-group">
+        <div class="col-lg-6 col-md-8">
+            <span class="h2">Список рассылки</span>
+        </div>
+        <div class="col-lg-6 col-md-4 text-right">
+            <a href="mailing/settings" class="btn btn-success">
+                <span class="glyphicon glyphicon-cog"></span>
+                Settings
+            </a>
+        </div>
+    </div>
+
     <table class="table table-condensed table-bordered">
-            <thead class="thead-light">
+        <thead class="thead-light">
+            <tr>
+                <th width="25%">Журнал/газета</th>
+                <th width="25%">Номер</th>
+                <th width="25%">Дата рассылки</th>
+                <th width="25%">Результат</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="mailingInfo" items="${mailingInfoList}">
                 <tr>
-                    <th class="col-sm-2">Журнал/газета</th>
-                    <th class="col-sm-2">Номер</th>
-                    <th class="col-sm-2">Дата рассылки</th>
-                    <th class="col-sm-12">Результат</th>
+                    <td>
+                        <%--TODO исправить на 'mailing.publishingTitle'--%>
+                        <c:out value="${mailingInfo.publishingId}"/>
+                    </td>
+                    <td>
+                        <%--TODO исправить на 'mailing.issueNumber'--%>
+                        <c:out value="${mailingInfo.issueId}"/>
+                    </td>
+                    <td>
+                        <fmt:formatDate value="${mailingInfo.date}" dateStyle="long" pattern="d MMMM YYYY"/>
+                    </td>
+                    <td style="color: ${mailingInfo.result.equals('Успешно') ? 'green' : 'red'}">
+                        <c:out value="${mailingInfo.result}"/>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="mailingInfo" items="${mailingInfoList}">
-                    <tr>
-                        <td>
-                            <%--TODO исправить на 'mailing.publishingTitle'--%>
-                            <c:out value="${mailingInfo.publishingId}"/>
-                        </td>
-                        <td>
-                            <%--TODO исправить на 'mailing.issueNumber'--%>
-                            <c:out value="${mailingInfo.issueId}"/>
-                        </td>
-                        <td>
-                            <fmt:formatDate value="${mailingInfo.date}" dateStyle="long" pattern="d MMMM YYYY"/>
-                        </td>
-                        <td style="color: ${mailingInfo.result.equals('Успешно') ? 'green' : 'red'}">
-                            <c:out value="${mailingInfo.result}"/>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+            </c:forEach>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
