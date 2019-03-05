@@ -18,7 +18,7 @@ namespace CloudPublishing.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService service;
-
+        private readonly IAccountService accounts;
         private readonly IAuthenticationManager authenticationManager;
 
         private static readonly IDictionary<EmployeeType, string> Types;
@@ -39,10 +39,11 @@ namespace CloudPublishing.Controllers
             };
         }
 
-        public EmployeeController(IEmployeeService service, IAuthenticationManager authenticationManager)
+        public EmployeeController(IEmployeeService service, IAccountService accounts, IAuthenticationManager authenticationManager)
         {
             this.service = service;
             this.authenticationManager = authenticationManager;
+            this.accounts = accounts;
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
         }
 
@@ -91,7 +92,7 @@ namespace CloudPublishing.Controllers
         public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var result = await service.AuthenticateUserAsync(new EmployeeDTO
+            var result = await accounts.AuthenticateUserAsync(new EmployeeDTO
             {
                 Email = model.Email,
                 Password = model.Password
@@ -106,7 +107,7 @@ namespace CloudPublishing.Controllers
             authenticationManager.SignOut();
             authenticationManager.SignIn(new AuthenticationProperties
             {
-                IsPersistent = true // model.CheckOut
+                IsPersistent = true
             }, result.GetContent());
 
             return RedirectToAction("List", "Employee");
@@ -144,7 +145,7 @@ namespace CloudPublishing.Controllers
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
-            var result = await service.CreateEmployeeAsync(user);
+            var result = await accounts.CreateAccountAsync(user);
 
             if (!result.IsSuccessful)
             {
@@ -190,7 +191,7 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
-            var result = await service.EditEmployeeAsync(user);
+            var result = await accounts.EditAccountAsync(user);
             if (!result.IsSuccessful)
             {
                 ModelState.AddModelError("", result.GetFailureMessage());
@@ -208,7 +209,7 @@ namespace CloudPublishing.Controllers
         [Authorize(Roles = "ChiefEditor")]
         public async Task<ActionResult> Delete(int? id)
         {
-            var result = await service.DeleteEmployeeAsync(id);
+            var result = await accounts.DeleteAccountAsync(id);
 
             return Json(new
             {

@@ -1,4 +1,11 @@
-﻿using CloudPublishing;
+﻿using System.Web.Http;
+using System.Web.Mvc;
+using Autofac;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
+using AutofacConfig;
+using CloudPublishing;
+using CloudPublishing.AutofacConfig;
 using CloudPublishing.Business.Services;
 using CloudPublishing.Business.Services.Interfaces;
 using Microsoft.AspNet.Identity;
@@ -12,15 +19,19 @@ namespace CloudPublishing
 {
     public class Startup
     {
-        private readonly IEmployeeServiceCreator creator;
-        public Startup()
-        {
-            creator = new EmployeeServiceCreator();
-        }
-
         public void Configuration(IAppBuilder app)
         {
-            app.CreatePerOwinContext<IEmployeeService>(() => creator.Create());
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new GlobalModule());
+            builder.RegisterModule(new WebModule());
+
+            var container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+            app.UseAutofacMiddleware(container);
+            app.UseAutofacMvc();
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

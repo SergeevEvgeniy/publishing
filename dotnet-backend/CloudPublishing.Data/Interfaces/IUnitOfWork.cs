@@ -16,12 +16,6 @@ namespace CloudPublishing.Data.Interfaces
 
         ITopicRepository Topics { get; }
 
-        // RESTful api's repositories
-
-        IArticleRepository Articles { get; }
-
-        // Identity
-
         IUserRepository Users { get; }
 
         int Save();

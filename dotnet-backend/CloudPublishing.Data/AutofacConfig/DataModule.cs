@@ -1,6 +1,11 @@
 ﻿using Autofac;
+using CloudPublishing.Data.EF;
+using CloudPublishing.Data.Identity.Entities;
+using CloudPublishing.Data.Identity.Managers;
+using CloudPublishing.Data.Identity.Stores;
 using CloudPublishing.Data.Interfaces;
 using CloudPublishing.Data.Repositories;
+using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Data.AutofacConfig
 {
@@ -9,9 +14,16 @@ namespace CloudPublishing.Data.AutofacConfig
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<MySql.Data.MySqlClient.MySqlProviderServices>().As<MySql.Data.MySqlClient.MySqlProviderServices>();
+            builder.RegisterType<CloudPublishingContext>().AsSelf().WithParameter("connectionString", "EmployeeContext")
+                .InstancePerRequest();
+            
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
 
-            // Для тестирования менть строку, но перед пушем возвращать обратно (временное решение)
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().WithParameter("connectionString", "EmployeeContext");
+            builder.RegisterType<EmployeeUserStore>().AsImplementedInterfaces().InstancePerRequest();
+            builder.Register(c => new EmployeeUserManager(c.Resolve<IUserRoleStore<EmployeeUser, int>>()))
+                .As<UserManager<EmployeeUser, int>>().InstancePerRequest();
+
+            builder.Register(c => new UserRepository(c.Resolve<CloudPublishingContext>())).As<IUserRepository>();
         }
     }
 }

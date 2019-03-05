@@ -7,6 +7,7 @@ using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using AutofacConfig;
 using CloudPublishing.AutofacConfig;
+using CloudPublishing.Business.Services;
 
 namespace CloudPublishing
 {
@@ -14,7 +15,7 @@ namespace CloudPublishing
     {
         protected void Application_Start()
         {
-            ConfigureContainer();
+            //ConfigureContainer();
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -23,15 +24,15 @@ namespace CloudPublishing
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
-        private void ConfigureContainer()
-        {
-            var builder = new ContainerBuilder();
-            builder.RegisterModule(new GlobalModule());
-            builder.RegisterModule(new WebModule());
+        //private void ConfigureContainer()
+        //{
+        //    var builder = new ContainerBuilder();
+        //    builder.RegisterModule(new GlobalModule());
+        //    builder.RegisterModule(new WebModule());
 
-            var container = builder.Build();
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
-            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-        }
+        //    var container = builder.Build();
+        //    DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+        //    GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+        //}
     }
 }

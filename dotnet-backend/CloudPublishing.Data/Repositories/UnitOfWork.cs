@@ -11,27 +11,21 @@ namespace CloudPublishing.Data.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CloudPublishingContext context;
-        private readonly HttpClient client;
 
         private readonly IEmployeeRepository employees = null;
         private readonly IReviewRepository reviews = null;
         private readonly IPublishingRepository publishings = null;
         private readonly ITopicRepository topics = null;
-
-        private readonly IArticleRepository articles = null;
-
         private readonly IUserRepository users = null;
 
-        public UnitOfWork(string connectionString)
+        public UnitOfWork(CloudPublishingContext context)
         {
-            context = new CloudPublishingContext(connectionString);
-            client = new HttpClient();
+            this.context = context;
         }
 
         public void Dispose()
         {
             context?.Dispose();
-            client?.Dispose();
         }
 
         public IEmployeeRepository Employees => employees?? new EmployeeRepository(context);
@@ -41,9 +35,6 @@ namespace CloudPublishing.Data.Repositories
         public IPublishingRepository Publishings => publishings ?? new PublishingRepository(context);
 
         public ITopicRepository Topics => topics ?? new TopicRepository(context);
-
-
-        public IArticleRepository Articles => articles ?? new ArticleRepository(client);
 
         public IUserRepository Users => users ?? new UserRepository(context);
 

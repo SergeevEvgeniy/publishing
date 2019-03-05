@@ -15,12 +15,12 @@ namespace CloudPublishing.Business.Services.Interfaces
 
         IResult<EmployeeDTO> GetEmployeeById(int? id);
 
-        Task<IResult<string>> CreateEmployeeAsync(EmployeeDTO entity);
+        //Task<IResult<string>> CreateEmployeeAsync(EmployeeDTO entity);
 
-        Task<IResult<string>> EditEmployeeAsync(EmployeeDTO entity);
+        //Task<IResult<string>> EditEmployeeAsync(EmployeeDTO entity);
 
-        Task<IResult<string>> DeleteEmployeeAsync(int? id);
+        //Task<IResult<string>> DeleteEmployeeAsync(int? id);
 
-        Task<IResult<ClaimsIdentity>> AuthenticateUserAsync(EmployeeDTO entity);
+        //Task<IResult<ClaimsIdentity>> AuthenticateUserAsync(EmployeeDTO entity);
     }
 }

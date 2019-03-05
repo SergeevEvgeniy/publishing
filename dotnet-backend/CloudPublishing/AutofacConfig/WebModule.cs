@@ -16,12 +16,8 @@ namespace CloudPublishing.AutofacConfig
         {
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-            builder.RegisterType<EmployeeServiceCreator>().As<IEmployeeServiceCreator>();
 
-            builder.Register<IEmployeeService>(c => HttpContext.Current.GetOwinContext().Get<IEmployeeService>())
-                .InstancePerRequest();
-
-            builder.Register<IAuthenticationManager>(c => HttpContext.Current.GetOwinContext().Authentication).InstancePerRequest();
+            builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).InstancePerRequest();
         }
     }
 }
