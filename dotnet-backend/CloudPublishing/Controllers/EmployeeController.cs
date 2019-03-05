@@ -155,6 +155,11 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
+            if (model.ChiefEditor)
+            {
+                authenticationManager.SignOut();
+            }
+
             TempData["Message"] = result.GetContent();
 
 
@@ -198,6 +203,11 @@ namespace CloudPublishing.Controllers
                 model.TypeList = GetEmployeeTypeSelectList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
+            }
+
+            if (model.ChiefEditor)
+            {
+                authenticationManager.SignOut();
             }
 
             TempData["Message"] = result.GetContent();

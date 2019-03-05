@@ -22,8 +22,6 @@ namespace CloudPublishing.Data.AutofacConfig
             builder.RegisterType<EmployeeUserStore>().AsImplementedInterfaces().InstancePerRequest();
             builder.Register(c => new EmployeeUserManager(c.Resolve<IUserRoleStore<EmployeeUser, int>>()))
                 .As<UserManager<EmployeeUser, int>>().InstancePerRequest();
-
-            builder.Register(c => new UserRepository(c.Resolve<CloudPublishingContext>())).As<IUserRepository>();
         }
     }
 }
