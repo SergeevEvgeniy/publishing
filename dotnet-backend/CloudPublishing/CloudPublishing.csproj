@@ -308,6 +308,7 @@
     <Content Include="Views\Review\GetArticleList.cshtml" />
     <Content Include="Views\Publishing\List.cshtml" />
     <Content Include="Views\Publishing\Create.cshtml" />
+    <Content Include="Views\Review\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
