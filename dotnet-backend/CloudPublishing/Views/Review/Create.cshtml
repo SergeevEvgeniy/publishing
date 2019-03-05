@@ -3,8 +3,6 @@
     ViewBag.Title = "Создание рецензии";
 }
 
-<h2>Создание рецензии</h2>
-
 @using (Html.BeginForm("Create", "Review", FormMethod.Post))
 {
     <div class="container mt-5">
@@ -28,7 +26,7 @@
             </div>
             <div class="row form-group">
                 <label class="col-sm-2 col-form-label">Статья</label>
-                <select class="form-control col-sm-4" type="text" id="article" disabled></select>
+                <select class="form-control col-sm-4" type="text" id="article" name="ArticleId" disabled></select>
             </div>
             <div class="form-group">
                 <label class="col-form-label">Содержание</label>
@@ -36,12 +34,12 @@
             </div>
             <div class="form-group">
                 <label class="col-form-label">Рецензия</label>
-                <textarea class="form-control col-sm-6" rows="6" name="Content" id="review-content"></textarea>
+                <textarea class="form-control col-sm-6" rows="6" name="Content" id="review_content"></textarea>
             </div>
             <div class="form-group">
                 <div class="form-check">
                     <label class="cursor-pointer">
-                        <input class="form-check-input" type="checkbox" value="" name="Approved">В публикацию
+                        <input class="form-check-input" type="checkbox" name="Approved" value="true" checked="checked">В публикацию
                     </label>
                 </div>
             </div>

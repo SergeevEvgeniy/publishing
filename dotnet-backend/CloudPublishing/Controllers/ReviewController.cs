@@ -2,9 +2,7 @@
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Reviews.ViewModels;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace CloudPublishing.Controllers
@@ -90,9 +88,12 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         public ActionResult Create(ReviewVM review)
         {
+            // Будет заменено на получение текущего пользователя
+            review.ReviwerId = 1;
+
             reviewService.CreateReview(mapper.Map<ReviewVM, ReviewDTO>(review));
 
-            return View("Index");
+            return Redirect("/Review/Index");
         }
 
         public ActionResult Details(int articleId)
@@ -104,30 +105,34 @@ namespace CloudPublishing.Controllers
             return View(review);
         }
 
-        /*[HttpGet]
+        [HttpGet]
         public ActionResult Edit(int articleId)
         {
-            // Получение id пользователя
+            // Будет заменено на получение id пользователя
             int userId = 1;
-            Review review = repo.Get(articleId, userId);
-            if (review == null)
-            {
-                return HttpNotFound();
-            }
+
+            var review = mapper.Map<ReviewDTO, ReviewVM>(reviewService.GetReview(articleId, userId));
+
             return View(review);
         }
 
         [HttpPost]
-        public ActionResult Edit(Review review)
+        public ActionResult Edit(ReviewVM review)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("InvalidModel");
-            }
-            repo.Update(review);
-            return View("Index");
-        }*/
+            reviewService.UpdateReview(mapper.Map<ReviewDTO>(review));
 
+            return Redirect("/Review/Index");
+        }
 
+        [HttpPost]
+        public ActionResult Delete(int articleId)
+        {
+            // Будет заменено на получение id пользователя
+            int userId = 1;
+
+            reviewService.DeleteReview(articleId, userId);
+
+            return Redirect("/Review/Index");
+        }
     }
 }
