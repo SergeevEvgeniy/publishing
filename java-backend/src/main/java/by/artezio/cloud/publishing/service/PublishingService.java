@@ -9,7 +9,7 @@ public interface PublishingService {
 
     List<Publishing> getPublishingList();
 
-    List<Topic> getPublishingToppics(int publishingId);
+    List<Topic> getPublishingTopics(int publishingId);
 
 }
 

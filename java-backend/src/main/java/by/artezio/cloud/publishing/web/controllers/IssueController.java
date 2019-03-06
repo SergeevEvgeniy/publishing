@@ -30,7 +30,7 @@ public class IssueController {
     @PostMapping
     public String getIssueFormDto(IssueForm issueForm) {
         System.out.println(issueForm);
-        List<Topic> tl = publishingService.getPublishingToppics(issueForm.getPublishingId());
+        List<Topic> tl = publishingService.getPublishingTopics(issueForm.getPublishingId());
         return "home";
     }
 

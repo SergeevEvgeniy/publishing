@@ -1,5 +1,6 @@
 package by.artezio.cloud.publishing.dao;
 
+import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Topic;
 import org.springframework.jdbc.core.RowMapper;
@@ -77,5 +78,4 @@ public class PublishingDao {
             topicRowMapper
         );
     }
-
 }
