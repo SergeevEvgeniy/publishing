@@ -1,0 +1,18 @@
+[
+    {
+        "publishing": "Вокруг света",
+        "publishingId": 100000
+    },
+    {
+        "publishing": "Советы садоводу и огороднику",
+        "publishingId": 100001
+    },
+    {
+        "publishing": "Лиза",
+        "publishingId": 100002
+    },
+    {
+        "publishing": "Очевидное-неверотное",
+        "publishingId": 100003
+    }
+]

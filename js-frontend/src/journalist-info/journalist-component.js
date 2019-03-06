@@ -19,6 +19,7 @@ function JournalistStatComponent($element) {
     var journalistInfoUrl = 'http://127.0.0.1:3000/getStat';
     var elementSelector = '#journalistInfo';
     var navigationSelector = '.nav-tabs';
+
     ($element).on('click', navigationSelector, function (event) {
         var target = event.target;
         while (target !== this) {
@@ -28,6 +29,9 @@ function JournalistStatComponent($element) {
                 $(target).children().first().addClass('active');
                 var component = new componentObj[componentPick]($(elementSelector));
                 component.setData(componentData);
+                component.onActionInChildComponent(function () {
+                    console.log('В дочернем элементе произошло событие.');
+                });
                 return;
             }
             target = target.parentNode;
@@ -40,7 +44,7 @@ function JournalistStatComponent($element) {
         }));
     }
 
-    //получить инфомрмацию о журналисте
+    //получить инфомрмацию о журналисте + добавить параметр data
     this.appendComponent = function () {
         var spinner = new Spinner();
         spinner.appendSpinner($element);
@@ -52,12 +56,13 @@ function JournalistStatComponent($element) {
             render();
             spinner.removeSpinner();
             //по умолчанию вкладка информация
+            //нужно ли его вызывать render ?
             var infoComponent = new componentObj.InfoComponent($(elementSelector));
             infoComponent.setData(componentData);
             //сделать эту вкладку активной. Но этот вариант не очень
             $(navigationSelector).find('a').first().addClass('active');
         });
-    }
+    };
 }
 
 module.exports = {

@@ -5,13 +5,13 @@ var tableDataTemplate = require('./table-data.hbs');
 
 
 //Переделать
-function PaginationComponent(tbodyEl, paginationEl, selectElement) {
+function PaginationComponent($tbodyEl, $paginationEl, $selectElement) {
     var startIndex = 0;
-    var pagesNumbers = [];
     var componentData = [];
     var availableTogglers = [5, 10, 25, 50];
-    var cuurentToggler = availableTogglers[0];
-    var stopIndex = cuurentToggler;
+    var maxPageNumber = 0;
+    var currentToggler = availableTogglers[0];
+    var stopIndex = currentToggler;
     var currentPageObj = {
         page: 1,
         continueNext: true,
@@ -31,32 +31,23 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
     };
 
     //сюда ещё нужно ивент для page li добавить
-    selectElement.change(function(event) {
+    $selectElement.change(function(event) {
         changePages(event.target);
     });
 
     function checkPageCount() {
-        let checkPage = 0;
+        let length = componentData.length;
 
-        if (componentData.length < 5) {
-            selectElement.hide();
+        if (length < 5) {
+            $selectElement.hide();
             return;
         }
 
-        for (let i = 0; i < componentData.length; i++) {
-            if (i % 5 === 0) {
-                checkPage++;
-                pagesNumbers.push(checkPage);
-            }
-        }
-        var pageToggler = [];
-        availableTogglers.forEach(function (item) {
-            pageToggler.push(item);
-        });
-        selectElement.append(paginationTogglerTemplate({
-            togglers: pageToggler
+        maxPageNumber = Math.ceil(length / currentToggler);
+        $selectElement.append(paginationTogglerTemplate({
+            togglers: availableTogglers
         }));
-        selectElement.change(function(event) {
+        $selectElement.change(function(event) {
             changePages(event.target);
         });
     }
@@ -77,20 +68,21 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
             pageObj.stop = page + 2;
         }
 
-        paginationEl.empty();
+        if (maxPageNumber < pageObj.stop) {
+            pageObj.stop = maxPageNumber;
+        }
+
+        $paginationEl.empty();
         for (; pageObj.index < pageObj.stop; pageObj.index++) {
             let obj = {};
-            if (pagesNumbers[pageObj.index] === undefined) {
-                break;
-            }
-
-            if (page === pageObj.index + 1) {
+            let index = pageObj.index + 1;
+            if (page === index) {
                 obj.class= 'active page-item';
             } else {
                 obj.class = 'page-item';
             }
 
-            obj.type = pagesNumbers[pageObj.index];
+            obj.type = index;
             arrayPage.push(obj);
         }
 
@@ -99,40 +91,43 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
             class: 'page-item'
         };
 
-       
         if (page > 3) {
             arrayPage.unshift(threeDots);
-        } else if (pagesNumbers.length - page > 2) {
+        }
+        if (maxPageNumber - page > 2) {
             arrayPage.push(threeDots);
         }
 
-        paginationEl.append(paginationListTemplate({
+        $paginationEl.append(paginationListTemplate({
             page: arrayPage
         }));
-        paginationEl.children().click(function (event) {
+        $paginationEl.children().click(function (event) {
             event.preventDefault();
             toggleData(event.target);
         });
     }
     function createPageList() {
-        if (pagesNumbers.length === 0) {
+        var length = componentData.length;
+
+        if (length === 0) {
             return;
         }
+
         var pageLists = [];
-        pagesNumbers.forEach(function (item, index) {
+        for (let item = 1; item <= maxPageNumber; item++) {
             let obj = {
                 type: item,
                 class: 'page-item'
             };
 
-            if (index === 3 && pagesNumbers.length >= 3) {
+            if (item > 3) {
                 obj.type = '...';
                 pageLists.push(obj);
                 pageLists[0].class = 'page-item active';
-                paginationEl.append(paginationListTemplate({
+                $paginationEl.append(paginationListTemplate({
                     page: pageLists
                 }));
-                paginationEl.children().click(function (event) {
+                $paginationEl.children().click(function (event) {
                     event.preventDefault();
                     toggleData(event.target);
                 });
@@ -140,13 +135,14 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
                 return;
             }
             pageLists.push(obj);
-        });
-        if (pagesNumbers.length <= 3) {
+        }
+
+        if (maxPageNumber <= 3) {
             pageLists[0].class = 'page-item active';
-            paginationEl.append(paginationListTemplate({
+            $paginationEl.append(paginationListTemplate({
                 page: pageLists
             }));
-            paginationEl.children().click(function (event) {
+            $paginationEl.children().click(function (event) {
                 event.preventDefault();
                 toggleData(event.target);
             }); 
@@ -154,21 +150,15 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
     }
 
     function createPaginationOnOptionChange() {
-        paginationEl.empty();
+        $paginationEl.empty();
         currentPageObj.continueBack = false;
         currentPageObj.continueNext = true;
-        let checkPage = 0;
         let length = componentData.length;
-        pagesNumbers = [];
-        while (length > 0) {
-            length = length - cuurentToggler;
-            checkPage++;
-            pagesNumbers.push(checkPage);
-        }
+        maxPageNumber = Math.ceil(length / currentToggler);
     }
 
     function appendDataToTable() {
-        tbodyEl.empty();
+        $tbodyEl.empty();
         var dataArray = [];
         for (; startIndex < componentData.length; startIndex++) {
             if (startIndex >= stopIndex) {
@@ -184,7 +174,7 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
             }
             dataArray.push(dataObj);
         }
-        tbodyEl.append(tableDataTemplate({
+        $tbodyEl.append(tableDataTemplate({
             data: dataArray
         }));
     }
@@ -200,8 +190,7 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
             }
         },
         onNext: function () {
-            let lastItemValue = pagesNumbers.length;
-            if (+currentPageObj.page === lastItemValue) {
+            if (+currentPageObj.page === maxPageNumber) {
                 currentPageObj.continueNext = false;
                 currentPageObj.continueBack = true;
             } else {
@@ -225,23 +214,23 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
 
         if (value === 'back' && currentPageObj.continueBack) {
             currentPageObj.page--;
-            startIndex = currentPageObj.page * cuurentToggler - cuurentToggler;
-            stopIndex -= cuurentToggler;
+            startIndex = currentPageObj.page * currentToggler - currentToggler;
+            stopIndex -= currentToggler;
             checkPageObj.onBack();
             animationOnPageClick()
             appendDataToTable();
             return;
         } else if (value === 'next' && currentPageObj.continueNext) {
             currentPageObj.page++;
-            startIndex = currentPageObj.page * cuurentToggler - cuurentToggler;
-            stopIndex = currentPageObj.page * cuurentToggler;
+            startIndex = currentPageObj.page * currentToggler - currentToggler;
+            stopIndex = currentPageObj.page * currentToggler;
             checkPageObj.onNext();
             animationOnPageClick()
             appendDataToTable();
             return;
         } else if (!isNaN(value)) {
-            startIndex = value * cuurentToggler - cuurentToggler;
-            stopIndex = value * cuurentToggler;
+            startIndex = value * currentToggler - currentToggler;
+            stopIndex = value * currentToggler;
             currentPageObj.page = +value;
             checkPageObj.onUserClick();
             appendDataToTable();
@@ -249,9 +238,9 @@ function PaginationComponent(tbodyEl, paginationEl, selectElement) {
         }
     };
     function changePages (target) {
-        cuurentToggler = $(target).val();
+        currentToggler = $(target).val();
         startIndex =  0;
-        stopIndex = cuurentToggler;
+        stopIndex = currentToggler;
         currentPageObj.page = 1;
         appendDataToTable();
         createPaginationOnOptionChange();

@@ -9,6 +9,22 @@ public class Topic {
     private String name;
 
     /**
+     * Конструктор, создаёт класс со стандартными значениями полей.
+     */
+    public Topic() {
+    }
+
+    /**
+     * Конструктор для создания объекта с указанными значениями полей.
+     * @param id - id рубрики
+     * @param name - название рубрики
+     */
+    public Topic(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    /**
      * Получение идентификатора рубрики.
      *
      * @return идентификатор рубрики

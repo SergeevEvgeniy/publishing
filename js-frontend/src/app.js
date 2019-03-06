@@ -2,6 +2,7 @@ var $ = require('jquery');
 var homeComponent = require('./home/home-component');
 var { JournalistStatComponent } = require('./journalist-info/journalist-component');
 
+
 $(function onReady() {
     var journalistComponent = new JournalistStatComponent($('#app'));
     journalistComponent.appendComponent();
