@@ -20,6 +20,7 @@ function SearchJournalistComponent($parentElement) {
     var $topicElement = $searchPage.find('#topic');
     var $articleInputElement = $searchPage.find('#article');
     var $lastNameInputElement = $searchPage.find('#lastName>input');
+    var $searchButtonElement = $searchPage.find(searchButtonSelector);
     var $searchResultElement = $searchPage.find('#searchResult');
     var $searchFormElement = $searchPage.find('form');
     var $loadingElement = $searchPage.find('.spinner-border');
@@ -41,9 +42,8 @@ function SearchJournalistComponent($parentElement) {
 
     function onSearchSubmitEvent(event) {
         var formData = $searchFormElement.serializeArray();
-        var searchButton = event.target;
         event.preventDefault();
-        searchButton.disabled = true;
+        $searchButtonElement.prop('disabled', true);
         $loadingElement.removeClass(hiddenClass);
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
             if (response.length !== 0) {
@@ -52,12 +52,11 @@ function SearchJournalistComponent($parentElement) {
                 $searchResultElement.text('Отсутствуют результаты поиска.');
             }
             $loadingElement.addClass(hiddenClass);
-            searchButton.disabled = false;
+            $searchButtonElement.prop('disabled', false);
         });
     }
 
-    function onSearchClearEvent(event) {
-        event.preventDefault();
+    function onSearchClearEvent() {
         $issueElement.closest('.input-block').addClass(hiddenClass);
         topicList.selectDefault();
         publishingList.selectDefault();
@@ -66,23 +65,22 @@ function SearchJournalistComponent($parentElement) {
         $searchResultElement.empty();
     }
 
-    function onInputBlurEvent(event) {
-        var $inputElementParent = $(event.target.parentElement);
-        var $validationMessage = $inputElementParent.find('small');
-        var pattern = /[A-z0-9]/;
+    function onInputKeyUpEvent(event) {
+        var inputElement = event.target;
+        var pattern = new RegExp(inputElement.getAttribute('pattern'));
         var inputElementValue = event.target.value;
-        console.log(pattern.test(event.target.textContent));
-        if (pattern.test(inputElementValue)) {
-            $validationMessage.removeClass(hiddenClass);
+        if (!pattern.test(inputElementValue)) {
+            inputElement.setCustomValidity(inputElement.dataset.message);
         } else {
-            $validationMessage.addClass(hiddenClass);
+            inputElement.setCustomValidity('');
         }
     }
 
-    $searchPage.on('change', publishingElementSelector, onPublishingChangeEvent);
-    $searchPage.on('click', searchButtonSelector, onSearchSubmitEvent);
-    $searchPage.on('click', clearButtonSelector, onSearchClearEvent);
-    $searchPage.on('blur', inputElementSelector, onInputBlurEvent);
+    $searchPage
+        .on('change', publishingElementSelector, onPublishingChangeEvent)
+        .on('submit', 'form', onSearchSubmitEvent)
+        .on('click', clearButtonSelector, onSearchClearEvent)
+        .on('keyup', inputElementSelector, onInputKeyUpEvent);
 
     this.render = function render() {
         $parentElement.append($searchPage);

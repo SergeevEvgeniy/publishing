@@ -45,10 +45,10 @@ function JournalistApiComponent() {
         return new Promise(function resolvePromise(resolve) {
             $.post(URL + '/api/journalists', formData).done(function getResponse(journalistList) {
                 //journalistList = [];
-                setTimeout(function resolveRequest() {
-                    resolve(journalistList);
-                }, 3000);
-                //resolve(journalistList);
+                // setTimeout(function resolveRequest() {
+                //     resolve(journalistList);
+                // }, 3000);
+                resolve(journalistList);
             });
         });
     };
