@@ -1,6 +1,7 @@
 package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.domain.Topic;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,14 @@ public class PublishingDao {
         rs.getString("subjects")
     );
 
+    private RowMapper<Topic> topicRowMapper = (rs, rowNum) -> new Topic(
+        rs.getInt("id"),
+        rs.getString("name")
+    );
+
     /**
      * Конструктор с параметром {@param jdbcTemplate}.
+     *
      * @param jdbcTemplate Объект, который дает доступ к базе данных.
      */
     public PublishingDao(final NamedParameterJdbcTemplate jdbcTemplate) {
@@ -35,6 +42,7 @@ public class PublishingDao {
 
     /**
      * Возвращает список Publishing {@link Publishing} объектов, которые имеются в издательстве.
+     *
      * @return список всех Publishing {@link Publishing} объектов
      */
     public List<Publishing> getPublishingList() {
@@ -44,6 +52,7 @@ public class PublishingDao {
 
     /**
      * Возвращает объект публикации {@link Publishing} c id == {@param id}.
+     *
      * @param id - publishing id
      * @return Publishing объект, если он существует, иначе <code>null</code>.
      */
@@ -53,5 +62,41 @@ public class PublishingDao {
             Collections.singletonMap("id", id),
             publishingRowMapper
         );
+    }
+
+    /**
+     * Получение списка рубрик по идентификатору журнала.
+     *
+     * @param id идентификатор журнала
+     * @return {@link List}&lt;{@link Topic}&gt;
+     */
+    public List<Topic> getTopicsByPublishingId(final Integer id) {
+        List<Integer> topicsId = jdbcTemplate.queryForList(
+            "SELECT topic_id FROM publishing_topic WHERE publishing_id = :publishingId",
+            Collections.singletonMap("publishingId", id),
+            Integer.class);
+
+        String str = convertToString(topicsId);
+        return jdbcTemplate.query("SELECT * FROM topic WHERE id IN (:str)",
+            Collections.singletonMap("str", str), topicRowMapper);
+    }
+
+    /**
+     * Превращение списка рубрик в строку вида "id1,id2,id3,...".
+     *
+     * @param topicsId список рубрик
+     * @return строка вида "id1,id2,id3,..."
+     */
+    private String convertToString(final List<Integer> topicsId) {
+        boolean needColon = false;
+        StringBuilder bldr = new StringBuilder();
+        for (Integer id : topicsId) {
+            if (needColon) {
+                bldr.append(",");
+            }
+            bldr.append(id);
+            needColon = true;
+        }
+        return bldr.toString();
     }
 }

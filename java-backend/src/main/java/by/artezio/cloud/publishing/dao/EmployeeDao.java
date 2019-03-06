@@ -1,13 +1,17 @@
 package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.Employee;
-import java.sql.ResultSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Класс для обращения к таблице Employee.
@@ -38,8 +42,7 @@ public class EmployeeDao {
     };
 
     /**
-     *
-     * @param email значение почты
+     * @param email    значение почты
      * @param password значение пароля
      * @return Employee полученного по совпадению пары логин/пароль
      */
@@ -48,10 +51,39 @@ public class EmployeeDao {
         map.put("email", email);
         map.put("password", password);
         return this.jdbcTemplate.queryForObject(
-                "SELECT * FROM employee where email = :email and password = :password",
-                map,
-                mapper
+            "SELECT * FROM employee where email = :email and password = :password",
+            map,
+            mapper
         );
     }
 
+    /**
+     * Получение сотрудника по его идентификатору.
+     *
+     * @param id идентификатор сотрудника
+     * @return {@link Employee}
+     */
+    public Employee getEmployeeById(final int id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM employee WHERE id = :id",
+            Collections.singletonMap("id", id), mapper);
+    }
+
+    /**
+     * Получение множества сотрудников по идентификатору журнала/газеты.
+     *
+     * @param id идентификатор журнала/газеты
+     * @return {@link Set}&lt;{@link Employee}&gt; множество сотрудников, которые работают в указанном журнале/газете
+     */
+    public Set<Employee> getJournalistsByPublishingId(final Integer id) {
+        String sql = "SELECT id,"
+            + " firstName, last_name, middle_name,"
+            + " email, password, sex, birth_year,"
+            + " address, type, education_id, chief_editor"
+            + " FROM employee e"
+            + " INNER JOIN publishing_employee pe ON pe.employee_id = e.id"
+            + " WHERE pe.publishing_id = :publishingId"
+            + " AND e.type = 'J'";
+        return new HashSet<>(jdbcTemplate.query(sql, Collections.singletonMap("publishingId", id),
+            mapper));
+    }
 }

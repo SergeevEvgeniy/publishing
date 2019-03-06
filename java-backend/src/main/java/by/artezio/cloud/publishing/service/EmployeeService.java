@@ -1,29 +1,28 @@
 package by.artezio.cloud.publishing.service;
 
-import by.artezio.cloud.publishing.dao.EmployeeDao;
 import by.artezio.cloud.publishing.domain.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 /**
- * Сервис, реализующий логику получения данных Employee.
- *
- * @author Sergeev Evgeniy
+ * Сервис, содержащий бизнес-логику по обработке сотрудников.
  */
-@Service
-public class EmployeeService {
-
-    @Autowired
-    private EmployeeDao userDao;
+public interface EmployeeService {
 
     /**
+     * Получение сотрудника по его идентификатору.
      *
-     * @param email значение почты
-     * @param password значение пароля
-     * @return Employee
+     * @param employeeId идентификатор сотрудника
+     * @return {@link Employee}
      */
-    public Employee getEmployee(final String email, final String password) {
-        //захэшировать пароль
-        return userDao.getEmployeeByLoginPass(email, password);
-    }
+    Employee getEmployeeById(final Integer employeeId);
+
+    /**
+     * Получение списка сотрудников по идентификатору журнала/газеты,
+     * в которой они работают.
+     *
+     * @param id идентификатор журнала/газеты
+     * @return {@link Set}&lt;{@link Employee}&gt;
+     */
+    Set<Employee> getEmployeesByPublishingId(final Integer id);
 }

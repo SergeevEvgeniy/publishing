@@ -9,6 +9,23 @@ public class Topic {
     private String name;
 
     /**
+     * Пустой конструктор для создания рубрики.
+     */
+    public Topic() {
+    }
+
+    /**
+     * Конструктор с параметрами для создания рубрики.
+     *
+     * @param id   идентификатор рубрики
+     * @param name название рубрики
+     */
+    public Topic(final Integer id, final String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    /**
      * Получение идентификатора рубрики.
      *
      * @return идентификатор рубрики
