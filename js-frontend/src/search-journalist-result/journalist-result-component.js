@@ -4,6 +4,7 @@ var JournalistListComponent = require('../journalist-list/journalist-list-compon
 var $resultPage = $('<div>', {
     id: 'searchJournalistResult'
 });
+var { JournalistStatComponent } = require('../journalist-info/journalist-component');
 $resultPage.append(resultTemplate());
 
 function JournalistResultComponent($parentElement) {
@@ -12,6 +13,14 @@ function JournalistResultComponent($parentElement) {
 
     var pagination = new PaginationComponent($paginationElement);
     var journalistList = new JournalistListComponent($journalistListElement);
+    //событие, для отображения владки "Информация о журналисте"
+    //оно просто для теста
+    $parentElement.on('click', 'button', function (event) {
+        var target = event.target;
+        var journalistName = target.closest('tr').firstElementChild;
+        var journalistStatComponent = new JournalistStatComponent($('#app'));
+        journalistStatComponent.appendComponent(journalistName);
+    })
 
     this.render = function render(data) {
         var journalistQuantity = data.length;

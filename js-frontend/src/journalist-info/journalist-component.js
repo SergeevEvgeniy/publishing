@@ -19,8 +19,9 @@ function JournalistStatComponent($element) {
     var journalistInfoUrl = 'http://127.0.0.1:3000/getStat';
     var elementSelector = '#journalistInfo';
     var navigationSelector = '.nav-tabs';
-
-    ($element).on('click', navigationSelector, function (event) {
+    var returnButtonSelector = '#returnToSearchForm';
+    var returnCallBack = null;
+    function toggleTabs(event) {
         var target = event.target;
         while (target !== this) {
             if (target.tagName === 'LI') {
@@ -36,7 +37,18 @@ function JournalistStatComponent($element) {
             }
             target = target.parentNode;
         }
-    });
+    }
+
+    function returnToSearchForm(event) {
+        event.preventDefault();
+        if (typeof returnCallBack === 'function') {
+            returnCallBack();
+        }
+    }
+
+
+    ($element).on('click', navigationSelector, toggleTabs)
+    .on('click', returnButtonSelector, returnToSearchForm);
 
     function render() {
         $element.empty().append(journalistTemplate({
@@ -45,10 +57,11 @@ function JournalistStatComponent($element) {
     }
 
     //получить инфомрмацию о журналисте + добавить параметр data
-    this.appendComponent = function () {
+    this.appendComponent = function (data) {
+        console.log(data);
         var spinner = new Spinner();
         spinner.appendSpinner($element);
-        //наверно, я как-то должен получить id журналиста и отправить запрос
+        //окей. мне в параметр передадут его id(или имя?)
         var loaderData = new LoaderData();
         loaderData.recieveSingleData(journalistInfoUrl)
         .then(function (item) {
@@ -63,6 +76,9 @@ function JournalistStatComponent($element) {
             $(navigationSelector).find('a').first().addClass('active');
         });
     };
+    this.onReturnSearchForm = function (callBack) {
+        returnCallBack = callBack;
+    }
 }
 
 module.exports = {

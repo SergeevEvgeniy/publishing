@@ -6,6 +6,7 @@ var JournalistResultComponent = require('../search-journalist-result/journalist-
 var $searchPage = $('<div>', {
     id: 'searchJournalist'
 });
+//var { JournalistInfoComponent } = require('../journalist-info/journalist-component');
 $searchPage.append(searchTemplate());
 
 function SearchJournalistComponent($parentElement) {
