@@ -2,12 +2,11 @@ package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.dao.EmployeeDao;
 import by.artezio.cloud.publishing.domain.Employee;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Сервис, реализующий логику получения данных Employee.
+ * Сервис, реализующий бизнес-логику по обработке сущности {@link Employee}.
  *
  * @author Sergeev Evgeniy
  */
@@ -15,16 +14,15 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     @Autowired
-    private EmployeeDao userDao;
+    private EmployeeDao employeeDao;
 
     /**
      *
      * @param email значение почты
-     * @param password значение пароля
+     * @param encodePassword закэшированное значение пароля
      * @return Employee
      */
-    public Employee getEmployee(final String email, final String password) {
-        Employee employeeByLoginPass = userDao.getEmployeeByLoginPass(email, DigestUtils.md5Hex(password));
-        return employeeByLoginPass;
+    public Employee getEmployeeByLoginPass(final String email, final String encodePassword) {
+        return employeeDao.getEmployeeByLoginPass(email, encodePassword);
     }
 }

@@ -11,6 +11,24 @@ public class LoginForm {
     private String password;
 
     /**
+     * Устанавливает значение электронной почты.
+     *
+     * @param email новый адрес электронной почты
+     */
+    public void setEmail(final String email) {
+        this.email = email;
+    }
+
+    /**
+     * Устанавливает значение пароля.
+     *
+     * @param password пароль
+     */
+    public void setPassword(final String password) {
+        this.password = password;
+    }
+
+    /**
      *
      * @return значение email, полученной с формы
      */

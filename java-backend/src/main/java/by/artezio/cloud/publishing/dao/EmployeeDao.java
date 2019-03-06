@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -40,18 +41,22 @@ public class EmployeeDao {
     /**
      *
      * @param email значение почты
-     * @param password значение пароля
-     * @return Employee полученного по совпадению пары логин/пароль
+     * @param encodePass хэш пароля
+     * @return Null если нет такого пользователя, либо Employee полученного по
+     * совпадению пары логин/пароль
      */
-    public Employee getEmployeeByLoginPass(final String email, final String password) {
+    public Employee getEmployeeByLoginPass(final String email, final String encodePass) {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("email", email);
-        map.put("password", password);
-        return this.jdbcTemplate.queryForObject(
-                "SELECT * FROM employee where email = :email and password = :password",
-                map,
-                mapper
-        );
+        map.put("password", encodePass);
+        try {
+            return this.jdbcTemplate.queryForObject(
+                    "SELECT * FROM employee where email = :email and password = :password",
+                    map,
+                    mapper
+            );
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
-
 }

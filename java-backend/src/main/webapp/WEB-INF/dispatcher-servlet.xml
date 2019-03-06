@@ -17,10 +17,18 @@
     <context:component-scan base-package="by.artezio.cloud.publishing.web"/>
 
     <!-- Бин необходим для поиска наших представлений(jsp файлов) по их названиям, которые могут возвращаться
-     в качестве результата работы методов контроллеров -->
+    в качестве результата работы методов контроллеров -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
+    
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <mvc:exclude-mapping path="/login"/>
+            <bean class="by.artezio.cloud.publishing.web.service.AuthenticationInterceptor"/>
+        </mvc:interceptor>        
+    </mvc:interceptors>
 </beans>
