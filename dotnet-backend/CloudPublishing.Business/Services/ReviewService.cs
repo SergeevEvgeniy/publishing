@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
+using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using System.Collections.Generic;
@@ -16,12 +17,7 @@ namespace CloudPublishing.Business.Services
         {
             this.db = db;
 
-            MapperConfiguration mapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Review, ReviewDTO>();
-                cfg.CreateMap<ReviewDTO, Review>();
-            });
-            mapper = mapperConfig.CreateMapper();
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ReviewBusinessMapProfile())).CreateMapper();
         }
 
         public IEnumerable<PublishingDTO> GetPublishingList()
@@ -101,8 +97,8 @@ namespace CloudPublishing.Business.Services
 
         public ReviewDTO GetReview(int articleId, int authorId)
         {
-            /*var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Review, ReviewDTO>()).CreateMapper();
-            return mapper.Map<Review, ReviewDTO>(db.Reviews.Get(articleId, authorId));*/
+            /*return mapper.Map<Review, ReviewDTO>(db.Reviews.Get(articleId, authorId));*/
+
             // Заглушка для тестирования
             return new ReviewDTO()
             {

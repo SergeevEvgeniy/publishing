@@ -1,8 +1,9 @@
 package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dao.EmployeeDao;
+import by.artezio.cloud.publishing.dto.AuthenticationResult;
 import by.artezio.cloud.publishing.dto.LoginForm;
-import by.artezio.cloud.publishing.service.SessionController;
+import by.artezio.cloud.publishing.web.service.SecurityService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class LoginController {
 
     @Autowired
-    private SessionController sessionController;
+    private SecurityService securityService;
 
     @Autowired
     private EmployeeDao ud;
@@ -32,7 +33,7 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
 
-        System.out.println(ud.getEmployeeByLoginPass("sara@mail.com", "admin"));
+        //System.out.println(ud.getEmployeeByLoginPass("sara@mail.com", "admin"));
         return "login";
     }
 
@@ -47,7 +48,7 @@ public class LoginController {
     public void login(@Valid @ModelAttribute final LoginForm loginForm, final BindingResult result,
             final HttpServletRequest request,
             final HttpServletResponse response) {
-
+        AuthenticationResult authenticationResult = securityService.loginUser(loginForm);
         //boolean hasError = sessionController.tryCreateSession(request, response);
         //show errors!!!
     }

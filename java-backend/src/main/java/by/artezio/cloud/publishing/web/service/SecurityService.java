@@ -5,13 +5,28 @@
  */
 package by.artezio.cloud.publishing.web.service;
 
+import by.artezio.cloud.publishing.dto.AuthenticationResult;
+import by.artezio.cloud.publishing.dto.LoginForm;
+import by.artezio.cloud.publishing.dto.User;
+
 /**
  *
  * @author Sergeev Evgeniy
  */
 public interface SecurityService {
 
-    //User getCurrentUser();
+    /**
+     *
+     * @return User dto
+     */
+    User getCurrentUser();
 
-    //AuthenticationResult loginUser(LoginForm loginForm);
+    /**
+     *
+     * @param loginForm форма логина с полями логин/пароль
+     * @return AuthenticationResult dto
+     */
+    AuthenticationResult loginUser(LoginForm loginForm);
 }
+
+
