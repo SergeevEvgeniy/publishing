@@ -1,9 +1,11 @@
 var $ = require('jquery');
 var { homeComponent } = require('./home/home-component');
 var SearchComponent = require('./search-journalist/search-component');
+var MagazineComponent = require('./publishing/magazine/magazine-component');
 var navObj = {
     homeComponent: homeComponent,
-    SearchComponent: SearchComponent
+    SearchComponent: SearchComponent,
+    MagazineComponent: MagazineComponent,
 };
 
 $(function onReady() {
