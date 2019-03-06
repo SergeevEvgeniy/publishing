@@ -12,6 +12,7 @@ function JournalistResultComponent($parentElement) {
 
     var pagination = new PaginationComponent($paginationElement);
     var journalistList = new JournalistListComponent($journalistListElement);
+
     this.render = function render(data) {
         var journalistQuantity = data.length;
         $parentElement.empty().append($resultPage);

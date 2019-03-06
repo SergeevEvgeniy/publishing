@@ -1,6 +1,6 @@
 var pagination = require('./pagination.hbs');
 var $ = require('jquery');
-var PagesComponent = require('../journalist-pages/pages-component');
+var PagesComponent = require('../journalist-pagination-pages/pages-component');
 var $paginationBlock = $('<div>', {
     id: 'paginationBlock'
 });
