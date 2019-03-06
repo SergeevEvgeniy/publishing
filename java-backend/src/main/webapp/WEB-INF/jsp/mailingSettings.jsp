@@ -33,10 +33,10 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-lg-9 col-md-7">
-                        <input type="text" class="form-control" placeholder="Новый email-адрес">
+                        <input id="emailAddress" type="email" class="form-control" placeholder="Новый email-адрес">
                     </div>
                     <div class="col-lg-3 col-md-5">
-                        <button class="btn btn-block btn-success">Добавить</button>
+                        <div id="addBtn" class="btn btn-block btn-success">Добавить</div>
                     </div>
                 </div>
             </div>
