@@ -11,10 +11,10 @@ namespace CloudPublishing.Util
             CreateMap<DetailedReviewDTO, DetailedReviewVM>();
             CreateMap<ReviewVM, ReviewDTO>();
             CreateMap<ReviewDTO, ReviewVM>();
-            CreateMap<PublishingDTO, ShortPublishingModel>();
             CreateMap<TopicDTO, TopicModel>();
             CreateMap<EmployeeDTO, AuthorModel>();
             CreateMap<ArticleDTO, ArticleModel>();
+            CreateMap<PublishingDTO, PublishingVM>();
         }
     }
 }
