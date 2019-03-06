@@ -1,13 +1,12 @@
 $(function () {
-    $('#cancel').click(function () {
-        // current link is //site/mailing/settings
-        window.location = '../mailing';
-        return false;
-    });
 
-    $('#mailingSelect').change(function () {
+    var $emailListElement = $('#emailList');
+    var emailReqexp = /^[\w%_\-.\d]+@[\w.\-]+.[A-Za-z]{2,6}$/;
+    var $emailElementTemplate = $('#emailElementTemplate .new-email-element');
+
+    $('#mailingSelect').on('change', function () {
         // current link is //site/mailing/settings(?id=<id>, optionally)
-        var id = $('#mailingSelect option:selected')[0].value;
+        var id = $(this).val();
         var url = '../mailing/settings';
         if (id !== '') {
             url = url + "?id=" + id;
@@ -16,47 +15,40 @@ $(function () {
         return false;
     });
 
-    var emailList = $('#emailList');
+    $emailListElement.on('click', '.delete-email', function (event) {
+        $(this).closest('li').remove();
+    });
 
-    emailList.click(function (event) {
-        var target = event.target.closest('span');
-        if (target === null) {
+    $('#addBtn').on('click', function () {
+        var $emailAddressInput = $('#emailAddress');
+        var $incorrectEmailMessageElement = $emailAddressInput.parent().find('.incorrect-email-message');
+        var newEmail = $emailAddressInput.val();
+        if (!newEmail.match(emailReqexp)) {
+            $incorrectEmailMessageElement.text("Entered value is not a valid email.").removeClass('hide');
             return;
         }
-        target.closest('li').remove();
-    });
+        var isDuplicate = $emailListElement.find('.added-email')
+            .filter(function (index, emailElement){
+                return newEmail === emailElement.textContent.trim();
+            })
+            .length > 0;
 
-    $('#addBtn').click(function () {
-        var newEmail = $('#emailAddress').val();
-        if (newEmail.match(/^[\w%_\-.\d]+@[\w.\-]+.[A-Za-z]{2,6}$/)) {
-            emailList.append(createNewEmailListItem(newEmail));
-        } else {
-            alert("! newEmail.match(/^[\\w%_\\-.\\d]+@[\\w.\\-]+.[A-Za-z]{2,6}$/)");
+        if (isDuplicate) {
+            $incorrectEmailMessageElement.text("Email already in").removeClass('hide');
+            return;
         }
-        console.log(newEmail);
+        $incorrectEmailMessageElement.addClass('hide');
+        $emailAddressInput.val('');
+        $emailElementTemplate
+            .clone()
+            .find('.input-email')
+            .val(newEmail)
+                .end()
+            .find('.added-email')
+            .text(newEmail)
+                .end()
+            .appendTo($emailListElement);
+        console.log('Added new email: %s', newEmail);
     });
 
-    function createTrashIcon() {
-        var div = document.createElement('div');
-        div.className = 'col-xs-2 text-right';
-        var span = document.createElement('span');
-        span.className = 'glyphicon glyphicon-trash';
-        span.style.cursor = 'pointer';
-        div.appendChild(span);
-        return div;
-    }
-
-    function createNewEmailListItem(email) {
-        var li = document.createElement('li');
-        li.className = 'list-group-item';
-        var rowDiv = document.createElement('div');
-        rowDiv.className = 'row';
-        var emailDiv = document.createElement('div');
-        emailDiv.textContent = email;
-        emailDiv.className = 'col-xs-10';
-        rowDiv.appendChild(emailDiv);
-        rowDiv.appendChild(createTrashIcon());
-        li.appendChild(rowDiv);
-        return li;
-    }
 });

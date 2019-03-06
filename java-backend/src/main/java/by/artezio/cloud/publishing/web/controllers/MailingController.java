@@ -1,7 +1,6 @@
 package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.service.MailingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/mailing")
 public class MailingController {
 
-    @Autowired
     private MailingService mailingService;
+
+    /**
+     * Конструктор с параметром.
+     * @param mailingService mailingService
+     */
+    public MailingController(final MailingService mailingService) {
+        this.mailingService = mailingService;
+    }
 
     /**
      * Возвращает вьюху "mailing".
@@ -48,4 +54,6 @@ public class MailingController {
         }
         return "mailingSettings";
     }
+
+    //TODO Post-request @PostMapping("/settings")
 }
