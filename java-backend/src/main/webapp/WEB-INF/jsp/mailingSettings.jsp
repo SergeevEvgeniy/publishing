@@ -18,7 +18,6 @@
             <label for="mailingSelect" class="label-control col-lg-4 col-md-4 col-sm-4 h4">Журнал/газета</label>
             <div class="col-lg-8 col-md-8 col-sm-8">
                 <select id="mailingSelect" class="form-control">
-                    <%--TODO перенаправление--%>
                     <option value="">--- Выберите журнал/газету ---</option>
                     <c:forEach var="item" items="${publishingList}">
                         <option value="${item.id}" <c:if test="${id == item.id}">selected</c:if>>
@@ -41,13 +40,13 @@
                     </div>
                 </div>
             </div>
-            <ul class="list-group">
+            <ul id="emailList" class="list-group">
                 <c:forEach var="email" items="${emailList}">
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-xs-10">${email}</div>
                             <div class="col-xs-2 text-right">
-                                <span class="glyphicon glyphicon-remove"></span>
+                                <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
                             </div>
                         </div>
                     </li>

@@ -15,4 +15,16 @@ $(function () {
         window.location = url;
         return false;
     });
+
+    var emailList = $('#emailList');
+    console.log(emailList);
+
+    emailList.click(function (event) {
+        var target = event.target.closest('span');
+        if (target === null) {
+            return;
+        }
+        var li = target.closest('li');
+        li.remove();
+    });
 });
