@@ -1,4 +1,5 @@
-﻿@model CloudPublishing.Models.Reviews.ViewModels.CreateReviewModel
+﻿@using System.Linq;
+@model CloudPublishing.Models.Reviews.ViewModels.CreateReviewModel
 @{
     ViewBag.Title = "Создание рецензии";
 }
@@ -8,9 +9,14 @@
     <div class="row form-group">
         <label class="col-sm-2 col-form-label">Журнал/газета</label>
         @*ajax-запрос по загрузке страницы и заполнение option-ов по аналогии с остальными select?*@
-        @Html.DropDownListFor(
-            x => x.publishingList,
-            Model.publishingList,
+        @Html.DropDownList(
+            "PublishingList",
+            Model.PublishingList.Select(item => new SelectListItem
+            {
+                Value = item.Id.ToString(),
+                Text = item.Title.ToString(),
+                Selected = "select" == item.Id.ToString()
+            }),
             "Выберите элемент",
             htmlAttributes: new { @class = "form-control col-sm-4", id = "publishing" })
     </div>
