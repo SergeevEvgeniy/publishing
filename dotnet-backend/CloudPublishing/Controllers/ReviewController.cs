@@ -2,6 +2,7 @@
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Reviews.ViewModels;
+using CloudPublishing.Util;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -17,17 +18,7 @@ namespace CloudPublishing.Controllers
         {
             reviewService = service;
 
-            MapperConfiguration mapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<DetailedReviewDTO, DetailedReviewVM>();
-                cfg.CreateMap<ReviewVM, ReviewDTO>();
-                cfg.CreateMap<ReviewDTO, ReviewVM>();
-                cfg.CreateMap<PublishingDTO, ShortPublishingModel>();
-                cfg.CreateMap<TopicDTO, TopicModel>();
-                cfg.CreateMap<EmployeeDTO, AuthorModel>();
-                cfg.CreateMap<ArticleDTO, ArticleModel>();
-            });
-            mapper = mapperConfig.CreateMapper();
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ReviewMapProfile())).CreateMapper();
         }
 
         // GET: Review

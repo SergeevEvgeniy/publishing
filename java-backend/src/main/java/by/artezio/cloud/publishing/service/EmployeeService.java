@@ -2,6 +2,7 @@ package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.dao.EmployeeDao;
 import by.artezio.cloud.publishing.domain.Employee;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class EmployeeService {
      * @return Employee
      */
     public Employee getEmployee(final String email, final String password) {
-        //захэшировать пароль
-        return userDao.getEmployeeByLoginPass(email, password);
+        Employee employeeByLoginPass = userDao.getEmployeeByLoginPass(email, DigestUtils.md5Hex(password));
+        return employeeByLoginPass;
     }
 }
