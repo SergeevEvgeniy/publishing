@@ -1,5 +1,6 @@
 package by.artezio.cloud.publishing.service;
 
+import by.artezio.cloud.publishing.service.employee.FakeEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionController {
 
     @Autowired
-    private EmployeeService userService;
+    private FakeEmployeeService userService;
 
     /**
      *

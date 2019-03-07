@@ -6,11 +6,13 @@ import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.ArticleCoauthor;
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.domain.Review;
+import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +30,12 @@ public class ArticleService {
 
     @Autowired
     private TopicDao topicDao;
+
+    @Autowired
+    private PublishingService publishingService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
 //    /**
 //     * Конструктор для создания объекта с указанными значениями полей.
@@ -48,48 +56,38 @@ public class ArticleService {
      *
      * <p>
      * Используется для получения данных в контроллере
-     * {@link ArticleController}</p>
+     * {@link by.artezio.cloud.publishing.web.controllers.ArticleController}</p>
      *
      * @param request запрос пользователя, объект класса
-     * {@link HttpServletRequest}
+     *                {@link HttpServletRequest}
      * @return список объектов класса {@link ArticleInfo}
      */
     public List<ArticleInfo> getArticleInfoList(final HttpServletRequest request) {
         List<ArticleInfo> articleLists = new ArrayList<>();
 
-        Cookie[] cookies = request.getCookies();
-        String email = "";
+        Employee empl = (Employee) request.getSession().getAttribute("user");
 
-        if (cookies != null
-                || cookies.length != 0) {
-            for (Cookie c : cookies) {
-                if ("user".equalsIgnoreCase(c.getName())) {
-                    email = c.getValue();
-                }
-            }
-        }
-
-        int id = getUserByEmail(email);
-        List<Article> articles = articleDao.getArticleListByJournalistId(id);
+        List<Article> articles = articleDao.getArticleListByJournalistId(empl.getId());
 
         for (Article a : articles) {
-            ArticleInfo aListDto = new ArticleInfo();
-            aListDto.setTitle(a.getTitle());
+            ArticleInfo articleInfo = new ArticleInfo();
+            articleInfo.setArticleId(a.getId());
+            articleInfo.setTitle(a.getTitle());
 
             String publishing = a.getPublishing().getTitle();
-            aListDto.setPublishing(publishing);
+            articleInfo.setPublishing(publishing);
 
             String topic = a.getTopic().getName();
-            aListDto.setTopic(topic);
+            articleInfo.setTopic(topic);
 
             Employee author = a.getAuthor();
 
             String authorFullName = getEmployeeShortName(author);
 
-            aListDto.setAuthorFullName(authorFullName);
+            articleInfo.setAuthorFullName(authorFullName);
 
             Set<String> coauthors = getCoauthorsShortNames(a.getCoauthors());
-            aListDto.setCoauthors(coauthors);
+            articleInfo.setCoauthors(coauthors);
         }
 
         return articleLists;
@@ -111,25 +109,15 @@ public class ArticleService {
      *
      * <p>
      * Используется для заполнения формы и для хранения данных при создании
-     * новой, или редактировании старой статьи.
+     * новой статьи.
      *
-     * @param request запрос пользователя, объект класса
-     * {@link HttpServletRequest}
      * @return объект класса {@link ArticleForm} с данными для заполнения формы
      * на странице update_article.jsp
      */
-    public ArticleForm getArticleForm(final HttpServletRequest request) {
-
-        String action = request.getParameter("action");
-        ArticleForm dto = new ArticleForm();
-
-        if ("create".equalsIgnoreCase(action)) {
-            dto = createNewArticleDto();
-        } else {
-            dto = prepareArticleDtoForUpdate(request);
-        }
-
-        return null;
+    public ArticleForm getNewArticleForm() {
+        ArticleForm af = new ArticleForm();
+        af.setPublishings(publishingService.getAllPublishings());
+        return af;
     }
 
     /**
@@ -146,7 +134,7 @@ public class ArticleService {
      * Получение множества ФИО соавторов.
      *
      * @param coauthors множество соавторов
-     * ({@link Set}&lt;{@link Employee}&gt;)
+     *                  ({@link Set}&lt;{@link Employee}&gt;)
      * @return множество ФИО соавторов ({@link Set}&lt;{@link String}&gt;)
      */
     private Set<String> getCoauthorsShortNames(final Set<Employee> coauthors) {
@@ -169,79 +157,75 @@ public class ArticleService {
      */
     private String getEmployeeShortName(final Employee e) {
         StringBuilder bldr = new StringBuilder()
-                .append(e.getLastName())
-                .append(" ")
-                .append(e.getFirstName().charAt(0))
-                .append(". ");
+            .append(e.getLastName())
+            .append(" ")
+            .append(e.getFirstName().charAt(0))
+            .append(". ");
         if (e.getMiddleName() != null
-                && !e.getMiddleName().isEmpty()) {
+            && !e.getMiddleName().isEmpty()) {
             bldr.append(e.getMiddleName().charAt(0))
-                    .append(".");
+                .append(".");
         }
         return bldr.toString();
     }
 
-    /**
-     * Получение списка соавторов по идентификатору статьи.
-     *
-     * @param id идентификатор статьи
-     * @return список сотрудников {@link Employee}, которые являются соавторами
-     * статьи.
-     */
-    private List<Employee> getCoauthorsByArticleId(final int id) {
-        List<ArticleCoauthor> coautors = articleDao.getArticleCoauthorsByArticleId(id);
+//    /**
+//     * Получение списка соавторов по идентификатору статьи.
+//     *
+//     * @param id идентификатор статьи
+//     * @return список сотрудников {@link Employee}, которые являются соавторами
+//     * статьи.
+//     */
+//    private List<Employee> getCoauthorsByArticleId(final int id) {
+//        List<ArticleCoauthor> coautors = articleDao.getArticleCoauthorsByArticleId(id);
+//
+//        // Тут будут запросы к сервису employee
+//        return null;
+//    }
 
-        // Тут будут запросы к сервису employee
-        return null;
-    }
-
-    /**
-     * Получение сотрудника по его email.
-     *
-     * @param userEmail email адрес сотрудника.
-     * @return сотрудник, {@link Employee}
-     */
-    private int getUserByEmail(final String userEmail) {
-        // Тут будут запросы к сервисам Employee
-        return 0;
-    }
-
-    /**
-     * Создание объекта {@link ArticleForm} для обновления существующей статьи.
-     *
-     * @param request запрос пользователя, объект класса
-     * {@link HttpServletRequest}
-     * @return объект {@link ArticleForm} с детальными данными о статье
-     */
-    private ArticleForm prepareArticleDtoForUpdate(final HttpServletRequest request) {
-        return null;
-    }
-
-    /**
-     * Создание объекта {@link ArticleForm} для создания новой статьи.
-     *
-     * @return объект {@link ArticleForm} не содержащий данных о статье.
-     */
-    private ArticleForm createNewArticleDto() {
-        ArticleForm dto = new ArticleForm();
-        List<Publishing> publishings = getAllPublishings();
-        List<String> publishingNames = new ArrayList<>();
-
-        for (Publishing p : publishings) {
-            publishingNames.add(p.getTitle());
+    private List<Employee> getArticleCoauthorsByArticleId(final int articleId) {
+        List<ArticleCoauthor> list = articleDao.getArticleCoauthorsByArticleId(articleId);
+        List<Employee> employees = new ArrayList<>();
+        for (ArticleCoauthor ac : list) {
+            employees.add(employeeService.getEmployeeById(ac.getEmployeeId()));
         }
-
-        dto.setPublishings(publishingNames);
-        return dto;
+        return employees;
     }
 
     /**
-     * Получение списка журналов/газет из сервиса Publishing.
+     * Создание объекта {@link ArticleForm} и заполнение его данными. которые потом будут редактироваться.
      *
-     * @return список журналов/газет ({@link List}&lt;{@link Publishing}&gt;)
+     * @param articleId идентификатор статьи
+     * @return {@link ArticleForm}
      */
-    private List<Publishing> getAllPublishings() {
-        // Запросы к сервисам с Publishing
-        return null;
+    public ArticleForm getUpdateArticleFormByArticleId(final int articleId) {
+        ArticleForm form = new ArticleForm();
+        Article article = articleDao.getArticleByArticleId(articleId);
+
+        List<Publishing> publishings = new ArrayList<>();
+        publishings.add(article.getPublishing());
+
+        List<Topic> topics = new ArrayList<>();
+        topics.add(article.getTopic());
+
+        Set<Employee> publishingEmployees = employeeService.getEmployeesByPublishingId(article.getPublishing().getId());
+        Set<Employee> coauthors = article.getCoauthors();
+        publishingEmployees.remove(article.getAuthor());
+        for (Employee e : publishingEmployees) {
+            if (coauthors.contains(e)) {
+                publishingEmployees.remove(e);
+            }
+        }
+        List<Review> reviews = articleDao.getReviewsByArticleId(articleId);
+
+        form.setPublishings(publishings);
+        form.setContent(article.getContent());
+        form.setTopics(topics);
+        form.setTitle(article.getTitle());
+        form.setCurrentCoauthors(article.getCoauthors());
+        form.setAvailableCoauthors(publishingEmployees);
+        form.setReviews(reviews);
+
+        return form;
     }
 }

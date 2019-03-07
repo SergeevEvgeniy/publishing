@@ -18,7 +18,7 @@
         <label for="publishingSelector">Журнал</label>
         <select id="publishingSelector">
             <c:forEach items="${model.publishings}" var="publishing">
-                <option>${publishing}</option>
+                <option data-publishingId="${publishing.id}">${publishing.title}</option>
             </c:forEach>
         </select>
     </div>
@@ -26,17 +26,17 @@
         <label for="topicSelector">Рубрика</label>
         <select id="topicSelector">
             <c:forEach items="${model.topics}" var="topic">
-                <option>${topic}</option>
+                <option data-topicId="${topic.id}">${topic.name}</option>
             </c:forEach>
         </select>
     </div>
     <div>
         <label for="title">Название</label>
-        <input type="text" id="title"/>
+        <input type="text" id="title" value="${model.title}"/>
     </div>
     <div>
         <label for="content">Содержание</label>
-        <textarea id="content"></textarea>
+        <textarea id="content">${model.content}</textarea>
     </div>
 
     <label for="coauthorsTable">Соавторы</label>
@@ -45,7 +45,8 @@
         <tr>
             <select>
                 <c:forEach var="availableCoauthor" items="${model.availableCoauthors}">
-                    <option>${availableCoauthor}</option>
+                    <option
+                        data-coauthorId="${availableCoauthor.id}">${availableCoauthor.firstName} ${availableCoauthor.lastName} ${availableCoauthor.middleName}</option>
                 </c:forEach>
             </select>
             <button>Добавить</button>
@@ -53,8 +54,8 @@
         <c:forEach items="${model.currentCoauthors}" var="currentCoauthor">
             <tr>
                 <td>
-                        ${currentCoauthor}
-                    <button>Удалить</button>
+                        ${currentCoauthor.lastName} ${currentCoauthor.firstName} ${currentCoauthor.middleName}
+                    <button data-coauthorId="${currentCoauthor.id}">Удалить</button>
                 </td>
             </tr>
         </c:forEach>
@@ -67,13 +68,13 @@
                 <label for="reviewerSelector">Рецензент</label>
                 <select id="reviewerSelector">
                     <c:forEach var="review" items="${model.reviews}">
-                        <option>${review.reviewerId}</option>
+                        <option data-reviewerId="${review.reviewerId}">${review.reviewerId}</option>
                     </c:forEach>
                 </select>
             </tr>
             <tr>
                 <td>
-                    <textarea></textarea>
+                    <textarea id="reviewContent"></textarea>
                 </td>
             </tr>
             </tbody>
