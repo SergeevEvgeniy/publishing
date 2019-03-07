@@ -1,4 +1,4 @@
-{{#if result}}
+{{#if issues}}
     <table class="table table-hover filter-result-table">
         <caption>Найденные номера</caption>
         <thead class="thead-light">
@@ -7,9 +7,9 @@
             </tr>
         </thead>
         <tbody>
-            {{#each result}}
-                <tr data-id="{{this.id}}" class="cursor-pointer">
-                    <td>{{this.title}}</td>
+            {{#each issues}}
+                <tr data-id="{{this.issueId}}" class="cursor-pointer">
+                    <td>{{this.issue}}</td>
                 </tr>
             {{/each}}
         </tbody>

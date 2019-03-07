@@ -5,8 +5,8 @@ var $ = require('jquery');
 function FilterResult(rootElement) {
     this.$rootElement = rootElement;
 
-    this.data = [ ];
-    this.visibleData = [ ];
+    this.issues = [ ];
+    this.visibleIssues = [ ];
 
     this.perPage = 5;
     this.currentPage = 1;
@@ -15,35 +15,33 @@ function FilterResult(rootElement) {
     this.render();
 }
 
-FilterResult.prototype.componentDidMount = function () {
-    $('.filter-result-table')
-        .on('click', 'td', event => {
-            var tr = $(event.target).parent('tr');
-            tr.parent('tbody')
-                .find('tr')
-                .removeClass('table-active');
-                
-            tr.addClass('table-active');
-            this.showIssue(tr.data('id'));
-        });
+FilterResult.prototype.showIssueClicked = function (event) {
+    var tr = $(event.target).parent('tr');
+    tr.parent('tbody')
+        .find('tr')
+        .removeClass('table-active');
+        
+    tr.addClass('table-active');
+    this.showIssue(tr.data('id'));
 };
 
 FilterResult.prototype.recount = function () {
-    if (this.data.length !== 0) {
-        var startItemIndex = (this.currentPage - 1) * this.perPage;
-        var endItemIndex = this.currentPage * this.perPage;
-        endItemIndex = (endItemIndex > this.data.length) ? this.data.length : endItemIndex;
+    if (this.issues.length === 0) {
+        this.visibleIssues = [ ];
+        this.render();
+        return;
+    } 
 
-        this.visibleData = this.data.slice(startItemIndex, endItemIndex);
-        this.render();
-    } else {
-        this.visibleData = [ ];
-        this.render();
-    }
+    var startItemIndex = (this.currentPage - 1) * this.perPage;
+    var endItemIndex = this.currentPage * this.perPage;
+    endItemIndex = (endItemIndex > this.issues.length) ? this.issues.length : endItemIndex;
+
+    this.visibleIssues = this.issues.slice(startItemIndex, endItemIndex);
+    this.render();
 };
 
-FilterResult.prototype.setData = function (data) {
-    this.data = data;
+FilterResult.prototype.setData = function (issues) {
+    this.issues = issues;
     this.recount();
     this.render();
 };
@@ -69,10 +67,9 @@ FilterResult.prototype.render = function () {
     this.$rootElement
         .empty()
         .append(filterResultTemplate({
-            result: this.visibleData,
-            pages: this.pages,
+            issues: this.visibleIssues,
         }));
-    this.componentDidMount();
+    $('.filter-result-table').on('click', 'td', event => this.showIssueClicked);
 };
 
 module.exports = FilterResult;

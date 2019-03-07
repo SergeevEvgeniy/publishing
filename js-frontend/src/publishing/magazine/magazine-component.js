@@ -1,37 +1,34 @@
-//template hbs
+// template hbs
 const magazineContainerTemplate = require('./magazine-container.hbs');
 
-//components
+// components
 const $ = require('jquery');
 const Filter = require('../filter/filter');
 const FilterResult = require('../filter/filter-result');
-const Pagination = require('../filter/pagination/pagination');
-const SelectPerPage = require('../filter/pagination/select-per-page');
+const Pagination = require('../../pagination/pagination');
+const SelectPerPage = require('../../select-per-page/select-per-page');
 const MagazineView = require('../view/magazine-view');
 
-//api
-// const magazineAPI = require('../../api/magazine-api');
+// services
+const magazineService = require('../../services/magazine-service');
 
 function MagazineComponent($rootElement) {
     this.$element = $rootElement;
     this.render();
 }
 
-MagazineComponent.prototype.filteredCallback = function (foundedMagazines, callback) {
-    // magazineAPI.loadMagazinesFilter(foundedMagazines)
-    //     .then(res => {
-    //         return res.json();
-    //     })
-    //     .then(magazines => {
-    //         this.filterResult.setData(magazines);
-    //         this.pagination.setAmountRecord(magazines.length);
-    //         this.pagination.setCurrentPage(1);
-    //         this.selectPerPage.setAmountRecord(magazines.length);
-    //         callback();
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //     });
+MagazineComponent.prototype.filterSubmitCallback = function (formData, next) {
+    magazineService.getFilteredIssues(formData)
+        .then(issues => {
+            this.filterResult.setData(issues);
+            this.pagination.setAmountRecord(issues.length);
+            this.pagination.setCurrentPage(1);
+            this.selectPerPage.setAmountRecord(issues.length);
+            next();
+        })
+        .catch(err => {
+            console.log(err);
+        });
 };
 
 MagazineComponent.prototype.showMagazineCallback = function (issueId) {
@@ -54,17 +51,14 @@ MagazineComponent.prototype.selectPerPageCallback = function (perPage) {
     this.pagination.setPerPage(perPage);
 };
 
-MagazineComponent.prototype.componentDidMount = function () {
-    // magazineAPI.loadMagazineTitle()
-    //     .then(res => {
-    //         return res.json();
-    //     })
-    //     .then(magazineTitle => {
-    //         this.filter.setProductionTitles(magazineTitle);
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //     });
+MagazineComponent.prototype.loadTitles = function () {
+    magazineService.getMagazinesTitles()
+        .then(titles => {
+            this.filter.setPublicationsTitles(titles);
+        })
+        .catch(err => {
+            console.log(err);
+        });
 };
 
 MagazineComponent.prototype.render = function () {
@@ -73,20 +67,20 @@ MagazineComponent.prototype.render = function () {
         .append(magazineContainerTemplate());
     
     this.filter = new Filter($('.filter-container'), 'Журнал');
-    this.filter.setFilteredCallback(this.filteredCallback.bind(this));
+    this.filter.setFilterSubmitCallback(this.filterSubmitCallback.bind(this));
     
     this.filterResult = new FilterResult($('.filter-result-container'));
     this.filterResult.setShowIssueCallback(this.showMagazineCallback.bind(this));
 
-    this.pagination = new Pagination($('.pagination-container'), 0);
+    this.pagination = new Pagination($('.pagination-container'));
     this.pagination.setSelectPageCallback(this.selectPageCallback.bind(this));
 
     this.selectPerPage = new SelectPerPage($('.select-per-page-container'));
     this.selectPerPage.setSelectPerPageCallback(this.selectPerPageCallback.bind(this));
 
-    this.magazineView = new MagazineView($('.view-container'));
+    // this.magazineView = new MagazineView($('.view-container'));
     
-    this.componentDidMount();
+    this.loadTitles();
 }
 
 module.exports = MagazineComponent;

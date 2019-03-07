@@ -1,11 +1,11 @@
 <form class="form-horizontal" id="form-filter">
     <div class="form-group">
-        <label for="titleProductionFilter" class="col-lg-12 control-label">{{titleProduction}}</label>
+        <label for="titlePublicationFilter" class="col-lg-12 control-label">{{typePublication}}</label>
         <div class="col-lg-12">
-            <select class="form-control" name="name-filter" id="titleProductionFilter">
+            <select class="form-control" name="name-filter" id="titlePublicationFilter">
                 {{#if titles}}
                     {{#each titles}}
-                        <option data-item="{{@index}}">{{this}}</option>
+                        <option data-item="{{this.id}}">{{this.title}}</option>
                     {{/each}}
                 {{else}}
                     <option> - Не найдено - </option>
@@ -27,10 +27,12 @@
     </div>
     <div class="form-group">
         <div class="col-lg-12 text-right">
-            <button class="btn btn-primary" type="submit">
-                <span class="spinner-border spinner-border-sm" hidden role="status" aria-hidden="true"></span>
+            <button type="submit" class="btn btn-primary btn-find">
+                <i class="fas fa-search"></i>
+                <span class="spinner spinner-border spinner-border-sm" hidden role="status" aria-hidden="true"></span>
                 Найти
             </button>
+            <button type="button" class="btn btn-primary">Очистить</button>
         </div>
     </div>
 </form>

@@ -1,11 +1,11 @@
 const EmployeeAPI = {
-    getEmployeeByIds: function (ids) {
+    getEmployeeById: id => {
         return fetch('http://localhost:3000/api/employee/id', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },
-            body: ids,
+            body: id,
             mode: 'cors',
         });
     },

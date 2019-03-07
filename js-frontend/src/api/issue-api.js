@@ -1,7 +1,7 @@
 const IssueAPI = {
-    getIssuesByFilter: function (formData) {
-        return fetch('http://localhost:3000/api/issue/filter', {
-            method: 'GET',
+    getIssuesByFilter: formData => {
+        return fetch(`http://localhost:3010/api/issue/filter`, {
+            method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },

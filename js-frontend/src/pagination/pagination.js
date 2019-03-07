@@ -121,3 +121,5 @@ Pagination.prototype.render = function () {
 };
 
 module.exports = Pagination;
+
+require('./pagination.css');

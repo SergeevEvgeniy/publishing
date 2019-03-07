@@ -1,0 +1,4 @@
+.no-select {
+    cursor: pointer;
+    user-select: none;
+}

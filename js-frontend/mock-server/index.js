@@ -30,7 +30,21 @@ app
         var journalists = require('./data/journalists');
         var body = req.body;
         res.json(journalists);
-    })
-    .listen(port, () => {
-        console.log('App work on ' + port + ' locallhost');
     });
+    
+app
+    .get('/api/publishing/magazine/title/all', (req, res) => {
+        var titles = require('./data/magazines-titles');
+        res.json(titles);
+    })
+    .post('/api/issue/filter', (req, res) => {
+        var body = req.body;
+        console.log('Issue filter');
+        console.log(body);
+        var issues = require('./data/magazine-issue-filter');
+        res.json(issues);
+    });
+
+app.listen(port, () => {
+    console.log('App work on ' + port + ' locallhost');
+});

@@ -2,68 +2,64 @@ var filterTemplate = require('./filter.hbs');
 
 var $ = require('jquery');
 
-function Filter($rootElement, title) {
+function Filter($rootElement, typePublication) {
     this.$rootElement = $rootElement;
 
-    this.title = title;
-    this.productionTitles = [ ];
-    this.filteredCallback = null;
+    this.typePublication = typePublication;
+    this.publicationsTitles = [ ];
+    this.filterSubmitCallback = null;
 
     this.render();
 }
 
-Filter.prototype.setFilteredCallback = function (callBack) {
-    this.filteredCallback = callBack;
+Filter.prototype.setFilterSubmitCallback = function (callBack) {
+    this.filterSubmitCallback = callBack;
 };
 
-Filter.prototype.componentDidMount = function () {
-    $('#form-filter')
-        .on('submit', event => {
-            event.preventDefault();
-            var form = event.currentTarget;
+Filter.prototype.submitFromFilter = function (event) {
+    event.preventDefault();
+    var form = event.currentTarget;
 
-            var dateNumber = form.dateNumberFilter.value.split('/');
-            var formData = {
-                title: form.titleProductionFilter.value,
-                date: dateNumber[0],
-                number: dateNumber[1],
-                article: form.articleTitleFilter.value,
-            }
+    var dateNumber = form.dateNumberFilter.value.split('/');
+    var formData = {
+        publicationTitle: form.titlePublicationFilter.value,
+        date: dateNumber[0],
+        number: dateNumber[1] || '',
+        articleTitle: form.articleTitleFilter.value,
+    }
 
-            // var formData = new FormData();
-            // formData.append('title', form.titleProductionFilter.value);
-            // formData.append('date', dateNumber[0]);
-            // formData.append('number', dateNumber[1]);
-            // formData.append('article', form.articleTitleFilter.value);
-            
-            // $(form)
-            //  .find('input, select')
-            //  .each(function() {
-            //      formData[this.name] = $(this).val();
-            //  });
-            
-            var $buttonElement = $(event.target)
-                .find('.btn')
-                .first()
-                .val('Поиск')
-                .addClass('disabled');
+    // var formData = new FormData();
+    // formData.append('title', form.titlePublicationFilter.value);
+    // formData.append('date', dateNumber[0]);
+    // formData.append('number', dateNumber[1]);
+    // formData.append('article', form.articleTitleFilter.value);
+    
+    // $(form)
+    //  .find('input, select')
+    //  .each(function() {
+    //      formData[this.name] = $(this).val();
+    //  });
+    
+    var $buttonElement = $(event.target)
+        .find('.btn-find')
+        .addClass('disabled');
 
-            var $spinner = $buttonElement
-                .find('span')
-                .first()
-                .removeAttr('hidden');
+    var $spinner = $buttonElement
+        .find('.spinner')
+        .removeAttr('hidden');
 
-            this.filteredCallback(formData, () => {
-                $buttonElement
-                    .val('Найти')
-                    .removeClass('disabled');
-                $spinner.attr('hidden', 'hidden');
-            });
-        });
+    var $faSearch = $('.btn-find .fa-search')
+        .attr('hidden', 'hidden');
+
+    this.filterSubmitCallback(formData, () => {
+        $buttonElement.removeClass('disabled');
+        $spinner.attr('hidden', 'hidden');
+        $faSearch.removeAttr('hidden', 'hidden');
+    });
 };
 
-Filter.prototype.setProductionTitles = function (titles) {
-    this.productionTitles = titles;
+Filter.prototype.setPublicationsTitles = function (titles) {
+    this.publicationTitles = titles;
     this.render();
 };
 
@@ -71,10 +67,11 @@ Filter.prototype.render = function () {
     this.$rootElement
         .empty()
         .append(filterTemplate({
-            titleProduction: this.title,
-            titles: this.productionTitles,
+            typePublication: this.typePublication,
+            titles: this.publicationTitles,
         }));
-    this.componentDidMount();
+   
+    $('#form-filter').on('submit', event => this.submitFromFilter(event));
 };
 
 module.exports = Filter;
