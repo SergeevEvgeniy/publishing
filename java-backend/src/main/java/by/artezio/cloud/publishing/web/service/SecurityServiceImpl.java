@@ -50,7 +50,7 @@ public class SecurityServiceImpl implements SecurityService {
         String email = loginForm.getEmail();
         String password = loginForm.getPassword();
 
-        String encodePass = password;//encoderService.encode(password);
+        String encodePass = encoderService.encode(password);
 
         Employee employee = employeeService.getEmployeeByLoginPass(email, encodePass);
 

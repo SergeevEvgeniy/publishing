@@ -1,5 +1,7 @@
 package by.artezio.cloud.publishing.dto;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Класс-сущность логин-формы.
  *
@@ -7,7 +9,9 @@ package by.artezio.cloud.publishing.dto;
  */
 public class LoginForm {
 
+    @NotNull(message = "email.empty")
     private String email;
+    @NotNull(message = "password.empty")
     private String password;
 
     /**

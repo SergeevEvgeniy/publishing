@@ -45,7 +45,7 @@ public class LoginController {
      *
      * @return ModelAndView статьи, либо логин, в случае неудачи аутентификации
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = LOGIN_LOCATION, method = RequestMethod.POST)
     public String login(@Valid final LoginForm loginForm,
             final BindingResult result,
             final Model model) {
@@ -66,5 +66,9 @@ public class LoginController {
         }
 
         return "redirect:/home";
+
+        // login -> home
+        // some -> login -> some
+        // isUser !-> login
     }
 }
