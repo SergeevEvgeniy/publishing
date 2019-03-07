@@ -52,4 +52,25 @@ public class MailingService {
     public List<String> getEmailListByPublishingId(final int id) {
         return mailingDao.getEmailListByPublishingId(id);
     }
+
+    /**
+     * Метод, обновляющий список подписчиков на издание с <code>id == {@param publishingId}</code>.
+     * @param publishingId id издания.
+     * @param emails новый список подписчиков.
+     * @return <code>true</code>, если обновление прошло успешно, иначе <code>false</code>.
+     */
+    public boolean updateSubscribersListByPublishingId(final int publishingId, final List<String> emails) {
+        boolean wasSuccessUpdated = true;
+
+        Integer mailingId = mailingDao.getMailingIdByPublishingId(publishingId);
+        if (mailingId == null) {
+            mailingId = mailingDao.createNewMailingByPublishingId(publishingId);
+        }
+
+        for (String email : emails) {
+            wasSuccessUpdated &= mailingDao.addNewSubscriberByMailingId(mailingId, email);
+        }
+
+        return wasSuccessUpdated;
+    }
 }

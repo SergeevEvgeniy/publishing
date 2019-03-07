@@ -7,13 +7,16 @@
     <title>Настройка</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mailing.css">
+
     <script src="${pageContext.request.contextPath}/resources/js/libs/jquery.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/mailing.js"></script>
 </head>
 <body>
 
 <div class="container" style="width: 700px">
-    <form method="post" class="form-horizontal">
+    <%--@elvariable id="subscribers" type="by.artezio.cloud.publishing.dto.Subscribers"--%>
+    <form:form modelAttribute="subscribers" method="post" action="${pageContext.request.contextPath}/mailing/settings" class="form-horizontal">
         <div class="form-group">
             <label for="mailingSelect" class="label-control col-lg-4 col-md-4 col-sm-4 h4">Журнал/газета</label>
             <div class="col-lg-8 col-md-8 col-sm-8">
@@ -44,7 +47,7 @@
             <ul id="emailList" class="list-group">
                 <c:forEach var="email" items="${emailList}">
                     <li class="list-group-item">
-                        <input type="hidden" value="${email}" name="emails">
+                        <input type="hidden" value="${email}" name="emails"/>
                         <div class="row">
                             <div class="col-xs-10 added-email">${email}</div>
                             <div class="col-xs-2 text-right">
@@ -59,7 +62,7 @@
             <a id="cancel" class="btn btn-default" href="${pageContext.request.contextPath}/mailing">Отменить</a>
             <button id="save" type="submit" class="btn btn-primary">Сохранить</button>
         </div>
-    </form>
+    </form:form>
     <div id="emailElementTemplate" class="hidden">
         <li class="list-group-item new-email-element">
             <input type="hidden" name="emails" class="input-email">
