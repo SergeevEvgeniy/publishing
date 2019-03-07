@@ -1,13 +1,12 @@
 $(function () {
-    $('#cancel').click(function () {
-        // current link is //site/mailing/settings
-        window.location = '../mailing';
-        return false;
-    });
 
-    $('#mailingSelect').change(function () {
+    var $emailListElement = $('#emailList');
+    var emailReqexp = /^[\w%_\-.\d]+@[\w.\-]+.[A-Za-z]{2,6}$/;
+    var $emailElementTemplate = $('#emailElementTemplate .new-email-element');
+
+    $('#mailingSelect').on('change', function () {
         // current link is //site/mailing/settings(?id=<id>, optionally)
-        var id = $('#mailingSelect option:selected')[0].value;
+        var id = $(this).val();
         var url = '../mailing/settings';
         if (id !== '') {
             url = url + "?id=" + id;
@@ -16,15 +15,40 @@ $(function () {
         return false;
     });
 
-    var emailList = $('#emailList');
-    console.log(emailList);
+    $emailListElement.on('click', '.delete-email', function (event) {
+        $(this).closest('li').remove();
+    });
 
-    emailList.click(function (event) {
-        var target = event.target.closest('span');
-        if (target === null) {
+    $('#addBtn').on('click', function () {
+        var $emailAddressInput = $('#emailAddress');
+        var $incorrectEmailMessageElement = $emailAddressInput.parent().find('.incorrect-email-message');
+        var newEmail = $emailAddressInput.val();
+        if (!newEmail.match(emailReqexp)) {
+            $incorrectEmailMessageElement.text("Entered value is not a valid email.").removeClass('hide');
             return;
         }
-        var li = target.closest('li');
-        li.remove();
+        var isDuplicate = $emailListElement.find('.added-email')
+            .filter(function (index, emailElement){
+                return newEmail === emailElement.textContent.trim();
+            })
+            .length > 0;
+
+        if (isDuplicate) {
+            $incorrectEmailMessageElement.text("Email already in").removeClass('hide');
+            return;
+        }
+        $incorrectEmailMessageElement.addClass('hide');
+        $emailAddressInput.val('');
+        $emailElementTemplate
+            .clone()
+            .find('.input-email')
+            .val(newEmail)
+                .end()
+            .find('.added-email')
+            .text(newEmail)
+                .end()
+            .appendTo($emailListElement);
+        console.log('Added new email: %s', newEmail);
     });
+
 });

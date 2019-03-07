@@ -16,8 +16,11 @@ import by.artezio.cloud.publishing.dto.User;
 public interface SecurityService {
 
     /**
+     * Возвращает объект {@link User}, соответсвующий текущего авторизованному
+     * пользователю. Если пользователь не авторизирован(аноним), то возвращается
+     * <code>null</code>
      *
-     * @return User dto
+     * @return объект {@link User}, либо <code>null</code>
      */
     User getCurrentUser();
 
@@ -28,5 +31,3 @@ public interface SecurityService {
      */
     AuthenticationResult loginUser(LoginForm loginForm);
 }
-
-

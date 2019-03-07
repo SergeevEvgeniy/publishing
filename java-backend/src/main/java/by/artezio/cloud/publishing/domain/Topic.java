@@ -16,10 +16,11 @@ public class Topic {
 
     /**
      * Конструктор для создания объекта с указанными значениями полей.
+     *
      * @param id - id рубрики
      * @param name - название рубрики
      */
-    public Topic(Integer id, String name) {
+    public Topic(final Integer id, final String name) {
         this.id = id;
         this.name = name;
     }

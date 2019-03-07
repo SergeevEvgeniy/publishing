@@ -2,6 +2,10 @@ package by.artezio.cloud.publishing.dto;
 
 import java.time.LocalDate;
 
+/**
+ *
+ * @author rezerv
+ */
 public class IssueForm {
 
     private int publishingId;
@@ -12,35 +16,67 @@ public class IssueForm {
 
     private LocalDate localDate;
 
+    /**
+     *
+     * @return publishingId
+     */
     public int getPublishingId() {
         return publishingId;
     }
 
-    public void setPublishingId(int publishingId) {
+    /**
+     *
+     * @param publishingId id
+     */
+    public void setPublishingId(final int publishingId) {
         this.publishingId = publishingId;
     }
 
+    /**
+     *
+     * @return articleId
+     */
     public int getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(int articleId) {
+    /**
+     *
+     * @param articleId id
+     */
+    public void setArticleId(final int articleId) {
         this.articleId = articleId;
     }
 
+    /**
+     *
+     * @return number
+     */
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    /**
+     *
+     * @param number number of Issue
+     */
+    public void setNumber(final String number) {
         this.number = number;
     }
 
+    /**
+     *
+     * @return localDate
+     */
     public LocalDate getLocalDate() {
         return localDate;
     }
 
-    public void setLocalDate(LocalDate localDate) {
+    /**
+     *
+     * @param localDate localDate
+     */
+    public void setLocalDate(final LocalDate localDate) {
         this.localDate = localDate;
     }
 

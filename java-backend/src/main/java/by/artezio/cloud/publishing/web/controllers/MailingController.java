@@ -1,10 +1,12 @@
 package by.artezio.cloud.publishing.web.controllers;
 
+import by.artezio.cloud.publishing.dto.Subscribers;
 import by.artezio.cloud.publishing.service.MailingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,8 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/mailing")
 public class MailingController {
 
-    @Autowired
     private MailingService mailingService;
+
+    /**
+     * Конструктор с параметром.
+     * @param mailingService mailingService
+     */
+    public MailingController(final MailingService mailingService) {
+        this.mailingService = mailingService;
+    }
 
     /**
      * Возвращает вьюху "mailing".
@@ -47,5 +56,18 @@ public class MailingController {
             model.addAttribute("emailList", mailingService.getEmailListByPublishingId(id));
         }
         return "mailingSettings";
+    }
+
+    /**
+     *
+     * @param subscribers Объект подписчиков рассылки издания с <code>id == subscribers.getPublishingId()</code>,
+     *                    в котором хранятся email-адреса, на которые произойдет рассылка в следующий раз.
+     * @return страница настроек.
+     */
+    @PostMapping("/settings")
+    public String addNewSubscribers(@ModelAttribute final Subscribers subscribers) {
+        System.out.println(subscribers);
+        mailingService.updateSubscribersListByPublishingId(subscribers.getPublishingId(), subscribers.getEmails());
+        return "redirect:../mailing/settings";
     }
 }

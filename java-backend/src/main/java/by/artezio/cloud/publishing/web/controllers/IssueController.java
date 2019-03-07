@@ -12,31 +12,48 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+/**
+ * Issue контроллер.
+ *
+ * @author rezerv
+ */
 @Controller
 @RequestMapping("/issues")
 public class IssueController {
 
     private PublishingService publishingService;
 
+    /**
+     *
+     * @return ModelAndView
+     */
     @GetMapping
     public ModelAndView getManePageForIssue() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("issues");
-        modelAndView.addObject("issueFormDto" ,new IssueForm());
+        modelAndView.addObject("issueFormDto", new IssueForm());
         modelAndView.addObject("publishing", publishingService.getPublishingList());
         return modelAndView;
     }
 
+    /**
+     *
+     * @param issueForm issueForm
+     * @return название вьюшки
+     */
     @PostMapping
-    public String getIssueFormDto(IssueForm issueForm) {
+    public String getIssueFormDto(final IssueForm issueForm) {
         System.out.println(issueForm);
-        List<Topic> tl = publishingService.getPublishingTopics(issueForm.getPublishingId());
+        List<Topic> tl = publishingService.getTopicsByPublishingId(issueForm.getPublishingId());
         return "home";
     }
 
-
+    /**
+     *
+     * @param publishingService publishingService
+     */
     @Autowired
-    public void setPublishingService(PublishingService publishingService) {
+    public void setPublishingService(final PublishingService publishingService) {
         this.publishingService = publishingService;
     }
 

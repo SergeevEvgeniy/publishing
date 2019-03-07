@@ -7,14 +7,17 @@ package by.artezio.cloud.publishing.dto;
  */
 public class AuthenticationResult {
 
-    private String message;
+    private final String message;
+    private final int status;
 
     /**
      *
-     * @param message Authentication message
+     * @param message сообщение аутентификации
+     * @param status статус аутентификации
      */
-    public void setMessage(final String message) {
+    public AuthenticationResult(final String message, final int status) {
         this.message = message;
+        this.status = status;
     }
 
     /**
@@ -24,5 +27,12 @@ public class AuthenticationResult {
     public String getMessage() {
         return message;
     }
-}
 
+    /**
+     *
+     * @return int значение статуса аутентификации
+     */
+    public int getStatus() {
+        return status;
+    }
+}

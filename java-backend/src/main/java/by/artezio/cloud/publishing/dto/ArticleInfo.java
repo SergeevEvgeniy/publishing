@@ -10,11 +10,29 @@ import java.util.Set;
  */
 public class ArticleInfo {
 
+    private int articleId;
     private String title;
     private String publishing;
     private String topic;
     private String authorFullName;
     private Set<String> coauthors;
+
+    /**
+     * Возвращает идентификатор статьи.
+     *
+     * @return int
+     */
+    public int getArticleId() {
+        return articleId;
+    }
+
+    /**
+     * Устанавливает идентификатор статьи.
+     * @param articleId идентификатор статьи
+     */
+    public void setArticleId(final int articleId) {
+        this.articleId = articleId;
+    }
 
     /**
      * Возвращает название статьи.

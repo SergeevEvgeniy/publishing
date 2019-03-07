@@ -1,16 +1,16 @@
 package by.artezio.cloud.publishing.web.controllers;
 
-import by.artezio.cloud.publishing.dao.EmployeeDao;
 import by.artezio.cloud.publishing.dto.AuthenticationResult;
 import by.artezio.cloud.publishing.dto.LoginForm;
 import by.artezio.cloud.publishing.web.service.SecurityService;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -20,20 +20,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class LoginController {
 
+    public static final String LOGIN_LOCATION = "/login";
+    private static final int UNAUTHORIZED = 401;
+    private static final int FORBIDDEN = 403;
+
     @Autowired
     private SecurityService securityService;
 
-    @Autowired
-    private EmployeeDao ud;
-
     /**
-     *
-     * @return название Jsp страницы
+     * @param model объект модели
+     * @return название Jsp страницы логина
      */
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
-
-        //System.out.println(ud.getEmployeeByLoginPass("sara@mail.com", "admin"));
+    @RequestMapping(value = LOGIN_LOCATION, method = RequestMethod.GET)
+    public String login(final Model model) {
+        model.addAttribute("loginForm", new LoginForm());
         return "login";
     }
 
@@ -41,24 +41,34 @@ public class LoginController {
      *
      * @param loginForm форма логина
      * @param result результат парсинга данных с формы
-     * @param request HttpRequest
-     * @param response HttpResponse
-     */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public void login(@Valid @ModelAttribute final LoginForm loginForm, final BindingResult result,
-            final HttpServletRequest request,
-            final HttpServletResponse response) {
-        AuthenticationResult authenticationResult = securityService.loginUser(loginForm);
-        //boolean hasError = sessionController.tryCreateSession(request, response);
-        //show errors!!!
-    }
-
-    /**
+     * @param model Model
      *
-     * @return название jsp страницы
+     * @return ModelAndView статьи, либо логин, в случае неудачи аутентификации
      */
-    @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public String success() {
-        return "loginSuccess";
+    @RequestMapping(value = LOGIN_LOCATION, method = RequestMethod.POST)
+    public String login(@Valid final LoginForm loginForm,
+            final BindingResult result,
+            final Model model) {
+
+        AuthenticationResult authResult;
+
+        if (result.hasErrors()) {
+            Logger.getLogger(LoginController.class.getName())
+                    .log(Level.SEVERE, (Supplier<String>) result.getFieldErrors());
+            authResult = new AuthenticationResult("Validation error", FORBIDDEN);
+        } else {
+            authResult = securityService.loginUser(loginForm);
+        }
+
+        if (authResult.getStatus() == UNAUTHORIZED) {
+            model.addAttribute("authResult", authResult);
+            return "login";
+        }
+
+        return "redirect:/home";
+
+        // login -> home
+        // some -> login -> some
+        // isUser !-> login
     }
 }

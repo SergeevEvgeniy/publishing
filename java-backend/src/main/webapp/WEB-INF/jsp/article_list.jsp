@@ -41,8 +41,15 @@
                     </ul>
                 </td>
                 <td>
-                    <button>Редактировать</button>
-                    <button>Удалить</button>
+                    <ul>
+                        <li>
+                            <a>Удалить</a>
+                        </li>
+                        <li>
+                            <a href="/update/${element.articleId}">Редактировать</a>
+                        </li>
+
+                    </ul>
                 </td>
             </tr>
         </c:forEach>
