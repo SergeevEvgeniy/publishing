@@ -101,6 +101,7 @@
     <Compile Include="Services\ReviewService.cs" />
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
     <Compile Include="Util\PublishingBusinessMapProfile.cs" />
+    <Compile Include="Util\ReviewBusinessMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CloudPublishing.Data\CloudPublishing.Data.csproj">

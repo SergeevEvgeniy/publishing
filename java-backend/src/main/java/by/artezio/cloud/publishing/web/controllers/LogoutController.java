@@ -24,7 +24,7 @@ public class LogoutController {
     private SecurityService securityService;
 
     /**
-     * Добавляет к jsp-странице атрибут User-dto
+     * Добавляет к jsp-странице атрибут User-dto.
      *
      * @return User-dto
      */

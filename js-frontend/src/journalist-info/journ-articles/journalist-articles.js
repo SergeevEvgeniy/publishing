@@ -11,10 +11,11 @@ function ArticlesComponent($element) {
     var releaseBodySelector = '#releaseBody';
     var searchBodySelector = '#searchResultBody';
     var loaderData = new LoaderData();
+    var updateCallBack = null;
 
-    ($element).on('click', '#findArticle', function (event) {
+
+    function findArticles (event) {
         event.preventDefault();
-        console.log('hel')
         var formData = new FormData(document.getElementById(formId));
         //отправить эти данные с запросом, url сейчас левый
         loaderData.recieveSingleData('http://127.0.0.1:3000/array')
@@ -25,12 +26,19 @@ function ArticlesComponent($element) {
         .catch(function (error) {
             console.log(error);
         });
-    }).on('click', '#clearFields', function (event) {
+    }
+
+    function clearForm(event) {
         event.preventDefault();
         event.target.closest('form').reset();
         $(searchBodySelector).empty();
         $(releaseBodySelector).empty();
-    }).on('change', editionSelector, function (event) {
+        if (typeof updateCallBack === 'function') {
+            updateCallBack();
+        }
+    }
+    
+    function getIssue(event) {
         $(releaseBodySelector).empty();
         //var value = event.target.value;
         //отправили запрос и получили все выпуски издания
@@ -44,7 +52,12 @@ function ArticlesComponent($element) {
         $(releaseBodySelector).append(releaseTemplate({
             data: release
         }));
-    })
+    }
+
+    //при создании убрать предыдущие события.
+    ($element).off().on('click', '#findArticle', findArticles)
+    .on('click', '#clearFields', clearForm)
+    .on('change', editionSelector, getIssue);
 
     function render() {
         // при загрузке мне нужно получить список всех изданий и рубрик
@@ -77,6 +90,9 @@ function ArticlesComponent($element) {
     this.setData = function (data) {
         //componentData = data;
         render();
+    };
+    this.onActionInChildComponent = function (callBack) {
+        updateCallBack = callBack;
     };
 }
 

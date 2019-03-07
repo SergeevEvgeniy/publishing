@@ -1,0 +1,235 @@
+[
+    {
+        "journalistId": 400000,
+        "firstName": "Петрович",
+        "lastName": "Петр",
+        "middleName": "Петрович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 107
+    },
+    {
+        "journalistId": 400001,
+        "firstName": "Иван",
+        "lastName": "Федорович",
+        "middleName": "Сидоров",
+        "educationTitle": "высшие",
+        "articlesQuantity": 18
+    },
+    {
+        "journalistId": 400002,
+        "firstName": "Кузникадзе",
+        "lastName": "Михо",
+        "middleName": "Шотаевич",
+        "educationTitle": "средне-специальное",
+        "articlesQuantity": 78
+    },
+    {
+        "journalistId": 400003,
+        "firstName": "Коваленко",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400004,
+        "firstName": "Джон",
+        "lastName": "Смит",
+        "middleName": "Малькольм",
+        "educationTitle": "начальное",
+        "articlesQuantity": 144
+    },
+    {
+        "journalistId": 400005,
+        "firstName": "Ковал",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400006,
+        "firstName": "Коваленко1",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400007,
+        "firstName": "Коваленко2",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    },
+    {
+        "journalistId": 400008,
+        "firstName": "Коваленко3",
+        "lastName": "Микола",
+        "middleName": "Остапович",
+        "educationTitle": "высшие",
+        "articlesQuantity": 112
+    }
+
+]

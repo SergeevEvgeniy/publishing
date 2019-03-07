@@ -4,6 +4,7 @@ import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.ArticleCoauthor;
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ArticleDao {
     @Autowired
     private TopicDao topicDao;
 
-    private RowMapper<Article> rowMapper = (rs, i) -> {
+    private RowMapper<Article> articleRowMapper = (rs, i) -> {
         Article article = new Article();
         Publishing p = service.getPublishingById(rs.getInt("publishing_id"));
         Topic t = topicDao.getTopicById(rs.getInt("topic_id"));
@@ -54,6 +55,22 @@ public class ArticleDao {
         t.setName(rs.getString("name"));
 
         return t;
+    };
+
+    private RowMapper<ArticleCoauthor> articleCoauthorRowMapper = (rs, rowNum) -> {
+        ArticleCoauthor ac = new ArticleCoauthor();
+        ac.setEmployeeId(rs.getInt("employee_id"));
+        ac.setArticleId(rs.getInt("article_id"));
+        return ac;
+    };
+
+    private RowMapper<Review> reviewRowMapper = (rs, rowNum) -> {
+        Review r = new Review();
+        r.setReviewerId(rs.getInt("reviewer_id"));
+        r.setArticleId(rs.getInt("article_id"));
+        r.setContent(rs.getString("content"));
+        r.setApproved(rs.getBoolean("approved"));
+        return r;
     };
 
 //    /**
@@ -79,7 +96,7 @@ public class ArticleDao {
     public List<Article> getArticleListByJournalistId(final int authorId) {
         return jdbcTemplate.query("SELECT * FROM article\n"
                 + "WHERE author_id = :authorId",
-            Collections.singletonMap("authorId", authorId), rowMapper);
+            Collections.singletonMap("authorId", authorId), articleRowMapper);
     }
 
     /**
@@ -88,7 +105,7 @@ public class ArticleDao {
      * @return список объектов статей {@link Article}.
      */
     public List<Article> getAllArticles() {
-        return jdbcTemplate.query("SELECT * FROM article", rowMapper);
+        return jdbcTemplate.query("SELECT * FROM article", articleRowMapper);
     }
 
     /**
@@ -98,6 +115,30 @@ public class ArticleDao {
      * @return список объектов класса {@link ArticleCoauthor}
      */
     public List<ArticleCoauthor> getArticleCoauthorsByArticleId(final int id) {
-        return null;
+        return jdbcTemplate.query("SELECT * FROM article_coauthors WHERE article_id = :articleId",
+            Collections.singletonMap("articleId", id), articleCoauthorRowMapper);
     }
+
+    /**
+     * Возвращает статью {@link Article} по её идентификатору.
+     *
+     * @param id идентификатор статьи
+     * @return {@link Article}
+     */
+    public Article getArticleByArticleId(final int id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM article WHERE id = :id",
+            Collections.singletonMap("id", id), articleRowMapper);
+    }
+
+    /**
+     * Возвращает список рецензий {@link Review} по идентификатору статьи.
+     *
+     * @param articleId идентификатор статьи
+     * @return {@link List}&lt;{@link Review}&gt;
+     */
+    public List<Review> getReviewsByArticleId(final int articleId) {
+        return jdbcTemplate.query("SELECT * FROM revire WHERE article_id = :articleId",
+            Collections.singletonMap("articleId", articleId), reviewRowMapper);
+    }
+
 }

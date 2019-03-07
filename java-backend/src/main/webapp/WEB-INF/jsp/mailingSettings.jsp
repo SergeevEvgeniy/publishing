@@ -13,12 +13,11 @@
 <body>
 
 <div class="container" style="width: 700px">
-    <form class="form-horizontal">
+    <form method="post" class="form-horizontal">
         <div class="form-group">
             <label for="mailingSelect" class="label-control col-lg-4 col-md-4 col-sm-4 h4">Журнал/газета</label>
             <div class="col-lg-8 col-md-8 col-sm-8">
-                <select id="mailingSelect" class="form-control">
-                    <%--TODO перенаправление--%>
+                <select name="publishingId" id="mailingSelect" class="form-control">
                     <option value="">--- Выберите журнал/газету ---</option>
                     <c:forEach var="item" items="${publishingList}">
                         <option value="${item.id}" <c:if test="${id == item.id}">selected</c:if>>
@@ -34,20 +33,22 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-lg-9 col-md-7">
-                        <input type="text" class="form-control" placeholder="Новый email-адрес">
+                        <input id="emailAddress" type="email" class="form-control" placeholder="Новый email-адрес">
+                        <div class="alert alert-danger hide incorrect-email-message"></div>
                     </div>
                     <div class="col-lg-3 col-md-5">
-                        <button class="btn btn-block btn-success">Добавить</button>
+                        <button <c:if test="${id == null}">disabled</c:if> type="button" id="addBtn" class="btn btn-block btn-success">Добавить</button>
                     </div>
                 </div>
             </div>
-            <ul class="list-group">
+            <ul id="emailList" class="list-group">
                 <c:forEach var="email" items="${emailList}">
                     <li class="list-group-item">
+                        <input type="hidden" value="${email}" name="emails">
                         <div class="row">
-                            <div class="col-xs-10">${email}</div>
+                            <div class="col-xs-10 added-email">${email}</div>
                             <div class="col-xs-2 text-right">
-                                <span class="glyphicon glyphicon-remove"></span>
+                                <span class="glyphicon glyphicon-trash delete-email" style="cursor: pointer"></span>
                             </div>
                         </div>
                     </li>
@@ -55,10 +56,21 @@
             </ul>
         </div>
         <div class="text-right">
-            <button id="cancel" class="btn btn-default">Отменить</button>
+            <a id="cancel" class="btn btn-default" href="${pageContext.request.contextPath}/mailing">Отменить</a>
             <button id="save" type="submit" class="btn btn-primary">Сохранить</button>
         </div>
     </form>
+    <div id="emailElementTemplate" class="hidden">
+        <li class="list-group-item new-email-element">
+            <input type="hidden" name="emails" class="input-email">
+            <div class="row">
+                <div class="col-xs-10 added-email"></div>
+                <div class="col-xs-2 text-right">
+                    <span class="glyphicon glyphicon-trash delete-email" style="cursor: pointer"></span>
+                </div>
+            </div>
+        </li>
+    </div>
 </div>
 </body>
 </html>

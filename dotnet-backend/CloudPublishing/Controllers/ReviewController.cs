@@ -2,6 +2,7 @@
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Reviews.ViewModels;
+using CloudPublishing.Util;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -17,17 +18,7 @@ namespace CloudPublishing.Controllers
         {
             reviewService = service;
 
-            MapperConfiguration mapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<DetailedReviewDTO, DetailedReviewVM>();
-                cfg.CreateMap<ReviewVM, ReviewDTO>();
-                cfg.CreateMap<ReviewDTO, ReviewVM>();
-                cfg.CreateMap<PublishingDTO, ShortPublishingModel>();
-                cfg.CreateMap<TopicDTO, TopicModel>();
-                cfg.CreateMap<EmployeeDTO, AuthorModel>();
-                cfg.CreateMap<ArticleDTO, ArticleModel>();
-            });
-            mapper = mapperConfig.CreateMapper();
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ReviewMapProfile())).CreateMapper();
         }
 
         // GET: Review
@@ -40,7 +31,6 @@ namespace CloudPublishing.Controllers
                 (reviewService.CreateDetailedReviewList(userId));
 
             return View(list);
-
         }
 
         [HttpGet]
@@ -49,9 +39,23 @@ namespace CloudPublishing.Controllers
             var pl = reviewService.GetPublishingList();
             var model = new CreateReviewModel()
             {
-                publishingList = new SelectList(pl, "Id", "Title", 1)
+                PublishingList = mapper.Map<IEnumerable<PublishingDTO>, List<PublishingVM>>(pl)
             };
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Create(ReviewVM review)
+        {
+            // Будет заменено на получение текущего пользователя
+            review.ReviwerId = 1;
+
+            if (ModelState.IsValid)
+            {
+                reviewService.CreateReview(mapper.Map<ReviewVM, ReviewDTO>(review));
+            }
+
+            return Redirect("/Review/Index");
         }
 
         [HttpGet]
@@ -85,17 +89,6 @@ namespace CloudPublishing.Controllers
             return Json("Content", JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult Create(ReviewVM review)
-        {
-            // Будет заменено на получение текущего пользователя
-            review.ReviwerId = 1;
-
-            reviewService.CreateReview(mapper.Map<ReviewVM, ReviewDTO>(review));
-
-            return Redirect("/Review/Index");
-        }
-
         public ActionResult Details(int articleId)
         {
             // Будет заменено на получение id пользователя
@@ -122,7 +115,10 @@ namespace CloudPublishing.Controllers
             // Будет заменено на получение id пользователя
             review.ReviwerId = 1;
 
-            reviewService.UpdateReview(mapper.Map<ReviewDTO>(review));
+            if (ModelState.IsValid)
+            {
+                reviewService.UpdateReview(mapper.Map<ReviewDTO>(review));
+            }
 
             return Redirect("/Review/Index");
         }

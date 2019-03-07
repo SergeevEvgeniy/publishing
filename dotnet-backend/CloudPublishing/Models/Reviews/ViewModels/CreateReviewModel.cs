@@ -1,9 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
 
 namespace CloudPublishing.Models.Reviews.ViewModels
 {
     public class CreateReviewModel
     {
-        public SelectList publishingList { get; set; }
+        public List<PublishingVM> PublishingList { get; set; }        
     }
 }

@@ -1,0 +1,22 @@
+{{#if result}}
+    <table class="table table-hover filter-result-table">
+        <caption>Найденные номера</caption>
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Номер</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each result}}
+                <tr data-id="{{this.id}}" class="cursor-pointer">
+                    <td>{{this.title}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{else}}
+    <p class="text-center">
+        <small>Не найдено</small>
+    </p>
+{{/if}}
+
