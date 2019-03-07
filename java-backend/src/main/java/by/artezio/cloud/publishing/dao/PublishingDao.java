@@ -1,6 +1,5 @@
 package by.artezio.cloud.publishing.dao;
 
-import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Topic;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -66,17 +64,19 @@ public class PublishingDao {
         );
 
     }
+
     /**
      * Возвращает список рубрик {@link Topic} входящие в состав журнала с
      * id == {@param ppublishingId}
+     *
      * @param publishingId - id журнала из которого извлекаем список рубрик
      * @return List<Topic> список объектов Topic (рубрики)
-     * */
+     */
     public List<Topic> getPublishingTopics(int publishingId) {
         return jdbcTemplate.query("select id, name from topic " +
-            "join publishing_topic pt " +
-            "on topic.id = pt.topic_id " +
-            "where pt.publishing_id = :publishingId",
+                "join publishing_topic pt " +
+                "on topic.id = pt.topic_id " +
+                "where pt.publishing_id = :publishingId",
             Collections.singletonMap("publishingId", publishingId),
             topicRowMapper
         );

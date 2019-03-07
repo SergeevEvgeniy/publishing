@@ -19,7 +19,7 @@ public class FakePublishingService implements PublishingService {
     private PublishingDao publishingDao;
 
     @Override
-    public List<Publishing> getAllPublishings() {
+    public List<Publishing> getPublishingList() {
         return publishingDao.getPublishingList();
     }
 

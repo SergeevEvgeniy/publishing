@@ -116,7 +116,7 @@ public class ArticleService {
      */
     public ArticleForm getNewArticleForm() {
         ArticleForm af = new ArticleForm();
-        af.setPublishings(publishingService.getAllPublishings());
+        af.setPublishings(publishingService.getPublishingList());
         return af;
     }
 

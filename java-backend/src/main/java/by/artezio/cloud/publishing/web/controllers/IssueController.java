@@ -22,7 +22,7 @@ public class IssueController {
     public ModelAndView getManePageForIssue() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("issues");
-        modelAndView.addObject("issueFormDto" ,new IssueForm());
+        modelAndView.addObject("issueFormDto", new IssueForm());
         modelAndView.addObject("publishing", publishingService.getPublishingList());
         return modelAndView;
     }
@@ -30,7 +30,7 @@ public class IssueController {
     @PostMapping
     public String getIssueFormDto(IssueForm issueForm) {
         System.out.println(issueForm);
-        List<Topic> tl = publishingService.getPublishingTopics(issueForm.getPublishingId());
+        List<Topic> tl = publishingService.getTopicsByPublishingId(issueForm.getPublishingId());
         return "home";
     }
 
