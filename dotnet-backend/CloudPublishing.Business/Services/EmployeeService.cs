@@ -47,9 +47,14 @@ namespace CloudPublishing.Business.Services
 
         public IResult<IEnumerable<EmployeeDTO>> GetEmployeeList(IEnumerable<int> idList, string lastName)
         {
+            if (idList == null)
+            {
+                return new BadResult<IEnumerable<EmployeeDTO>>("Отсутствует список идентификаторов");
+            }
             try
             {
-                var list = unitOfWork.Employees.Find(x => x.LastName.Contains(lastName) && idList.Contains(x.Id));
+                var list = unitOfWork.Employees.Find(x =>
+                    x.LastName.Contains(lastName ?? string.Empty) && idList.Contains(x.Id));
                 return new SuccessfulResult<IEnumerable<EmployeeDTO>>(mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list));
             }
             catch (InvalidOperationException e)
