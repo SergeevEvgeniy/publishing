@@ -11,6 +11,8 @@ namespace CloudPublishing.Business.Services.Interfaces
     {
         IResult<IEnumerable<EmployeeDTO>> GetEmployeeList();
 
+        IResult<IEnumerable<EmployeeDTO>> GetEmployeeList(IEnumerable<int> idList, string lastName);
+
         IResult<IEnumerable<EducationDTO>> GetEducationList();
 
         IResult<EmployeeDTO> GetEmployeeById(int? id);

@@ -40,7 +40,7 @@ namespace CloudPublishing.Business.Services
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<string>(e);
+                return new BadResult<string>(e.Message, true);
             }
         }
 
@@ -68,7 +68,7 @@ namespace CloudPublishing.Business.Services
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<string>(e);
+                return new BadResult<string>(e.Message, true);
             }
         }
 
@@ -96,7 +96,7 @@ namespace CloudPublishing.Business.Services
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<string>(e);
+                return new BadResult<string>(e.Message, true);
             }
         }
 
@@ -114,7 +114,7 @@ namespace CloudPublishing.Business.Services
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<ClaimsIdentity>(e);
+                return new BadResult<ClaimsIdentity>(e.Message, true);
             }
         }
     }
