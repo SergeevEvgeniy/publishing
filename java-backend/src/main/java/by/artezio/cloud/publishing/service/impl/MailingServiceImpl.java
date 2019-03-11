@@ -10,14 +10,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Сервис, реализующий логику получения данных для {@link by.artezio.cloud.publishing.web.controllers.MailingController}.
+ * Конкретная реализация интерфейса {@link MailingService}, построенная на конкретном обращении к локальной DAO.
+ *
  * @author vgamezo
  */
 @Service
 public class MailingServiceImpl implements MailingService {
 
     private MailingDao mailingDao;
-    private PublishingDao publishingDao;
+    private PublishingDao publishingDao; //TODO вынести в PublishingService.
 
     /**
      * Конструктор с параметрами.

@@ -6,6 +6,7 @@ import by.artezio.cloud.publishing.dto.MailingInfo;
 import java.util.List;
 
 /**
+ * Интерфейс для сервисов, реализующих логику преобразования данных из/в {@link by.artezio.cloud.publishing.dao.MailingDao}.
  * @author vgamezo
  */
 public interface MailingService {
