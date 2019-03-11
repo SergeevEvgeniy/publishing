@@ -2,7 +2,7 @@ package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
-import by.artezio.cloud.publishing.service.ArticleService;
+import by.artezio.cloud.publishing.service.impl.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

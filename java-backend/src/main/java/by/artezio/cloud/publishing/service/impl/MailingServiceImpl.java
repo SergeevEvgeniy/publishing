@@ -1,9 +1,10 @@
-package by.artezio.cloud.publishing.service;
+package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.dao.MailingDao;
 import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.dto.MailingInfo;
 import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.service.MailingService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

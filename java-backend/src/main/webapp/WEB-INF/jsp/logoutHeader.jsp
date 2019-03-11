@@ -15,7 +15,7 @@
                 <li><a href="/cloud-publishing/mailing">Mailing</a></li>                              
             </ul>
             <div class="nav navbar-right navbar-brand">
-                <span>${user.name}</span>
+                <span>${currentUser.name}</span>
                 <a href="${pageContext.request.contextPath}/logout">
                     <i class="glyphicon glyphicon-off"></i>
                 </a>

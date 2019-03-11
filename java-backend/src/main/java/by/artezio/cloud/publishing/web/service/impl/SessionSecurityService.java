@@ -1,10 +1,12 @@
-package by.artezio.cloud.publishing.web.service;
+package by.artezio.cloud.publishing.web.service.impl;
 
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.dto.AuthenticationResult;
 import by.artezio.cloud.publishing.dto.LoginForm;
 import by.artezio.cloud.publishing.dto.User;
 import by.artezio.cloud.publishing.service.EmployeeService;
+import by.artezio.cloud.publishing.web.service.EncoderService;
+import by.artezio.cloud.publishing.web.service.SecurityService;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @author Sergeev Evgeniy
  */
 @Service
-public class SecurityServiceImpl implements SecurityService {
+public class SessionSecurityService implements SecurityService {
 
     private static final String CURRENT_USER = "currentUser";
     private static final int UNAUTHORIZED = 401;
-    private static final int FORBIDDEN = 403;
     private static final int OK = 200;
 
     @Autowired

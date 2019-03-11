@@ -6,7 +6,7 @@ import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
-import by.artezio.cloud.publishing.service.ArticleService;
+import by.artezio.cloud.publishing.service.impl.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

@@ -1,4 +1,4 @@
-package by.artezio.cloud.publishing.service;
+package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.dao.ArticleDao;
 import by.artezio.cloud.publishing.dao.TopicDao;
@@ -10,6 +10,8 @@ import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
+import by.artezio.cloud.publishing.service.EmployeeService;
+import by.artezio.cloud.publishing.service.PublishingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,7 @@
-package by.artezio.cloud.publishing.web.service;
+package by.artezio.cloud.publishing.web.service.impl;
 
 import by.artezio.cloud.publishing.web.controllers.LoginController;
+import by.artezio.cloud.publishing.web.service.SecurityService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 @Service
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
+    public static final String LOCATION = "location";
     private final SecurityService securityService;
 
     /**
@@ -32,7 +34,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             response.sendRedirect(request.getContextPath() + LoginController.LOGIN_LOCATION);
         }
         HttpSession session = request.getSession();
-        session.setAttribute("location", request.getPathInfo());
+        session.setAttribute(LOCATION, request.getRequestURI().substring(request.getContextPath().length()));
         return true;
     }
 }

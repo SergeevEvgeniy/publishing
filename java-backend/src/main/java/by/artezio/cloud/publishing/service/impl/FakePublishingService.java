@@ -1,4 +1,4 @@
-package by.artezio.cloud.publishing.service.publishing;
+package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.domain.Publishing;
