@@ -2,7 +2,8 @@ package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
-import by.artezio.cloud.publishing.service.impl.ArticleService;
+import by.artezio.cloud.publishing.service.ArticleService;
+import by.artezio.cloud.publishing.service.impl.LocalArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,7 @@ public class ArticleController {
      * @param service ArticalService
      */
     @Autowired
-    public ArticleController(final ArticleService service) {
+    public ArticleController(final LocalArticleService service) {
         this.service = service;
     }
 
@@ -35,25 +36,25 @@ public class ArticleController {
      * @param request HttpServletRequest
      * @return String
      */
-    @GetMapping(path = "/article_list")
+    @GetMapping(path = "/articleList")
     public final String articleList(final Model model, final HttpServletRequest request) {
 
         List<ArticleInfo> data = service.getArticleInfoList(request);
-        model.addAttribute("list", data);
-        return "article_list";
+        model.addAttribute("data", data);
+        return "articleList";
     }
 
     /**
      * Возвращает пользователю страницу для создания/редактирования статьи.
      *
      * @param model Model
-     * @return String назвавинее jsp страницы
+     * @return String название jsp страницы
      */
     @GetMapping(path = "/update")
     public final String createArticle(final Model model) {
         ArticleForm data = service.getNewArticleForm();
         model.addAttribute("model", data);
-        return "update_article";
+        return "updateArticle";
     }
 
     /**
@@ -67,6 +68,6 @@ public class ArticleController {
     public final String updateArticle(@PathVariable final int articleId, final Model model) {
         ArticleForm form = service.getUpdateArticleFormByArticleId(articleId);
         model.addAttribute("model", form);
-        return "update_article";
+        return "updateArticle";
     }
 }

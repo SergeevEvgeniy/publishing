@@ -11,32 +11,25 @@ import java.util.Set;
 /**
  * Класс, содержащий детальную информацию о статье.
  *
- * <p>Используется для отображения статей на странице <code>update_article.jsp</code>.
+ * <p>Используется для отображения статей на странице <code>updateArticle.jsp</code>.
  *
  * @author Denis Shubin
  */
 public class ArticleForm {
 
-    //    private List<String> publishings;
     private List<Publishing> publishings;
-    //    private List<String> topics;
     private List<Topic> topics;
     private String title;
     private String content;
-    //    private List<String> currentCoauthors;
     private Set<Employee> currentCoauthors;
-    //    private List<String> availableCoauthors;
     private Set<Employee> availableCoauthors;
     private List<Review> reviews;
 
     /**
      * Возвращает список журналов/газет.
      *
-     * @return List<String>
+     * @return List<Publishing>
      */
-//    public List<String> getPublishings() {
-//        return publishings;
-//    }
     public List<Publishing> getPublishings() {
         return publishings;
     }
@@ -44,11 +37,8 @@ public class ArticleForm {
     /**
      * Устанавливает список журналов/газет.
      *
-     * @param publishings List<String>
+     * @param publishings List<Publishing>
      */
-//    public void setPublishings(final List<String> publishings) {
-//        this.publishings = publishings;
-//    }
     public void setPublishings(final List<Publishing> publishings) {
         this.publishings = publishings;
     }
@@ -56,11 +46,8 @@ public class ArticleForm {
     /**
      * Возвращает список рубрик.
      *
-     * @return List<String>
+     * @return List<Topic>
      */
-//    public List<String> getTopics() {
-//        return topics;
-//    }
     public List<Topic> getTopics() {
         return topics;
     }
@@ -68,11 +55,8 @@ public class ArticleForm {
     /**
      * Устанавливает список рубрик.
      *
-     * @param topics List<String>
+     * @param topics List<Topic>
      */
-//    public void setTopics(final List<String> topics) {
-//        this.topics = topics;
-//    }
     public void setTopics(final List<Topic> topics) {
         this.topics = topics;
     }
@@ -116,11 +100,8 @@ public class ArticleForm {
     /**
      * Возвращает список утверждённых соавторов.
      *
-     * @return List<String>
+     * @return List<Employee>
      */
-//    public List<String> getCurrentCoauthors() {
-//        return currentCoauthors;
-//    }
     public Set<Employee> getCurrentCoauthors() {
         return currentCoauthors;
     }
@@ -128,11 +109,8 @@ public class ArticleForm {
     /**
      * Устанавливает список утверждённых соавторов.
      *
-     * @param currentCoauthors List<String>
+     * @param currentCoauthors List<Employee>
      */
-//    public void setCurrentCoauthors(final List<String> currentCoauthors) {
-//        this.currentCoauthors = currentCoauthors;
-//    }
     public void setCurrentCoauthors(final Set<Employee> currentCoauthors) {
         this.currentCoauthors = currentCoauthors;
     }
@@ -140,11 +118,8 @@ public class ArticleForm {
     /**
      * Возвращает список возможных соавторов.
      *
-     * @return List<String>
+     * @return List<Employee>
      */
-//    public List<String> getAvailableCoauthors() {
-//        return availableCoauthors;
-//    }
     public Set<Employee> getAvailableCoauthors() {
         return availableCoauthors;
     }
@@ -152,11 +127,8 @@ public class ArticleForm {
     /**
      * Устанавливает список возможных соавторов.
      *
-     * @param availableCoauthors List<String>
+     * @param availableCoauthors List<Employee>
      */
-//    public void setAvailableCoauthors(final List<String> availableCoauthors) {
-//        this.availableCoauthors = availableCoauthors;
-//    }
     public void setAvailableCoauthors(final Set<Employee> availableCoauthors) {
         this.availableCoauthors = availableCoauthors;
     }

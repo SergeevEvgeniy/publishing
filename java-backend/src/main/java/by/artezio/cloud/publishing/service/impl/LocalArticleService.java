@@ -25,7 +25,7 @@ import java.util.Set;
  * Сервис, содержащий бизнес-логику по обработке статей.
  */
 @Service
-public class ArticleService {
+public class LocalArticleService implements by.artezio.cloud.publishing.service.ArticleService {
 
     @Autowired
     private ArticleDao articleDao;
@@ -39,20 +39,6 @@ public class ArticleService {
     @Autowired
     private EmployeeService employeeService;
 
-//    /**
-//     * Конструктор для создания объекта с указанными значениями полей.
-//     *
-//     * @param articleDao объект класса {@link ArticleDao} для взаимодействия с
-//     * таблицей "article"
-//     * @param topicDao объект класса {@link TopicDao} для взаимодействия с
-//     * таблицей "topic"
-//     */
-//    @Autowired
-//    public ArticleService(final ArticleDao articleDao, final TopicDao topicDao) {
-//        this.articleDao = articleDao;
-//        this.topicDao = topicDao;
-//    }
-
     /**
      * Получение списка объектов {@link ArticleInfo}.
      *
@@ -64,6 +50,7 @@ public class ArticleService {
      *                {@link HttpServletRequest}
      * @return список объектов класса {@link ArticleInfo}
      */
+    @Override
     public List<ArticleInfo> getArticleInfoList(final HttpServletRequest request) {
         List<ArticleInfo> articleLists = new ArrayList<>();
 
@@ -101,6 +88,7 @@ public class ArticleService {
      * @param publishingId идентификатор журнала/газеты
      * @return объект класса {@link Publishing}
      */
+    @Override
     public Publishing getPublishingById(final int publishingId) {
         // Тут будут запросы к сервисам Publishing
         return null;
@@ -116,6 +104,7 @@ public class ArticleService {
      * @return объект класса {@link ArticleForm} с данными для заполнения формы
      * на странице update_article.jsp
      */
+    @Override
     public ArticleForm getNewArticleForm() {
         ArticleForm af = new ArticleForm();
         af.setPublishings(publishingService.getPublishingList());
@@ -128,6 +117,7 @@ public class ArticleService {
      * @param id идентификатор сотрудника
      * @return сотрудник, объект класса {@link Employee}
      */
+    @Override
     public Employee getAuthorById(final int id) {
         return null;
     }
@@ -171,19 +161,6 @@ public class ArticleService {
         return bldr.toString();
     }
 
-//    /**
-//     * Получение списка соавторов по идентификатору статьи.
-//     *
-//     * @param id идентификатор статьи
-//     * @return список сотрудников {@link Employee}, которые являются соавторами
-//     * статьи.
-//     */
-//    private List<Employee> getCoauthorsByArticleId(final int id) {
-//        List<ArticleCoauthor> coautors = articleDao.getArticleCoauthorsByArticleId(id);
-//
-//        // Тут будут запросы к сервису employee
-//        return null;
-//    }
 
     private List<Employee> getArticleCoauthorsByArticleId(final int articleId) {
         List<ArticleCoauthor> list = articleDao.getArticleCoauthorsByArticleId(articleId);
@@ -200,6 +177,7 @@ public class ArticleService {
      * @param articleId идентификатор статьи
      * @return {@link ArticleForm}
      */
+    @Override
     public ArticleForm getUpdateArticleFormByArticleId(final int articleId) {
         ArticleForm form = new ArticleForm();
         Article article = articleDao.getArticleByArticleId(articleId);
