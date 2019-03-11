@@ -60,7 +60,7 @@
         </div>
         <div class="text-right">
             <a id="cancel" class="btn btn-default" href="${pageContext.request.contextPath}/mailing">Отменить</a>
-            <button id="save" type="submit" class="btn btn-primary">Сохранить</button>
+            <button id="save" type="submit" class="btn btn-primary" <c:if test="${id == null}">disabled</c:if>>Сохранить</button>
         </div>
     </form:form>
     <div id="emailElementTemplate" class="hidden">
