@@ -5,13 +5,15 @@
 <html>
     <head>
         <title>Настройка</title>
-        <jsp:include page="styleLinks.jsp"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mailing.css">
 
         <script src="${pageContext.request.contextPath}/resources/js/libs/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/resources/js/mailing.js"></script>
     </head>
     <body>
-        <jsp:include page="logoutHeader.jsp"/>
+
         <div class="container" style="width: 700px">
             <%--@elvariable id="subscribers" type="by.artezio.cloud.publishing.dto.Subscribers"--%>
             <form:form modelAttribute="subscribers" method="post" action="${pageContext.request.contextPath}/mailing/settings" class="form-horizontal">

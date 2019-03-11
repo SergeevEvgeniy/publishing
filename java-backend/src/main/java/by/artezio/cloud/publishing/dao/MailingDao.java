@@ -99,7 +99,7 @@ public class MailingDao {
      * @param email email-адрес нового подписчика.
      * @return <code>true</code>, если подписчик был успешно добавлен, иначе <code>false</code>.
      */
-    public boolean addNewSubscriberByMailingId(final int mailingId, final String email) {
+    public boolean addSubscriberByMailingId(final int mailingId, final String email) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("mailingId", mailingId);
         map.put("email", email);
@@ -127,5 +127,16 @@ public class MailingDao {
             Collections.singletonMap("publishingId", publishingId)
         );
         return this.getMailingIdByPublishingId(publishingId);
+    }
+
+    /**
+     * Метод, удаляющий всех подписчиков, которые подписаны на рассылку с <code>id = {@param mailingId}</code>.
+     * @param mailingId id рассылки.
+     */
+    public void clearMailingSubscribersByMailingId(final Integer mailingId) {
+        this.jdbcTemplate.update(
+            "delete from mailing_subscriber where mailing_id = :mailing_id",
+            Collections.singletonMap("mailing_id", mailingId)
+        );
     }
 }
