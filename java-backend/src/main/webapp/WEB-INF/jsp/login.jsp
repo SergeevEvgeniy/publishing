@@ -4,16 +4,20 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
     <head>
+        <jsp:include page="styleLinks.jsp"/>
         <title>Login Page</title>
     </head>
     <body>
-        <form:form action="login" method="post" modelAttribute="loginForm">
-            Username: <form:input type="email" path="email" required="required"/>
-            <br>
-            Password: <form:input type="password" path="password" required="required"/>
-            <br>
-            <input type="submit" value="Login">
-            <p>${authResult.message}</p>
-        </form:form>
+        <div class="container">
+            <form:form class="form-signin" action="login" method="post" modelAttribute="loginForm">
+                <h1>Please sign in</h1>
+                <label>Username:</label>
+                <form:input class="form-control" placeholder="Email address" type="email" path="email" required="required"/>
+                <label>Password: </label>
+                <form:input class="form-control" placeholder="Password" type="password" path="password" required="required"/>
+                <input class="btn btn-primary btn-block" type="submit" value="Login">
+                <p>${authResult.message}</p>
+            </form:form>
+        </div>
     </body>
 </html>

@@ -2,8 +2,7 @@
 <html>
     <head>
         <title>Home Page</title>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+        <jsp:include page="styleLinks.jsp"/>
         <meta charset="UTF-8"/>    
     </head>
     <body>

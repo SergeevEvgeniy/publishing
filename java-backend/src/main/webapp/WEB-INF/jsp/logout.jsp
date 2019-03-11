@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+        <jsp:include page="styleLinks.jsp"/>
         <title>Logout Page</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">        
     </head>
     <body>
-        <div class="container" style="width: 500px">
-            <header>
-                <h1>
-                    Logout
-                </h1>
-            </header>
-            <form class="form-horizontal" action="${pageContext.request.contextPath}/logout" method="post">
+        <div class="container">
+            <form class="form-signin" action="${pageContext.request.contextPath}/logout" method="post">
+                <header>
+                    <h1>
+                        Logout
+                    </h1>
+                </header>
                 <fieldset>
                     <div class="control-group">
                         <div class="controls text">

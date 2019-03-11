@@ -4,11 +4,10 @@
 <html>
     <head>
         <title>Рассылка</title>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+        <jsp:include page="styleLinks.jsp"/>
     </head>
     <body>
-
+        <jsp:include page="logoutHeader.jsp"/>
         <div class="container">
             <div class="row panel-group">
                 <div class="col-lg-6 col-md-8">
