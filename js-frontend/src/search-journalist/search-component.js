@@ -6,7 +6,6 @@ var JournalistResultComponent = require('../search-journalist-result/journalist-
 var $searchPage = $('<div>', {
     id: 'searchJournalist'
 });
-//var { JournalistInfoComponent } = require('../journalist-info/journalist-component');
 $searchPage.append(searchTemplate());
 
 function SearchJournalistComponent($parentElement) {
@@ -37,7 +36,8 @@ function SearchJournalistComponent($parentElement) {
             if ($issuePanel.hasClass(hiddenClass)) {
                 $issuePanel.removeClass(hiddenClass);
             }
-            issueList.render(response);
+            issueList.setElementList(response);
+            issueList.render();
         });
     }
 
@@ -86,10 +86,12 @@ function SearchJournalistComponent($parentElement) {
     this.render = function render() {
         $parentElement.append($searchPage);
         api.getPublishingList().then(function handleResponse(response) {
-            publishingList.render(response);
+            publishingList.setElementList(response);
+            publishingList.render();
         });
         api.getTopicList().then(function handleResponse(response) {
-            topicList.render(response);
+            topicList.setElementList(response);
+            topicList.render();
         });
     };
 }

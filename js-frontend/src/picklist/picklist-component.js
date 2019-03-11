@@ -9,8 +9,8 @@ var picklistTemplate = require('./picklist.hbs');
  */
 function PicklistComponent($parentElement, name, defaultText) {
     /**
-     * Массив значений выпадающего списка
-     * Каждое значение содержит два параметра
+     * Массив обьектов выпадающего списка
+     * Каждый обьект содержит два параметра
      * value уникальный идентификатор елемента
      * text название елемента
      * @type {Array}
