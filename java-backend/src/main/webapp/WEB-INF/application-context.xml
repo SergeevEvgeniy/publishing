@@ -19,17 +19,5 @@
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
     </bean>
-
-    <!-- Бины, необходимые для рассылки -->
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <!-- TODO дополнить property -->
-    </bean>
-
-    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
-        <property name="from" value="${mailing.from}"/>
-        <property name="subject" value="Subject mailing"/>
-    </bean>
-    <!-- Бины, необходимые для рассылки -->
-
 </beans>
 

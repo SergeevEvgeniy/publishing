@@ -15,5 +15,5 @@ public interface MailSender {
      * @param subject тема письма.
      * @param message содержание письма.
      */
-    void sendMail(final List<String> addressees, final String subject, final String message);
+    void sendMail(List<String> addressees, String subject, String message);
 }
