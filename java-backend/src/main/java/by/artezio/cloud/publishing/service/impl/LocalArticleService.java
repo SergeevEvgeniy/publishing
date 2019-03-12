@@ -27,17 +27,35 @@ import java.util.Set;
 @Service
 public class LocalArticleService implements by.artezio.cloud.publishing.service.ArticleService {
 
-    @Autowired
     private ArticleDao articleDao;
-
-    @Autowired
     private TopicDao topicDao;
-
-    @Autowired
     private PublishingService publishingService;
-
-    @Autowired
     private EmployeeService employeeService;
+
+    /**
+     * Конструктор с параметрами.
+     *
+     * @param articleDao        класс для взаимодействия с таблицей aarticle
+     * @param topicDao          класс для взаимодействия с таблицей topic
+     * @param publishingService сервис, содержащий бизнес-логику по обработке изданий
+     * @param employeeService   сервис, содержащий бизнес-логику по обработке сотрудников
+     */
+    @Autowired
+    public LocalArticleService(final ArticleDao articleDao,
+                               final TopicDao topicDao,
+                               final PublishingService publishingService,
+                               final EmployeeService employeeService) {
+        this.articleDao = articleDao;
+        this.topicDao = topicDao;
+        this.publishingService = publishingService;
+        this.employeeService = employeeService;
+    }
+
+    /**
+     * Пустой конструктор.
+     */
+    public LocalArticleService() {
+    }
 
     /**
      * Получение списка объектов {@link ArticleInfo}.
@@ -56,7 +74,9 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
 
         Employee empl = (Employee) request.getSession().getAttribute("user");
 
-        List<Article> articles = articleDao.getArticleListByJournalistId(empl.getId());
+//        List<Article> articles = articleDao.getArticleListByJournalistId(empl.getId());
+        int NOT_MAGIC_NUMBER = 3;
+        List<Article> articles = articleDao.getArticleListByJournalistId(NOT_MAGIC_NUMBER);
 
         for (Article a : articles) {
             ArticleInfo articleInfo = new ArticleInfo();
@@ -77,6 +97,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
 
             Set<String> coauthors = getCoauthorsShortNames(a.getCoauthors());
             articleInfo.setCoauthors(coauthors);
+            articleLists.add(articleInfo);
         }
 
         return articleLists;
@@ -90,8 +111,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
      */
     @Override
     public Publishing getPublishingById(final int publishingId) {
-        // Тут будут запросы к сервисам Publishing
-        return null;
+        return publishingService.getPublishingById(publishingId);
     }
 
     /**
@@ -119,7 +139,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
      */
     @Override
     public Employee getAuthorById(final int id) {
-        return null;
+        return employeeService.getEmployeeById(id);
     }
 
     /**
@@ -132,8 +152,10 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     private Set<String> getCoauthorsShortNames(final Set<Employee> coauthors) {
         Set<String> result = new HashSet<>();
 
-        for (Employee e : coauthors) {
-            result.add(getEmployeeShortName(e));
+        if (coauthors != null) {
+            for (Employee e : coauthors) {
+                result.add(getEmployeeShortName(e));
+            }
         }
         return result;
     }
