@@ -1,0 +1,28 @@
+{
+    "journalistId": 500,
+    "firstName": "Антон",
+    "lastName": "Якубович",
+    "middleName": "Некрасович",
+    "sex": "М",
+    "articlesQuantity": 10,
+    "articlesData": [
+        {
+            "title": "К",
+            "count": 23
+        },
+        {
+            "title": "Рууд",
+            "count": 2
+        }
+    ],
+    "topicsData": [
+        {
+            "title": "К",
+            "count": 23222
+        },
+        {
+            "title": "Рууд",
+            "count": 22222
+        }
+    ]
+}

@@ -3,7 +3,7 @@ var JournalistListComponent = require('../journalist-list/journalist-list-compon
 var $resultPage = $('<div>', {
     id: 'searchJournalistResult'
 });
-var { JournalistStatComponent } = require('../journalist-info/journalist-component');
+var JournalistStatComponent = require('../journalist-info/journalist-component');
 $resultPage.append(resultTemplate());
 
 function JournalistResultComponent($parentElement) {
@@ -14,7 +14,7 @@ function JournalistResultComponent($parentElement) {
     //оно просто для теста
     $parentElement.on('click', 'button', function (event) {
         var target = event.target;
-        var journalistName = target.closest('tr').firstElementChild;
+        var journalistName = target.closest('tr').firstElementChild.textContent;
         var journalistStatComponent = new JournalistStatComponent($('#app'));
         journalistStatComponent.appendComponent(journalistName);
     })

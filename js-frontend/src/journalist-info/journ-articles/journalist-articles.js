@@ -1,8 +1,8 @@
 var $ = require('jquery');
 var articlesTemplate = require('./journalist-articles.hbs');
 var releaseTemplate = require('./release.hbs');
-var { LoaderData } = require('../data-loader/data-loader');
-var { SearchResultComponent } = require('../search-result/search-result');
+var LoaderData = require('../data-loader/data-loader');
+var SearchResultComponent = require('../search-result/search-result');
 
 function ArticlesComponent($element) {
     var componentData = {};
@@ -17,7 +17,6 @@ function ArticlesComponent($element) {
     function findArticles (event) {
         event.preventDefault();
         var formData = new FormData(document.getElementById(formId));
-        //отправить эти данные с запросом, url сейчас левый
         loaderData.recieveSingleData('http://127.0.0.1:3000/array')
         .then(function (item) {
             var searchResult = new SearchResultComponent($(searchBodySelector));
@@ -40,11 +39,6 @@ function ArticlesComponent($element) {
     
     function getIssue(event) {
         $(releaseBodySelector).empty();
-        //var value = event.target.value;
-        //отправили запрос и получили все выпуски издания
-        //loaderData.recieveSingleData('url', value)
-        //.then(function () {})
-        //для теста
         var release = [{
             id: 500,
             name: '24124'
@@ -54,18 +48,14 @@ function ArticlesComponent($element) {
         }));
     }
 
-    //при создании убрать предыдущие события.
     ($element).off().on('click', '#findArticle', findArticles)
     .on('click', '#clearFields', clearForm)
     .on('change', editionSelector, getIssue);
 
     function render() {
-        // при загрузке мне нужно получить список всех изданий и рубрик
         loaderData.recieveSingleData('http://127.0.0.1:3000/array')
         .then(function (item) {
-            //для теста
             console.log('получили данные о Изданиях и выпусках');
-            //componentData = item
             componentData.edition = [
                 {
                 id: 1,
@@ -88,7 +78,6 @@ function ArticlesComponent($element) {
     }
 
     this.setData = function (data) {
-        //componentData = data;
         render();
     };
     this.onActionInChildComponent = function (callBack) {
@@ -96,6 +85,4 @@ function ArticlesComponent($element) {
     };
 }
 
-module.exports = {
-    ArticlesComponent: ArticlesComponent
-};
+module.exports = ArticlesComponent;

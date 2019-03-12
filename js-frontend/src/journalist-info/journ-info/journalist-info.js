@@ -4,6 +4,7 @@ function InfoComponent($element) {
 
     var componentData = {};
     var updateCallBack = null;
+
     function render() {
         $element.empty().append(infoTemplate({
             data: componentData
@@ -22,6 +23,4 @@ function InfoComponent($element) {
 
 }
 
-module.exports = {
-    InfoComponent: InfoComponent
-};
+module.exports = InfoComponent;

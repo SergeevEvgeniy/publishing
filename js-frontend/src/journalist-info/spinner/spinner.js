@@ -15,11 +15,13 @@ function Spinner() {
         currentParent = parent;
         currentParent.append(spinnerTemplate);
     };
+
+    /**
+     * Находит в родительском контейнере тело спиннера и удаляет его.
+     */
     this.removeSpinner = function () {
         currentParent.find(spinnerBodySelector).remove();
     };
 }
 
-module.exports = {
-    Spinner: Spinner
-};
+module.exports = Spinner;
