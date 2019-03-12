@@ -8,6 +8,9 @@ import by.artezio.cloud.publishing.dto.ArticleInfo;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * Сервис, содержащий бизнес-логику для работы со статьями.
+ */
 public interface ArticleService {
     /**
      * Получение списка объектов {@link ArticleInfo}.

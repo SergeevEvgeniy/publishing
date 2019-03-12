@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Контроллер, возвращающий jsp страницы.
+ * Контроллер, обрабатывающий запросы, связанные со статьями.
  */
 @Controller
 public class ArticleController {
@@ -38,7 +38,6 @@ public class ArticleController {
      */
     @GetMapping(path = "/articleList")
     public final String articleList(final Model model, final HttpServletRequest request) {
-
         List<ArticleInfo> data = service.getArticleInfoList(request);
         model.addAttribute("data", data);
         return "articleList";

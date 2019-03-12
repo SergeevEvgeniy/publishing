@@ -21,6 +21,4 @@ function StatisticsComponent($element) {
 
 }
 
-module.exports = {
-    StatisticsComponent: StatisticsComponent
-};
+module.exports = StatisticsComponent;
