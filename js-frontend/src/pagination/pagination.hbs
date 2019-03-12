@@ -1,18 +1,14 @@
-<ul class="pagination pagination-sm no-select">
+<ul class="pagination a-no-sel">
     <li class="page-item">
         <span class="page-link" data-page="prev">&laquo;</span>
     </li>
-    {{#each pages}}
-        {{#if this.class}}
+    {{#if pages}}
+        {{#each pages}}
             <li class="page-item {{this.class}}">
                 <span class="page-link active" data-page="{{this.value}}">{{this.value}}</span>
             </li>
-        {{else}}
-            <li class="page-item">
-                <span class="page-link active" data-page="{{this.value}}">{{this.value}}</span>
-            </li>
-        {{/if}}
-    {{/each}}
+        {{/each}}
+    {{/if}}
     <li class="page-item">
         <span class="page-link" data-page="next">&raquo;</span>
     </li>

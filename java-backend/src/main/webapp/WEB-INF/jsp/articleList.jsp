@@ -20,7 +20,7 @@
 <span class="glyphicon glyphicon-search"></span>
 <div class="container">
 
-    <form:form modelAttribute="data" cssClass="">
+    <form:form modelAttribute="data">
         <div class="text-right form-group">
             <a href="update" class="btn btn-success ">Добавить статью</a>
         </div>
@@ -50,10 +50,12 @@
                         </ul>
                     </td>
                     <td>
-                            <%--<a href="update/${element.articleId}">--%>
-                        <button class="glyphicon glyphicon-edit btn btn-lg btn-success"></button>
-                            <%--</a>--%>
-                        <button class="glyphicon glyphicon-trash btn btn-lg btn-danger"></button>
+
+                        <a href="update/${element.articleId}">
+                            <span class="glyphicon glyphicon-edit btn btn-lg btn-success"> </span>
+                        </a>
+
+                        <span class="glyphicon glyphicon-trash btn btn-lg btn-danger"></span>
                     </td>
                 </tr>
             </c:forEach>
