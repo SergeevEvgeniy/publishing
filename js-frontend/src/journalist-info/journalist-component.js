@@ -1,11 +1,10 @@
 
 var journalistTemplate = require('./journalist.hbs');
 var $ = require('jquery');
-var { InfoComponent } = require('./journ-info/journalist-info');
-var { ArticlesComponent } = require('./journ-articles/journalist-articles');
-var { StatisticsComponent } = require('./journ-statistics/journalist-statistics');
-var { LoaderData } = require('./data-loader/data-loader');
-var { Spinner } = require('./spinner/spinner');
+var journalistApi = require('../api/journalist-api');
+var InfoComponent = require('./journ-info/journalist-info');
+var ArticlesComponent = require('./journ-articles/journalist-articles');
+var StatisticsComponent = require('./journ-statistics/journalist-statistics');
 var componentObj = {
     InfoComponent: InfoComponent,
     ArticlesComponent: ArticlesComponent,
@@ -13,14 +12,26 @@ var componentObj = {
 };
 
 
+/**
+ * Компонент для управлением отображением инфомрации и
+ * статистики журналиста.
+ * @constructor
+ * @param {JQueryElement} $element - родитель, к которому будет добавлен шаблон информации
+ */
+
 function JournalistStatComponent($element) {
 
     var componentData = {};
-    var journalistInfoUrl = 'http://127.0.0.1:3000/getStat';
     var elementSelector = '#journalistInfo';
     var navigationSelector = '.nav-tabs';
     var returnButtonSelector = '#returnToSearchForm';
     var returnCallBack = null;
+
+
+    /**
+     * Событие на переключение вкладок меню 'Информация, Статистика, Статьи'
+     * @param {Event} event 
+     */
     function toggleTabs(event) {
         var target = event.target;
         while (target !== this) {
@@ -39,6 +50,10 @@ function JournalistStatComponent($element) {
         }
     }
 
+    /**
+     * Событие на кнопку "Вернуться".
+     * @param {Event} event 
+     */
     function returnToSearchForm(event) {
         event.preventDefault();
         if (typeof returnCallBack === 'function') {
@@ -47,41 +62,47 @@ function JournalistStatComponent($element) {
     }
 
 
-    ($element).on('click', navigationSelector, toggleTabs)
-    .on('click', returnButtonSelector, returnToSearchForm);
+    ($element)
+        .on('click', navigationSelector, toggleTabs)
+        .on('click', returnButtonSelector, returnToSearchForm);
 
+    /**
+     * Очищает контейнер родителя и добавляет новый шаблон с 
+     * параметром data
+     */
     function render() {
         $element.empty().append(journalistTemplate({
             data: componentData
         }));
     }
 
-    //получить инфомрмацию о журналисте + добавить параметр data
-    this.appendComponent = function (data) {
-        console.log(data);
-        var spinner = new Spinner();
-        spinner.appendSpinner($element);
-        //окей. мне в параметр передадут его id(или имя?)
-        var loaderData = new LoaderData();
-        loaderData.recieveSingleData(journalistInfoUrl)
-        .then(function (item) {
-            componentData = item;
-            render();
-            spinner.removeSpinner();
-            //по умолчанию вкладка информация
-            //нужно ли его вызывать render ?
-            var infoComponent = new componentObj.InfoComponent($(elementSelector));
+    /**
+     * Метод для отображения вкладки 'Информация' - по умолчанию
+     * @param {string} id - id журналиста
+     */
+    this.appendComponent = function (id) {
+        console.log('Вызван appendComponent')
+        render();
+        journalistApi.getJournalistInfo(id)
+        .then(function (journalistData) {
+            componentData = journalistData;
+            console.log(journalistData)
+            var infoComponent = new componentObj.InfoComponent($journalistPage);
             infoComponent.setData(componentData);
-            //сделать эту вкладку активной. Но этот вариант не очень
             $(navigationSelector).find('a').first().addClass('active');
-        });
-    };
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }
+    /**
+     * Подписка на событие??
+     * @param {function} callBack - функция обратного вызова
+     */
     this.onReturnSearchForm = function (callBack) {
         returnCallBack = callBack;
     }
 }
 
-module.exports = {
-    JournalistStatComponent: JournalistStatComponent
-};
+module.exports = JournalistStatComponent;
 

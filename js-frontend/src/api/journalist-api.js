@@ -21,7 +21,13 @@ function JournalistApiComponent() {
             resolve(topicList);
         });
     };
-
+    this.getJournalistInfo = function (id) {
+        console.log(`id журналиста ${id}`);
+        return new Promise(function (resolve) {
+            var journalistInfo = require('../../data/journalist-info-stat.json');
+            resolve(journalistInfo);
+        })
+    };
     this.getIssueList = function getIssueList(id) {
         console.log(id);
         return new Promise(function resolvePromise(resolve) {

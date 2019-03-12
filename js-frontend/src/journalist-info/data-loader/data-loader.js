@@ -35,6 +35,4 @@ function LoaderData() {
     };
 }
 
-module.exports = {
-    LoaderData: LoaderData
-};
+module.exports = LoaderData;
