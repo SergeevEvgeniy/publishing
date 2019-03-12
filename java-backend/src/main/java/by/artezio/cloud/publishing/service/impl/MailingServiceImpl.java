@@ -2,9 +2,11 @@ package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.dao.MailingDao;
 import by.artezio.cloud.publishing.dto.MailingInfo;
+import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,13 +18,16 @@ import java.util.List;
 public class MailingServiceImpl implements MailingService {
 
     private MailingDao mailingDao;
+    private MailSender mailSender;
 
     /**
      * Конструктор с параметрами.
-     * @param mailingDao mailingDao
+     * @param mailingDao dao для взаимодействия с БД.
+     * @param mailSender отправитель писем.
      */
-    public MailingServiceImpl(final MailingDao mailingDao) {
+    public MailingServiceImpl(final MailingDao mailingDao, final MailSender mailSender) {
         this.mailingDao = mailingDao;
+        this.mailSender = mailSender;
     }
 
     @Override
@@ -51,5 +56,10 @@ public class MailingServiceImpl implements MailingService {
         }
 
         return wasSuccessUpdated;
+    }
+
+    @Override
+    public void sendMail() {
+        mailSender.sendMail(Arrays.asList("mail@mail.ru"), "AutoMailing", "Hi. This is AutoMailing");
     }
 }

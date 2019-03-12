@@ -31,7 +31,7 @@ function JournalistApiComponent() {
     this.getIssueList = function getIssueList(id) {
         console.log(id);
         return new Promise(function resolvePromise(resolve) {
-            var issueList = require('../../data/issues.json').issues.map(function convertToOptionFormat(issue) {
+            var issueList = require('../../data/issues.json')[0].issues.map(function convertToOptionFormat(issue) {
                 return {
                     value: issue.issueId,
                     text: issue.issue

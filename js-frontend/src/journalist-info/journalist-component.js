@@ -16,10 +16,10 @@ var componentObj = {
  * Компонент для управлением отображением инфомрации и
  * статистики журналиста.
  * @constructor
- * @param {JQueryElement} $element - родитель, к которому будет добавлен шаблон информации
+ * @param {JQueryElement} $parentElement - родитель, к которому будет добавлен шаблон информации
  */
 
-function JournalistStatComponent($element) {
+function JournalistStatComponent($parentElement) {
 
     var componentData = {};
     var elementSelector = '#journalistInfo';
@@ -61,31 +61,30 @@ function JournalistStatComponent($element) {
         }
     }
 
-
-    ($element)
+    ($parentElement)
         .on('click', navigationSelector, toggleTabs)
         .on('click', returnButtonSelector, returnToSearchForm);
 
     /**
-     * Очищает контейнер родителя и добавляет новый шаблон с 
-     * параметром data
+     * Очищает контейнер родителя и добавляет шаблон journalistTemplate
      */
     function render() {
-        $element.empty().append(journalistTemplate({
+        $parentElement.empty().append(journalistTemplate({
             data: componentData
         }));
     }
 
     /**
-     * Метод для отображения вкладки 'Информация' - по умолчанию
+     * Метод для добавления в родительский контейнер и установки 
+     * влкдаки 'Информация' по умолчанию
      * @param {string} id - id журналиста
      */
     this.appendComponent = function (id) {
         console.log('Вызван appendComponent')
-        render();
         journalistApi.getJournalistInfo(id)
         .then(function (journalistData) {
             componentData = journalistData;
+            render();
             console.log(journalistData)
             var infoComponent = new componentObj.InfoComponent($journalistPage);
             infoComponent.setData(componentData);
@@ -96,12 +95,12 @@ function JournalistStatComponent($element) {
         })
     }
     /**
-     * Подписка на событие??
-     * @param {function} callBack - функция обратного вызова
+     * Установка функции обратного вызова для закрытия вкладки
+     * @param {function} listener - функция обратного вызова
      */
-    this.onReturnSearchForm = function (callBack) {
-        returnCallBack = callBack;
-    }
+    this.onReturnSearchForm = function (listener) {
+        returnCallBack = listener;
+    };
 }
 
 module.exports = JournalistStatComponent;
