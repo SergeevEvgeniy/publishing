@@ -7,7 +7,7 @@ var amountVisiblePagesOnSide = 2;
 /**
  * Создаёт компонент позволяющий перемещаться между страницами
  * @constructor
- * @param {JQuery element} $parentElement - jqeury элемент-контейнер для размещения компонента
+ * @param {JQuery element} $parentElement - элемент-контейнер для размещения компонента
  */
 function Pagination($parentElement) {
     var $paginationWrapper = $('<div />');
@@ -20,9 +20,9 @@ function Pagination($parentElement) {
     var startPageIndex = 0;
     var endPageIndex = 0;
     var index = 0;
-    var handleChangedPageCallback = null;
+    var pageChangeListener = null;
 
-    function handlePageClicked(event) {
+    function onPageChangeEvent(event) {
         var target = event.target;
         var clickedPage = $(target).data('page');
 
@@ -55,15 +55,16 @@ function Pagination($parentElement) {
     }
 
     /**
-     * Метод устанавливающий callback, вызывающийся после изменения текущей страцниы
-     * @param {function} callback - callback принимающий в качестве параметра номер новой страницы
+     * Установка метода обратного вызова на изменение текущей страницы
+     * @param {function} listener вызывается, когда была изменена текущая страница
+     * Отправляет аргумент - новая страница
      */
-    this.setHandleChangedPageCallback = function setHandleChangedPageCallback(callback) {
-        handleChangedPageCallback = callback;
+    this.onPageChange = function onPageChange(listener) {
+        pageChangeListener = listener;
     };
 
     /**
-     * Метод, который устаравливает количество элементов на странице
+     * Установка количества элементов на странице
      * @param {Number} newPerPage - количество элементов на странице
      */
     this.setPerPage = function setPerPage(newPerPage) {
@@ -74,37 +75,37 @@ function Pagination($parentElement) {
     };
 
     /**
-     * Метод устанавливающий текущую страницу
-     * @param {Number} newCurrentPage - количество элементов на странице
+     * Установка текущей страницы
+     * @param {Number} newCurrentPage - текущая страница
      */
     this.setCurrentPage = function setCurrentPage(newCurrentPage) {
-        if (!!handleChangedPageCallback) {
+        if (!!handleChangedPage) {
             return;
         }
         currentPage = (newCurrentPage < 1) ? 1 : newCurrentPage;
         currentPage = (newCurrentPage > amountPages) ? amountPages : newCurrentPage;
-        handleChangedPageCallback(currentPage);
-        this.recount();
-        this.render();
-    };
-
-    /**
-     * Метод устанавливающий текущую страницу
-     * @param {Number} newCurrentPage - количество элементов на странице
-     */
-    this.setAmountRecord = function setAmountRecord(inputAmountRecord) {
-        if (amountRecord === 0) {
-            return;
-        }
-        amountRecord = inputAmountRecord;
+        handleChangedPage(currentPage);
         recount();
         this.render();
     };
 
-    $paginationWrapper.on('click', '.pagination span', handlePageClicked(event));
+    /**
+     * Установка количества записей
+     * @param {Number} newAmountRecord - количество элементов
+     */
+    this.setAmountRecord = function setAmountRecord(newAmountRecord) {
+        if (amountRecord === 0) {
+            return;
+        }
+        amountRecord = newAmountRecord;
+        recount();
+        this.render();
+    };
+
+    $paginationWrapper.on('click', '.pagination span', onPageChangeEvent(event));
 
     /**
-     * Метод отображающий компонент в переданном $parentElement контейнере
+     * Отрисовка компонента
      */
     this.render = function render() {
         $paginationWrapper

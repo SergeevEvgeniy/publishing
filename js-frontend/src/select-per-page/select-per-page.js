@@ -4,33 +4,32 @@ var $ = require('jquery');
 /**
  * Создаёт компонент позволяющий выбрать количество элементов на странице
  * @constructor
- * @param {JQuery element} $parentElement - jqeury элемент-контейнер для размещения компонента
+ * @param {JQuery element} $parentElement - элемент-контейнер для размещения компонента
  */
 function SelectPerPage($parentElement) {
     var $selectPerPageWrapper = $('<div />');
-    var handleSelectedPerPageCallback = null;
+    var selectPerPageChangeListener = null;
 
-    function handleSelectedPerPage(event) {
-        if (!!handleSelectedPerPageCallback) {
+    function onSelectPerPageChangeEvent(event) {
+        if (!!selectPerPageChangeListener) {
             return;
         }
-        handleSelectedPerPageCallback(+event.target.value);
+        selectPerPageChangeListener(+event.target.value);
     }
 
     /**
-     * Метод устанавливающий callback, вызывающийся после изменения количества отображаемых
-     * элементов на странице
-     * @param {function} callback - callback принимающий в качестве параметра количество
-     *                              элементов на странице
+     * Установка метода обратного вызова на изменение количества записей на странице
+     * @param {function} listener - вызывается, когда было изменено количество элементов на странице
+     * Отправляет аргумент - количество элементов на странице
      */
-    this.setSelectPerPageCallback = function setSelectPerPageCallback(callback) {
-        this.selectPerPageCallback = callback;
+    this.onSelectPerPageChange = function onSelectPerPageChange(listener) {
+        selectPerPageChangeListener = listener;
     };
 
-    $selectPerPageWrapper.on('change', 'ul', handleSelectedPerPage(event));
+    $selectPerPageWrapper.on('change', 'ul', onSelectPerPageChangeEvent(event));
 
     /**
-     * Метод отображающий компонент в переданном $parentElement контейнере
+     * Отрисовка компонента
      */
     this.render = function render() {
         $selectPerPageWrapper
