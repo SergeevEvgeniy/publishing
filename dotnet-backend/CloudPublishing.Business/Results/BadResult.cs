@@ -6,13 +6,7 @@ namespace CloudPublishing.Business.Results
     {
         private readonly string message;
 
-        public BadResult(string message)
-        {
-            this.message = message;
-            IsExternalException = false;
-        }
-
-        public BadResult(string message, bool isExternalException)
+        public BadResult(string message, bool isExternalException = false)
         {
             this.message = message;
             this.IsExternalException = isExternalException;
