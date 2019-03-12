@@ -1,8 +1,8 @@
 <div class="statistics">
-    {{#if data.count}}
+    {{#if data.articlesQuantity}}
         <h3>Статей (всего): 
             <span class="articles-count">
-                {{data.count}}
+                {{data.articlesQuantity}}
             </span>
         </h3>
             <table class="table table-striped journ-statistics">
@@ -10,13 +10,13 @@
                     По изданиям
                 </caption>
                 <tbody>
-                    {{#each data.edition}}
+                    {{#each data.articlesData}}
                     <tr>
                         <td>
-                            {{name}}
+                            {{title}}
                         </td>
                         <td>
-                            {{title}}
+                            {{count}}
                         </td>
                     </tr>
                     {{/each}}
@@ -27,13 +27,13 @@
                     По рубрикам
                 </caption>
                 <tbody>
-                    {{#each data.heading}}
+                    {{#each data.topicsData}}
                     <tr>
                         <td>
-                            {{name}}
+                            {{title}}
                         </td>
                         <td>
-                            {{title}}
+                            {{count}}
                         </td>
                     </tr>
                     {{/each}}

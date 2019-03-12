@@ -58,8 +58,8 @@
                                     onclick="location.href='@Url.Action("Edit", "Review", new { id = @item.ArticleId })'">
                                 <i class="far fa-edit text-secondary"></i>
                             </button>
-                            <button class="btn btn-sm border border-danger"
-                                    onclick="location.href='@Url.Action("Delete", "Review", new { id = @item.ArticleId })'">
+                            <button class="btn btn-sm border border-danger delete-button"
+                                    value="@item.ArticleId">
                                 <i class="fas fa-trash-alt text-danger"></i>
                             </button>
                         }
@@ -69,3 +69,21 @@
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $(".delete-button").click(function () {
+                var id = $(this).val();
+                var target = event.target;
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete", "Review")/' + id,
+                    success: function () {
+                        $(target.closest("tr")).detach();
+                    }
+                });
+            });
+        })
+    </script>
+}
