@@ -124,14 +124,12 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(int id)
+        public void Delete(int id)
         {
             // Будет заменено на получение id пользователя
             int userId = 1;
 
             reviewService.DeleteReview(id, userId);
-
-            return Redirect("/Review/Index");
         }
     }
 }
