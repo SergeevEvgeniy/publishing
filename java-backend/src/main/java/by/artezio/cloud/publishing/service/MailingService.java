@@ -30,4 +30,9 @@ public interface MailingService {
      * @return <code>true</code>, если обновление прошло успешно, иначе <code>false</code>.
      */
     boolean updateSubscribersListByPublishingId(int publishingId, List<String> emails);
+
+    /**
+     * Метод, делающий рассылку.
+      */
+    void sendMail();
 }
