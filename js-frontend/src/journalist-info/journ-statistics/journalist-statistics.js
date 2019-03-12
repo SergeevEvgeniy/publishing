@@ -1,9 +1,12 @@
 var statisticsTemplate = require('./journalist-statistics.hbs');
 
-
+/**
+ * Компонент для отображения информации о рубриках и статьях журналиста
+ * @constructor
+ * @param {JQuery} $parentElement - родитель, к которому будет добавлен шаблон статистики
+ */
 function StatisticsComponent($parentElement) {
     var componentData = {};
-    var updateCallBack = null;
 
     function render() {
         $parentElement.empty().append(statisticsTemplate({
@@ -11,14 +14,10 @@ function StatisticsComponent($parentElement) {
         }));
     }
 
-    this.setData = function (data) {
+    this.setData = function setData(data) {
         componentData = data;
         render();
     };
-    this.onActionInChildComponent = function (callBack) {
-        updateCallBack = callBack;
-    };
-
 }
 
 module.exports = StatisticsComponent;

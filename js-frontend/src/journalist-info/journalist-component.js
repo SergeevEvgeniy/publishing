@@ -1,4 +1,3 @@
-
 var journalistTemplate = require('./journalist.hbs');
 var $ = require('jquery');
 var journalistApi = require('../api/journalist-api');
@@ -18,7 +17,6 @@ var componentObj = {
  * @constructor
  * @param {JQueryElement} $parentElement - родитель, к которому будет добавлен шаблон информации
  */
-
 function JournalistStatComponent($parentElement) {
 
     var componentData = {};
@@ -30,18 +28,20 @@ function JournalistStatComponent($parentElement) {
 
     /**
      * Событие на переключение вкладок меню 'Информация, Статистика, Статьи'
-     * @param {Event} event 
+     * @param {Event} event
      */
     function toggleTabs(event) {
         var target = event.target;
+        var componentPick;
+        var component;
         while (target !== this) {
             if (target.tagName === 'LI') {
-                var componentPick = target.dataset.type + 'Component';
+                componentPick = target.dataset.type + 'Component';
                 $(this).find('a').removeClass('active');
                 $(target).children().first().addClass('active');
-                var component = new componentObj[componentPick]($(elementSelector));
+                component = new componentObj[componentPick]($(elementSelector));
                 component.setData(componentData);
-                component.onActionInChildComponent(function () {
+                component.onActionInChildComponent(function onActionInChildComponent() {
                     console.log('В дочернем элементе произошло событие.');
                 });
                 return;
@@ -52,7 +52,7 @@ function JournalistStatComponent($parentElement) {
 
     /**
      * Событие на кнопку "Вернуться".
-     * @param {Event} event 
+     * @param {Event} event
      */
     function returnToSearchForm(event) {
         event.preventDefault();
@@ -75,30 +75,29 @@ function JournalistStatComponent($parentElement) {
     }
 
     /**
-     * Метод для добавления в родительский контейнер и установки 
+     * Метод для добавления в родительский контейнер и установки
      * влкдаки 'Информация' по умолчанию
      * @param {string} id - id журналиста
      */
-    this.appendComponent = function (id) {
-        console.log('Вызван appendComponent')
+    this.appendComponent = function appendComponent(id) {
+        var infoComponent;
         journalistApi.getJournalistInfo(id)
-        .then(function (journalistData) {
-            componentData = journalistData;
-            render();
-            console.log(journalistData)
-            var infoComponent = new componentObj.InfoComponent($journalistPage);
-            infoComponent.setData(componentData);
-            $(navigationSelector).find('a').first().addClass('active');
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-    }
+            .then(function response(journalistData) {
+                componentData = journalistData;
+                render();
+                infoComponent = new componentObj.InfoComponent($journalistPage);
+                infoComponent.setData(componentData);
+                $(navigationSelector).find('a').first().addClass('active');
+            })
+            .catch(function errorResponse(error) {
+                console.log(error);
+            });
+    };
     /**
      * Установка функции обратного вызова для закрытия вкладки
      * @param {function} listener - функция обратного вызова
      */
-    this.onReturnSearchForm = function (listener) {
+    this.onReturnSearchForm = function onReturnSearchForm(listener) {
         returnCallBack = listener;
     };
 }

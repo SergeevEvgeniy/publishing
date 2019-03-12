@@ -1,7 +1,7 @@
-const PublishingAPI = require('../api/publishing-api');
-const IssueAPI = require('../api/issue-api');
+var PublishingAPI = require('../api/publishing-api');
+var IssueAPI = require('../api/issue-api');
 
-const MagazineService = {
+var MagazineService = {
     getMagazinesTitles: () => {
         return new Promise((resolve, reject) => {
             PublishingAPI.getMagazinesTitles()

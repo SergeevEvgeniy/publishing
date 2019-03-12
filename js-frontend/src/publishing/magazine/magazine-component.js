@@ -1,16 +1,16 @@
 // template hbs
-const magazineContainerTemplate = require('./magazine-container.hbs');
+var magazineContainerTemplate = require('./magazine-container.hbs');
 
 // components
-const $ = require('jquery');
-const Filter = require('../filter/filter');
-const FilterResult = require('../filter/filter-result');
-const Pagination = require('../../pagination/pagination');
-const SelectPerPage = require('../../select-per-page/select-per-page');
-const MagazineView = require('../view/magazine-view');
+var $ = require('jquery');
+var Filter = require('../filter/filter');
+var FilterResult = require('../filter/filter-result');
+var Pagination = require('../../pagination/pagination');
+var SelectPerPage = require('../../select-per-page/select-per-page');
+var MagazineView = require('../view/magazine-view');
 
 // services
-const magazineService = require('../../services/magazine-service');
+var magazineService = require('../../services/magazine-service');
 
 function MagazineComponent($rootElement) {
     this.$element = $rootElement;
