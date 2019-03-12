@@ -10,6 +10,6 @@ namespace CloudPublishing.Data.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Publishing> Publishings{ get; set; }
+        public virtual ICollection<Publishing> Publishings{ get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace CloudPublishing.Data.Entities
         public string Title { get; set; }
         public string Type { get; set; }
         public string Subjects { get; set; }
-        public ICollection<Topic> Topics { get; set; }
+        public virtual ICollection<Topic> Topics { get; set; }
     }
 }
