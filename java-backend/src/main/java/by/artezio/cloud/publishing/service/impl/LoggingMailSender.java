@@ -1,5 +1,6 @@
-package by.artezio.cloud.publishing.service;
+package by.artezio.cloud.publishing.service.impl;
 
+import by.artezio.cloud.publishing.service.MailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

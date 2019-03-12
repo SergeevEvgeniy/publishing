@@ -15,7 +15,7 @@ public class MailingRestController {
 
     /**
      * Метод, реализуюищй отлавливание действия на рассылку с начальными данными (TODO добавить начальные данные, как параметры).
-     * @return true(TODO добавить норманый док)
+     * @return <code>true</code>, в случае успешной рассылки и <code>false</code> в противном случае.
      */
     @GetMapping(path = "")
     public boolean sendMail() {

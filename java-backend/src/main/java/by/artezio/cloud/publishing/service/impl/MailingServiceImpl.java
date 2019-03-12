@@ -1,9 +1,7 @@
 package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.dao.MailingDao;
-import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.dto.MailingInfo;
-import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.service.MailingService;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +16,18 @@ import java.util.List;
 public class MailingServiceImpl implements MailingService {
 
     private MailingDao mailingDao;
-    private PublishingDao publishingDao; //TODO вынести в PublishingService.
 
     /**
      * Конструктор с параметрами.
      * @param mailingDao mailingDao
-     * @param publishingDao publishingDao
      */
-    public MailingServiceImpl(final MailingDao mailingDao, final PublishingDao publishingDao) {
+    public MailingServiceImpl(final MailingDao mailingDao) {
         this.mailingDao = mailingDao;
-        this.publishingDao = publishingDao;
     }
 
     @Override
     public List<MailingInfo> getAllMailingInfo() {
         return mailingDao.getAllMailingInfo();
-    }
-
-    @Override
-    public List<Publishing> getPublishingList() {
-        return publishingDao.getPublishingList();
     }
 
     @Override
