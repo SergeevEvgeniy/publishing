@@ -1,35 +1,45 @@
-//template hbs
 var selectPerPageTemplate = require('./select-per-page.hbs');
-
 var $ = require('jquery');
 
-function SelectPerPage($rootElement) {
-    this.$rootElement = $rootElement;
-    this.selectPerPageCallback = null;
-}
+/**
+ * Создаёт компонент позволяющий выбрать количество элементов на странице
+ * @constructor
+ * @param {JQuery element} $parentElement - jqeury элемент-контейнер для размещения компонента
+ */
+function SelectPerPage($parentElement) {
+    var $selectPerPageWrapper = $('<div />');
+    var handleSelectedPerPageCallback = null;
 
-SelectPerPage.prototype.selectedPerPage = function (event) {
-    var target = event.target;
-    this.selectPerPageCallback(target.value);
-};
-
-SelectPerPage.prototype.setAmountRecord = function (amountRecord) {
-    if (amountRecord === 0) {
-        return;
+    function handleSelectedPerPage(event) {
+        if (!!handleSelectedPerPageCallback) {
+            return;
+        }
+        handleSelectedPerPageCallback(+event.target.value);
     }
-    this.render();
-};
 
-SelectPerPage.prototype.setSelectPerPageCallback = function (callback) {
-    this.selectPerPageCallback = callback;
-};  
+    /**
+     * Метод устанавливающий callback, вызывающийся после изменения количества отображаемых
+     * элементов на странице
+     * @param {function} callback - callback принимающий в качестве параметра количество
+     *                              элементов на странице
+     */
+    this.setSelectPerPageCallback = function setSelectPerPageCallback(callback) {
+        this.selectPerPageCallback = callback;
+    };
 
-SelectPerPage.prototype.render = function () {
-    this.$rootElement
-        .empty()
-        .append(selectPerPageTemplate());
+    $selectPerPageWrapper.on('change', 'ul', handleSelectedPerPage(event));
 
-    $('.select-per-page').change(event => this.selectedPerPage(event));
-};
+    /**
+     * Метод отображающий компонент в переданном $parentElement контейнере
+     */
+    this.render = function render() {
+        $selectPerPageWrapper
+            .empty()
+            .append(selectPerPageTemplate());
+        $parentElement
+            .empty()
+            .append(selectPerPageWrapper);
+    };
+}
 
 module.exports = SelectPerPage;
