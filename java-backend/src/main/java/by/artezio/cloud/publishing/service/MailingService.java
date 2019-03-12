@@ -1,6 +1,5 @@
 package by.artezio.cloud.publishing.service;
 
-import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.dto.MailingInfo;
 
 import java.util.List;
@@ -16,12 +15,6 @@ public interface MailingService {
      * @return список рассылок
      */
     List<MailingInfo> getAllMailingInfo();
-
-    /**
-     * Возвращает список всех публикаций {@link Publishing}, доступных издательству.
-     * @return список объектов {@link Publishing}
-     */
-    List<Publishing> getPublishingList();
 
     /**
      * Возвращает список email-адресов, которые принимали участие в последней рассылке публикации с id == {@param id}.
