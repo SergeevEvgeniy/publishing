@@ -3,6 +3,7 @@ var api = require('../api/journalist-api');
 var $ = require('jquery');
 var PickListComponent = require('../picklist/picklist-component');
 var JournalistResultComponent = require('../search-journalist-result/journalist-result-component');
+var FormControlComponent = require('../form-control/form-control-component');
 var $searchPage = $('<div>', {
     id: 'searchJournalist'
 });
@@ -24,11 +25,14 @@ function SearchJournalistComponent($parentElement) {
     var $searchResultElement = $searchPage.find('#searchResult');
     var $searchFormElement = $searchPage.find('form');
     var $loadingElement = $searchPage.find('.spinner-border');
+    var $formControlElement = $searchPage.find('#formControl');
+    
 
     var issueList = new PickListComponent($issueElement, 'issue', 'Выбирите выпуск');
     var publishingList = new PickListComponent($publishingElement, 'publishing', 'Выберите издание');
     var topicList = new PickListComponent($topicElement, 'topic', 'Выберите рубрику');
     var journalistResult = new JournalistResultComponent($searchResultElement);
+    var formControl = new FormControlComponent($formControlElement);
 
     function onPublishingChangeEvent(event) {
         api.getIssueList(event.target.value).then(function renderIssueList(response) {
@@ -79,12 +83,13 @@ function SearchJournalistComponent($parentElement) {
 
     $searchPage
         .on('change', publishingElementSelector, onPublishingChangeEvent)
-        .on('submit', 'form', onSearchSubmitEvent)
-        .on('click', clearButtonSelector, onSearchClearEvent)
+        // .on('submit', 'form', onSearchSubmitEvent)
+        // .on('click', clearButtonSelector, onSearchClearEvent)
         .on('keyup', inputElementSelector, onInputKeyUpEvent);
 
     this.render = function render() {
         $parentElement.append($searchPage);
+        formControl.render();
         api.getPublishingList().then(function handleResponse(response) {
             publishingList.setElementList(response);
             publishingList.render();

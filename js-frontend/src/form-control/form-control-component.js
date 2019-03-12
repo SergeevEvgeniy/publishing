@@ -3,8 +3,8 @@ var formControlTemplate = require('./form-control.hbs');
  * Компонент для обработки форм
  * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
  */
-function formControlComponent($parentElement) {
-    var $templateWrapper = $('</div>').append(formControlTemplate());
+function FormControlComponent($parentElement) {
+    var $templateWrapper = $('<div />').append(formControlTemplate());
 
     var formClearListener = null;
     var formSubmitListener = null;
@@ -69,8 +69,9 @@ function formControlComponent($parentElement) {
      * Отрисовка компонента
      */
     this.render = function render() {
+        console.log($templateWrapper);
         $parentElement.append($templateWrapper.html());
     };
 }
 
-module.exports = formControlComponent;
+module.exports = FormControlComponent;
