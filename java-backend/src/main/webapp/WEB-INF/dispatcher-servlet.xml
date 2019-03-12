@@ -25,11 +25,11 @@
     </bean>
     
     <!--Interceptor для аутентификации пользователя. Раскомментировать для включения-->
-    <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/*"/>-->
-            <!--<mvc:exclude-mapping path="/login"/>-->
-            <!--<bean class="by.artezio.cloud.publishing.web.service.AuthenticationInterceptor"/>-->
-        <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors>-->
-</beans>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <mvc:exclude-mapping path="/login"/>
+            <bean class="by.artezio.cloud.publishing.web.service.impl.AuthenticationInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    </beans>

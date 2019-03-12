@@ -27,11 +27,12 @@ import java.util.Set;
 @Service
 public class LocalArticleService implements by.artezio.cloud.publishing.service.ArticleService {
 
+    private static final int JOURNALIST_ID = 3;
+
     private ArticleDao articleDao;
     private TopicDao topicDao;
     private PublishingService publishingService;
     private EmployeeService employeeService;
-
     /**
      * Конструктор с параметрами.
      *
@@ -75,8 +76,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
         Employee empl = (Employee) request.getSession().getAttribute("user");
 
 //        List<Article> articles = articleDao.getArticleListByJournalistId(empl.getId());
-        int NOT_MAGIC_NUMBER = 3;
-        List<Article> articles = articleDao.getArticleListByJournalistId(NOT_MAGIC_NUMBER);
+        List<Article> articles = articleDao.getArticleListByJournalistId(JOURNALIST_ID);
 
         for (Article a : articles) {
             ArticleInfo articleInfo = new ArticleInfo();
