@@ -1,12 +1,12 @@
 var statisticsTemplate = require('./journalist-statistics.hbs');
 
 
-function StatisticsComponent($element) {
+function StatisticsComponent($parentElement) {
     var componentData = {};
     var updateCallBack = null;
 
     function render() {
-        $element.empty().append(statisticsTemplate({
+        $parentElement.empty().append(statisticsTemplate({
             data: componentData
         }));
     }
