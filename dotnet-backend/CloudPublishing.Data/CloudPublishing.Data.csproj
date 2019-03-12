@@ -104,6 +104,7 @@
     <Compile Include="Entities\Publishing.cs" />
     <Compile Include="Entities\Review.cs" />
     <Compile Include="Entities\Topic.cs" />
+    <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\Enums\Role.cs" />
     <Compile Include="Identity\Managers\EmployeeUserManager.cs" />
     <Compile Include="Identity\EmployeeUserMapProfile.cs" />

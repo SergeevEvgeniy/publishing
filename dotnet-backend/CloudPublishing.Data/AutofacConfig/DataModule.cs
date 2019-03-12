@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using CloudPublishing.Data.EF;
+using CloudPublishing.Data.Identity;
 using CloudPublishing.Data.Identity.Entities;
 using CloudPublishing.Data.Identity.Managers;
 using CloudPublishing.Data.Identity.Stores;
@@ -18,10 +19,11 @@ namespace CloudPublishing.Data.AutofacConfig
                 .InstancePerRequest();
             
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+            builder.RegisterType<CustomPasswordHasher>().As<IPasswordHasher>();
 
             builder.RegisterType<EmployeeUserStore>().AsImplementedInterfaces().InstancePerRequest();
-            builder.Register(c => new EmployeeUserManager(c.Resolve<IUserRoleStore<EmployeeUser, int>>()))
-                .As<UserManager<EmployeeUser, int>>().InstancePerRequest();
+            builder.Register(c => new EmployeeUserManager(c.Resolve<IUserRoleStore<EmployeeUser, int>>(), c.Resolve<IPasswordHasher>()))
+                .As<UserManager<EmployeeUser, int>>().AsSelf().InstancePerRequest();
         }
     }
 }
