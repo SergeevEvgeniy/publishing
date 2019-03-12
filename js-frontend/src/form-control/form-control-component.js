@@ -11,9 +11,10 @@ function FormControlComponent($parentElement) {
 
     var $submitButton = $templateWrapper.find('spinner-border');
     var $loadingElement = $templateWrapper.find('#submit');
-    var $formElement = $parentElement.closest('form');
-    var $inputElementList = $formElement.find('input');
-    var $selectElementList = $formElement.find('select');
+    
+    var $formElement;
+    var $inputElementList;
+    var $selectElementList;
 
     var submitButtonSelector = '#submit';
     var clearButtonSelector = '#clear';
@@ -31,13 +32,12 @@ function FormControlComponent($parentElement) {
     }
 
     function onClearClickEvent() {
+        var selectElementList = $parentElement.closest('form').find('select');
         $inputElementList.each(function clearInputElements(index, element) {
-            console.log(index);
-            console.log(element);
-            element.val('');
+            $(element).val('');
         });
-        $selectElementList.each(function clearInputElements(index, element) {
-            element.prop('selectedIndex', 0);
+        selectElementList.each(function clearSelectElements(index, element) {
+            console.log(element.selectedIndex);
         });
 
         if (formClearListener) {
@@ -45,7 +45,7 @@ function FormControlComponent($parentElement) {
         }
     }
 
-    $templateWrapper
+    $parentElement
         .on('click', submitButtonSelector, onSubmitClickEvent)
         .on('click', clearButtonSelector, onClearClickEvent);
 
@@ -71,6 +71,9 @@ function FormControlComponent($parentElement) {
     this.render = function render() {
         console.log($templateWrapper);
         $parentElement.append($templateWrapper.html());
+        $formElement = $parentElement.closest('form');
+        $inputElementList = $formElement.find('input');
+        $selectElementList = $formElement.find('select');
     };
 }
 
