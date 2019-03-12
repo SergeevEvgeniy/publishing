@@ -17,7 +17,7 @@ namespace CloudPublishing.Models.Employees.ViewModels
         [DisplayName("Пароль")]
         public string Password { get; set; }
 
-        //[DisplayName("Запомнить меня")]
-        //public bool CheckOut { get; set; }
+        [DisplayName("Запомнить меня")]
+        public bool CheckOut { get; set; }
     }
 }
