@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Results;
 using CloudPublishing.Business.Results.Interfaces;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
-using CloudPublishing.Data.Identity.Entities;
 using CloudPublishing.Data.Interfaces;
-using Microsoft.AspNet.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CloudPublishing.Business.Services
 {

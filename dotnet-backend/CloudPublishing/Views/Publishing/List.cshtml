@@ -1,9 +1,8 @@
 ﻿@model IEnumerable<CloudPublishing.Models.Publishings.PublishingTableViewModel>
 @{
-                /**/
 
-                ViewBag.Title = "Журналы";
-                Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Издания";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row justify-content-end mb-3">
     <a href=@Url.Action("CreatePublishing", "Publishing") class="btn btn-success"><i class="fas fa-plus"></i>Добавить</a>

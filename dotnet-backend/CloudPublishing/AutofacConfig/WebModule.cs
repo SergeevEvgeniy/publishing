@@ -3,10 +3,6 @@ using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using System.Reflection;
 using System.Web;
-using CloudPublishing.Business.Services;
-using CloudPublishing.Business.Services.Interfaces;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 
 namespace CloudPublishing.AutofacConfig
 {

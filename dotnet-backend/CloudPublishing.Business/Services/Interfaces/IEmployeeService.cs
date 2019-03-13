@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using CloudPublishing.Business.DTO;
+﻿using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Results.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace CloudPublishing.Business.Services.Interfaces
 {

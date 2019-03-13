@@ -1,11 +1,9 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using CloudPublishing.Data.EF;
-using CloudPublishing.Data.Identity.Entities;
+﻿using CloudPublishing.Data.Identity.Entities;
 using CloudPublishing.Data.Identity.Managers;
-using CloudPublishing.Data.Identity.Stores;
 using CloudPublishing.Data.Interfaces;
 using Microsoft.AspNet.Identity;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace CloudPublishing.Data.Repositories
 {

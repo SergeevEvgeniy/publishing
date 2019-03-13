@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.Enums;
 using CloudPublishing.Models.Employees.ViewModels;
 using CloudPublishing.Util;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CloudPublishing.Controllers
 {
