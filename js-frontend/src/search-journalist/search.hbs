@@ -8,22 +8,35 @@
                 <label class="col-sm-4 text-right font-weight-bold">Издание:</label>
                 <div class="col-sm-8" id="publishing">
                     <select name="publishing" class="form-control">
-                        <option disabled selected>Выберите издание</option>
+                        {{#if publishing.defaultText}}
+                        <option disabled selected>{{publishing.defaultText}}</option>
+                        {{/if}}
+                        {{#each publishing.elementList}}
+                        <option value={{value}}>{{text}}</option>
+                        {{/each}}
                     </select>
                 </div>
             </div>
-            <div class="row input-block d-none">
+            {{#if issue.isIssuesAdded}}
+            <div class="row input-block">
                 <label class="col-sm-4 text-right font-weight-bold">Выпуск:</label>
                 <div class="col-sm-8" id="issue">
                     <select name="issue" class="form-control">
-                        <option disabled selected>Выберите выпуск</option>
+                        {{#if issue.defaultText}}
+                        <option disabled selected>{{issue.defaultText}}</option>
+                        {{/if}}
+                        {{#each issue.elementList}}
+                        <option value={{value}}>{{text}}</option>
+                        {{/each}}
                     </select>
                 </div>
             </div>
+            {{/if}}
             <div class="row input-block">
                 <label class="col-sm-4 text-right font-weight-bold">Фамилия:</label>
                 <div class="col-sm-8">
-                    <input pattern="^[А-я]+$" name="last_name" class="form-control" type="text" id="lastName"
+                    <input pattern="^[А-я]+$" name="lastName" class="form-control" type="text" id="lastName"
+                        value="{{lastName}}"
                         data-message="Поле фамилия не может содержать латинских символов, спец и цифр."
                         placeholder="Введите фамилию или её часть">
                 </div>
@@ -34,7 +47,12 @@
                 <label class="col-sm-4 text-right font-weight-bold">Рубрика:</label>
                 <div class="col-sm-8" id="topic">
                     <select name="topic" class="form-control">
-                        <option disabled selected>Выберите рубрику</option>
+                        {{#if topic.defaultText}}
+                        <option disabled selected>{{topic.defaultText}}</option>
+                        {{/if}}
+                        {{#each topic.elementList}}
+                        <option value={{value}}>{{text}}</option>
+                        {{/each}}
                     </select>
                 </div>
             </div>
@@ -42,19 +60,29 @@
                 <label class="col-sm-4 text-right font-weight-bold">Название статьи:</label>
                 <div class="col-sm-8">
                     <input pattern="^[А-Яа-яЁё\s$0-9]+$" name="article" class="form-control" id="article" type="text"
+                    value="{{article}}"
                         data-message="Поле название статьи не может содержать латинских символов и спец символов кроме символа '$'."
                         placeholder="Введите название статьи или её часть">
                 </div>
             </div>
         </div>
         <div class="col-sm-12 text-right submit-area">
+            {{#if isLoading}}
             <div class="spinner-border text-primary align-middle d-none" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
+            {{/if}}
+            {{#if isSubmitButtonActive}}
             <button type="submit" class="btn btn-primary" id="searchJournalist">
                 <i class="fas fa-search"></i>
                 Найти
             </button>
+            {{else}}
+            <button type="submit" class="btn btn-primary disabled" id="searchJournalist">
+                <i class="fas fa-search"></i>
+                Найти
+            </button>
+            {{/if}}
             <button type="button" class="btn btn-primary" id="clearJournalistSearch">Очистить</button>
         </div>
     </div>
