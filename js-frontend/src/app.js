@@ -12,10 +12,8 @@ $(function onReady() {
     var $app = $('#app');
     var navbarSelector = '#navbar';
     $(navbarSelector).click(function navigate(event) {
-        var navPick = event.target.dataset.type;
-        var pick = new navObj[navPick]($app);
         $app.empty();
-        pick.render();
+        new navObj[event.target.dataset.type]($app).render();
     });
 });
 
