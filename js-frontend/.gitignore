@@ -554,4 +554,5 @@ bh_unicode_properties.cache
 # https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
 .eslintrc.json
+/config/eslint.config.js
 /config/backend-config.js
