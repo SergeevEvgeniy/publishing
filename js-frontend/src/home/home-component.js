@@ -1,11 +1,9 @@
 var homeTemplate = require('./home.hbs');
 
-function homeComponent($parent) {
+function HomeComponent($parent) {
     this.render = function render() {
         $parent.append(homeTemplate({ name: 'Люк Скайвокер' }));
     };
 }
 
-module.exports = {
-    homeComponent: homeComponent
-};
+module.exports = HomeComponent;

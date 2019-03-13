@@ -1,9 +1,9 @@
 var $ = require('jquery');
-var { homeComponent } = require('./home/home-component');
+var HomeComponent = require('./home/home-component');
 var SearchComponent = require('./search-journalist/search-component');
 var MagazineComponent = require('./publishing/magazine/magazine-component');
 var navObj = {
-    homeComponent: homeComponent,
+    HomeComponent: HomeComponent,
     SearchComponent: SearchComponent,
     MagazineComponent: MagazineComponent,
 };
@@ -11,13 +11,12 @@ var navObj = {
 $(function onReady() {
     var $app = $('#app');
     var navbarSelector = '#navbar';
-    $(navbarSelector).click(function (event) {
-        $app.empty();
+    $(navbarSelector).click(function navigate(event) {
         var navPick = event.target.dataset.type;
         var pick = new navObj[navPick]($app);
+        $app.empty();
         pick.render();
-    })
-
+    });
 });
 
 require('bootstrap/dist/css/bootstrap.css');
