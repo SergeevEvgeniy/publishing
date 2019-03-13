@@ -20,7 +20,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Employee> GetAll()
         {
-            return context.Employees.Include(x => x.Education).AsNoTracking().ToList();
+            return context.Employees.Include(x => x.Education).AsNoTracking().Include("Publishings").ToList();
         }
 
         public Employee Get(int id)

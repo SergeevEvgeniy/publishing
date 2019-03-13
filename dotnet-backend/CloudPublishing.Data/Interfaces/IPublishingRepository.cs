@@ -4,6 +4,5 @@ namespace CloudPublishing.Data.Interfaces
 {
     public interface IPublishingRepository : IRepository<Publishing>
     {
-
     }
 }

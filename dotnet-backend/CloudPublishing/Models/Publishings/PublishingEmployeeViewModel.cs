@@ -1,14 +1,15 @@
-﻿using System;
+﻿using CloudPublishing.Business.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using CloudPublishing.Business.DTO;
 
 namespace CloudPublishing.Models.Publishings
 {
-    public class TopicViewModel
+    public class PublishingEmployeeViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
     }
 }
