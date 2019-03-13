@@ -1,4 +1,4 @@
-<form>
+<form id="{{componentId}}">
     <div class="row">
         <div class="col-sm-12">
             <h4 class="form-title">Поиск журналистов</h4>
@@ -6,13 +6,17 @@
         <div class="col-sm-6">
             <div class="row input-block">
                 <label class="col-sm-4 text-right font-weight-bold">Издание:</label>
-                <div class="col-sm-8" id="publishing">
-                    <select name="publishing" class="form-control">
+                <div class="col-sm-8">
+                    <select value="publishing.value" name="publishing" class="form-control">
                         {{#if publishing.defaultText}}
                         <option disabled selected>{{publishing.defaultText}}</option>
                         {{/if}}
                         {{#each publishing.elementList}}
-                        <option value={{value}}>{{text}}</option>
+                            {{#if selected}}
+                                <option  selected value={{value}}>{{text}}</option>
+                            {{else}}
+                                <option value={{value}}>{{text}}</option>
+                            {{/if}}
                         {{/each}}
                     </select>
                 </div>
@@ -26,7 +30,11 @@
                         <option disabled selected>{{issue.defaultText}}</option>
                         {{/if}}
                         {{#each issue.elementList}}
-                        <option value={{value}}>{{text}}</option>
+                            {{#if selected}}
+                                <option  selected value={{value}}>{{text}}</option>
+                            {{else}}
+                                <option value={{value}}>{{text}}</option>
+                            {{/if}}
                         {{/each}}
                     </select>
                 </div>
@@ -35,7 +43,7 @@
             <div class="row input-block">
                 <label class="col-sm-4 text-right font-weight-bold">Фамилия:</label>
                 <div class="col-sm-8">
-                    <input pattern="^[А-я]+$" name="lastName" class="form-control" type="text" id="lastName"
+                    <input pattern="^[А-Яа-яЁё$0-9\sA-z]+$" name="lastName" class="form-control" type="text" id="lastName"
                         value="{{lastName}}"
                         data-message="Поле фамилия не может содержать латинских символов, спец и цифр."
                         placeholder="Введите фамилию или её часть">
@@ -51,7 +59,11 @@
                         <option disabled selected>{{topic.defaultText}}</option>
                         {{/if}}
                         {{#each topic.elementList}}
-                        <option value={{value}}>{{text}}</option>
+                            {{#if selected}}
+                                <option  selected value={{value}}>{{text}}</option>
+                            {{else}}
+                                <option value={{value}}>{{text}}</option>
+                            {{/if}}
                         {{/each}}
                     </select>
                 </div>
@@ -59,7 +71,7 @@
             <div class="row input-block">
                 <label class="col-sm-4 text-right font-weight-bold">Название статьи:</label>
                 <div class="col-sm-8">
-                    <input pattern="^[А-Яа-яЁё\s$0-9]+$" name="article" class="form-control" id="article" type="text"
+                    <input pattern="^[А-Яа-яЁё$0-9\sA-z]+$" name="article" class="form-control" id="article" type="text"
                     value="{{article}}"
                         data-message="Поле название статьи не может содержать латинских символов и спец символов кроме символа '$'."
                         placeholder="Введите название статьи или её часть">
@@ -68,7 +80,7 @@
         </div>
         <div class="col-sm-12 text-right submit-area">
             {{#if isLoading}}
-            <div class="spinner-border text-primary align-middle d-none" role="status">
+            <div class="spinner-border text-primary align-middle" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
             {{/if}}
