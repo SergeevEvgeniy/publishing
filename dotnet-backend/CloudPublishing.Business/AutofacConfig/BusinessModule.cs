@@ -1,9 +1,6 @@
 ﻿using Autofac;
-using AutoMapper;
 using CloudPublishing.Business.Services;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Business.Util;
-using CloudPublishing.Data.Interfaces;
 
 namespace CloudPublishing.Business.AutofacConfig
 {

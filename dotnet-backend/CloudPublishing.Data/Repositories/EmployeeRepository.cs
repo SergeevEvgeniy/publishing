@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CloudPublishing.Data.EF;
+using CloudPublishing.Data.Entities;
+using CloudPublishing.Data.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using CloudPublishing.Data.EF;
-using CloudPublishing.Data.Entities;
-using CloudPublishing.Data.Identity.Managers;
-using CloudPublishing.Data.Interfaces;
 
 namespace CloudPublishing.Data.Repositories
 {
@@ -20,7 +19,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Employee> GetAll()
         {
-            return context.Employees.Include(x => x.Education).AsNoTracking().ToList();
+            return context.Employees.Include(x => x.Education).AsNoTracking().Include("Publishings").ToList();
         }
 
         public Employee Get(int id)

@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using CloudPublishing.Data.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Data.EF.EntityConfigurations
 {

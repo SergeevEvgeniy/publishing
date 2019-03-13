@@ -1,11 +1,6 @@
-﻿using System.Threading.Tasks;
-using CloudPublishing.Data.EF;
-using CloudPublishing.Data.Identity.Entities;
-using CloudPublishing.Data.Identity.Stores;
+﻿using CloudPublishing.Data.Identity.Entities;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
+using System.Threading.Tasks;
 
 namespace CloudPublishing.Data.Identity.Managers
 {

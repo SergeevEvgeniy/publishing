@@ -23,7 +23,11 @@ namespace CloudPublishing
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap-theme.css",
-                "~/Content/site.css"));
+                "~/Content/site.css",
+                "~/Content/custom/publishing-create-form-styles.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/publishing-create-view").Include(
+                "~/Scripts/custom/publishingMultiSelectComponent.js"));
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Data.Entity.ModelConfiguration;
-using CloudPublishing.Data.Entities;
+﻿using CloudPublishing.Data.Entities;
+using System.Data.Entity.ModelConfiguration;
 
 namespace CloudPublishing.Data.EF.EntityConfigurations
 {
@@ -24,6 +24,15 @@ namespace CloudPublishing.Data.EF.EntityConfigurations
                     }
                 );
 
+            HasMany<Employee>(x => x.Employees)
+                .WithMany(x => x.Publishings)
+                .Map( x =>
+                    {
+                        x.MapLeftKey("publishing_id");
+                        x.MapRightKey("employee_id");
+                        x.ToTable("publishing_employee");
+                    }
+                );
         }
     }
 }

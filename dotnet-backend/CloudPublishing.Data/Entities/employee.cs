@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace CloudPublishing.Data.Entities
 {
     public class Employee
@@ -27,5 +29,7 @@ namespace CloudPublishing.Data.Entities
         public bool ChiefEditor { get; set; }
 
         public Education Education { get; set; }
+
+        public ICollection<Publishing> Publishings { get; set; }
     }
 }

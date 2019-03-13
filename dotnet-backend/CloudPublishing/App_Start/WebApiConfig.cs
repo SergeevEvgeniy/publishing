@@ -1,9 +1,4 @@
-﻿using System.Net.Http.Formatting;
-using System.Web.Http;
-using Autofac;
-using Autofac.Integration.WebApi;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+﻿using System.Web.Http;
 
 namespace CloudPublishing
 {

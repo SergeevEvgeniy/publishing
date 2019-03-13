@@ -11,8 +11,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/cloud-publishing/home">Home</a></li>
-                <li><a href="/cloud-publishing/mailing">Mailing</a></li>                              
+                <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/mailing">Mailing</a></li>
             </ul>
             <div class="nav navbar-right navbar-brand">
                 <span>${currentUser.name}</span>

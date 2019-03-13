@@ -25,7 +25,6 @@ function getMagazinesTitles() {
     });
 }
 
-
 module.exports = {
     getMagazinesTitles: getMagazinesTitles,
     getFilteredIssues: getFilteredIssues,

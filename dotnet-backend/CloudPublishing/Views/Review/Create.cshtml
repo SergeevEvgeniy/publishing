@@ -48,10 +48,9 @@
         </div>
     </div>
     <div class="row form-group">
-        <div class=" "></div>
         <div class="col-sm-6 text-right pr-0">
             <div class="form-group">
-                <input type="reset" class="btn btn-secondary mr-2" value="Отменить">
+                <input type="reset" class="btn btn-secondary mr-2" id="cancel_button" value="Отменить">
                 <input type="submit" class="btn btn-primary" value="Сохранить">
             </div>
         </div>
@@ -61,84 +60,68 @@
 @section Scripts
 {
     <script>
-    $(function () {
-        $("#publishing").change(function () {
-            var publishingId = $(this).val();
-            $.ajax({
-                type: "GET",
-                url: "@Url.Action("GetTopicList")/" + publishingId,
-                success: function (data) {
-                    $("#topic").empty();
-                    $("#topic").append(data);
-                    $("#topic").prop("disabled", false);
+        $(function () {
+            $("#publishing").change(function () {
+                var publishingId = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetTopicList")/" + publishingId,
+                    success: function (data) {
+                        $("#topic").empty();
+                        $("#topic").append(data);
+                        $("#topic").prop("disabled", false);
+                    }
+                })
+            });
 
-                    // Если значение первого выпадающего списка было повторно выбрано,
-                    // то сбрасываются и отключаются все, кроме последующего и удаляется содержимое статьи
-                    $("#author").prop("disabled", true).val(0);
-                    $("#article").prop("disabled", true).val(0);
-                    $("#article_content").empty();
+            $("#topic").change(function () {
+                var publishingId = $("#publishing").val();
+                var topicId = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetAuthorList")/" + publishingId + "/" + topicId,
+                    success: function (data) {
+                        $("#author").empty();
+                        $("#author").append(data);
+                        $("#author").prop("disabled", false);
+                    }
+                })
+            });
+
+            $("#author").change(function () {
+                var publishingId = $("#publishing").val();
+                var topicId = $("#topic").val();
+                var authorId = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetArticleList")/" + publishingId + "/" + topicId + "/" + authorId,
+                    success: function (data) {
+                        $("#article").empty();
+                        $("#article").append(data);
+                        $("#article").prop("disabled", false);
+                    }
+                })
+            });
+
+            $("#article").change(function () {
+                var articleId = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetArticleContent")/" + articleId,
+                    success: function (data) {
+                        $("#article_content").empty();
+                        $("#article_content").append(data);
+                    }
+                })
+            });
+
+            $("#cancel_button").click(function () {
+                var lists = $("select");
+
+                for (var i = 1; i < lists.length; i++) {
+                    $(lists[i]).empty().prop("disabled", true);
                 }
             });
         });
-        $("#topic").change(function () {
-            var publishingId = $("#publishing").val();
-            var topicId = $(this).val();
-            $.ajax({
-                type: "GET",
-                url: "@Url.Action("GetAuthorList")/" + publishingId + "/" + topicId,
-                success: function (data) {
-                    $("#author").empty();
-                    $("#author").append(data);
-                    $("#author").prop("disabled", false);
-                    $("#article").prop("disabled", true).val(0);
-                    $("#article_content").empty();
-                }
-            })
-        });
-        $("#author").change(function () {
-            var publishingId = $("#publishing").val();
-            var topicId = $("#topic").val();
-            var authorId = $(this).val();
-            $.ajax({
-                type: "GET",
-                url: "@Url.Action("GetArticleList")/" + publishingId + "/" + topicId + "/" + authorId,
-                success: function (data) {
-                    $("#article").empty();
-                    $("#article").append(data);
-                    $("#article").prop("disabled", false);
-                    $("#article_content").empty();
-                }
-            })
-        });
-        $("#article").change(function () {
-            var articleId = $(this).val();
-            $.ajax({
-                type: "GET",
-                url: "@Url.Action("GetArticleContent")/" + articleId,
-                success: function (data) {
-                    $("#article_content").empty();
-                    $("#article_content").append(data);
-                }
-            })
-        });
-
-        // Построение option-ов при получении Json из контроллена
-        // Не используется, контроллер возвращает partial view, который вставляется в select
-        function appendOption(target, data, keyProperty, textProperty) {
-            $(target).empty();
-
-            $("<option></option>", {
-                value: 0,
-                text: "Выберите элемент"
-            }).appendTo(target);
-
-            $(data).each(function (index, item) {
-                $("<option></option>", {
-                    value: item[keyProperty],
-                    text: item[textProperty]
-                }).appendTo(target);
-            });
-        }
-    });
     </script>
 }

@@ -1,4 +1,3 @@
-
 var journalistTemplate = require('./journalist.hbs');
 var $ = require('jquery');
 var journalistApi = require('../api/journalist-api');
@@ -16,10 +15,9 @@ var componentObj = {
  * Компонент для управлением отображением инфомрации и
  * статистики журналиста.
  * @constructor
- * @param {JQueryElement} $element - родитель, к которому будет добавлен шаблон информации
+ * @param {JQueryElement} $parentElement - родитель, к которому будет добавлен шаблон информации
  */
-
-function JournalistStatComponent($element) {
+function JournalistStatComponent($parentElement) {
 
     var componentData = {};
     var elementSelector = '#journalistInfo';
@@ -30,18 +28,20 @@ function JournalistStatComponent($element) {
 
     /**
      * Событие на переключение вкладок меню 'Информация, Статистика, Статьи'
-     * @param {Event} event 
+     * @param {Event} event
      */
     function toggleTabs(event) {
         var target = event.target;
+        var componentPick;
+        var component;
         while (target !== this) {
             if (target.tagName === 'LI') {
-                var componentPick = target.dataset.type + 'Component';
+                componentPick = target.dataset.type + 'Component';
                 $(this).find('a').removeClass('active');
                 $(target).children().first().addClass('active');
-                var component = new componentObj[componentPick]($(elementSelector));
+                component = new componentObj[componentPick]($(elementSelector));
                 component.setData(componentData);
-                component.onActionInChildComponent(function () {
+                component.onActionInChildComponent(function onActionInChildComponent() {
                     console.log('В дочернем элементе произошло событие.');
                 });
                 return;
@@ -52,7 +52,7 @@ function JournalistStatComponent($element) {
 
     /**
      * Событие на кнопку "Вернуться".
-     * @param {Event} event 
+     * @param {Event} event
      */
     function returnToSearchForm(event) {
         event.preventDefault();
@@ -61,47 +61,45 @@ function JournalistStatComponent($element) {
         }
     }
 
-
-    ($element)
+    ($parentElement)
         .on('click', navigationSelector, toggleTabs)
         .on('click', returnButtonSelector, returnToSearchForm);
 
     /**
-     * Очищает контейнер родителя и добавляет новый шаблон с 
-     * параметром data
+     * Очищает контейнер родителя и добавляет шаблон journalistTemplate
      */
     function render() {
-        $element.empty().append(journalistTemplate({
+        $parentElement.empty().append(journalistTemplate({
             data: componentData
         }));
     }
 
     /**
-     * Метод для отображения вкладки 'Информация' - по умолчанию
+     * Метод для добавления в родительский контейнер и установки
+     * влкдаки 'Информация' по умолчанию
      * @param {string} id - id журналиста
      */
-    this.appendComponent = function (id) {
-        console.log('Вызван appendComponent')
-        render();
+    this.appendComponent = function appendComponent(id) {
+        var infoComponent;
         journalistApi.getJournalistInfo(id)
-        .then(function (journalistData) {
-            componentData = journalistData;
-            console.log(journalistData)
-            var infoComponent = new componentObj.InfoComponent($journalistPage);
-            infoComponent.setData(componentData);
-            $(navigationSelector).find('a').first().addClass('active');
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-    }
+            .then(function response(journalistData) {
+                componentData = journalistData;
+                render();
+                infoComponent = new componentObj.InfoComponent($journalistPage);
+                infoComponent.setData(componentData);
+                $(navigationSelector).find('a').first().addClass('active');
+            })
+            .catch(function errorResponse(error) {
+                console.log(error);
+            });
+    };
     /**
-     * Подписка на событие??
-     * @param {function} callBack - функция обратного вызова
+     * Установка функции обратного вызова для закрытия вкладки
+     * @param {function} listener - функция обратного вызова
      */
-    this.onReturnSearchForm = function (callBack) {
-        returnCallBack = callBack;
-    }
+    this.onReturnSearchForm = function onReturnSearchForm(listener) {
+        returnCallBack = listener;
+    };
 }
 
 module.exports = JournalistStatComponent;

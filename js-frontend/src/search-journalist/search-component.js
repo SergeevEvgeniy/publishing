@@ -1,99 +1,107 @@
 var searchTemplate = require('./search.hbs');
 var api = require('../api/journalist-api');
-var $ = require('jquery');
-var PickListComponent = require('../picklist/picklist-component');
 var JournalistResultComponent = require('../search-journalist-result/journalist-result-component');
-var $searchPage = $('<div>', {
-    id: 'searchJournalist'
-});
-$searchPage.append(searchTemplate());
+
+var data = {
+    componentId: 'searchJournalist',
+    publishing: {
+        prevOptionIndex: 0,
+        defaultText: 'Выберите издание',
+        elementList: [],
+        value: null
+    },
+    issue: {
+        prevOptionIndex: 0,
+        defaultText: 'Выбирите выпуск',
+        elementList: [],
+        isIssuesAdded: false
+    },
+    topic: {
+        prevOptionIndex: 0,
+        defaultText: 'Выберите рубрику',
+        elementList: [],
+        value: null
+    },
+    lastName: null,
+    article: null,
+    isLoading: false,
+    isSubmitButtonActive: true
+};
 
 function SearchJournalistComponent($parentElement) {
-    var hiddenClass = 'd-none';
-    var publishingElementSelector = '#publishing select';
-    var searchButtonSelector = '#searchJournalist';
-    var clearButtonSelector = '#clearJournalistSearch';
-    var inputElementSelector = 'input';
+    $parentElement.append($('<div>', {
+        id: data.componentId
+    }));
 
-    var $issueElement = $searchPage.find('#issue');
-    var $publishingElement = $searchPage.find('#publishing');
-    var $topicElement = $searchPage.find('#topic');
-    var $articleInputElement = $searchPage.find('#article');
-    var $lastNameInputElement = $searchPage.find('#lastName>input');
-    var $searchButtonElement = $searchPage.find(searchButtonSelector);
-    var $searchResultElement = $searchPage.find('#searchResult');
-    var $searchFormElement = $searchPage.find('form');
-    var $loadingElement = $searchPage.find('.spinner-border');
-
-    var issueList = new PickListComponent($issueElement, 'issue', 'Выбирите выпуск');
-    var publishingList = new PickListComponent($publishingElement, 'publishing', 'Выберите издание');
-    var topicList = new PickListComponent($topicElement, 'topic', 'Выберите рубрику');
-    var journalistResult = new JournalistResultComponent($searchResultElement);
+    function render() {
+        $parentElement.find('#' + data.componentId).empty().append(searchTemplate(data));
+    }
 
     function onPublishingChangeEvent(event) {
         api.getIssueList(event.target.value).then(function renderIssueList(response) {
-            var $issuePanel = $issueElement.closest('.input-block');
-            if ($issuePanel.hasClass(hiddenClass)) {
-                $issuePanel.removeClass(hiddenClass);
-            }
-            issueList.setElementList(response);
-            issueList.render();
+            data.issue.elementList = response;
+            data.issue.isIssuesAdded = true;
+            render();
         });
     }
 
     function onSearchSubmitEvent(event) {
-        var formData = $searchFormElement.serializeArray();
+        var formData = $parentElement.find('form').serializeArray();
         event.preventDefault();
-        $searchButtonElement.prop('disabled', true);
-        $loadingElement.removeClass(hiddenClass);
+        data.isLoading = true;
+        data.isSubmitButtonActive = false;
+        render();
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
+            var journalistResult = new JournalistResultComponent($parentElement);
             if (response.length !== 0) {
                 journalistResult.render(response);
             } else {
-                $searchResultElement.text('Отсутствуют результаты поиска.');
+                console.log('Отсутствуют результаты поиска');
             }
-            $loadingElement.addClass(hiddenClass);
-            $searchButtonElement.prop('disabled', false);
+            data.isLoading = false;
+            data.isSubmitButtonActive = true;
+            render();
         });
     }
 
     function onSearchClearEvent() {
-        $issueElement.closest('.input-block').addClass(hiddenClass);
-        topicList.selectDefault();
-        publishingList.selectDefault();
-        $articleInputElement.val('');
-        $lastNameInputElement.val('');
-        $searchResultElement.empty();
+        render();
     }
 
     function onInputKeyUpEvent(event) {
-        var inputElement = event.target;
-        var pattern = new RegExp(inputElement.getAttribute('pattern'));
-        var inputElementValue = event.target.value;
-        if (!pattern.test(inputElementValue)) {
-            inputElement.setCustomValidity(inputElement.dataset.message);
-        } else {
-            inputElement.setCustomValidity('');
-        }
+        var target = event.target;
+        var dataProperty = target.name;
+        data[dataProperty] = target.value;
     }
 
-    $searchPage
-        .on('change', publishingElementSelector, onPublishingChangeEvent)
-        .on('submit', 'form', onSearchSubmitEvent)
-        .on('click', clearButtonSelector, onSearchClearEvent)
-        .on('keyup', inputElementSelector, onInputKeyUpEvent);
+    function onSelectChangeEvent(event) {
+        var target = event.target;
+        var dataProperty = target.name;
+        var optionIndex = target.selectedIndex - 1;
+        var selectElementData = data[dataProperty];
+        selectElementData.elementList[selectElementData.prevOptionIndex].selected = false;
+        selectElementData.elementList[optionIndex].selected = true;
+        selectElementData.prevOptionIndex = optionIndex;
+    }
 
-    this.render = function render() {
-        $parentElement.append($searchPage);
-        api.getPublishingList().then(function handleResponse(response) {
-            publishingList.setElementList(response);
-            publishingList.render();
-        });
-        api.getTopicList().then(function handleResponse(response) {
-            topicList.setElementList(response);
-            topicList.render();
-        });
-    };
+    $parentElement
+        .on('change', '[name="publishing"]', onPublishingChangeEvent)
+        .on('submit', 'form', onSearchSubmitEvent)
+        .on('click', '#clearJournalistSearch', onSearchClearEvent)
+        .on('keyup', 'input', onInputKeyUpEvent)
+        .on('change', 'select', onSelectChangeEvent);
+
+    api.getPublishingList().then(function renderPublishingList(response) {
+        data.publishing.elementList = response;
+        render();
+    });
+
+    api.getTopicList().then(function renderTopicList(response) {
+        data.topic.elementList = response;
+        render();
+    });
+
+    this.render = render;
 }
 
 require('./search.css');

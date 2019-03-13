@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
 using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Text;
-using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Data.Identity
 {

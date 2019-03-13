@@ -7,7 +7,7 @@
         <jsp:include page="styleLinks.jsp"/>
     </head>
     <body>
-        <jsp:include page="logoutHeader.jsp"/>
+        <jsp:include page="header.jsp"/>
         <div class="container">
             <div class="row panel-group">
                 <div class="col-lg-6 col-md-8">
