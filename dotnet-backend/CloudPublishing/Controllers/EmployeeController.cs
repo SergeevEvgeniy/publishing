@@ -107,7 +107,7 @@ namespace CloudPublishing.Controllers
             authenticationManager.SignOut();
             authenticationManager.SignIn(new AuthenticationProperties
             {
-                IsPersistent = true
+                IsPersistent = model.CheckOut
             }, result.GetContent());
 
             return RedirectToAction("List", "Employee");

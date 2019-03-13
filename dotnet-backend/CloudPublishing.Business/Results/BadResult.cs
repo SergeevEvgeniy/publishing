@@ -1,5 +1,4 @@
-﻿using System;
-using CloudPublishing.Business.Results.Interfaces;
+﻿using CloudPublishing.Business.Results.Interfaces;
 
 namespace CloudPublishing.Business.Results
 {
@@ -7,17 +6,15 @@ namespace CloudPublishing.Business.Results
     {
         private readonly string message;
 
-        public BadResult(Exception exception)
-        {
-            message = exception.Message;
-        }
-
-        public BadResult(string message)
+        public BadResult(string message, bool isExternalException = false)
         {
             this.message = message;
+            this.IsExternalException = isExternalException;
         }
 
         public bool IsSuccessful => false;
+
+        public bool IsExternalException { get; }
 
         public T GetContent()
         {

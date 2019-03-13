@@ -41,7 +41,25 @@ namespace CloudPublishing.Business.Services
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<IEnumerable<EmployeeDTO>>(e);
+                return new BadResult<IEnumerable<EmployeeDTO>>(e.Message, true);
+            }
+        }
+
+        public IResult<IEnumerable<EmployeeDTO>> GetEmployeeList(IEnumerable<int> idList, string lastName)
+        {
+            if (idList == null)
+            {
+                return new BadResult<IEnumerable<EmployeeDTO>>("Отсутствует список идентификаторов");
+            }
+            try
+            {
+                var list = unitOfWork.Employees.Find(x =>
+                    x.LastName.Contains(lastName ?? string.Empty) && idList.Contains(x.Id));
+                return new SuccessfulResult<IEnumerable<EmployeeDTO>>(mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list));
+            }
+            catch (InvalidOperationException e)
+            {
+                return new BadResult<IEnumerable<EmployeeDTO>>(e.Message, true);
             }
         }
 
@@ -55,7 +73,7 @@ namespace CloudPublishing.Business.Services
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<IEnumerable<EducationDTO>>(e);
+                return new BadResult<IEnumerable<EducationDTO>>(e.Message, true);
             }
         }
 
@@ -65,11 +83,15 @@ namespace CloudPublishing.Business.Services
             try
             {
                 var employee = mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id.Value));
+                if (employee == null)
+                {
+                    return new BadResult<EmployeeDTO>("Пользователь не найден");
+                }
                 return new SuccessfulResult<EmployeeDTO>(employee);
             }
             catch (InvalidOperationException e)
             {
-                return new BadResult<EmployeeDTO>(e);
+                return new BadResult<EmployeeDTO>(e.Message, true);
             }
         }
     }

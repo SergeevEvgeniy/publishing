@@ -6,7 +6,7 @@ import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
-import by.artezio.cloud.publishing.service.ArticleService;
+import by.artezio.cloud.publishing.service.impl.LocalArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -27,7 +27,7 @@ public class ArticleDao {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    private ArticleService service;
+    private LocalArticleService service;
 
     @Autowired
     private TopicDao topicDao;
@@ -72,20 +72,6 @@ public class ArticleDao {
         r.setApproved(rs.getBoolean("approved"));
         return r;
     };
-
-//    /**
-//     * Конструктор с параметрами.
-//     *
-//     * @param jdbcTemplate объект класса NamedParameterJdbcTemplate
-//     * @param service      объект класса ArticleService
-//     * @param topicDao     объект класса TopicDao
-//     */
-//    @Autowired
-//    public ArticleDao(final NamedParameterJdbcTemplate jdbcTemplate, final ArticleService service, final TopicDao topicDao) {
-//        this.jdbcTemplate = jdbcTemplate;
-//        this.service = service;
-//        this.topicDao = topicDao;
-//    }
 
     /**
      * Получение списка статей по идентификатору автора.
@@ -137,7 +123,7 @@ public class ArticleDao {
      * @return {@link List}&lt;{@link Review}&gt;
      */
     public List<Review> getReviewsByArticleId(final int articleId) {
-        return jdbcTemplate.query("SELECT * FROM revire WHERE article_id = :articleId",
+        return jdbcTemplate.query("SELECT * FROM review WHERE article_id = :articleId",
             Collections.singletonMap("articleId", articleId), reviewRowMapper);
     }
 

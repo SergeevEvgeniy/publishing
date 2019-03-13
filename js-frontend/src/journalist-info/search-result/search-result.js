@@ -1,26 +1,16 @@
-var $ = require('jquery');
 var searchResultTemplate = require('./search-result.hbs');
-var { PaginationComponent } = require('../pagination/pagination');
-
+/**
+ * Компонент для отображения таблицы с результами поиска.
+ * @param {JQueryElement} $element - контейнер родителя к которому добавится таблица результата
+ */
 function SearchResultComponent($element) {
-
-    var componentData = {};
-    var tbodySelector = '#searchResults';
-    var paginationListSelector = '.pagination';
-    var togglerListSelector = '.toggler';
-    function render() {
+    /**
+     * Очищает контейнер родителя и добавляет шаблон таблицы в него
+     */
+    this.render = function render() {
         $element.empty().append(searchResultTemplate({
-            data: componentData
         }));
-    }
-    this.setData = function (data) {
-        componentData = data;
-        render();
-        var paginationComponent = new PaginationComponent($(tbodySelector), $(paginationListSelector), $(togglerListSelector));
-        paginationComponent.renderTable(componentData);
     };
 }
 
-module.exports = {
-    SearchResultComponent: SearchResultComponent
-};
+module.exports = SearchResultComponent;

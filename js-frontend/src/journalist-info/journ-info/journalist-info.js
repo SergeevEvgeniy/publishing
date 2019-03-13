@@ -1,11 +1,17 @@
 var infoTemplate = require('./journalist-info.hbs');
 
-function InfoComponent($element) {
+/**
+ * Компонент для отображения личной информации о журналисте
+ * @constructor
+ * @param {JQuery} $parentElement 
+ */
+function InfoComponent($parentElement) {
 
     var componentData = {};
-    var updateCallBack = null;
+    var updateListener = null;
+
     function render() {
-        $element.empty().append(infoTemplate({
+        $parentElement.empty().append(infoTemplate({
             data: componentData
         }));
     }
@@ -16,12 +22,6 @@ function InfoComponent($element) {
         componentData = data;
         render();
     };
-    this.onActionInChildComponent = function (callBack) {
-        updateCallBack = callBack;
-    };
-
 }
 
-module.exports = {
-    InfoComponent: InfoComponent
-};
+module.exports = InfoComponent;

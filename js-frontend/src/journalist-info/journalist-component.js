@@ -1,11 +1,9 @@
-
 var journalistTemplate = require('./journalist.hbs');
 var $ = require('jquery');
-var { InfoComponent } = require('./journ-info/journalist-info');
-var { ArticlesComponent } = require('./journ-articles/journalist-articles');
-var { StatisticsComponent } = require('./journ-statistics/journalist-statistics');
-var { LoaderData } = require('./data-loader/data-loader');
-var { Spinner } = require('./spinner/spinner');
+var journalistApi = require('../api/journalist-api');
+var InfoComponent = require('./journ-info/journalist-info');
+var ArticlesComponent = require('./journ-articles/journalist-articles');
+var StatisticsComponent = require('./journ-statistics/journalist-statistics');
 var componentObj = {
     InfoComponent: InfoComponent,
     ArticlesComponent: ArticlesComponent,
@@ -13,24 +11,37 @@ var componentObj = {
 };
 
 
-function JournalistStatComponent($element) {
+/**
+ * Компонент для управлением отображением инфомрации и
+ * статистики журналиста.
+ * @constructor
+ * @param {JQueryElement} $parentElement - родитель, к которому будет добавлен шаблон информации
+ */
+function JournalistStatComponent($parentElement) {
 
     var componentData = {};
-    var journalistInfoUrl = 'http://127.0.0.1:3000/getStat';
     var elementSelector = '#journalistInfo';
     var navigationSelector = '.nav-tabs';
     var returnButtonSelector = '#returnToSearchForm';
     var returnCallBack = null;
+
+
+    /**
+     * Событие на переключение вкладок меню 'Информация, Статистика, Статьи'
+     * @param {Event} event
+     */
     function toggleTabs(event) {
         var target = event.target;
+        var componentPick;
+        var component;
         while (target !== this) {
             if (target.tagName === 'LI') {
-                var componentPick = target.dataset.type + 'Component';
+                componentPick = target.dataset.type + 'Component';
                 $(this).find('a').removeClass('active');
                 $(target).children().first().addClass('active');
-                var component = new componentObj[componentPick]($(elementSelector));
+                component = new componentObj[componentPick]($(elementSelector));
                 component.setData(componentData);
-                component.onActionInChildComponent(function () {
+                component.onActionInChildComponent(function onActionInChildComponent() {
                     console.log('В дочернем элементе произошло событие.');
                 });
                 return;
@@ -39,6 +50,10 @@ function JournalistStatComponent($element) {
         }
     }
 
+    /**
+     * Событие на кнопку "Вернуться".
+     * @param {Event} event
+     */
     function returnToSearchForm(event) {
         event.preventDefault();
         if (typeof returnCallBack === 'function') {
@@ -46,42 +61,46 @@ function JournalistStatComponent($element) {
         }
     }
 
+    ($parentElement)
+        .on('click', navigationSelector, toggleTabs)
+        .on('click', returnButtonSelector, returnToSearchForm);
 
-    ($element).on('click', navigationSelector, toggleTabs)
-    .on('click', returnButtonSelector, returnToSearchForm);
-
+    /**
+     * Очищает контейнер родителя и добавляет шаблон journalistTemplate
+     */
     function render() {
-        $element.empty().append(journalistTemplate({
+        $parentElement.empty().append(journalistTemplate({
             data: componentData
         }));
     }
 
-    //получить инфомрмацию о журналисте + добавить параметр data
-    this.appendComponent = function (data) {
-        console.log(data);
-        var spinner = new Spinner();
-        spinner.appendSpinner($element);
-        //окей. мне в параметр передадут его id(или имя?)
-        var loaderData = new LoaderData();
-        loaderData.recieveSingleData(journalistInfoUrl)
-        .then(function (item) {
-            componentData = item;
-            render();
-            spinner.removeSpinner();
-            //по умолчанию вкладка информация
-            //нужно ли его вызывать render ?
-            var infoComponent = new componentObj.InfoComponent($(elementSelector));
-            infoComponent.setData(componentData);
-            //сделать эту вкладку активной. Но этот вариант не очень
-            $(navigationSelector).find('a').first().addClass('active');
-        });
+    /**
+     * Метод для добавления в родительский контейнер и установки
+     * влкдаки 'Информация' по умолчанию
+     * @param {string} id - id журналиста
+     */
+    this.appendComponent = function appendComponent(id) {
+        var infoComponent;
+        journalistApi.getJournalistInfo(id)
+            .then(function response(journalistData) {
+                componentData = journalistData;
+                render();
+                infoComponent = new componentObj.InfoComponent($journalistPage);
+                infoComponent.setData(componentData);
+                $(navigationSelector).find('a').first().addClass('active');
+            })
+            .catch(function errorResponse(error) {
+                console.log(error);
+            });
     };
-    this.onReturnSearchForm = function (callBack) {
-        returnCallBack = callBack;
-    }
+    /**
+     * Установка функции обратного вызова для закрытия вкладки
+     * @param {function} listener - функция обратного вызова
+     */
+    this.onReturnSearchForm = function onReturnSearchForm(listener) {
+        returnCallBack = listener;
+    };
 }
 
-module.exports = {
-    JournalistStatComponent: JournalistStatComponent
-};
+module.exports = JournalistStatComponent;
 

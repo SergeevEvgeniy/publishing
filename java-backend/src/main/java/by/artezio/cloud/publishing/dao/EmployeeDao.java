@@ -84,7 +84,7 @@ public class EmployeeDao {
      */
     public Set<Employee> getJournalistsByPublishingId(final Integer id) {
         String sql = "SELECT id,"
-                + " firstName, last_name, middle_name,"
+                + " first_name, last_name, middle_name,"
                 + " email, password, sex, birth_year,"
                 + " address, type, education_id, chief_editor"
                 + " FROM employee e"

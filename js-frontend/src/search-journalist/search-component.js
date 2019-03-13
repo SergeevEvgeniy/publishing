@@ -6,7 +6,6 @@ var JournalistResultComponent = require('../search-journalist-result/journalist-
 var $searchPage = $('<div>', {
     id: 'searchJournalist'
 });
-//var { JournalistInfoComponent } = require('../journalist-info/journalist-component');
 $searchPage.append(searchTemplate());
 
 function SearchJournalistComponent($parentElement) {
@@ -19,8 +18,6 @@ function SearchJournalistComponent($parentElement) {
     var $issueElement = $searchPage.find('#issue');
     var $publishingElement = $searchPage.find('#publishing');
     var $topicElement = $searchPage.find('#topic');
-    var $articleInputElement = $searchPage.find('#article');
-    var $lastNameInputElement = $searchPage.find('#lastName>input');
     var $searchButtonElement = $searchPage.find(searchButtonSelector);
     var $searchResultElement = $searchPage.find('#searchResult');
     var $searchFormElement = $searchPage.find('form');
@@ -37,7 +34,8 @@ function SearchJournalistComponent($parentElement) {
             if ($issuePanel.hasClass(hiddenClass)) {
                 $issuePanel.removeClass(hiddenClass);
             }
-            issueList.render(response);
+            issueList.setElementList(response);
+            issueList.render();
         });
     }
 
@@ -59,11 +57,13 @@ function SearchJournalistComponent($parentElement) {
 
     function onSearchClearEvent() {
         $issueElement.closest('.input-block').addClass(hiddenClass);
-        topicList.selectDefault();
-        publishingList.selectDefault();
-        $articleInputElement.val('');
-        $lastNameInputElement.val('');
         $searchResultElement.empty();
+        $parentElement.find('input').each(function clearInputElements(index, element) {
+            $(element).val('');
+        });
+        $parentElement.find('select').each(function clearSelectElements(index, element) {
+            $(element).prop('selectedIndex', 0);
+        });
     }
 
     function onInputKeyUpEvent(event) {
@@ -86,10 +86,12 @@ function SearchJournalistComponent($parentElement) {
     this.render = function render() {
         $parentElement.append($searchPage);
         api.getPublishingList().then(function handleResponse(response) {
-            publishingList.render(response);
+            publishingList.setElementList(response);
+            publishingList.render();
         });
         api.getTopicList().then(function handleResponse(response) {
-            topicList.render(response);
+            topicList.setElementList(response);
+            topicList.render();
         });
     };
 }

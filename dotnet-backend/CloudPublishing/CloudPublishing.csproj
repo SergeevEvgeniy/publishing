@@ -194,6 +194,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+	<Compile Include="Models\Employees\EmployeeData.cs" />
+    <Compile Include="Models\Employees\EmployeeFilter.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeCreateModel.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeEditModel.cs" />
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />

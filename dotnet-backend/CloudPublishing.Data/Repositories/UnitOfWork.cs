@@ -11,6 +11,7 @@ namespace CloudPublishing.Data.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CloudPublishingContext context;
+        private readonly EmployeeUserManager manager;
 
         private readonly IEmployeeRepository employees = null;
         private readonly IReviewRepository reviews = null;
@@ -18,9 +19,10 @@ namespace CloudPublishing.Data.Repositories
         private readonly ITopicRepository topics = null;
         private readonly IUserRepository users = null;
 
-        public UnitOfWork(CloudPublishingContext context)
+        public UnitOfWork(CloudPublishingContext context, EmployeeUserManager manager)
         {
             this.context = context;
+            this.manager = manager;
         }
 
         public void Dispose()
@@ -36,7 +38,7 @@ namespace CloudPublishing.Data.Repositories
 
         public ITopicRepository Topics => topics ?? new TopicRepository(context);
 
-        public IUserRepository Users => users ?? new UserRepository(context);
+        public IUserRepository Users => users ?? new UserRepository(manager);
 
         public int Save()
         {

@@ -11,9 +11,9 @@ namespace CloudPublishing.Data.Identity.Managers
 {
     public class EmployeeUserManager : UserManager<EmployeeUser, int>
     {
-        public EmployeeUserManager(IUserStore<EmployeeUser, int> store) : base(store)
+        public EmployeeUserManager(IUserStore<EmployeeUser, int> store, IPasswordHasher passwordHasher) : base(store)
         {
-            
+            PasswordHasher = passwordHasher;
         }
 
         public async Task<IdentityResult> UpdateAsync(EmployeeUser user, string newPassword)
@@ -44,13 +44,5 @@ namespace CloudPublishing.Data.Identity.Managers
             await store.UpdateAsync(user);
             return await Task.FromResult(IdentityResult.Success);
         }
-
-        //public static EmployeeUserManager Create(IdentityFactoryOptions<EmployeeUserManager> options, IOwinContext context)
-        //{
-        //    var appDbContext = context.Get<CloudPublishingContext>();
-        //    var appUserManager = new EmployeeUserManager(new EmployeeUserStore(appDbContext));
-
-        //    return appUserManager;
-        //}
     }
 }

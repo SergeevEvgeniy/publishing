@@ -13,9 +13,9 @@ namespace CloudPublishing.Data.Repositories
     {
         private readonly EmployeeUserManager manager;
 
-        public UserRepository(CloudPublishingContext context)
+        public UserRepository(EmployeeUserManager manager)
         {
-            manager = new EmployeeUserManager(new EmployeeUserStore(context));
+            this.manager = manager;
         }
 
         public Task<IdentityResult> CreateAsync(EmployeeUser user)

@@ -8,6 +8,8 @@ using Autofac.Integration.WebApi;
 using AutofacConfig;
 using CloudPublishing.AutofacConfig;
 using CloudPublishing.Business.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CloudPublishing
 {
@@ -22,6 +24,11 @@ namespace CloudPublishing
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            GlobalConfiguration.Configuration.Formatters
+                .JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            GlobalConfiguration.Configuration.Formatters
+                .JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         }
 
         //private void ConfigureContainer()

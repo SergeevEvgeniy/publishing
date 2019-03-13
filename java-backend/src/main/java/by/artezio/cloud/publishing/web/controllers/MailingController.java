@@ -2,6 +2,7 @@ package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dto.Subscribers;
 import by.artezio.cloud.publishing.service.MailingService;
+import by.artezio.cloud.publishing.service.PublishingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +20,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MailingController {
 
     private MailingService mailingService;
+    private PublishingService publishingService;
 
     /**
-     * Конструктор с параметром.
+     * Конструктор с параметрами.
      * @param mailingService mailingService
+     * @param publishingService publishingService
      */
-    public MailingController(final MailingService mailingService) {
+    public MailingController(final MailingService mailingService, final PublishingService publishingService) {
         this.mailingService = mailingService;
+        this.publishingService = publishingService;
     }
 
     /**
@@ -50,7 +54,7 @@ public class MailingController {
     @GetMapping("/settings")
     public String getEmailList(@RequestParam(required = false) final Integer id, final Model model) {
         System.out.println("ID == " + id);
-        model.addAttribute("publishingList", mailingService.getPublishingList());
+        model.addAttribute("publishingList", publishingService.getPublishingList());
         if (id != null) {
             model.addAttribute("id", id);
             model.addAttribute("emailList", mailingService.getEmailListByPublishingId(id));
@@ -59,7 +63,6 @@ public class MailingController {
     }
 
     /**
-     *
      * @param subscribers Объект подписчиков рассылки издания с <code>id == subscribers.getPublishingId()</code>,
      *                    в котором хранятся email-адреса, на которые произойдет рассылка в следующий раз.
      * @return страница настроек.
@@ -67,7 +70,10 @@ public class MailingController {
     @PostMapping("/settings")
     public String addNewSubscribers(@ModelAttribute final Subscribers subscribers) {
         System.out.println(subscribers);
-        mailingService.updateSubscribersListByPublishingId(subscribers.getPublishingId(), subscribers.getEmails());
+        boolean isSuccessUpdated = mailingService
+            .updateSubscribersListByPublishingId(subscribers.getPublishingId(), subscribers.getEmails());
+        System.out.println("Email-subscribers was success updated?");
+        System.out.println(isSuccessUpdated ? "YES" : "NO");
         return "redirect:../mailing/settings";
     }
 }

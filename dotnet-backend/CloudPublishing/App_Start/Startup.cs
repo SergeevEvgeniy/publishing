@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
@@ -10,6 +11,8 @@ using CloudPublishing.Business.Services;
 using CloudPublishing.Business.Services.Interfaces;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
+using Microsoft.Owin.Infrastructure;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 
@@ -34,8 +37,11 @@ namespace CloudPublishing
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+                AuthenticationMode = AuthenticationMode.Active,
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Employee/Login"),
+                LogoutPath = new PathString("/Employee/Logout"),
+                ExpireTimeSpan = TimeSpan.FromMinutes(20),
             });
         }
     }

@@ -12,6 +12,7 @@ namespace CloudPublishing.Business.Results
         }
 
         public bool IsSuccessful => true;
+        public bool IsExternalException => false;
 
         public T GetContent()
         {
