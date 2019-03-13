@@ -7,6 +7,13 @@ namespace CloudPublishing.Business.Services.Interfaces
     {
         IEnumerable<PublishingDTO> GetAllPublishings();
         IEnumerable<TopicDTO> GetAllTopics();
-        
+        IEnumerable<EmployeeDTO> GetAllEmployees();
+        IEnumerable<EmployeeDTO> GetPublishingEmployees(int publishingId);
+        PublishingDTO GetPublishing(int id);
+        void CreatePublishing(PublishingDTO publishing);
+        void UpdatePublishing(PublishingDTO publishing);
+        void DeletePublishing(int id);
+        IEnumerable<EmployeeDTO> GetNotInPublishingEmployees(int publishingId);
+        IEnumerable<TopicDTO> GetNotAtPublishingTopics(int publishingId);
     }
 }

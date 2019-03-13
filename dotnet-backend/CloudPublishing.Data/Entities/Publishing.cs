@@ -9,5 +9,6 @@ namespace CloudPublishing.Data.Entities
         public string Type { get; set; }
         public string Subjects { get; set; }
         public ICollection<Topic> Topics { get; set; }
+        public ICollection<Employee> Employees { get; set; }
     }
 }
