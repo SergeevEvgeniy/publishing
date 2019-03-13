@@ -1,7 +1,6 @@
 var paginationTemplate = require('./pagination.hbs');
 var $ = require('jquery');
 
-var amountVisiblePages = 5;
 var amountVisiblePagesOnSide = 2;
 
 /**
@@ -44,7 +43,7 @@ function Pagination($parentElement) {
         }
         amountPages = Math.ceil(amountRecord / perPage);
         startPageIndex = Math.max(currentPage - amountVisiblePagesOnSide, 1);
-        endPageIndex = Math.min(startPageIndex + amountVisiblePages - 1, amountPages);
+        endPageIndex = Math.min(startPageIndex + amountVisiblePagesOnSide - 1, amountPages);
         visiblePages = [];
         for (index = startPageIndex; index <= endPageIndex; index++) {
             this.visiblePages.push({
@@ -84,7 +83,7 @@ function Pagination($parentElement) {
         }
         currentPage = (newCurrentPage < 1) ? 1 : newCurrentPage;
         currentPage = (newCurrentPage > amountPages) ? amountPages : newCurrentPage;
-        handleChangedPage(currentPage);
+        pageChangeListener(currentPage);
         recount();
         this.render();
     };
@@ -102,7 +101,7 @@ function Pagination($parentElement) {
         this.render();
     };
 
-    $paginationWrapper.on('click', '.pagination span', onPageChangeEvent(event));
+    $paginationWrapper.on('click', '.pagination span', onPageChangeEvent);
 
     /**
      * Отрисовка компонента
