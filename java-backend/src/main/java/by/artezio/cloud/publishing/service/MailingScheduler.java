@@ -26,7 +26,7 @@ public class MailingScheduler {
      * Метод, реализующий рассылку писем по расписанию.
      * Фактически, он просто вызывает метод MailingService.sendMail в определенное время.
      */
-    @Scheduled(cron = "1 * * * * *")
+    @Scheduled(cron = "* */5 * * * *")
     public void sendMail() {
         mailingService.sendMail();
     }
