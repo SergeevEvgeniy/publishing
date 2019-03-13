@@ -188,13 +188,13 @@
     <Compile Include="AutofacConfig\WebModule.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\PublishingController.cs" />
-    <Compile Include="Controllers\RestApi\EmployeeController.cs" />
+    <Compile Include="Controllers\RestApi\EmployeesController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Converters\UIConvertersExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-	<Compile Include="Models\Employees\EmployeeData.cs" />
+    <Compile Include="Models\Employees\EmployeeData.cs" />
     <Compile Include="Models\Employees\EmployeeFilter.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeCreateModel.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeEditModel.cs" />
