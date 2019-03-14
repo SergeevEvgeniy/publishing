@@ -74,7 +74,7 @@ public class PublishingDao {
      * @param publishingId - id журнала из которого извлекаем список рубрик
      * @return List<Topic> список объектов Topic (рубрики)
      */
-    public List<Topic> getPublishingTopics(final int publishingId) {
+    public List<Topic> getTopicsByPublishingId(final int publishingId) {
         return jdbcTemplate.query("select id, name from topic "
                 + "join publishing_topic pt "
                 + "on topic.id = pt.topic_id "
@@ -82,23 +82,6 @@ public class PublishingDao {
                 Collections.singletonMap("publishingId", publishingId),
                 topicRowMapper
         );
-    }
-
-    /**
-     * Получение списка рубрик по идентификатору журнала.
-     *
-     * @param id идентификатор журнала
-     * @return {@link List}&lt;{@link Topic}&gt;
-     */
-    public List<Topic> getTopicsByPublishingId(final Integer id) {
-        List<Integer> topicsId = jdbcTemplate.queryForList(
-                "SELECT topic_id FROM publishing_topic WHERE publishing_id = :publishingId",
-                Collections.singletonMap("publishingId", id),
-                Integer.class);
-
-        String str = convertToString(topicsId);
-        return jdbcTemplate.query("SELECT * FROM topic WHERE id IN (:str)",
-                Collections.singletonMap("str", str), topicRowMapper);
     }
 
     /**

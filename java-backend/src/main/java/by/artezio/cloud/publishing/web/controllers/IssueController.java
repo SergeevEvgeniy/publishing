@@ -1,12 +1,10 @@
 package by.artezio.cloud.publishing.web.controllers;
 
-import by.artezio.cloud.publishing.dto.IssueForm;
 import by.artezio.cloud.publishing.service.PublishingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -43,7 +41,7 @@ public class IssueController {
      * в режиме создания номера, а также имя страницы jsp содержащая
      * форму для создания нового номера
      */
-    @GetMapping("/create")
+    @GetMapping(params = "new")
     public ModelAndView openFormInCreationMode() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("method", "POST");
@@ -53,39 +51,29 @@ public class IssueController {
     }
 
     /**
+     * @param issueId id номера
      * @return ModelAndView - содержит представление данных используемые
      * в режиме редактирования номера, а также имя страницы jsp содержащая
      * форму для редактирования номера
      */
-    @GetMapping("/edit")
-    public ModelAndView openFormInEditingMode() {
+    @GetMapping(params = "editableIssue")
+    public ModelAndView openFormInEditingMode(@RequestParam("editableIssue") final int issueId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("issueForm");
         return modelAndView;
     }
 
     /**
+     * @param issueId id номера
      * @return ModelAndView - содержит представление данных используемые
      * в режиме просмотра номера, а также имя страницы jsp содержащая
      * форму для просмотра номера
      */
-    @GetMapping("/view")
-    public ModelAndView openFormInViewingMode() {
+    @GetMapping(params = "viewedIssue")
+    public ModelAndView openFormInViewingMode(@RequestParam("viewedIssue") final int issueId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("issueForm");
         return modelAndView;
     }
-
-    /**
-     * Метод создания и добовления новых номеров.
-     * @param issueForm {@link IssueForm} содержит данные
-     * полей формы
-     * @return перенаправление на главную страницу раздела номеров
-     */
-    @PostMapping("/issue")
-    public String addNewIssue(@ModelAttribute("issueForm") final IssueForm issueForm) {
-        return "redirect:/issues";
-    }
-
 
 }

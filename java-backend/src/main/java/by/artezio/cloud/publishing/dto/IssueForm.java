@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- *
+ * Объект DTO для формы создания/редактирования номеров.
  * @author Igor Kuzmin
  */
 public class IssueForm {
@@ -18,64 +18,56 @@ public class IssueForm {
     private LocalDate localDate;
 
     /**
-     *
-     * @return publishingId
+     * @return publishingId id публикации полученное с формы
      */
     public int getPublishingId() {
         return publishingId;
     }
 
     /**
-     *
-     * @param publishingId id
+     * @param publishingId установка id публикации номера
      */
     public void setPublishingId(final int publishingId) {
         this.publishingId = publishingId;
     }
 
     /**
-     *
-     * @return articleId
+     * @return {@link List} id всех статей в номере
      */
     public List<Integer> getArticlesId() {
         return articlesId;
     }
 
     /**
-     *
-     * @param articlesId id
+     * @param articlesId {@link List} для установки id статей для номера
      */
     public void setArticlesId(final List<Integer> articlesId) {
         this.articlesId = articlesId;
     }
 
     /**
-     *
-     * @return number
+     * @return number значение номера
      */
     public String getNumber() {
         return number;
     }
 
     /**
-     *
-     * @param number number of Issue
+     * @param number установка номера
      */
     public void setNumber(final String number) {
         this.number = number;
     }
 
     /**
-     *
-     * @return localDate
+     * @return localDate дата когда номер будет опубликован системой
      */
     public LocalDate getLocalDate() {
         return localDate;
     }
 
     /**
-     *
-     * @param localDate localDate
+     * @param localDate localDate установка даты публикации системой данного номера
      */
     public void setLocalDate(final LocalDate localDate) {
         this.localDate = localDate;

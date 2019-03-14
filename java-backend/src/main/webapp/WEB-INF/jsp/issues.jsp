@@ -10,7 +10,7 @@
     <div class="container">
             <h3 class="page-header">Номера</h3>
             <div class="text-right" style="margin-bottom: 10px">
-                <a href="<c:url value="/issues/create"/>" class="btn btn-success">
+                <a href="<c:url value="?new"/>" class="btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>Добавить
                 </a>
             </div>

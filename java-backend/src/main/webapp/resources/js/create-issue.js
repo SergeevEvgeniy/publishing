@@ -2,7 +2,7 @@ $(function () {
 
     onChangeSelectListener($("#publishing"), function (topics) {
         var $topics = $("#topics");
-        $topics.html($("<option>Выберете рубрику</option>").val("empty"));
+        $topics.html($("<option>Выберете рубрику</option>").val(""));
         var $options = $.map(topics, function (topic) {
             var $option = $("<option></option>").val(topic.id);
             return $option.text(topic.name);
@@ -39,17 +39,17 @@ $(function () {
                 $(this).empty();
                 this.disabled = true;
             });
-            if ($(this).val() === "empty"){
+            if (!$(this).val()) {
                 return;
             }
             var nextSelect = $formSelects.get(nextSelectIndex);
-            var requestParams = $("form").serializeArray();
+            var requestParams = $formSelects.serializeArray();
             nextSelect.disabled = false;
             $.getJSON(createUrl(requestParams), handler);
         });
 
         function createUrl(requestParams) {
-            var url = location.href;
+            var url = location.href.split("?")[0];
             for (var i = 0; i < requestParams.length; i++) {
                 var param = requestParams[i];
                 url += "/" + param.name + "/" + param.value;
