@@ -13,6 +13,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
                 <li><a href="${pageContext.request.contextPath}/mailing">Mailing</a></li>
+                <li><a href="${pageContext.request.contextPath}/articleList">Article</a></li>
             </ul>
             <div class="nav navbar-right navbar-brand">
                 <span>${currentUser.name}</span>

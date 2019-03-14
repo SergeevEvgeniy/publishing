@@ -1,6 +1,6 @@
-<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib  tagdir="/WEB-INF/tags/" prefix="tag"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<tags:layout>
+<tag:layout> 
     <h1>Привет, Мир</h1>
     <h2>Это домашняя страница</h2>
-</tags:layout>
+</tag:layout>
