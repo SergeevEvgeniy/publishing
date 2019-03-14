@@ -35,7 +35,6 @@ namespace CloudPublishing.Data.Repositories
         public void Create(Publishing publishing)
         {
             context.Publishings.Add(MapToRealPublishing(publishing));
-            context.SaveChanges();
         }
 
         public void Update(Publishing modifyPublishing)
@@ -47,7 +46,7 @@ namespace CloudPublishing.Data.Repositories
 
             if (publishingToUpdate == null)
             {
-                throw new Exception($"User with Id '{modifyPublishing.Id}' not found");
+                throw new Exception($"Publishing with Id '{modifyPublishing.Id}' not found");
             }
 
             publishingToUpdate.Title = modifyPublishing.Title;
@@ -55,17 +54,16 @@ namespace CloudPublishing.Data.Repositories
             publishingToUpdate.Subjects = modifyPublishing.Subjects;
             UpdatePublishingEmployees(publishingToUpdate, modifyPublishing.Employees);
             UpdatePublishingTopics(publishingToUpdate, modifyPublishing.Topics);
-            context.SaveChanges();
         }
 
         public void Delete(int id)
         {
             var publishing = context.Publishings.FirstOrDefault(x => x.Id == id);
-            if (publishing != null)
+            if (publishing == null)
             {
-                context.Publishings.Remove(publishing);
-                context.SaveChanges();
+                throw new Exception($"Publishing with Id '{id}' not found");
             }
+            context.Publishings.Remove(publishing);
         }
 
         private Publishing MapToRealPublishing(Publishing publishing)

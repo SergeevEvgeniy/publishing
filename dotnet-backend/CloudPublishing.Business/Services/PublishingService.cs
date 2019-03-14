@@ -44,17 +44,20 @@ namespace CloudPublishing.Business.Services
         {
             Publishing publishingEntity = publishing.ToEntity();
             unitOfWork.Publishings.Create(publishingEntity);
+            unitOfWork.Save();
         }
 
         public void UpdatePublishing(PublishingDTO publishing)
         {
             Publishing publishingEntity = publishing.ToEntity();
             unitOfWork.Publishings.Update(publishingEntity);
+            unitOfWork.Save();
         }
 
         public void DeletePublishing(int id)
         {
             unitOfWork.Publishings.Delete(id);
+            unitOfWork.Save();
         }
 
         public IEnumerable<TopicDTO> GetAllTopics()
