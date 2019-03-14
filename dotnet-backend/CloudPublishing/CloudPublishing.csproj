@@ -203,6 +203,7 @@
     <Compile Include="Models\Employees\Enums\EmployeeType.cs" />
     <Compile Include="Models\Publishings\Enums\PublishingType.cs" />
     <Compile Include="Models\Publishings\PublishingCreateViewModel.cs" />
+    <Compile Include="Models\Publishings\PublishingEditViewModel.cs" />
     <Compile Include="Models\Publishings\PublishingEmployeeViewModel.cs" />
     <Compile Include="Models\Publishings\PublishingViewModel.cs" />
     <Compile Include="Models\Publishings\TopicViewModel.cs" />
@@ -315,8 +316,9 @@
     <Content Include="Views\Review\GetAuthorList.cshtml" />
     <Content Include="Views\Review\GetArticleList.cshtml" />
     <Content Include="Views\Publishing\List.cshtml" />
-    <Content Include="Views\Publishing\PublishingInDetail.cshtml" />
+    <Content Include="Views\Publishing\EditPublishing.cshtml" />
     <Content Include="Views\Review\Edit.cshtml" />
+    <Content Include="Views\Publishing\CreatePublishing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

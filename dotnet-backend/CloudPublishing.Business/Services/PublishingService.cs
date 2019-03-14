@@ -66,16 +66,5 @@ namespace CloudPublishing.Business.Services
         {
             return unitOfWork.Employees.GetAll().Select(x => x.ToDTO());
         }
-
-        public IEnumerable<EmployeeDTO> GetNotInPublishingEmployees(int publishingId)
-        {
-            return unitOfWork.Employees.GetAll().Where(x => x.Publishings == null || x.Publishings.All(p => p.Id != publishingId)).Select(x => x.ToDTO());
-        }
-
-        public IEnumerable<TopicDTO> GetNotAtPublishingTopics(int publishingId)
-        {
-
-            return unitOfWork.Topics.GetAll().Where(x => x.Publishings == null || x.Publishings.All(p => p.Id != publishingId)).Select(x => x.ToDTO());
-        }
     }
 }

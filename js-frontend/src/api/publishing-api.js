@@ -1,5 +1,5 @@
-const PublishingAPI = {
-    getMagazinesTitles: () => {
+var PublishingAPI = {
+    getMagazinesTitles: function getMagazinesTitles() {
         return fetch('http://localhost:3010/api/publishing/magazine/title/all', {
             method: 'GET',
             headers: {
@@ -8,7 +8,7 @@ const PublishingAPI = {
             mode: 'cors',
         });
     },
-    getNewspapersTitles: () => {
+    getNewspapersTitles: function getMagazinesTitles() {
         return fetch('http://localhost:3010/api/publishing/newspaper/title/all', {
             method: 'GET',
             headers: {

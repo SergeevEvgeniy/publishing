@@ -20,3 +20,4 @@ $(function onReady() {
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap/dist/js/bootstrap');
 require('@fortawesome/fontawesome-free/css/all.css');
+require('./handlebars-helpers/handlebars_helpers_if_eq');

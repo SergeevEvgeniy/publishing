@@ -26,14 +26,10 @@ namespace CloudPublishing.Controllers
             PublishingCreateViewModel publishingViewModel = new PublishingCreateViewModel
             {
                 Publishing = new PublishingViewModel(),
-                TopicsNotAtPublishing = publishingService.GetAllTopics().Select(x => x.ToViewModel()),
-                EmployeesNotInPublishing = publishingService.GetAllEmployees().Select(x => x.ToViewModel()),
-                EmployeesAtPublishing = null,
-                TopicsAtPublishing = null
+                AvailableTopics = publishingService.GetAllTopics().Select(x => x.ToViewModel()),
+                AvailableEmployees = publishingService.GetAllEmployees().Select(x => x.ToViewModel())
             };
-
-            ViewBag.Action = "CreatePublishing";
-            return View("PublishingInDetail", publishingViewModel);
+            return View(publishingViewModel);
         }
 
         [HttpPost]
@@ -52,17 +48,20 @@ namespace CloudPublishing.Controllers
                 return null;
             }
 
-            PublishingCreateViewModel publishingViewModel = new PublishingCreateViewModel
+            PublishingEditViewModel publishingViewModel = new PublishingEditViewModel
             {
                 Publishing = publishing.ToViewModel(),
-                EmployeesNotInPublishing = publishingService.GetNotInPublishingEmployees(id).Select(x => x.ToViewModel()),
-                TopicsNotAtPublishing = publishingService.GetNotAtPublishingTopics(id).Select(x => x.ToViewModel()),
+                AvailableTopics = publishingService.GetAllTopics()
+                   .Where(x => !publishing.Topics.Select(t => t.Id).Contains(x.Id))
+                   .Select(x => x.ToViewModel()),
+                AvailableEmployees = publishingService.GetAllEmployees()
+                   .Where(x => !publishing.Employees.Select(t => t.Id).Contains(x.Id))
+                   .Select(x => x.ToViewModel()),
                 EmployeesAtPublishing = publishing.Employees.Select(x => x.ToViewModel()),
                 TopicsAtPublishing = publishing.Topics.Select(x => x.ToViewModel())
-
             };
-            ViewBag.Action = "EditPublishing";
-            return View("PublishingInDetail", publishingViewModel);
+
+            return View(publishingViewModel);
         }
 
         [HttpPost]
