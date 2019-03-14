@@ -27,7 +27,11 @@ var data = {
     isLoading: false,
     isSubmitButtonActive: true
 };
-
+/**
+ * Компонент поиска журналистов.
+ * @param  {JQuery} $parentElement Элемент-контейнер для размещения компонента.
+ * @returns {void}
+ */
 function SearchJournalistComponent($parentElement) {
     $parentElement.append($('<div>', {
         id: data.componentId
@@ -65,6 +69,11 @@ function SearchJournalistComponent($parentElement) {
     }
 
     function onSearchClearEvent() {
+        data.lastName = null;
+        data.article = null;
+        data.issue.isIssuesAdded = false;
+        data.publishing.elementList[data.publishing.prevOptionIndex].selected = false;
+        data.topic.elementList[data.publishing.prevOptionIndex].selected = false;
         render();
     }
 
@@ -100,7 +109,9 @@ function SearchJournalistComponent($parentElement) {
         data.topic.elementList = response;
         render();
     });
-
+    /**
+     * @returns {function} Отрисовка компонента
+     */
     this.render = render;
 }
 

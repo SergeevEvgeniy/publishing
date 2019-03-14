@@ -2,7 +2,7 @@ var homeTemplate = require('./home.hbs');
 
 /**
  * Компонент главной страницы.
- * @param  {Object} $parentElement Элемент-контейнер для размещения компонента.
+ * @param  {JQuery} $parentElement Элемент-контейнер для размещения компонента.
  * @returns {void}
  */
 function HomeComponent($parentElement) {
