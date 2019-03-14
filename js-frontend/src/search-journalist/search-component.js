@@ -58,7 +58,7 @@ function SearchJournalistComponent($parentElement) {
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
             var journalistResult = new JournalistResultComponent($parentElement);
             if (response.length !== 0) {
-                journalistResult.render(response);
+                journalistResult.setJournalistList(response);
             } else {
                 console.log('Отсутствуют результаты поиска');
             }
@@ -74,6 +74,7 @@ function SearchJournalistComponent($parentElement) {
         data.issue.isIssuesAdded = false;
         data.publishing.elementList[data.publishing.prevOptionIndex].selected = false;
         data.topic.elementList[data.publishing.prevOptionIndex].selected = false;
+        $parentElement.find('#journalistResult').empty();
         render();
     }
 
@@ -110,7 +111,7 @@ function SearchJournalistComponent($parentElement) {
         render();
     });
     /**
-     * @returns {function} Отрисовка компонента
+     * @returns {function} Отрисовка компонента.
      */
     this.render = render;
 }
