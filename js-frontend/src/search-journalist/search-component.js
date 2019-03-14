@@ -111,7 +111,7 @@ function SearchJournalistComponent($parentElement) {
         render();
     });
     /**
-     * @returns {function} Отрисовка компонента
+     * @returns {function} Отрисовка компонента.
      */
     this.render = render;
 }
