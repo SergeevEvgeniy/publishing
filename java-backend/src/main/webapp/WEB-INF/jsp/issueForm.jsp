@@ -1,5 +1,5 @@
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -9,56 +9,95 @@
 </head>
 <body>
     <div class="container">
-        <c:url value="#" var="issuesURL"/>
-        <sf:form class="form-horizontal col-sm-offset-1" method="post" action="${issuesURL}"
-                 modelAttribute="issueFormDto">
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="publishing">Журналы</label>
-                <div class="col-sm-8">
-                    <sf:select class="form-control" id="publishing" path="publishingId">
-                        <option value="empty">Выберете журнал</option>
+        <h3 class="page-header">Форма добавления/просмотра/редактирования номеров</h3>
+        <%--@elvariable id="issueForm" type="by.artezio.cloud.publishing.dto.IssueForm"--%>
+        <form:form class="form-horizontal" method="${method}"
+                   action="${pageContext.request.contextPath}/issues/issue" modelAttribute="issueForm">
+
+            <div class="form-group row">
+                <label class="control-label col-sm-offset-2 col-sm-1" for="publishing">
+                    Журналы
+                </label>
+                <div class="col-sm-7">
+                    <select class="form-control" id="publishing" name="publishingId">
+                        <option value="">Выберете журнал</option>
                         <c:forEach var="p" items="${publishing}">
-                            <sf:option value="${p.id}">${p.title}</sf:option>
+                            <option value="${p.id}">${p.title}</option>
                         </c:forEach>
-                    </sf:select>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="numbers">Номер</label>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-offset-2 col-sm-1" for="number">
+                    Номер
+                </label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" id="numbers"/>
+                    <c:if test="${method == 'POST'}">
+                        <input type="text" class="form-control" id="number" name="number"/>
+                    </c:if>
+                    <c:if test="${method == 'PUT'}">
+                        <input type="text" class="form-control" id="number" name="number" value="${issueForm.number}"/>
+                    </c:if>
                 </div>
-                <label class="control-label col-sm-2" for="date">Дата</label>
+                <label class="control-label col-sm-1" for="date">Дата</label>
                 <div class="col-sm-3">
-                    <input type="date" class="form-control" id="date"/>
+                    <c:if test="${method == 'POST'}">
+                        <input type="date" class="form-control" id="date" name="date"/>
+                    </c:if>
+                    <c:if test="${method == 'PUT'}">
+                        <input type="date" class="form-control" id="date" name="date" value="${issueForm.localDate}"/>
+                    </c:if>
                 </div>
             </div>
-            <fieldset id="content">
-                <legend>Содержание</legend>
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="topics">Рубрика</label>
-                    <div class="col-sm-8">
-                        <select class="form-control" id="topics" name="topicId" disabled></select>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="form-group row">
+                                <label class="control-label col-sm-2" for="topics">Рубрика</label>
+                                <div class="col-sm-10">
+                                    <c:if test="${method == 'POST'}">
+                                        <select class="form-control" id="topics" name="topicId" disabled></select>
+                                    </c:if>
+                                    <c:if test="${method == 'PUT'}">
+                                        <select class="form-control" id="topics" name="topicId"></select>
+                                    </c:if>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="control-label col-sm-2" for="authors">Автор</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="authors" name="authorId" disabled></select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="control-label col-sm-2" for="articles">Статья</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="articles" disabled></select>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <button class="btn btn-success">
+                                    <span class="glyphicon glyphicon-plus"></span>Добавить
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-body"></div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="authors">Автор</label>
-                    <div class="col-sm-8">
-                        <select class="form-control" id="authors" name="authorId" disabled></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="articles">Статья</label>
-                    <div class="col-sm-8">
-                        <select class="form-control" id="articles" disabled></select>
-                    </div>
-                </div>
-            </fieldset>
-        </sf:form>
+            </div>
+
+        </form:form>
     </div>
 
     <script type="text/javascript" src="<c:url value="/resources/js/libs/jquery.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/resources/js/libs/bootstrap.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/resources/js/issue-page.js"/>"></script>
+    <c:choose>
+        <c:when test="${method == 'POST'}">
+            <script type="text/javascript" src="<c:url value="/resources/js/create-issue.js"/>"></script>
+        </c:when>
+    </c:choose>
 </body>
 </html>

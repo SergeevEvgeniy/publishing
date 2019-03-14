@@ -1,16 +1,17 @@
 package by.artezio.cloud.publishing.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
- * @author rezerv
+ * @author Igor Kuzmin
  */
 public class IssueForm {
 
     private int publishingId;
 
-    private int articleId;
+    private List<Integer> articlesId;
 
     private String number;
 
@@ -36,16 +37,16 @@ public class IssueForm {
      *
      * @return articleId
      */
-    public int getArticleId() {
-        return articleId;
+    public List<Integer> getArticlesId() {
+        return articlesId;
     }
 
     /**
      *
-     * @param articleId id
+     * @param articlesId id
      */
-    public void setArticleId(final int articleId) {
-        this.articleId = articleId;
+    public void setArticlesId(final List<Integer> articlesId) {
+        this.articlesId = articlesId;
     }
 
     /**
