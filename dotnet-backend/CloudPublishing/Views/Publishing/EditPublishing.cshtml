@@ -1,10 +1,10 @@
 ﻿@using CloudPublishing.Models.Publishings.Enums;
-@model CloudPublishing.Models.Publishings.PublishingCreateViewModel
+@model CloudPublishing.Models.Publishings.PublishingEditViewModel
 @{
-    ViewBag.Title = "Новое издание";
+    ViewBag.Title = "Редактирование издания";
 }
 
-@using (Html.BeginForm((string)ViewBag.Action, "Publishing", FormMethod.Post, new { id = "publishingCreateForm" }))
+@using (Html.BeginForm("EditPublishing", "Publishing", FormMethod.Post, new { id = "publishingCreateForm" }))
 {
     <div>
         @Html.HiddenFor(m => m.Publishing.Id)
@@ -36,7 +36,7 @@
                     <div class="col-9">
                         <select class="form-control">
                             <option></option>
-                            @foreach (var topic in Model.TopicsNotAtPublishing)
+                            @foreach (var topic in Model.AvailableTopics)
                             {
                                 <option value="@topic.Id">@topic.Name</option>
                             }
@@ -76,7 +76,7 @@
                     <div class="col-9">
                         <select class="form-control">
                             <option></option>
-                            @foreach (var journalist in Model.EmployeesNotInPublishing.Where(x => x.Type == "J"))
+                            @foreach (var journalist in Model.AvailableEmployees.Where(x => x.Type == "J"))
                             {
                                 <option value="@journalist.Id">@journalist.Name</option>
                             }
@@ -118,7 +118,7 @@
                     <div class="col-9">
                         <select class="form-control">
                             <option></option>
-                            @foreach (var editor in Model.EmployeesNotInPublishing.Where(x => x.Type == "E"))
+                            @foreach (var editor in Model.AvailableEmployees.Where(x => x.Type == "E"))
                             {
                                 <option value="@editor.Id">@editor.Name</option>
                             }

@@ -13,7 +13,5 @@ namespace CloudPublishing.Business.Services.Interfaces
         void CreatePublishing(PublishingDTO publishing);
         void UpdatePublishing(PublishingDTO publishing);
         void DeletePublishing(int id);
-        IEnumerable<EmployeeDTO> GetNotInPublishingEmployees(int publishingId);
-        IEnumerable<TopicDTO> GetNotAtPublishingTopics(int publishingId);
     }
 }
