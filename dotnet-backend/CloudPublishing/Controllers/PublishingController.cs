@@ -51,12 +51,10 @@ namespace CloudPublishing.Controllers
             PublishingEditViewModel publishingViewModel = new PublishingEditViewModel
             {
                 Publishing = publishing.ToViewModel(),
-                AvailableTopics = publishingService.GetAllTopics()
-                   .Where(x => !publishing.Topics.Select(t => t.Id).Contains(x.Id))
-                   .Select(x => x.ToViewModel()),
-                AvailableEmployees = publishingService.GetAllEmployees()
-                   .Where(x => !publishing.Employees.Select(t => t.Id).Contains(x.Id))
-                   .Select(x => x.ToViewModel()),
+                AvailableTopics = publishingService.GetTopicsNotInPublishing(id)
+                    .Select(x => x.ToViewModel()),
+                AvailableEmployees = publishingService.GetEmployeesNotInPublishing(id)
+                    .Select(x => x.ToViewModel()),
                 EmployeesAtPublishing = publishing.Employees.Select(x => x.ToViewModel()),
                 TopicsAtPublishing = publishing.Topics.Select(x => x.ToViewModel())
             };

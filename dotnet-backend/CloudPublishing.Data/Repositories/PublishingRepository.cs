@@ -18,12 +18,18 @@ namespace CloudPublishing.Data.Repositories
 
         public Publishing Get(int id)
         {
-            return context.Publishings.AsNoTracking().Include("Topics").Include("Employees").FirstOrDefault(x => x.Id == id);
+            return context.Publishings.AsNoTracking()
+                .Include("Topics").AsNoTracking()
+                .Include("Employees").AsNoTracking()
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<Publishing> GetAll()
         {
-            return context.Publishings.AsNoTracking().Include("Topics").Include("Employees").ToList();
+            return context.Publishings.AsNoTracking()
+                .Include("Topics").AsNoTracking()
+                .Include("Employees").AsNoTracking()
+                .ToList();
         }
 
         public void Create(Publishing publishing)
@@ -34,7 +40,11 @@ namespace CloudPublishing.Data.Repositories
 
         public void Update(Publishing modifyPublishing)
         {
-            Publishing publishingToUpdate = context.Publishings.Include("Employees").Include("Topics").FirstOrDefault(x => x.Id == modifyPublishing.Id);
+            Publishing publishingToUpdate = context.Publishings
+                .Include("Employees")
+                .Include("Topics")
+                .FirstOrDefault(x => x.Id == modifyPublishing.Id);
+
             if (publishingToUpdate == null)
             {
                 throw new Exception($"User with Id '{modifyPublishing.Id}' not found");
