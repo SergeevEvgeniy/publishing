@@ -17,6 +17,6 @@ public class LoggingMailSender implements MailSender {
     @Override
     public void sendMail(final List<String> addressees, final String subject, final String message) {
         String addresses = String.join(", ", addressees);
-        System.out.printf("Sending email to [%s]. Subject: %s. Message: %s", addresses, subject, message);
+        System.out.printf("Sending email to [%s]. Subject: %s. Message: %s\n", addresses, subject, message);
     }
 }

@@ -51,8 +51,10 @@ public class MailingServiceImpl implements MailingService {
 
         mailingDao.clearMailingSubscribersByMailingId(mailingId);
 
-        for (String email : emails) {
-            wasSuccessUpdated &= mailingDao.addSubscriberByMailingId(mailingId, email);
+        if (emails != null) {
+            for (String email : emails) {
+                wasSuccessUpdated &= mailingDao.addSubscriberByMailingId(mailingId, email);
+            }
         }
 
         return wasSuccessUpdated;

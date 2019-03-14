@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CloudPublishing.Data.EF;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Identity.Entities;
 using CloudPublishing.Data.Identity.Enums;
 using Microsoft.AspNet.Identity;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CloudPublishing.Data.Identity.Stores
 {

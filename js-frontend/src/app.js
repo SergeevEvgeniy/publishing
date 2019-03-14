@@ -12,13 +12,12 @@ $(function onReady() {
     var $app = $('#app');
     var navbarSelector = '#navbar';
     $(navbarSelector).click(function navigate(event) {
-        var navPick = event.target.dataset.type;
-        var pick = new navObj[navPick]($app);
         $app.empty();
-        pick.render();
+        new navObj[event.target.dataset.type]($app).render();
     });
 });
 
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap/dist/js/bootstrap');
 require('@fortawesome/fontawesome-free/css/all.css');
+require('./handlebars-helpers/handlebars_helpers_if_eq');

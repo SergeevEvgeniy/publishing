@@ -1,8 +1,18 @@
 var homeTemplate = require('./home.hbs');
 
-function HomeComponent($parent) {
+/**
+ * Компонент главной страницы.
+ * @param  {Object} $parentElement Элемент-контейнер для размещения компонента.
+ * @returns {void}
+ */
+function HomeComponent($parentElement) {
+    /**
+     * @returns {function} Отрисовка компонента
+     */
     this.render = function render() {
-        $parent.append(homeTemplate({ name: 'Люк Скайвокер' }));
+        $parentElement.append(homeTemplate({
+            name: 'Люк Скайвокер'
+        }));
     };
 }
 

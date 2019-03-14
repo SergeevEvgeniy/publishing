@@ -1,9 +1,7 @@
-﻿using System;
+﻿using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Results.Interfaces;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using CloudPublishing.Business.DTO;
-using CloudPublishing.Business.Results.Interfaces;
-using Microsoft.AspNet.Identity;
 
 namespace CloudPublishing.Business.Services.Interfaces
 {

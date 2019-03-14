@@ -1,9 +1,6 @@
-﻿using CloudPublishing.Business.DTO;
-using CloudPublishing.Business.Services.Interfaces;
+﻿using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Converters;
 using CloudPublishing.Models.Publishings;
-using CloudPublishing.Models.Publishings.Enums;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -55,7 +52,7 @@ namespace CloudPublishing.Controllers
                 return null;
             }
 
-            PublishingCreateViewModel publishingVM = new PublishingCreateViewModel
+            PublishingCreateViewModel publishingViewModel = new PublishingCreateViewModel
             {
                 Publishing = publishing.ToViewModel(),
                 EmployeesNotInPublishing = publishingService.GetNotInPublishingEmployees(id).Select(x => x.ToViewModel()),
@@ -65,7 +62,7 @@ namespace CloudPublishing.Controllers
 
             };
             ViewBag.Action = "EditPublishing";
-            return View("PublishingInDetail", publishingVM);
+            return View("PublishingInDetail", publishingViewModel);
         }
 
         [HttpPost]

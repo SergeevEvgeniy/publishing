@@ -1,6 +1,6 @@
-using System.Data.Entity;
 using CloudPublishing.Data.EF.EntityConfigurations;
 using CloudPublishing.Data.Entities;
+using System.Data.Entity;
 
 namespace CloudPublishing.Data.EF
 {
@@ -11,9 +11,9 @@ namespace CloudPublishing.Data.EF
         {
         }
 
-        public virtual DbSet<Education> Educations { get; set; }
-        public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<Review> Review { get; set; }
+        public DbSet<Education> Educations { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Review> Review { get; set; }
         public DbSet<Publishing> Publishings { get; set; }
         public DbSet<Topic> Topics { get; set; }
 

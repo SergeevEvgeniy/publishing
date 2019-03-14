@@ -26,7 +26,7 @@ function SelectPerPage($parentElement) {
         selectPerPageChangeListener = listener;
     };
 
-    $selectPerPageWrapper.on('change', 'ul', onSelectPerPageChangeEvent(event));
+    $selectPerPageWrapper.on('change', 'ul', onSelectPerPageChangeEvent);
 
     /**
      * Отрисовка компонента
