@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+
 /**
  * Контроллер для страницы номеров.
  * @author Igor Kuzmin
@@ -26,7 +27,7 @@ public class IssueController {
     }
 
     /**
-     * @return ModelAndView - содержит представление данных о всех номерах,
+     * @return ModelAndView - содержит данные о всех номерах,
      * а также имя главной страницы раздела номера
      * */
     @GetMapping
@@ -37,7 +38,7 @@ public class IssueController {
     }
 
     /**
-     * @return ModelAndView - содержит представление данных используемые
+     * @return ModelAndView - содержит данные используемые
      * в режиме создания номера, а также имя страницы jsp содержащая
      * форму для создания нового номера
      */
@@ -52,7 +53,7 @@ public class IssueController {
 
     /**
      * @param issueId id номера
-     * @return ModelAndView - содержит представление данных используемые
+     * @return ModelAndView - содержит данные используемые
      * в режиме редактирования номера, а также имя страницы jsp содержащая
      * форму для редактирования номера
      */
@@ -65,7 +66,7 @@ public class IssueController {
 
     /**
      * @param issueId id номера
-     * @return ModelAndView - содержит представление данных используемые
+     * @return ModelAndView - содержит данные используемые
      * в режиме просмотра номера, а также имя страницы jsp содержащая
      * форму для просмотра номера
      */
