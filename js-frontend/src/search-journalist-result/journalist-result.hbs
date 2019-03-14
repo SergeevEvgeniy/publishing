@@ -2,14 +2,26 @@
     <h4>Результаты поиска</h4>
     <table class="table table-striped">
         <thead>
-        <tr>
-            <th scope="col">Имя</th>
-            <th scope="col">Образование</th>
-            <th scope="col">Статей</th>
-            <th scope="col"></th>
-        </tr>
+            <tr>
+                <th scope="col">Имя</th>
+                <th scope="col">Образование</th>
+                <th scope="col">Статей</th>
+                <th scope="col"></th>
+            </tr>
         </thead>
         <tbody>
+            {{#each journalistList}}
+            <tr data-journalist-id={{journalistId}}>
+                <td>{{lastName}} {{firstName}} {{middleName}}</td>
+                <td>{{educationTitle}}</td>
+                <td>{{articlesQuantity}}</td>
+                <td>
+                    <button class="btn btn-primary journalist-info">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
         </tbody>
     </table>
     <div id="pagination"></div>
