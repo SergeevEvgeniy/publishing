@@ -1,6 +1,6 @@
 ﻿namespace CloudPublishing.Models.Reviews.ViewModels
 {
-    public class DetailedReviewVM
+    public class DetailedReviewModel
     {
         public string Publishing { get; set; }
 

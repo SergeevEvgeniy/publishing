@@ -39,30 +39,31 @@ public class MailingController {
      */
     @GetMapping
     public String initMailingInfo(final Model model) {
-        System.out.println(mailingService.getAllMailingInfo().size());
         model.addAttribute("mailingInfoList", mailingService.getAllMailingInfo());
         return "mailing";
     }
 
     /**
-     * Обработчик ссылки с id публикации.
+     * Обработчик перехода на страницу настроек рассылок из вне, а так же обрабатывает внутренние перехода по этому странице
+     *      путем выбора издания, подписчиков которых планируется изменять.
      *
-     * @param id id публикации
+     * @param publishingId id издания
      * @param model модель, с помощью которой можно взаимодействовать с отображаемым контентом
      * @return вьюха настроек
      */
     @GetMapping("/settings")
-    public String getEmailList(@RequestParam(required = false) final Integer id, final Model model) {
-        System.out.println("ID == " + id);
+    public String getEmailList(@RequestParam(required = false, name = "id") final Integer publishingId, final Model model) {
         model.addAttribute("publishingList", publishingService.getPublishingList());
-        if (id != null) {
-            model.addAttribute("id", id);
-            model.addAttribute("emailList", mailingService.getEmailListByPublishingId(id));
+        if (publishingId != null) {
+            model.addAttribute("id", publishingId);
+            model.addAttribute("emailList", mailingService.getEmailList(publishingId));
         }
         return "mailingSettings";
     }
 
     /**
+     * Изменяет список подписчиков, подписанных на издание с <code>id == subscribers.getPublishingId()</code>.
+     *
      * @param subscribers Объект подписчиков рассылки издания с <code>id == subscribers.getPublishingId()</code>,
      *                    в котором хранятся email-адреса, на которые произойдет рассылка в следующий раз.
      * @return страница настроек.
@@ -70,10 +71,11 @@ public class MailingController {
     @PostMapping("/settings")
     public String addNewSubscribers(@ModelAttribute final Subscribers subscribers) {
         System.out.println(subscribers);
-        boolean isSuccessUpdated = mailingService
-            .updateSubscribersListByPublishingId(subscribers.getPublishingId(), subscribers.getEmails());
-        System.out.println("Email-subscribers was success updated?");
+        boolean isSuccessUpdated = mailingService.updateEmailList(subscribers.getPublishingId(), subscribers.getEmails());
+
+        System.out.print("Email-subscribers was success updated? --> ");
         System.out.println(isSuccessUpdated ? "YES" : "NO");
-        return "redirect:../mailing/settings";
+
+        return "redirect:/mailing/settings";
     }
 }

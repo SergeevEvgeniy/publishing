@@ -2,37 +2,46 @@ package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.dto.MailingInfo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Интерфейс для сервисов, реализующих логику преобразования данных из/в {@link by.artezio.cloud.publishing.dao.MailingDao}.
+ * Интерфейс для сервисов, реализующих логику взаимодействия с данными рассылок.
+ *
  * @author vgamezo
  */
 public interface MailingService {
 
     /**
-     * Метод, возвращающий список всех рассылок.
+     * Возвращает список всех рассылок.
+     *
      * @return список рассылок
      */
     List<MailingInfo> getAllMailingInfo();
 
     /**
-     * Возвращает список email-адресов, которые принимали участие в последней рассылке публикации с id == {@param id}.
-     * @param id id публикации
+     * Возвращает список email-адресов,
+     * которые принимали участие в последней рассылке публикации с <code>id == publishingId</code>.
+     *
+     * @param publishingId id публикации
      * @return Список email-адресов
      */
-    List<String> getEmailListByPublishingId(int id);
+    List<String> getEmailList(int publishingId);
 
     /**
-     * Метод, обновляющий список подписчиков на издание с <code>id == {@param publishingId}</code>.
+     * Обновляет список email-адресов на издание с <code>id == publishingId</code>.
+     *
      * @param publishingId id издания.
-     * @param emails новый список подписчиков.
+     * @param emails новый список email-адресов.
      * @return <code>true</code>, если обновление прошло успешно, иначе <code>false</code>.
      */
-    boolean updateSubscribersListByPublishingId(int publishingId, List<String> emails);
+    boolean updateEmailList(int publishingId, List<String> emails);
 
     /**
-     * Метод, делающий рассылку.
-      */
-    void sendMail();
+     * Делает рассылку всех номеров всех изданий, у которых время издания равно localDateTime.
+     *
+     * @param localDateTime время, на момент которого происходит рассылка.
+     *                      К результатам рассылок добавляется рассылки, время публикации которых есть localDateTime.
+     */
+    void sendMail(LocalDateTime localDateTime);
 }

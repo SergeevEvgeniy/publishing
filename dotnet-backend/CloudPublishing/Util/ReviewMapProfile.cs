@@ -8,13 +8,12 @@ namespace CloudPublishing.Util
     {
         public ReviewMapProfile()
         {
-            CreateMap<DetailedReviewDTO, DetailedReviewVM>();
-            CreateMap<ReviewVM, ReviewDTO>();
-            CreateMap<ReviewDTO, ReviewVM>();
+            CreateMap<DetailedReviewDTO, DetailedReviewModel>();
+            CreateMap<ReviewModel, ReviewDTO>().ReverseMap();
             CreateMap<TopicDTO, TopicModel>();
             CreateMap<EmployeeDTO, AuthorModel>();
             CreateMap<ArticleDTO, ArticleModel>();
-            CreateMap<PublishingDTO, PublishingVM>();
+            CreateMap<PublishingDTO, PublishingModel>();
         }
     }
 }
