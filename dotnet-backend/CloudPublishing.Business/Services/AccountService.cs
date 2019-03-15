@@ -1,20 +1,19 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Identity.Entities;
 using CloudPublishing.Data.Interfaces;
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace CloudPublishing.Business.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly IUnitOfWork unit;
         private readonly IMapper mapper;
+        private readonly IUnitOfWork unit;
 
         public AccountService(IUnitOfWork unit)
         {
@@ -27,8 +26,8 @@ namespace CloudPublishing.Business.Services
             var user = mapper.Map<EmployeeDTO, EmployeeUser>(entity);
             var result = await unit.Users.CreateAsync(user);
             return !result.Succeeded
-                        ? result.Errors.Aggregate((resultError, error) => error + "\n")
-                        : "Данные пользователя" + user.UserName + " успешно обновлены";
+                ? result.Errors.Aggregate((resultError, error) => error + "\n")
+                : "Данные пользователя" + user.UserName + " успешно обновлены";
         }
 
         public async Task<string> EditAccountAsync(EmployeeDTO entity)
@@ -38,6 +37,8 @@ namespace CloudPublishing.Business.Services
             {
                 return "Такого пользователя не существует";
             }
+
+
             if (target.ChiefEditor && !entity.ChiefEditor)
             {
                 return "Сначала необходимо указать другого главного редактора";
@@ -57,6 +58,7 @@ namespace CloudPublishing.Business.Services
             {
                 return "Такого пользователя не существует";
             }
+
             if (target.ChiefEditor)
             {
                 return "Сначала необходимо указать другого главного редактора";
@@ -67,6 +69,7 @@ namespace CloudPublishing.Business.Services
             {
                 return result.Errors.Aggregate((resultError, error) => error + "\n");
             }
+
             return "Пользователь " + target.UserName + "успешно удален";
         }
 

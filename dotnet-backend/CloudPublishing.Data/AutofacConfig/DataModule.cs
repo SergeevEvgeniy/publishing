@@ -15,7 +15,7 @@ namespace CloudPublishing.Data.AutofacConfig
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<MySql.Data.MySqlClient.MySqlProviderServices>().As<MySql.Data.MySqlClient.MySqlProviderServices>();
-            builder.RegisterType<CloudPublishingContext>().AsSelf().WithParameter("connectionString", "PublishingContext")
+            builder.RegisterType<CloudPublishingContext>().AsSelf().WithParameter("connectionString", "EmployeeContext")
                 .InstancePerRequest();
             
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
