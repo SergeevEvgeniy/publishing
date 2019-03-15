@@ -2,43 +2,43 @@ var searchTemplate = require('./search.hbs');
 var api = require('../api/journalist-api');
 var JournalistResultComponent = require('../search-journalist-result/journalist-result-component');
 
-var data = {
-    componentId: 'searchJournalist',
-    publishing: {
-        prevOptionIndex: 0,
-        defaultText: 'Выберите издание',
-        elementList: [],
-        value: null
-    },
-    issue: {
-        prevOptionIndex: 0,
-        defaultText: 'Выбирите выпуск',
-        elementList: [],
-        isIssuesAdded: false
-    },
-    topic: {
-        prevOptionIndex: 0,
-        defaultText: 'Выберите рубрику',
-        elementList: [],
-        value: null
-    },
-    lastName: null,
-    article: null,
-    isLoading: false,
-    isSubmitButtonActive: true
-};
 /**
  * Компонент поиска журналистов.
+ * @constructor
  * @param  {JQuery} $parentElement Элемент-контейнер для размещения компонента.
- * @returns {void}
  */
 function SearchJournalistComponent($parentElement) {
-    $parentElement.append($('<div>', {
-        id: data.componentId
-    }));
+    var data = {
+        componentId: 'searchJournalist',
+        publishing: {
+            prevOptionIndex: 0,
+            defaultText: 'Выберите издание',
+            elementList: [],
+            value: null
+        },
+        issue: {
+            prevOptionIndex: 0,
+            defaultText: 'Выбирите выпуск',
+            elementList: [],
+            isIssuesAdded: false
+        },
+        topic: {
+            prevOptionIndex: 0,
+            defaultText: 'Выберите рубрику',
+            elementList: [],
+            value: null
+        },
+        lastName: null,
+        article: null,
+        isLoading: false,
+        isSubmitButtonActive: true
+    };
+
+    var $componentContainer = $('<div/>');
+    $parentElement.append($componentContainer);
 
     function render() {
-        $parentElement.find('#' + data.componentId).empty().append(searchTemplate(data));
+        $componentContainer.empty().append(searchTemplate(data));
     }
 
     function onPublishingChangeEvent(event) {

@@ -4,21 +4,23 @@ var data = {
     componentId: 'journalistResult',
     journalistList: []
 };
+var Pagination = require('../pagination/pagination-component');
 /**
  * Компонент поиска журналистов.
+ * @constructor
  * @param  {JQuery} $parentElement Элемент-контейнер для размещения компонента.
- * @returns {void}
  */
 function JournalistResultComponent($parentElement) {
-    $parentElement.append($('<div>', {
-        id: data.componentId
-    }));
+    var $componentContainer = $('<div/>');
+    var $paginationContainer = $('<div/>');
+    $parentElement.append($componentContainer);
+    $parentElement.append($paginationContainer);
 
     function render() {
-        $parentElement.find('#' + data.componentId).empty().append(resultTemplate(data));
+        $componentContainer.empty().append(resultTemplate(data));
     }
 
-    $parentElement.on('click', '.journalist-info', function onJournalistInfoClickEvent(event) {
+    $componentContainer.on('click', '.journalist-info', function onJournalistInfoClickEvent(event) {
         var journalistName = event.target.closest('tr').firstElementChild.textContent;
         var journalistStatComponent = new JournalistStatComponent($parentElement);
         journalistStatComponent.appendComponent(journalistName);
@@ -29,8 +31,17 @@ function JournalistResultComponent($parentElement) {
      * @returns {function} journalistList Отрисовка компонента.
      */
     this.setJournalistList = function setJournalistList(journalistList) {
-        data.journalistList = journalistList;
+        var pagination = new Pagination($paginationContainer);
+        data.journalistList = journalistList.slice(0, 5);
         render();
+        pagination.setAmountRecord(journalistList.length);
+        pagination.setCurrentPage(1);
+        pagination.setPerPage(5);
+        pagination.onPageChange(function onPageChange(newCurrentPage) {
+            console.log(newCurrentPage);
+            data.journalistList = journalistList.slice(newCurrentPage * 5, newCurrentPage * 5 + 5);
+            render();
+        });
     };
     /**
      * @returns {function} Отрисовка компонента.
