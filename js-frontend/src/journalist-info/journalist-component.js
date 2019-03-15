@@ -2,6 +2,7 @@ var journalistTemplate = require('./journalist.hbs');
 var $ = require('jquery');
 var journalistApi = require('../api/journalist-api');
 var InfoComponent = require('./journ-info/journalist-info');
+
 /**
  * Компонент для управлением отображением инфомрации и
  * статистики журналиста.
@@ -57,7 +58,7 @@ function JournalistStatComponent($parentElement) {
         }));
         infoComponent = new InfoComponent($parentElement.find('.journalist-info-content'));
     }
-    render();
+
     /**
      * Метод для добавления в родительский контейнер и установки
      * влкдаки 'Информация' по умолчанию.
@@ -82,6 +83,11 @@ function JournalistStatComponent($parentElement) {
     this.onReturnSearchForm = function onReturnSearchForm(listener) {
         returnCallBack = listener;
     };
+
+    /**
+    * Отрисовка компонента.
+    */
+    this.render = render;
 }
 
 module.exports = JournalistStatComponent;

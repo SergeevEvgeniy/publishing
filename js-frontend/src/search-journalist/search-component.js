@@ -1,6 +1,5 @@
 var searchTemplate = require('./search.hbs');
 var api = require('../api/journalist-api');
-var JournalistResultComponent = require('../search-journalist-result/journalist-result-component');
 
 /**
  * Компонент поиска журналистов.
@@ -34,11 +33,10 @@ function SearchJournalistComponent($parentElement) {
         isSubmitButtonActive: true
     };
 
-    var $componentContainer = $('<div/>');
-    $parentElement.append($componentContainer);
+    var journalistSearchListener = null;
 
     function render() {
-        $componentContainer.empty().append(searchTemplate(data));
+        $parentElement.empty().append(searchTemplate(data));
     }
 
     function onPublishingChangeEvent(event) {
@@ -56,9 +54,8 @@ function SearchJournalistComponent($parentElement) {
         data.isSubmitButtonActive = false;
         render();
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
-            var journalistResult = new JournalistResultComponent($parentElement);
-            if (response.length !== 0) {
-                journalistResult.setJournalistList(response);
+            if (response.length !== 0 && journalistSearchListener) {
+                journalistSearchListener(response);
             } else {
                 console.log('Отсутствуют результаты поиска');
             }
@@ -111,7 +108,15 @@ function SearchJournalistComponent($parentElement) {
         render();
     });
     /**
-     * @returns {function} Отрисовка компонента.
+     * Установка метода обратного вызова на поиск журналистов
+     * @param {function} listener вызывается, когда была отравлена форма поиска журналиста
+     * Отправляет аргумент - массив с информацией о журналистах
+     */
+    this.onSearchJournalist = function onSearchJournalist(listener) {
+        journalistSearchListener = listener;
+    };
+    /**
+     * Отрисовка компонента.
      */
     this.render = render;
 }
