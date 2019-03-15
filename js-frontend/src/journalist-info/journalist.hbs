@@ -2,18 +2,22 @@
     <h2>{{data.firstName}} {{data.lastName}} {{data.middleName}}</h2>
     <section class="info-body">
         <ul class="nav nav-tabs">
-            <li class="nav-item" data-type="Info">
-                <a href="#" class="nav-link">Информация</a>
+            <li class="nav-item" data-type="infoComponent">
+                <a href="#" class="nav-link active">Информация</a>
             </li>
-            <li class="nav-item" data-type="Statistics">
+            <li class="nav-item" data-type="statisticsComponent">
                 <a href="#" class="nav-link">Статистика</a>
             </li>
-            <li class="nav-item" data-type="Articles">
+            <li class="nav-item" data-type="articlesComponent">
                 <a href="#" class="nav-link">Статьи</a>
             </li>
         </ul>
         <!--Это будет отдельным компонентом. Наверно. Стили потом-->
-        <div id="journalistInfo">
+        <div class="journalist-info-content" hidden>
+        </div>
+        <div class="journalist-statistics-content" hidden>
+        </div>
+        <div class="journalist-articles-content" hidden>
         </div>
         <button class="btn btn-primary" id="returnToSearchForm"> 
             <i class="fas fa-arrow-left mr-1"></i>Вернуться
