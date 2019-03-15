@@ -88,9 +88,6 @@
     <Compile Include="DTO\ReviewDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Results\BadResult.cs" />
-    <Compile Include="Results\Interfaces\IResult.cs" />
-    <Compile Include="Results\SuccessfulResult.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\Interfaces\IAccountService.cs" />

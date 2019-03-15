@@ -57,10 +57,7 @@ namespace CloudPublishing.Controllers
         private List<SelectListItem> GetEmployeeEducationList()
         {
             var list = service.GetEducationList();
-            return list.IsSuccessful
-                ? list.GetContent().Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()})
-                    .ToList()
-                : new List<SelectListItem>();
+            return list.Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()}).ToList();
         }
 
         [HttpGet]
@@ -68,9 +65,8 @@ namespace CloudPublishing.Controllers
         {
             if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
             var result = service.GetEmployeeList();
-            if (!result.IsSuccessful) return null;
 
-            return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.GetContent().ToList())
+            return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.ToList())
                 .Select(x =>
                 {
                     x.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), x.Type)];
@@ -90,15 +86,15 @@ namespace CloudPublishing.Controllers
         public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var result = await accounts.AuthenticateUserAsync(new EmployeeDTO
+            var claims = await accounts.AuthenticateUserAsync(new EmployeeDTO
             {
                 Email = model.Email,
                 Password = model.Password
             });
 
-            if (!result.IsSuccessful)
+            if (claims == null)
             {
-                ModelState.AddModelError("", result.GetFailureMessage());
+                ModelState.AddModelError("", "Введены неверные данные");
                 model.Password = string.Empty;
                 return View(model);
             }
@@ -106,7 +102,7 @@ namespace CloudPublishing.Controllers
             authenticationManager.SignIn(new AuthenticationProperties
             {
                 IsPersistent = model.CheckOut
-            }, result.GetContent());
+            }, claims);
 
             return RedirectToAction("List", "Employee");
         }
@@ -145,20 +141,20 @@ namespace CloudPublishing.Controllers
 
             var result = await accounts.CreateAccountAsync(user);
 
-            if (!result.IsSuccessful)
-            {
-                ModelState.AddModelError("", result.GetFailureMessage());
-                model.TypeList = GetEmployeeTypeSelectList();
-                model.EducationList = GetEmployeeEducationList();
-                return View(model);
-            }
+            //if (!result.IsSuccessful)
+            //{
+            //    ModelState.AddModelError("", result.GetFailureMessage());
+            //    model.TypeList = GetEmployeeTypeSelectList();
+            //    model.EducationList = GetEmployeeEducationList();
+            //    return View(model);
+            //}
 
             if (model.ChiefEditor)
             {
                 authenticationManager.SignOut();
             }
 
-            TempData["Message"] = result.GetContent();
+            TempData["Message"] = result;
 
 
             return RedirectToAction("List");
@@ -171,9 +167,9 @@ namespace CloudPublishing.Controllers
             if (id == null) return null;
 
             var result = service.GetEmployeeById(id.Value);
-            if (!result.IsSuccessful) return null;
+            if (result == null) return null;
 
-            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result.GetContent());
+            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result);
             model.TypeList = GetEmployeeTypeSelectList();
             model.EducationList = GetEmployeeEducationList();
 
@@ -195,20 +191,20 @@ namespace CloudPublishing.Controllers
             }
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
             var result = await accounts.EditAccountAsync(user);
-            if (!result.IsSuccessful)
-            {
-                ModelState.AddModelError("", result.GetFailureMessage());
-                model.TypeList = GetEmployeeTypeSelectList();
-                model.EducationList = GetEmployeeEducationList();
-                return View(model);
-            }
+            //if (!result.IsSuccessful)
+            //{
+            //    ModelState.AddModelError("", result.GetFailureMessage());
+            //    model.TypeList = GetEmployeeTypeSelectList();
+            //    model.EducationList = GetEmployeeEducationList();
+            //    return View(model);
+            //}
 
             if (model.ChiefEditor)
             {
                 authenticationManager.SignOut();
             }
 
-            TempData["Message"] = result.GetContent();
+            TempData["Message"] = result;
 
             return RedirectToAction("List");
         }
@@ -217,12 +213,18 @@ namespace CloudPublishing.Controllers
         [Authorize(Roles = "ChiefEditor")]
         public async Task<ActionResult> Delete(int? id)
         {
-            var result = await accounts.DeleteAccountAsync(id);
+            //var result = await accounts.DeleteAccountAsync(id);
+
+            //return Json(new
+            //{
+            //    isSuccessful = result.IsSuccessful,
+            //    message = result.IsSuccessful ? result.GetContent() : result.GetFailureMessage()
+            //}, JsonRequestBehavior.AllowGet);
 
             return Json(new
             {
-                isSuccessful = result.IsSuccessful,
-                message = result.IsSuccessful ? result.GetContent() : result.GetFailureMessage()
+                isSuccessful = false,
+                message = "Not implemented"
             }, JsonRequestBehavior.AllowGet);
         }
     }

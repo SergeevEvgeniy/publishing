@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using CloudPublishing.Business.DTO;
-using CloudPublishing.Business.Results;
-using CloudPublishing.Business.Results.Interfaces;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
@@ -28,67 +26,29 @@ namespace CloudPublishing.Business.Services
             unitOfWork?.Dispose();
         }
 
-        public IResult<IEnumerable<EmployeeDTO>> GetEmployeeList()
+        public IEnumerable<EmployeeDTO> GetEmployeeList()
         {
-            try
-            {
-                var list = mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unitOfWork.Employees.GetAll());
-                return new SuccessfulResult<IEnumerable<EmployeeDTO>>(list);
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>(e.Message, true);
-            }
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unitOfWork.Employees.GetAll());
         }
 
-        public IResult<IEnumerable<EmployeeDTO>> GetEmployeeList(IEnumerable<int> idList, string lastName)
+        public IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList, string lastName)
         {
-            if (idList == null)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>("Отсутствует список идентификаторов");
-            }
-            try
-            {
-                var list = unitOfWork.Employees.Find(x =>
-                    x.LastName.Contains(lastName ?? string.Empty) && idList.Contains(x.Id));
-                return new SuccessfulResult<IEnumerable<EmployeeDTO>>(mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list));
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>(e.Message, true);
-            }
+            var list = unitOfWork.Employees.Find(x => x.LastName.Contains(lastName ?? string.Empty) && idList.Contains(x.Id));
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
         }
 
-        public IResult<IEnumerable<EducationDTO>> GetEducationList()
+        public IEnumerable<EducationDTO> GetEducationList()
         {
-            try
-            {
-                var list = mapper.Map<IEnumerable<Education>, List<EducationDTO>>(
-                    unitOfWork.Employees.GetEducationList());
-                return new SuccessfulResult<IEnumerable<EducationDTO>>(list);
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EducationDTO>>(e.Message, true);
-            }
+            return mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Employees.GetEducationList());
         }
 
-        public IResult<EmployeeDTO> GetEmployeeById(int? id)
+        public EmployeeDTO GetEmployeeById(int? id)
         {
-            if (id == null) return new BadResult<EmployeeDTO>("Отсутствует идентификатор");
-            try
+            if (id == null)
             {
-                var employee = mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id.Value));
-                if (employee == null)
-                {
-                    return new BadResult<EmployeeDTO>("Пользователь не найден");
-                }
-                return new SuccessfulResult<EmployeeDTO>(employee);
+                return null;
             }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<EmployeeDTO>(e.Message, true);
-            }
+            return mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id.Value));
         }
     }
 }
