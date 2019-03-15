@@ -1,82 +1,100 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Infrastructure;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Business.Util;
-using CloudPublishing.Data.Identity.Entities;
+using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
+using CloudPublishing.Data.Util;
 
 namespace CloudPublishing.Business.Services
 {
     public class AccountService : IAccountService
     {
+        private readonly IPasswordHasher hasher;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unit;
 
-        public AccountService(IUnitOfWork unit)
+        public AccountService(IUnitOfWork unit, IPasswordHasher hasher)
         {
             this.unit = unit;
+            this.hasher = hasher;
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessMapProfile())).CreateMapper();
         }
 
-        public async Task<string> CreateAccountAsync(EmployeeDTO entity)
+        public void CreateAccount(EmployeeDTO entity)
         {
-            var user = mapper.Map<EmployeeDTO, EmployeeUser>(entity);
-            var result = await unit.Users.CreateAsync(user);
-            return !result.Succeeded
-                ? result.Errors.Aggregate((resultError, error) => error + "\n")
-                : "Данные пользователя" + user.UserName + " успешно обновлены";
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
+            var employee = mapper.Map<EmployeeDTO, Employee>(entity);
+            employee.Password = hasher.HashPassword(entity.Password);
+            unit.Employees.Create(employee);
+            unit.Save();
         }
 
-        public async Task<string> EditAccountAsync(EmployeeDTO entity)
+        public void EditAccount(EmployeeDTO entity)
         {
-            var target = await unit.Users.FindByIdAsync(entity.Id);
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
+            var target = unit.Employees.Get(entity.Id);
             if (target == null)
             {
-                return "Такого пользователя не существует";
+                throw new NullReferenceException("Пользователь не найден");
             }
 
 
             if (target.ChiefEditor && !entity.ChiefEditor)
             {
-                return "Сначала необходимо указать другого главного редактора";
+                throw new ChiefEditorExistenceException();
             }
 
-            var user = mapper.Map<EmployeeDTO, EmployeeUser>(entity);
-            var result = await unit.Users.UpdateAsync(user);
-            return !result.Succeeded
-                ? result.Errors.Aggregate((resultError, error) => error + "\n")
-                : "Данные пользователя" + user.UserName + " успешно обновлены";
+            if (entity.Password != null)
+            {
+                entity.Password = hasher.HashPassword(entity.Password);
+            }
+
+            unit.Employees.Update(mapper.Map<EmployeeDTO, Employee>(entity));
+            unit.Save();
         }
 
-        public async Task<string> DeleteAccountAsync(int? id)
+        public void DeleteAccount(int? id)
         {
-            var target = await unit.Users.FindByIdAsync(id.Value);
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var target = unit.Employees.Get(id.Value);
+
             if (target == null)
             {
-                return "Такого пользователя не существует";
+                throw new NullReferenceException("Пользователь не найден");
             }
 
             if (target.ChiefEditor)
             {
-                return "Сначала необходимо указать другого главного редактора";
+                throw new ChiefEditorExistenceException();
             }
 
-            var result = await unit.Users.DeleteAsync(target);
-            if (!result.Succeeded)
-            {
-                return result.Errors.Aggregate((resultError, error) => error + "\n");
-            }
-
-            return "Пользователь " + target.UserName + "успешно удален";
+            unit.Employees.Delete(id.Value);
+            unit.Save();
         }
 
-        public async Task<ClaimsIdentity> AuthenticateUserAsync(EmployeeDTO entity)
+        public EmployeeDTO AuthenticateUser(string email, string password)
         {
-            var user = mapper.Map<EmployeeDTO, EmployeeUser>(entity);
-            return await unit.Users.AuthenticateAsync(user);
+            var hashedPassword = hasher.HashPassword(password);
+
+            var employee = unit.Employees.Find(x => x.Password == hashedPassword && x.Email == email).FirstOrDefault();
+            return mapper.Map<Employee, EmployeeDTO>(employee);
         }
     }
 }
