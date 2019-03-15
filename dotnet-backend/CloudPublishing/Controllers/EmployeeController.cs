@@ -18,24 +18,8 @@ namespace CloudPublishing.Controllers
         private readonly IEmployeeService service;
         private readonly IAccountService accounts;
         private readonly IAuthenticationManager authenticationManager;
-
-        private static readonly IDictionary<EmployeeType, string> Types;
-        private static readonly IDictionary<Sex, string> Sexes;
+        
         private readonly IMapper mapper;
-
-        static EmployeeController()
-        {
-            Types = new Dictionary<EmployeeType, string>
-            {
-                {EmployeeType.E, "Редактор"},
-                {EmployeeType.J, "Журналист"}
-            };
-            Sexes = new Dictionary<Sex, string>
-            {
-                {Sex.M, "М"},
-                {Sex.F, "Ж"}
-            };
-        }
 
         public EmployeeController(IEmployeeService service, IAccountService accounts, IAuthenticationManager authenticationManager)
         {
@@ -45,13 +29,13 @@ namespace CloudPublishing.Controllers
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
         }
 
-        private static List<SelectListItem> GetEmployeeTypeSelectList()
+        private List<SelectListItem> GetEmployeeTypeList()
         {
-            return new List<SelectListItem>
+            return service.GetEmployeeTypes().Select(x => new SelectListItem
             {
-                new SelectListItem {Value = EmployeeType.E.ToString(), Text = Types[EmployeeType.E]},
-                new SelectListItem {Value = EmployeeType.J.ToString(), Text = Types[EmployeeType.J]}
-            };
+                Value = x.Key,
+                Text = x.Value
+            }).ToList();
         }
 
         private List<SelectListItem> GetEmployeeEducationList()
@@ -64,15 +48,9 @@ namespace CloudPublishing.Controllers
         public ActionResult List()
         {
             if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
-            var result = service.GetEmployeeList();
+            var list = service.GetEmployeeList();
 
-            return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.ToList())
-                .Select(x =>
-                {
-                    x.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), x.Type)];
-                    x.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), x.Sex)];
-                    return x;
-                }));
+            return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(list));
         }
 
         [HttpGet]
@@ -119,7 +97,7 @@ namespace CloudPublishing.Controllers
         {
             var model = new EmployeeCreateModel
             {
-                TypeList = GetEmployeeTypeSelectList(),
+                TypeList = GetEmployeeTypeList(),
                 EducationList = GetEmployeeEducationList()
             };
             return View(model);
@@ -132,7 +110,7 @@ namespace CloudPublishing.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.TypeList = GetEmployeeTypeSelectList();
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
@@ -170,7 +148,7 @@ namespace CloudPublishing.Controllers
             if (result == null) return null;
 
             var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result);
-            model.TypeList = GetEmployeeTypeSelectList();
+            model.TypeList = GetEmployeeTypeList();
             model.EducationList = GetEmployeeEducationList();
 
             if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
@@ -185,7 +163,7 @@ namespace CloudPublishing.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.TypeList = GetEmployeeTypeSelectList();
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }

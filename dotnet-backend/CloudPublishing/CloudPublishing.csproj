@@ -199,8 +199,6 @@
     <Compile Include="Models\Employees\ViewModels\EmployeeCreateModel.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeEditModel.cs" />
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
-    <Compile Include="Models\Employees\Enums\Sex.cs" />
-    <Compile Include="Models\Employees\Enums\EmployeeType.cs" />
     <Compile Include="Models\Publishings\Enums\PublishingType.cs" />
     <Compile Include="Models\Publishings\PublishingCreateViewModel.cs" />
     <Compile Include="Models\Publishings\PublishingEditViewModel.cs" />

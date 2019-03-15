@@ -13,5 +13,7 @@ namespace CloudPublishing.Business.Services.Interfaces
         IEnumerable<EducationDTO> GetEducationList();
 
         EmployeeDTO GetEmployeeById(int? id);
+
+        IDictionary<string, string> GetEmployeeTypes();
     }
 }

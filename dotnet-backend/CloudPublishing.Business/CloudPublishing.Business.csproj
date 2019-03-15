@@ -87,6 +87,8 @@
     <Compile Include="DTO\PublishingDTO.cs" />
     <Compile Include="DTO\ReviewDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />
+    <Compile Include="Enums\EmployeeType.cs" />
+    <Compile Include="Enums\Sex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
