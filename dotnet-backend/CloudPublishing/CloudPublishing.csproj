@@ -185,6 +185,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AutofacConfig\AutoMapperModule.cs" />
     <Compile Include="AutofacConfig\WebModule.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\PublishingController.cs" />
@@ -219,6 +220,9 @@
     <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\PublishingMapProfile.cs" />
+    <Compile Include="Util\PublishingValueResolvers\EmployeeShortName.cs" />
+    <Compile Include="Util\PublishingValueResolvers\TopicsNameToString.cs" />
     <Compile Include="Util\ReviewMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>

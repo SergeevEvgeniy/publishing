@@ -14,14 +14,5 @@ namespace CloudPublishing.Models.Publishings
         public string Type { get; set; }
         public string Subjects { get; set; }
         public string Topics { get; set; }
-
-        public PublishingTableViewModel(PublishingDTO publishing)
-        {
-            Id = publishing.Id;
-            Title = publishing.Title;
-            Type = Enum.GetName(typeof(PublishingType), int.Parse(publishing.Type));
-            Subjects = publishing.Subjects;
-            Topics = string.Join(", ", publishing.Topics.Select(x => x.Name));
-        }
     }
 }

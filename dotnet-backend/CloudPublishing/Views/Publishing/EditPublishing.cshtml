@@ -140,7 +140,7 @@
                                     @editor.Name
                                 </div>
                                 <div class="col-6 text-right">
-                                    <input type="hidden" value="@editor.Id" name="Publishing.EmployeesId" />
+                                    <input type="hidden" value="@editor.Id" name="Publishing.EmployeesId">
                                     <button class="btn btn-light">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
@@ -153,8 +153,8 @@
         </div>
     </div>
     <div>
-        <a href=@Url.Action("List", "Publishing") class="btn btn-secondary active" role="button" aria-pressed="true">Отменить</a>
-        <button type="submit" class="btn btn-primary active">Сохранить</button>
+        <a href=@Url.Action("List", "Publishing") class="btn btn-secondary" role="button" aria-pressed="true">Отменить</a>
+        <input type="submit" name="save" class="btn btn-primary" value="Сохранить">
     </div>
 }
 @Scripts.Render("~/bundles/publishing-create-view")

@@ -1,6 +1,9 @@
-﻿using CloudPublishing.Business.Services.Interfaces;
+﻿using AutoMapper;
+using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Converters;
 using CloudPublishing.Models.Publishings;
+using CloudPublishing.Util;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -9,15 +12,16 @@ namespace CloudPublishing.Controllers
     public class PublishingController : Controller
     {
         private IPublishingService publishingService;
-
+        private IMapper mapper;
         public PublishingController(IPublishingService publishingService)
         {
             this.publishingService = publishingService;
+            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new PublishingMapProfile())).CreateMapper();
         }
 
         public ActionResult List()
         {
-            var publishings = publishingService.GetAllPublishings().Select(x => new PublishingTableViewModel(x));
+            var publishings = mapper.Map<IEnumerable<PublishingTableViewModel>>(publishingService.GetAllPublishings());
             return View(publishings);
         }
 
