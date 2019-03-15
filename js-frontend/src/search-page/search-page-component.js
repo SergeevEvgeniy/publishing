@@ -31,6 +31,11 @@ function SearchPageComponent($parentElement) {
         });
     });
 
+    searchJournalistComponent.onClearSearch(function onClearSearch() {
+        $journalistResultContainer.empty();
+        $journalistPaginationContainer.empty();
+    });
+
     journalistResultComponent.onJournalistInfoButtonClick(function openJournalistInfo(journalistName) {
         $searchJournalistContainer.empty();
         $journalistResultContainer.empty();

@@ -34,6 +34,7 @@ function SearchJournalistComponent($parentElement) {
     };
 
     var journalistSearchListener = null;
+    var clearSearchListener = null;
 
     function render() {
         $parentElement.empty().append(searchTemplate(data));
@@ -71,8 +72,8 @@ function SearchJournalistComponent($parentElement) {
         data.issue.isIssuesAdded = false;
         data.publishing.elementList[data.publishing.prevOptionIndex].selected = false;
         data.topic.elementList[data.publishing.prevOptionIndex].selected = false;
-        $parentElement.find('#journalistResult').empty();
         render();
+        clearSearchListener();
     }
 
     function onInputKeyUpEvent(event) {
@@ -107,6 +108,7 @@ function SearchJournalistComponent($parentElement) {
         data.topic.elementList = response;
         render();
     });
+
     /**
      * Установка метода обратного вызова на поиск журналистов
      * @param {function} listener вызывается, когда была отравлена форма поиска журналиста
@@ -115,6 +117,16 @@ function SearchJournalistComponent($parentElement) {
     this.onSearchJournalist = function onSearchJournalist(listener) {
         journalistSearchListener = listener;
     };
+
+    /**
+     * Установка метода обратного вызова на очистку поиска
+     * @param {function} listener вызывается, когда была нажата кнопка очистить
+     * Отправляет аргумент - массив с информацией о журналистах
+     */
+    this.onClearSearch = function onClearSearch(listener) {
+        clearSearchListener = listener;
+    };
+
     /**
      * Отрисовка компонента.
      */
