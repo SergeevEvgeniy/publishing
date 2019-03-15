@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Security;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Infrastructure;
@@ -58,37 +59,34 @@ namespace CloudPublishing.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Login(LoginViewModel model)
-        //{
-        //    if (!ModelState.IsValid) return View(model);
-        //    var claims = await accounts.AuthenticateUserAsync(new EmployeeDTO
-        //    {
-        //        Email = model.Email,
-        //        Password = model.Password
-        //    });
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-        //    if (claims == null)
-        //    {
-        //        ModelState.AddModelError("", "Введены неверные данные");
-        //        model.Password = string.Empty;
-        //        return View(model);
-        //    }
-        //    authenticationManager.SignOut();
-        //    authenticationManager.SignIn(new AuthenticationProperties
-        //    {
-        //        IsPersistent = model.CheckOut
-        //    }, claims);
+            var user = accounts.AuthenticateUser(model.Email, model.Password);
 
-        //    return RedirectToAction("List", "Employee");
-        //}
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Введены неверные данные");
+                model.Password = string.Empty;
+                return View(model);
+            }
 
-        //public ActionResult Logout()
-        //{
-        //    authenticationManager.SignOut();
-        //    return RedirectToAction("List");
-        //}
+            FormsAuthentication.SetAuthCookie(user.Email, model.CheckOut);
+
+            return RedirectToAction("List", "Employee");
+        }
+
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("List");
+        }
 
         [HttpGet]
         //[Authorize(Roles = "ChiefEditor")]
@@ -117,6 +115,7 @@ namespace CloudPublishing.Controllers
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
             accounts.CreateAccount(user);
+
 
             //if (!result.IsSuccessful)
             //{
@@ -194,7 +193,7 @@ namespace CloudPublishing.Controllers
             {
                 accounts.DeleteAccount(id);
             }
-            catch (ChiefEditorExistenceException e)
+            catch (ChiefEditorRoleChangeException e)
             {
                 return Json(new
                 {

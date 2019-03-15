@@ -10,6 +10,8 @@ namespace CloudPublishing.Business.Util
         {
             CreateMap<Employee, EmployeeDTO>()
                 .ForMember(dest => dest.Password, opt => opt.Ignore());
+            CreateMap<EmployeeDTO, Employee>()
+                .ForMember(dest => dest.Education, opt => opt.Ignore());
             CreateMap<Education, EducationDTO>();
         }
     }

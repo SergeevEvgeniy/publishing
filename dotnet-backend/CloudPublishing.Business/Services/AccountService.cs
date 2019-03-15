@@ -32,6 +32,16 @@ namespace CloudPublishing.Business.Services
                 throw new ArgumentNullException("entity");
             }
 
+            if (entity.ChiefEditor)
+            {
+                var chief = unit.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
+                if (chief != null)
+                {
+                    chief.ChiefEditor = false;
+                    unit.Employees.Update(chief);
+                }
+            }
+
             var employee = mapper.Map<EmployeeDTO, Employee>(entity);
             employee.Password = hasher.HashPassword(entity.Password);
             unit.Employees.Create(employee);
@@ -51,10 +61,19 @@ namespace CloudPublishing.Business.Services
                 throw new NullReferenceException("Пользователь не найден");
             }
 
-
             if (target.ChiefEditor && !entity.ChiefEditor)
             {
-                throw new ChiefEditorExistenceException();
+                throw new ChiefEditorRoleChangeException();
+            }
+
+            if (entity.ChiefEditor && !target.ChiefEditor)
+            {
+                var chief = unit.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
+                if (chief != null)
+                {
+                    chief.ChiefEditor = false;
+                    unit.Employees.Update(chief);
+                }
             }
 
             if (entity.Password != null)
@@ -62,7 +81,7 @@ namespace CloudPublishing.Business.Services
                 entity.Password = hasher.HashPassword(entity.Password);
             }
 
-            unit.Employees.Update(mapper.Map<EmployeeDTO, Employee>(entity));
+            unit.Employees.Update(mapper.Map(entity, target));
             unit.Save();
         }
 
@@ -82,7 +101,7 @@ namespace CloudPublishing.Business.Services
 
             if (target.ChiefEditor)
             {
-                throw new ChiefEditorExistenceException();
+                throw new ChiefEditorRoleChangeException();
             }
 
             unit.Employees.Delete(id.Value);
