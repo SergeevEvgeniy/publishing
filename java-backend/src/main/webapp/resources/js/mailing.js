@@ -7,7 +7,7 @@ $(function () {
     $('#mailingSelect').on('change', function () {
         // current link is //site/mailing/settings(?id=<id>, optionally)
         var id = $(this).val();
-        var url = '../mailing/settings';
+        var url = APP_CONTEXT_PATH + '/mailing/settings';
         if (id !== '') {
             url = url + "?id=" + id;
         }

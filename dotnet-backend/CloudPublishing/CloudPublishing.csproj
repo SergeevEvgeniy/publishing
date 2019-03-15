@@ -33,6 +33,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\CloudPublishing.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -170,9 +171,9 @@
     <Compile Include="Models\Reviews\ViewModels\AuthorModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\CreateReviewModel.cs" />
     <Compile Include="Models\Publishings\PublishingTableViewModel.cs" />
-    <Compile Include="Models\Reviews\ViewModels\DetailedReviewVM.cs" />
-    <Compile Include="Models\Reviews\ViewModels\PublishingVM.cs" />
-    <Compile Include="Models\Reviews\ViewModels\ReviewVM.cs" />
+    <Compile Include="Models\Reviews\ViewModels\DetailedReviewModel.cs" />
+    <Compile Include="Models\Reviews\ViewModels\PublishingModel.cs" />
+    <Compile Include="Models\Reviews\ViewModels\ReviewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\TopicModel.cs" />
     <Compile Include="Util\AjaxOnlyAttribute.cs" />
     <Compile Include="Util\EmployeeMapProfile.cs" />

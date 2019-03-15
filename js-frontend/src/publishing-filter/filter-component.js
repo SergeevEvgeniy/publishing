@@ -36,7 +36,7 @@ function Filter($parentElement, publicationType) {
         formData.append('article', event.currentTarget.articleTitleFilter.value);
 
         onFilterSubmitListener(formData);
-        this.render();
+        event.currentTarget.render();
     }
 
     function onInputChangeEvent(prop) {

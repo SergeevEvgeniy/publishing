@@ -3,11 +3,10 @@ var homeTemplate = require('./home.hbs');
 /**
  * Компонент главной страницы.
  * @param  {JQuery} $parentElement Элемент-контейнер для размещения компонента.
- * @returns {void}
  */
 function HomeComponent($parentElement) {
     /**
-     * @returns {function} Отрисовка компонента
+     * Добавляет в контейнер родителя шаблон home
      */
     this.render = function render() {
         $parentElement.append(homeTemplate({
