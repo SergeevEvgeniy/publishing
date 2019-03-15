@@ -28,7 +28,6 @@ function JournalistResultComponent($parentElement) {
     /**
      * Установка данных о журналистах.
      * @param  {Array} journalistList Данные с информацией о журналистах.
-     * @returns {function} journalistList Отрисовка компонента.
      */
     this.setJournalistList = function setJournalistList(journalistList) {
         var pagination = new Pagination($paginationContainer);
