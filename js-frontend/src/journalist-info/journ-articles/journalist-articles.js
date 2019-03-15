@@ -5,9 +5,9 @@ var SearchResultComponent = require('../search-result/search-result');
 
 
 /**
- * Компонент для вкладки 'Поиск статей'
+ * Компонент для вкладки 'Поиск статей'.
  * @constructor
- * @param {JQueryElement} $parentElement - родитель, к которому будет добавлен шаблон
+ * @param {jQuery} $parentElement - родитель, к которому будет добавлен шаблон.
  */
 function ArticlesComponent($parentElement) {
     var componentData = {};
@@ -16,13 +16,24 @@ function ArticlesComponent($parentElement) {
     var searchBodySelector = '#searchResultBody';
     var updateCallBack = null;
 
-
-    function findArticles (event) {
+    /**
+     * Метод для обработки события при нажатии кнопки 'Найти'.
+     * Добавляет к родительскому компоненту шаблон результатов поиска статей.
+     * @param {Event} event - объект события
+     */
+    function findArticles(event) {
+        var searchResult;
         event.preventDefault();
-        var searchResult = new SearchResultComponent($(searchBodySelector));
+        searchResult = new SearchResultComponent($(searchBodySelector));
         searchResult.render();
     }
 
+    /**
+     * Метод для обработки события при нажатии кнопки 'Очистить'
+     * Очищает форму, удаляет выпадающий список 'Выпуск',
+     * шаблон результатов поиска.
+     * @param {Event} event - объект события.
+     */
     function clearForm(event) {
         event.preventDefault();
         event.target.closest('form').reset();
@@ -32,10 +43,13 @@ function ArticlesComponent($parentElement) {
             updateCallBack();
         }
     }
-    
-    function getIssue(event) {
+    /**
+     * Метод для добавления шаблона выпадающего списка на форму.
+     */
+    function getIssue() {
+        var release;
         $(releaseBodySelector).empty();
-        var release = [{
+        release = [{
             id: 500,
             name: '24124'
         }];
@@ -45,36 +59,49 @@ function ArticlesComponent($parentElement) {
     }
 
     ($parentElement).off().on('click', '#findArticle', findArticles)
-    .on('click', '#clearFields', clearForm)
-    .on('change', editionSelector, getIssue);
+        .on('click', '#clearFields', clearForm)
+        .on('change', editionSelector, getIssue);
 
+    /**
+     * Фукнция для добавления шаблона articlesTemplate в родительский контейнер.
+     */
     function render() {
         componentData.edition = [
             {
-            id: 1,
-            name: 'name'
+                id: 1,
+                name: 'name'
             },
             {
                 id: 2,
                 name: 'name2'
             },
         ];
-        componentData.heading = [{
-            id: 100,
-            name: 'meow'
-        }];
+        componentData.heading = [
+            {
+                id: 100,
+                name: 'meow'
+            }
+        ];
 
         $parentElement.empty().append(articlesTemplate({
             data: componentData
         }));
-
     }
 
-    this.setData = function (data) {
+    /**
+     * @param {Object} data - входные данные, которые будут записаны в componentData
+     */
+    this.setData = function setData(data) {
+        componentData = data;
         render();
     };
-    this.onActionInChildComponent = function (callBack) {
-        updateCallBack = callBack;
+
+    /**
+     * Установка функции обратного вызова.
+     * @param {function} listener - функция обратного вызова.
+     */
+    this.onActionInChildComponent = function onActionInChildComponent(listener) {
+        updateCallBack = listener;
     };
 }
 

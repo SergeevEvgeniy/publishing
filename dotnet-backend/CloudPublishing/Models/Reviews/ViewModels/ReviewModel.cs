@@ -2,7 +2,7 @@
 
 namespace CloudPublishing.Models.Reviews.ViewModels
 {
-    public class ReviewVM
+    public class ReviewModel
     {
         [Required]
         public int ArticleId { get; set; }

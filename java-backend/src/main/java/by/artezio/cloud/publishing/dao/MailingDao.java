@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * MailingDAO, дающий возможность получить данные о рассылках.
+ * MailingDAO, дающий возможность получить данные о рассылках (результаты, подписчики...).
  *
  * @author vgamezo
  */
@@ -44,26 +44,23 @@ public class MailingDao {
     }
 
     /**
-     * Возвращает список email адресов, которые были в последней рассылке публикации с {@param publishingId}.
+     * Возвращает список email адресов, которые подписаны на издание с id == publishingId.
      *
      * @param publishingId id публикации
-     * @return Список email адресов, которые были в последней рассылке публикации с {@param publishingId}
+     * @return Список email адресов, которые были в последней рассылке публикации с id == publishingId
      */
-    public List<String> getEmailListByPublishingId(final int publishingId) {
+    public List<String> getEmailList(final int publishingId) {
         return jdbcTemplate.query(
-            "select email\n"
-                + "from mailing_subscriber ms\n"
-                + "   join (select max(mailing.id) as id\n"
-                + "        from mailing\n"
-                + "        where publishing_id = :publishingId\n"
-                + "        group by publishing_id) maxid on maxid.id = ms.mailing_id;",
-            new MapSqlParameterSource(Collections.singletonMap("publishingId", publishingId)),
+            "select ms.email\n"
+                + "from mailing m join mailing_subscriber ms on m.id = ms.mailing_id\n"
+                + "where publishing_id = :publishing_id;",
+            new MapSqlParameterSource(Collections.singletonMap("publishing_id", publishingId)),
             (rs, rowNum) -> rs.getString(1)
         );
     }
 
     /**
-     * Возвращает список объектов {@link MailingInfo}.
+     * Возвращает информацию о всех произошедших рассылках.
      *
      * @return список объектов {@link MailingInfo}.
      */
@@ -77,10 +74,10 @@ public class MailingDao {
     }
 
     /**
-     * Метод, возвращающий последний id рассылки по публикации с <code> id == publishingId </code>.
+     * Возвращает id рассылки, привязанной к изданию с id == publishingId.
      *
      * @param publishingId id издания, по которому проходила рассылка.
-     * @return id последней рассылки рассылки
+     * @return id последней рассылки рассылки. Целое число, если рассылка существует, иначе null.
      */
     public Integer getMailingIdByPublishingId(final int publishingId) {
         try {
@@ -94,12 +91,13 @@ public class MailingDao {
     }
 
     /**
-     * Метод, добавляющий нового подписчика к уже существвующим.
+     * Добавляет email-адрес подписчика к уже добавленным на рассылку с id == mailingId.
+     *
      * @param mailingId id рассылки, которая прикреплена к изданию.
      * @param email email-адрес нового подписчика.
      * @return <code>true</code>, если подписчик был успешно добавлен, иначе <code>false</code>.
      */
-    public boolean addSubscriberByMailingId(final int mailingId, final String email) {
+    public boolean addEmailByMailingId(final int mailingId, final String email) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("mailingId", mailingId);
         map.put("email", email);
@@ -117,11 +115,13 @@ public class MailingDao {
     }
 
     /**
-     * Метод, создающий новую запись в таблице mailing и возвращает id этой рассылки.
+     * Создается новая запись в таблице mailing, которая привязывается к изданию с id == publishingId
+     *      и возвращается id этой рассылки.
+     *
      * @param publishingId id издания, на которую создается рассылка.
      * @return id рассылки.
      */
-    public Integer createNewMailingByPublishingId(final int publishingId) {
+    public Integer createMailingRecord(final int publishingId) {
         this.jdbcTemplate.update(
             "insert into mailing (publishing_id) values (:publishingId)",
             Collections.singletonMap("publishingId", publishingId)
@@ -130,7 +130,7 @@ public class MailingDao {
     }
 
     /**
-     * Метод, удаляющий всех подписчиков, которые подписаны на рассылку с <code>id = {@param mailingId}</code>.
+     * Удаляет всех подписчиков, которые подписаны на рассылку с id == mailingId.
      * @param mailingId id рассылки.
      */
     public void clearMailingSubscribersByMailingId(final Integer mailingId) {

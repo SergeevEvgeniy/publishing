@@ -638,7 +638,7 @@ module.exports = {
         'no-empty': 'error',
 
         // disallow invalid jsdoc
-        'valid-jsdoc': ['error', { requireReturn: true, requireReturnType: true }]
+        'valid-jsdoc': ['error', { requireReturn: false, requireReturnType: true }]
     },
     env: {
         browser: true

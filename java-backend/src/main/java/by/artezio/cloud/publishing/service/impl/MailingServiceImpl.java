@@ -6,6 +6,7 @@ import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,24 +37,24 @@ public class MailingServiceImpl implements MailingService {
     }
 
     @Override
-    public List<String> getEmailListByPublishingId(final int id) {
-        return mailingDao.getEmailListByPublishingId(id);
+    public List<String> getEmailList(final int publishingId) {
+        return mailingDao.getEmailList(publishingId);
     }
 
     @Override
-    public boolean updateSubscribersListByPublishingId(final int publishingId, final List<String> emails) {
+    public boolean updateEmailList(final int publishingId, final List<String> emails) {
         boolean wasSuccessUpdated = true;
 
         Integer mailingId = mailingDao.getMailingIdByPublishingId(publishingId);
         if (mailingId == null) {
-            mailingId = mailingDao.createNewMailingByPublishingId(publishingId);
+            mailingId = mailingDao.createMailingRecord(publishingId);
         }
 
         mailingDao.clearMailingSubscribersByMailingId(mailingId);
 
         if (emails != null) {
             for (String email : emails) {
-                wasSuccessUpdated &= mailingDao.addSubscriberByMailingId(mailingId, email);
+                wasSuccessUpdated &= mailingDao.addEmailByMailingId(mailingId, email);
             }
         }
 
@@ -61,7 +62,8 @@ public class MailingServiceImpl implements MailingService {
     }
 
     @Override
-    public void sendMail() {
-        mailSender.sendMail(Arrays.asList("mail@mail.ru"), "AutoMailing", "Hi. This is AutoMailing");
+    public void sendMail(final LocalDateTime dateTime) {
+        mailSender.sendMail(Arrays.asList("mail@mail.ru"), "AutoMailing", dateTime.toString() + " Hi. This is AutoMailing");
+        //TODO add mailing_result
     }
 }

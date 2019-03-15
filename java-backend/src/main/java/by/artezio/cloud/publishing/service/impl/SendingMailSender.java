@@ -5,6 +5,9 @@ import by.artezio.cloud.publishing.service.MailSender;
 import java.util.List;
 
 /**
+ * Реализация интерфейса {@link MailSender}.
+ * Происходит непосредственная рассылка писем, используя почтовые протоколы.
+ *
  * @author vgamezo
  */
 public class SendingMailSender implements MailSender {
