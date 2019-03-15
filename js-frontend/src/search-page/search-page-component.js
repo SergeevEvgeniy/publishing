@@ -11,24 +11,38 @@ var Pagination = require('../pagination/pagination-component');
  */
 function SearchPageComponent($parentElement) {
     var $componentContainer = $('<div />').append(searchTemplate());
-    var searchJournalistComponent = new SearchJournalistComponent($componentContainer.find('#searchJournalistForm'));
-    var journalistResultComponent = new JournalistResultComponent($componentContainer.find('#searchJournalistResult'));
-    var journalistStatComponent = new JournalistStatComponent($componentContainer.find('#journalistInfoTab'));
-    var journalistPagination = new Pagination($componentContainer.find('#journalistPagination'));
+    var $searchJournalistContainer = $componentContainer.find('#searchJournalistForm');
+    var $journalistResultContainer = $componentContainer.find('#searchJournalistResult');
+    var $journalistStatContainer = $componentContainer.find('#journalistInfoTab');
+    var $journalistPaginationContainer = $componentContainer.find('#journalistPagination');
+
+    var searchJournalistComponent = new SearchJournalistComponent($searchJournalistContainer);
+    var journalistResultComponent = new JournalistResultComponent($journalistResultContainer);
+    var journalistStatComponent = new JournalistStatComponent($journalistStatContainer);
+    var journalistPaginationComponent = new Pagination($journalistPaginationContainer);
 
     searchJournalistComponent.onSearchJournalist(function setJournalistList(journalistList) {
         journalistResultComponent.setJournalistList(journalistList.slice(0, 5));
-        journalistPagination.setAmountRecord(journalistList.length);
-        journalistPagination.setCurrentPage(1);
-        journalistPagination.setPerPage(5);
-        journalistPagination.onPageChange(function onPageChange(newCurrentPage) {
+        journalistPaginationComponent.setAmountRecord(journalistList.length);
+        journalistPaginationComponent.setCurrentPage(1);
+        journalistPaginationComponent.setPerPage(5);
+        journalistPaginationComponent.onPageChange(function onPageChange(newCurrentPage) {
             journalistResultComponent.setJournalistList(journalistList.slice(newCurrentPage * 5 - 5, newCurrentPage * 5));
         });
     });
 
     journalistResultComponent.onJournalistInfoButtonClick(function openJournalistInfo(journalistName) {
-        $componentContainer.find('#searchJournalist').empty();
+        $searchJournalistContainer.empty();
+        $journalistResultContainer.empty();
+        $journalistPaginationContainer.empty();
         journalistStatComponent.appendComponent(journalistName);
+    });
+
+    journalistStatComponent.onReturnButtonClick(function returnToJournalistSearchForm() {
+        $journalistStatContainer.empty();
+        searchJournalistComponent.render();
+        journalistResultComponent.render();
+        journalistPaginationComponent.render();
     });
 
     function render() {

@@ -14,7 +14,7 @@ function JournalistStatComponent($parentElement) {
     var navigationSelector = '.nav-tabs';
     var returnButtonSelector = '#returnToSearchForm';
     var infoComponent;
-    var returnCallBack = null;
+    var returnButtonClickEventListener = null;
 
     /**
      * Событие на переключение вкладок меню 'Информация, Статистика, Статьи'
@@ -41,8 +41,8 @@ function JournalistStatComponent($parentElement) {
      */
     function returnToSearchForm(event) {
         event.preventDefault();
-        if (typeof returnCallBack === 'function') {
-            returnCallBack();
+        if (returnButtonClickEventListener) {
+            returnButtonClickEventListener();
         }
     }
     $parentElement
@@ -58,6 +58,14 @@ function JournalistStatComponent($parentElement) {
         }));
         infoComponent = new InfoComponent($parentElement.find('.journalist-info-content'));
     }
+
+    /**
+     * Установка функции обратного вызова для просмотра формы поиска журналистов и результатов поиска
+     * @param {function} listener -вызывается, нажата кнопка вернуться к поиску журналиста
+    */
+    this.onReturnButtonClick = function onReturnButtonClick(listener) {
+        returnButtonClickEventListener = listener;
+    };
 
     /**
      * Метод для добавления в родительский контейнер и установки
