@@ -1,5 +1,4 @@
 ﻿using CloudPublishing.Data.EF;
-using CloudPublishing.Data.Identity.Managers;
 using CloudPublishing.Data.Interfaces;
 
 namespace CloudPublishing.Data.Repositories
@@ -16,16 +15,13 @@ namespace CloudPublishing.Data.Repositories
 
         public ITopicRepository Topics { get; }
 
-        public IUserRepository Users { get; }
-
-        public UnitOfWork(CloudPublishingContext context, EmployeeUserManager manager)
+        public UnitOfWork(CloudPublishingContext context)
         {
             this.context = context;
             Employees = new EmployeeRepository(context);
             Reviews = new ReviewRepository(context);
             Publishings = new PublishingRepository(context);
             Topics = new TopicRepository(context);
-            Users = new UserRepository(manager);
         }
 
         public void Dispose()

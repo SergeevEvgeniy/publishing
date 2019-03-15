@@ -25,35 +25,23 @@ namespace CloudPublishing.Controllers.RestApi
         public IHttpActionResult GetEmployeeData()
         {
             var result = service.GetEmployeeList();
-            if (!result.IsSuccessful)
-            {
-                return !result.IsExternalException ? BadRequest(result.GetFailureMessage()) : (IHttpActionResult)InternalServerError();
-            }
 
-            return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result.GetContent()), new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result), new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
         }
 
         [HttpGet]
         public IHttpActionResult GetEmployeeData(int? id)
         {
             var result = service.GetEmployeeById(id);
-            if (!result.IsSuccessful)
-            {
-                return !result.IsExternalException ? BadRequest(result.GetFailureMessage()) : (IHttpActionResult)InternalServerError();
-            }
 
-            return Json(mapper.Map<EmployeeDTO, EmployeeData>(result.GetContent()), new JsonSerializerSettings{ContractResolver = new CamelCasePropertyNamesContractResolver()});
+            return Json(mapper.Map<EmployeeDTO, EmployeeData>(result), new JsonSerializerSettings{ContractResolver = new CamelCasePropertyNamesContractResolver()});
         }
 
         [HttpPost]
         public IHttpActionResult GetEmployeeData(EmployeeFilter filter)
         {
             var result = service.GetEmployeeList(filter.IdList, filter.LastName);
-            if (!result.IsSuccessful)
-            {
-                return !result.IsExternalException ? BadRequest(result.GetFailureMessage()) : (IHttpActionResult)InternalServerError();
-            }
-            return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result.GetContent()), new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result), new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
         }
     }
 }

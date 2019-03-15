@@ -1,5 +1,5 @@
-﻿using CloudPublishing.Data.Entities;
-using System.Data.Entity.ModelConfiguration;
+﻿using System.Data.Entity.ModelConfiguration;
+using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Data.EF.EntityConfigurations
 {
