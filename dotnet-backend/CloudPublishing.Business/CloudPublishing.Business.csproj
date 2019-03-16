@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\CloudPublishing.Business.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacConfig\BusinessModule.cs" />
-    <Compile Include="Converters\ConvertersExtention.cs" />
     <Compile Include="DTO\AdvertisingDTO.cs" />
     <Compile Include="DTO\ArticleDTO.cs" />
     <Compile Include="DTO\DetailedReviewDTO.cs" />
@@ -89,6 +89,7 @@
     <Compile Include="Services\Interfaces\IReviewService.cs" />
     <Compile Include="Services\ReviewService.cs" />
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
+    <Compile Include="Util\PublishingBusinessMapProfile.cs" />
     <Compile Include="Util\ReviewBusinessMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>
