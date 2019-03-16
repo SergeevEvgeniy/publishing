@@ -1,5 +1,4 @@
-﻿@using CloudPublishing.Models.Publishings.Enums;
-@model CloudPublishing.Models.Publishings.PublishingCreateViewModel
+﻿@model CloudPublishing.Models.Publishings.PublishingCreateViewModel
 @{
     ViewBag.Title = "Новое издания";
 }
@@ -18,8 +17,8 @@
     <div class="form-group row">
         <label class="col-2">Тип</label>
         <div class="col-10">
-            <span>@Html.RadioButtonFor(m => m.Publishing.Type, (int)PublishingType.Газета)@PublishingType.Газета.ToString()</span>
-            <span>@Html.RadioButtonFor(m => m.Publishing.Type, (int)PublishingType.Журнал)@PublishingType.Журнал.ToString()</span>
+            <span>@Html.RadioButtonFor(m => m.Publishing.Type, "m")Журнал</span>
+            <span>@Html.RadioButtonFor(m => m.Publishing.Type, "n")Газета</span>
         </div>
     </div>
     <div class="form-group row">
