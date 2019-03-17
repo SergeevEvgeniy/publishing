@@ -23,12 +23,16 @@ function SearchPageComponent($parentElement) {
 
     searchJournalistComponent.onSearchJournalist(function setJournalistList(journalistList) {
         var visibleItemCount = 5;
+        if (journalistList.length === 0) {
+            $journalistResultContainer.append(document.createTextNode('Результаты поиска не найдены.'));
+            return;
+        }
         journalistResultComponent.setJournalistList(journalistList.slice(0, visibleItemCount));
         journalistPaginationComponent.setAmountRecord(journalistList.length);
         journalistPaginationComponent.setPerPage(visibleItemCount);
         journalistPaginationComponent.onPageChange(function onPageChange(newCurrentPage) {
             var firstItemIndex = newCurrentPage * visibleItemCount - visibleItemCount;
-            var lastItemIndex =  newCurrentPage * visibleItemCount;
+            var lastItemIndex = newCurrentPage * visibleItemCount;
             journalistResultComponent.setJournalistList(journalistList.slice(firstItemIndex, lastItemIndex));
         });
     });
