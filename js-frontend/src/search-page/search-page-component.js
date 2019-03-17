@@ -5,7 +5,7 @@ var JournalistStatComponent = require('../journalist-info/journalist-component')
 var Pagination = require('../pagination/pagination-component');
 
 /**
- * Компонент поиска журналистов.
+ * Компонент поиска.
  * @constructor
  * @param  {JQuery} $parentElement Элемент-контейнер для размещения компонента.
  */
@@ -22,12 +22,14 @@ function SearchPageComponent($parentElement) {
     var journalistPaginationComponent = new Pagination($journalistPaginationContainer);
 
     searchJournalistComponent.onSearchJournalist(function setJournalistList(journalistList) {
-        journalistResultComponent.setJournalistList(journalistList.slice(0, 5));
+        var visibleItemCount = 5;
+        journalistResultComponent.setJournalistList(journalistList.slice(0, visibleItemCount));
         journalistPaginationComponent.setAmountRecord(journalistList.length);
-        journalistPaginationComponent.setCurrentPage(1);
-        journalistPaginationComponent.setPerPage(5);
+        journalistPaginationComponent.setPerPage(visibleItemCount);
         journalistPaginationComponent.onPageChange(function onPageChange(newCurrentPage) {
-            journalistResultComponent.setJournalistList(journalistList.slice(newCurrentPage * 5 - 5, newCurrentPage * 5));
+            var firstItemIndex = newCurrentPage * visibleItemCount - visibleItemCount;
+            var lastItemIndex =  newCurrentPage * visibleItemCount;
+            journalistResultComponent.setJournalistList(journalistList.slice(firstItemIndex, lastItemIndex));
         });
     });
 
