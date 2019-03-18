@@ -44,6 +44,7 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         public ActionResult CreatePublishing(PublishingViewModel publishing)
         {
+            // TODO: Валидация нового журнала
             publishingService.CreatePublishing(mapper.Map<PublishingDTO>(publishing));
             return RedirectToAction("List");
         }
