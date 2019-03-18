@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Infrastructure;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using CloudPublishing.Data.Util;
@@ -18,20 +15,15 @@ namespace CloudPublishing.Business.Services
         private readonly IMapper mapper;
         private readonly IUnitOfWork unit;
 
-        public AccountService(IUnitOfWork unit, IPasswordHasher hasher)
+        public AccountService(IUnitOfWork unit, IPasswordHasher hasher, IMapper mapper)
         {
             this.unit = unit;
             this.hasher = hasher;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
         public void CreateAccount(EmployeeDTO entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-
             if (entity.ChiefEditor)
             {
                 var chief = unit.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
@@ -50,15 +42,10 @@ namespace CloudPublishing.Business.Services
 
         public void EditAccount(EmployeeDTO entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-
             var target = unit.Employees.Get(entity.Id);
             if (target == null)
             {
-                throw new NullReferenceException("Пользователь не найден");
+                throw new EntityNotFoundException("Пользователь не найден");
             }
 
             if (target.ChiefEditor && !entity.ChiefEditor)
@@ -85,18 +72,13 @@ namespace CloudPublishing.Business.Services
             unit.Save();
         }
 
-        public void DeleteAccount(int? id)
+        public void DeleteAccount(int id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            var target = unit.Employees.Get(id.Value);
+            var target = unit.Employees.Get(id);
 
             if (target == null)
             {
-                throw new NullReferenceException("Пользователь не найден");
+                throw new EntityNotFoundException("Пользователь не найден");
             }
 
             if (target.ChiefEditor)
@@ -104,7 +86,7 @@ namespace CloudPublishing.Business.Services
                 throw new ChiefEditorRoleChangeException();
             }
 
-            unit.Employees.Delete(id.Value);
+            unit.Employees.Delete(id);
             unit.Save();
         }
 

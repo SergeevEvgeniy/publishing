@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.Security;
+using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Infrastructure;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.ViewModels;
 using CloudPublishing.Util;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.Security;
 
 namespace CloudPublishing.Controllers
 {
@@ -18,11 +18,11 @@ namespace CloudPublishing.Controllers
         private readonly IMapper mapper;
         private readonly IEmployeeService service;
 
-        public EmployeeController(IEmployeeService service, IAccountService accounts)
+        public EmployeeController(IEmployeeService service, IAccountService accounts, IMapper mapper)
         {
             this.service = service;
             this.accounts = accounts;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
         private List<SelectListItem> GetEmployeeTypeList()
@@ -89,7 +89,7 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Create()
         {
             var model = new EmployeeCreateModel
@@ -102,7 +102,7 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Create(EmployeeCreateModel model)
         {
             if (!ModelState.IsValid)
@@ -114,25 +114,23 @@ namespace CloudPublishing.Controllers
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Ошибка при получении данных пользователя.");
+                model.TypeList = GetEmployeeTypeList();
+                model.EducationList = GetEmployeeEducationList();
+                return View(model);
+            }
+
             accounts.CreateAccount(user);
 
-
-            //if (!result.IsSuccessful)
-            //{
-            //    ModelState.AddModelError("", result.GetFailureMessage());
-            //    model.TypeList = GetEmployeeTypeSelectList();
-            //    model.EducationList = GetEmployeeEducationList();
-            //    return View(model);
-            //}
-
             TempData["Message"] = "Пользователь " + model.Email + " успешно создан";
-
 
             return RedirectToAction("List");
         }
 
         [HttpGet]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -160,7 +158,7 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Edit(EmployeeEditModel model)
         {
             if (!ModelState.IsValid)
@@ -171,14 +169,15 @@ namespace CloudPublishing.Controllers
             }
 
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Возникла ошибка при получении данных пользователя");
+                model.TypeList = GetEmployeeTypeList();
+                model.EducationList = GetEmployeeEducationList();
+                return View(model);
+            }
+
             accounts.EditAccount(user);
-            //if (!result.IsSuccessful)
-            //{
-            //    ModelState.AddModelError("", result.GetFailureMessage());
-            //    model.TypeList = GetEmployeeTypeSelectList();
-            //    model.EducationList = GetEmployeeEducationList();
-            //    return View(model);
-            //}
 
             TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
 
@@ -186,12 +185,21 @@ namespace CloudPublishing.Controllers
         }
 
         [AjaxOnly]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Delete(int? id)
         {
+            if (id == null)
+            {
+                return Json(new
+                {
+                    isSuccessful = false,
+                    message = "Неверний идентификатор пользователя"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
             try
             {
-                accounts.DeleteAccount(id);
+                accounts.DeleteAccount(id.Value);
             }
             catch (ChiefEditorRoleChangeException e)
             {
