@@ -5,6 +5,7 @@ import by.artezio.cloud.publishing.dto.AuthenticationResult;
 import by.artezio.cloud.publishing.dto.LoginForm;
 import by.artezio.cloud.publishing.dto.User;
 import by.artezio.cloud.publishing.service.EmployeeService;
+import by.artezio.cloud.publishing.web.security.AccessDeniedException;
 import by.artezio.cloud.publishing.web.security.EncoderService;
 import by.artezio.cloud.publishing.web.security.SecurityService;
 import javax.servlet.http.HttpSession;
@@ -22,6 +23,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class SessionSecurityService implements SecurityService {
 
     private static final String CURRENT_USER = "currentUser";
+    private static final String EDITOR = "E";
+    private static final String JOURNALIST = "J";
     private static final int UNAUTHORIZED = 401;
     private static final int OK = 200;
 
@@ -63,5 +66,29 @@ public class SessionSecurityService implements SecurityService {
 
         getSession().setAttribute(CURRENT_USER, user);
         return new AuthenticationResult("success", OK);
+    }
+
+    @Override
+    public void checkIsEditor() {
+        final User currentUser = getCurrentUser();
+        if (currentUser == null || !currentUser.getType().equals(EDITOR)) {
+            throw new AccessDeniedException("Пользователь не обладает ролью редактор");
+        }
+    }
+
+    @Override
+    public void checkIsJournalist() {
+        final User currentUser = getCurrentUser();
+        if (currentUser == null || !currentUser.getType().equals(JOURNALIST)) {
+            throw new AccessDeniedException("Пользователь не обладает ролью журналист");
+        }
+    }
+
+    @Override
+    public void checkIsChiefEditor() {
+        final User currentUser = getCurrentUser();
+        if (currentUser == null || !currentUser.isChiefEditor()) {
+            throw new AccessDeniedException("Пользователь не обладает ролью Главный редактор");
+        }
     }
 }

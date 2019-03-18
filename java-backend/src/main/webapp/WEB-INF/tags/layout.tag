@@ -13,23 +13,21 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mailing.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/update-article.css">
 
-        <script src="${pageContext.request.contextPath}/resources/js/libs/jquery.js"></script>
-        <script src="${pageContext.request.contextPath}/resources/js/mailing.js"></script>
-        <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap.js"/>"></script>
-    <script>
-        var APP_CONTEXT_PATH = '${pageContext.request.contextPath}';
-    </script>
-</head>
-<body>
-
-    <header>
-        <jsp:include page="/WEB-INF/jsp/header.jsp"/>
-    </header>
-    <main>
-        <div class="container">
-            <jsp:doBody/>
-        </div>
-    </main>
-
-</body>
+        <script src="${pageContext.request.contextPath}/resources/js/libs/jquery.js"/>
+        <script src="${pageContext.request.contextPath}/resources/js/mailing.js"/>
+        <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap.js"/>
+        <script>
+            var APP_CONTEXT_PATH = '${pageContext.request.contextPath}';
+        </script>
+    </head>
+    <body>
+        <header>
+            <jsp:include page="/WEB-INF/jsp/header.jsp"/>
+        </header>
+        <main>
+            <div class="container">
+                <jsp:doBody/>
+            </div>
+        </main>
+    </body>
 </html>

@@ -25,10 +25,34 @@ public interface SecurityService {
     User getCurrentUser();
 
     /**
+     * Получает пользователя из сервиса и ложит его в сессию.
      *
      * @param loginForm форма логина с полями логин/пароль
-     * @return AuthenticationResult dto
+     * @return AuthenticationResult результат аутентификации пользователя с
+     * соответсвтующим сообщением
      */
     AuthenticationResult loginUser(LoginForm loginForm);
+
+    /**
+     * Проверяет, имеет ли залогиннеый сейчас пользователь роль "Редактор".
+     *
+     * @throws AccessDeniedException
+     */
+    void checkIsEditor();
+
+    /**
+     * Проверяет, имеет ли залогиннеый сейчас пользователь роль "Журналист".
+     *
+     * @throws AccessDeniedException
+     */
+    void checkIsJournalist();
+
+    /**
+     * Проверяет, имеет ли залогиннеый сейчас пользователь роль "Главный
+     * Редактор".
+     *
+     * @throws AccessDeniedException
+     */
+    void checkIsChiefEditor();
 
 }

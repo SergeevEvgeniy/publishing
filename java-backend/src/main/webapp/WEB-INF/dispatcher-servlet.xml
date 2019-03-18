@@ -29,7 +29,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/*"/>
             <mvc:exclude-mapping path="/login"/>
-            <bean class="by.artezio.cloud.publishing.web.service.impl.AuthenticationInterceptor"/>
+            <bean class="by.artezio.cloud.publishing.web.security.impl.AuthenticationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>
