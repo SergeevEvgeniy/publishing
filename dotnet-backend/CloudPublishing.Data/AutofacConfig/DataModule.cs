@@ -12,7 +12,7 @@ namespace CloudPublishing.Data.AutofacConfig
         {
             builder.RegisterType<MySql.Data.MySqlClient.MySqlProviderServices>().As<MySql.Data.MySqlClient.MySqlProviderServices>();
             builder.RegisterType<CloudPublishingContext>().AsSelf()
-                .WithParameter("connectionString", "PublishingContext");
+                .WithParameter("connectionString", "EmployeeContext");
             
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
 

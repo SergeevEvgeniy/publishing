@@ -4,7 +4,6 @@ using System.Linq;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using CloudPublishing.Models.Employees.Enums;
@@ -32,10 +31,10 @@ namespace CloudPublishing.Business.Services
             };
         }
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        public EmployeeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
         public void Dispose()

@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.Security;
+using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Infrastructure;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.ViewModels;
 using CloudPublishing.Util;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.Security;
 
 namespace CloudPublishing.Controllers
 {
@@ -18,11 +18,11 @@ namespace CloudPublishing.Controllers
         private readonly IMapper mapper;
         private readonly IEmployeeService service;
 
-        public EmployeeController(IEmployeeService service, IAccountService accounts)
+        public EmployeeController(IEmployeeService service, IAccountService accounts, IMapper mapper)
         {
             this.service = service;
             this.accounts = accounts;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
         private List<SelectListItem> GetEmployeeTypeList()
@@ -176,6 +176,7 @@ namespace CloudPublishing.Controllers
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
+
             accounts.EditAccount(user);
 
             TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
@@ -195,6 +196,7 @@ namespace CloudPublishing.Controllers
                     message = "Неверний идентификатор пользователя"
                 }, JsonRequestBehavior.AllowGet);
             }
+
             try
             {
                 accounts.DeleteAccount(id.Value);

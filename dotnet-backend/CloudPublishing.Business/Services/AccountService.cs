@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Infrastructure;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using CloudPublishing.Data.Util;
@@ -18,11 +15,11 @@ namespace CloudPublishing.Business.Services
         private readonly IMapper mapper;
         private readonly IUnitOfWork unit;
 
-        public AccountService(IUnitOfWork unit, IPasswordHasher hasher)
+        public AccountService(IUnitOfWork unit, IPasswordHasher hasher, IMapper mapper)
         {
             this.unit = unit;
             this.hasher = hasher;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
         public void CreateAccount(EmployeeDTO entity)
