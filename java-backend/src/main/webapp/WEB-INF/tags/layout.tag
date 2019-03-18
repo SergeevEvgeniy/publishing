@@ -26,7 +26,9 @@
         <jsp:include page="/WEB-INF/jsp/header.jsp"/>
     </header>
     <main>
-        <jsp:doBody  />
+        <div class="container">
+            <jsp:doBody/>
+        </div>
     </main>
 
 </body>

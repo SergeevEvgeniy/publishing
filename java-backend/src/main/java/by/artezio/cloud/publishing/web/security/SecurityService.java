@@ -30,6 +30,5 @@ public interface SecurityService {
      * @return AuthenticationResult dto
      */
     AuthenticationResult loginUser(LoginForm loginForm);
-    
-    void checkIsEditor();
+
 }

@@ -1,7 +1,7 @@
 package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dto.User;
-import by.artezio.cloud.publishing.web.service.SecurityService;
+import by.artezio.cloud.publishing.web.security.SecurityService;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -2,8 +2,8 @@ package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dto.AuthenticationResult;
 import by.artezio.cloud.publishing.dto.LoginForm;
-import static by.artezio.cloud.publishing.web.service.impl.AuthenticationInterceptor.LOCATION;
-import by.artezio.cloud.publishing.web.service.SecurityService;
+import static by.artezio.cloud.publishing.web.security.impl.AuthenticationInterceptor.LOCATION;
+import by.artezio.cloud.publishing.web.security.SecurityService;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
