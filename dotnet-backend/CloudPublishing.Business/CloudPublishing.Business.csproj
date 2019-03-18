@@ -86,9 +86,11 @@
     <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
     <Compile Include="Services\Interfaces\IPublishingService.cs" />
+    <Compile Include="Services\Interfaces\IRoleService.cs" />
     <Compile Include="Services\PublishingService.cs" />
     <Compile Include="Services\Interfaces\IReviewService.cs" />
     <Compile Include="Services\ReviewService.cs" />
+    <Compile Include="Services\RoleService.cs" />
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
     <Compile Include="Util\PublishingBusinessMapProfile.cs" />
     <Compile Include="Util\ReviewBusinessMapProfile.cs" />

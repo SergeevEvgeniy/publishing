@@ -89,7 +89,7 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Create()
         {
             var model = new EmployeeCreateModel
@@ -102,7 +102,7 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Create(EmployeeCreateModel model)
         {
             if (!ModelState.IsValid)
@@ -130,7 +130,7 @@ namespace CloudPublishing.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -158,7 +158,7 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Edit(EmployeeEditModel model)
         {
             if (!ModelState.IsValid)
@@ -185,7 +185,7 @@ namespace CloudPublishing.Controllers
         }
 
         [AjaxOnly]
-        //[Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = "ChiefEditor")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

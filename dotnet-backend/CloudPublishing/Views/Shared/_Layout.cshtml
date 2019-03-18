@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
@@ -21,33 +21,32 @@
                     Сотрудники
                 </a>
                 <div class="dropdown-menu" aria-labelledby="employeeDropdown">
-                    @Html.ActionLink("Список сотрудников", "List", "Employee", null, new { @class = "dropdown-item" })
-                    @*@if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
-                    {*@
-                        @Html.ActionLink("Добавить сотрудника", "Create", "Employee", null, new { @class = "dropdown-item" })
-                    @*}*@
+                    @Html.ActionLink("Список сотрудников", "List", "Employee", null, new {@class = "dropdown-item"})
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
+                    {
+                        @Html.ActionLink("Добавить сотрудника", "Create", "Employee", null, new {@class = "dropdown-item"})
+                    }
                 </div>
             </li>
         </ul>
         <ul class="navbar-nav my-lg-0">
-            @*@if (!User.Identity.IsAuthenticated)
-        {*@
-            <li class="nav-item active">
-                @Html.ActionLink("Авторизация", "Login", "Employee", null, new { @class = "nav-link" })
-            </li>
-            @* }
-        else
-        {
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="employeeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
-                    @User.Identity.Name
-                </a>
-                <div class="dropdown-menu" aria-labelledby="employeeDropdown">
-                    @Html.ActionLink("Выход", "Logout", "Employee", null, new { @class = "dropdown-item" })
-                </div>
-            </li>
-
-        } *@
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <li class="nav-item active">
+                    @Html.ActionLink("Авторизация", "Login", "Employee", null, new {@class = "nav-link"})
+                </li>
+            }
+            else
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="employeeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                        @User.Identity.Name
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="employeeDropdown">
+                        @Html.ActionLink("Выход", "Logout", "Employee", null, new {@class = "dropdown-item"})
+                    </div>
+                </li>
+            }
         </ul>
     </div>
 </nav>
@@ -59,6 +58,6 @@
     </footer>
 </div>
 @Scripts.Render("~/bundles/libs")
-@RenderSection("scripts", required: false)
+@RenderSection("scripts", false)
 </body>
 </html>
