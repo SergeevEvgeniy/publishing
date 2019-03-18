@@ -36,7 +36,7 @@ public final class IssueDao {
 
     /**
      * Получение списка всех номеров.
-     * @return {@link} всех {@link Issue}
+     * @return {@link List} всех {@link Issue}
      * */
     public List<Issue> getListOfAllIssues() {
         return jdbcTemplate.query("select * from issue", issueRowMapper);
