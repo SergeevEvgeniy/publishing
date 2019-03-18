@@ -1,16 +1,15 @@
+/* eslint-disable no-invalid-this */
 var paginationTemplate = require('./pagination.hbs');
 var $ = require('jquery');
 
 var amountVisiblePagesOnSide = 2;
 
 /**
- * Создаёт компонент позволяющий перемещаться между страницами
+ * Создаёт компонент позволяющий перемещаться между страницами.
  * @constructor
- * @param {JQuery element} $parentElement - элемент-контейнер для размещения компонента
+ * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
  */
 function Pagination($parentElement) {
-    var $paginationWrapper = $('<div />');
-
     var amountRecord = 0;
     var perPage = 5;
     var currentPage = 1;
@@ -25,9 +24,6 @@ function Pagination($parentElement) {
         var target = event.target;
         var clickedPage = $(target).data('page');
 
-        if (clickedPage === '...') {
-            return;
-        }
         if (clickedPage === 'next') {
             this.setCurrentPage(+currentPage + 1);
         } else if (clickedPage === 'prev') {
@@ -43,10 +39,10 @@ function Pagination($parentElement) {
         }
         amountPages = Math.ceil(amountRecord / perPage);
         startPageIndex = Math.max(currentPage - amountVisiblePagesOnSide, 1);
-        endPageIndex = Math.min(startPageIndex + amountVisiblePagesOnSide - 1, amountPages);
+        endPageIndex = Math.min(currentPage + amountVisiblePagesOnSide, amountPages);
         visiblePages = [];
         for (index = startPageIndex; index <= endPageIndex; index++) {
-            this.visiblePages.push({
+            visiblePages.push({
                 value: index,
                 class: (currentPage === index) ? 'active' : '',
             });
@@ -57,6 +53,7 @@ function Pagination($parentElement) {
      * Установка метода обратного вызова на изменение текущей страницы
      * @param {function} listener вызывается, когда была изменена текущая страница
      * Отправляет аргумент - новая страница
+     * @returns {void}
      */
     this.onPageChange = function onPageChange(listener) {
         pageChangeListener = listener;
@@ -65,24 +62,34 @@ function Pagination($parentElement) {
     /**
      * Установка количества элементов на странице
      * @param {Number} newPerPage - количество элементов на странице
+     * @returns {void}
      */
     this.setPerPage = function setPerPage(newPerPage) {
         perPage = newPerPage;
         currentPage = 1;
-        this.recount();
+        recount();
         this.render();
     };
 
     /**
      * Установка текущей страницы
      * @param {Number} newCurrentPage - текущая страница
+     * @returns {void}
      */
     this.setCurrentPage = function setCurrentPage(newCurrentPage) {
-        if (!!handleChangedPage) {
+        if (!pageChangeListener) {
             return;
         }
-        currentPage = (newCurrentPage < 1) ? 1 : newCurrentPage;
-        currentPage = (newCurrentPage > amountPages) ? amountPages : newCurrentPage;
+        if (newCurrentPage > amountPages || newCurrentPage < 1) {
+            return;
+        }
+        if (newCurrentPage < 1) {
+            currentPage = 1;
+        } else if (newCurrentPage > amountPages) {
+            currentPage = amountPages;
+        } else {
+            currentPage = newCurrentPage;
+        }
         pageChangeListener(currentPage);
         recount();
         this.render();
@@ -91,9 +98,10 @@ function Pagination($parentElement) {
     /**
      * Установка количества записей
      * @param {Number} newAmountRecord - количество элементов
+     * @returns {void}
      */
     this.setAmountRecord = function setAmountRecord(newAmountRecord) {
-        if (amountRecord === 0) {
+        if (newAmountRecord === 0) {
             return;
         }
         amountRecord = newAmountRecord;
@@ -101,21 +109,19 @@ function Pagination($parentElement) {
         this.render();
     };
 
-    $paginationWrapper.on('click', '.pagination span', onPageChangeEvent);
+    $parentElement.on('click', 'span', onPageChangeEvent.bind(this));
 
     /**
      * Отрисовка компонента
+     * @returns {void}
      */
     this.render = function render() {
-        $paginationWrapper
+        $parentElement
             .empty()
             .append(paginationTemplate({
                 pages: visiblePages,
                 perPage: perPage,
             }));
-        $parentElement
-            .empty()
-            .append(paginationWrapper);
     };
 }
 

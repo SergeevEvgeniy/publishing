@@ -1,26 +1,40 @@
-﻿using AutoMapper;
-using CloudPublishing.Business.DTO;
-using CloudPublishing.Business.Results;
-using CloudPublishing.Business.Results.Interfaces;
-using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Business.Util;
-using CloudPublishing.Data.Entities;
-using CloudPublishing.Data.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Services.Interfaces;
+using CloudPublishing.Data.Entities;
+using CloudPublishing.Data.Interfaces;
+using CloudPublishing.Models.Employees.Enums;
 
 namespace CloudPublishing.Business.Services
 {
     public class EmployeeService : IEmployeeService
     {
+        private static readonly IDictionary<EmployeeType, string> Types;
+        private static readonly IDictionary<Sex, string> Sexes;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        static EmployeeService()
+        {
+            Types = new Dictionary<EmployeeType, string>
+            {
+                {EmployeeType.E, "Редактор"},
+                {EmployeeType.J, "Журналист"}
+            };
+            Sexes = new Dictionary<Sex, string>
+            {
+                {Sex.M, "М"},
+                {Sex.F, "Ж"}
+            };
+        }
+
+        public EmployeeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
         public void Dispose()
@@ -28,67 +42,36 @@ namespace CloudPublishing.Business.Services
             unitOfWork?.Dispose();
         }
 
-        public IResult<IEnumerable<EmployeeDTO>> GetEmployeeList()
+        public IEnumerable<EmployeeDTO> GetEmployeeList()
         {
-            try
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unitOfWork.Employees.GetAll().Select(x =>
             {
-                var list = mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unitOfWork.Employees.GetAll());
-                return new SuccessfulResult<IEnumerable<EmployeeDTO>>(list);
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>(e.Message, true);
-            }
+                x.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), x.Type)];
+                x.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), x.Sex)];
+                return x;
+            }));
         }
 
-        public IResult<IEnumerable<EmployeeDTO>> GetEmployeeList(IEnumerable<int> idList, string lastName)
+        public IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList, string lastName)
         {
-            if (idList == null)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>("Отсутствует список идентификаторов");
-            }
-            try
-            {
-                var list = unitOfWork.Employees.Find(x =>
-                    x.LastName.Contains(lastName ?? string.Empty) && idList.Contains(x.Id));
-                return new SuccessfulResult<IEnumerable<EmployeeDTO>>(mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list));
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>(e.Message, true);
-            }
+            var list = unitOfWork.Employees.Find(x =>
+                x.LastName.Contains(lastName ?? string.Empty) && idList.Contains(x.Id));
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
         }
 
-        public IResult<IEnumerable<EducationDTO>> GetEducationList()
+        public IEnumerable<EducationDTO> GetEducationList()
         {
-            try
-            {
-                var list = mapper.Map<IEnumerable<Education>, List<EducationDTO>>(
-                    unitOfWork.Employees.GetEducationList());
-                return new SuccessfulResult<IEnumerable<EducationDTO>>(list);
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EducationDTO>>(e.Message, true);
-            }
+            return mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Employees.GetEducationList());
         }
 
-        public IResult<EmployeeDTO> GetEmployeeById(int? id)
+        public EmployeeDTO GetEmployeeById(int id)
         {
-            if (id == null) return new BadResult<EmployeeDTO>("Отсутствует идентификатор");
-            try
-            {
-                var employee = mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id.Value));
-                if (employee == null)
-                {
-                    return new BadResult<EmployeeDTO>("Пользователь не найден");
-                }
-                return new SuccessfulResult<EmployeeDTO>(employee);
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<EmployeeDTO>(e.Message, true);
-            }
+            return mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id));
+        }
+
+        public IDictionary<string, string> GetEmployeeTypes()
+        {
+            return Types.Select(x => new {key = x.Key.ToString(), x.Value}).ToDictionary(x => x.key, y => y.Value);
         }
     }
 }

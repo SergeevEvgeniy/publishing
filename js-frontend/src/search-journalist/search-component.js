@@ -1,40 +1,37 @@
 var searchTemplate = require('./search.hbs');
 var api = require('../api/journalist-api');
-var JournalistResultComponent = require('../search-journalist-result/journalist-result-component');
 
-var data = {
-    componentId: 'searchJournalist',
-    publishing: {
-        prevOptionIndex: 0,
-        defaultText: 'Выберите издание',
-        elementList: [],
-        value: null
-    },
-    issue: {
-        prevOptionIndex: 0,
-        defaultText: 'Выбирите выпуск',
-        elementList: [],
-        isIssuesAdded: false
-    },
-    topic: {
-        prevOptionIndex: 0,
-        defaultText: 'Выберите рубрику',
-        elementList: [],
-        value: null
-    },
-    lastName: null,
-    article: null,
-    isLoading: false,
-    isSubmitButtonActive: true
-};
-
+/**
+ * Компонент поиска журналистов.
+ * @constructor
+ * @param  {JQuery} $parentElement Элемент-контейнер для размещения компонента.
+ */
 function SearchJournalistComponent($parentElement) {
-    $parentElement.append($('<div>', {
-        id: data.componentId
-    }));
+    var data = {
+        publishing: {
+            prevOptionIndex: 0,
+            elementList: []
+        },
+        issue: {
+            prevOptionIndex: 0,
+            elementList: [],
+            isIssuesAdded: false
+        },
+        topic: {
+            prevOptionIndex: 0,
+            elementList: []
+        },
+        lastName: null,
+        article: null,
+        isLoading: false,
+        isSubmitButtonActive: true
+    };
+
+    var journalistSearchListener = null;
+    var clearSearchListener = null;
 
     function render() {
-        $parentElement.find('#' + data.componentId).empty().append(searchTemplate(data));
+        $parentElement.empty().append(searchTemplate(data));
     }
 
     function onPublishingChangeEvent(event) {
@@ -52,11 +49,8 @@ function SearchJournalistComponent($parentElement) {
         data.isSubmitButtonActive = false;
         render();
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
-            var journalistResult = new JournalistResultComponent($parentElement);
-            if (response.length !== 0) {
-                journalistResult.render(response);
-            } else {
-                console.log('Отсутствуют результаты поиска');
+            if (journalistSearchListener) {
+                journalistSearchListener(response);
             }
             data.isLoading = false;
             data.isSubmitButtonActive = true;
@@ -65,6 +59,14 @@ function SearchJournalistComponent($parentElement) {
     }
 
     function onSearchClearEvent() {
+        if (clearSearchListener) {
+            clearSearchListener();
+        }
+        data.lastName = null;
+        data.article = null;
+        data.issue.isIssuesAdded = false;
+        data.publishing.elementList[data.publishing.prevOptionIndex].selected = false;
+        data.topic.elementList[data.publishing.prevOptionIndex].selected = false;
         render();
     }
 
@@ -101,6 +103,27 @@ function SearchJournalistComponent($parentElement) {
         render();
     });
 
+    /**
+     * Установка метода обратного вызова на поиск журналистов
+     * @param {function} listener вызывается, когда была отравлена форма поиска журналиста
+     * Отправляет аргумент - массив с информацией о журналистах
+     */
+    this.onSearchJournalist = function onSearchJournalist(listener) {
+        journalistSearchListener = listener;
+    };
+
+    /**
+     * Установка метода обратного вызова на очистку поиска
+     * @param {function} listener вызывается, когда была нажата кнопка очистить
+     * Отправляет аргумент - массив с информацией о журналистах
+     */
+    this.onClearSearch = function onClearSearch(listener) {
+        clearSearchListener = listener;
+    };
+
+    /**
+     * Отрисовка компонента.
+     */
     this.render = render;
 }
 

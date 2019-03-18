@@ -1,5 +1,5 @@
-﻿using CloudPublishing.Business.DTO;
-using CloudPublishing.Business.Results.Interfaces;
+﻿using System.Collections.Generic;
+using CloudPublishing.Business.DTO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -7,12 +7,12 @@ namespace CloudPublishing.Business.Services.Interfaces
 {
     public interface IAccountService  
     {
-        Task<IResult<string>> CreateAccountAsync(EmployeeDTO entity);
+        void CreateAccount(EmployeeDTO entity);
 
-        Task<IResult<string>> EditAccountAsync(EmployeeDTO entity);
+        void EditAccount(EmployeeDTO entity);
 
-        Task<IResult<string>> DeleteAccountAsync(int? id);
+        void DeleteAccount(int id);
 
-        Task<IResult<ClaimsIdentity>> AuthenticateUserAsync(EmployeeDTO entity);
+        EmployeeDTO AuthenticateUser(string email, string password);
     }
 }

@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var HomeComponent = require('./home/home-component');
-var SearchComponent = require('./search-journalist/search-component');
+var SearchComponent = require('./search-page/search-page-component');
 var MagazineComponent = require('./publishing/magazine/magazine-component');
 var navObj = {
     HomeComponent: HomeComponent,

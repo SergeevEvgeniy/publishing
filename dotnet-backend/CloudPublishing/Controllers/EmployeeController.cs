@@ -1,82 +1,56 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.Security;
+using AutoMapper;
 using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Infrastructure;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Models.Employees.Enums;
 using CloudPublishing.Models.Employees.ViewModels;
 using CloudPublishing.Util;
-using Microsoft.Owin.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace CloudPublishing.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeService service;
         private readonly IAccountService accounts;
-        private readonly IAuthenticationManager authenticationManager;
 
-        private static readonly IDictionary<EmployeeType, string> Types;
-        private static readonly IDictionary<Sex, string> Sexes;
         private readonly IMapper mapper;
+        private readonly IEmployeeService service;
 
-        static EmployeeController()
-        {
-            Types = new Dictionary<EmployeeType, string>
-            {
-                {EmployeeType.E, "Редактор"},
-                {EmployeeType.J, "Журналист"}
-            };
-            Sexes = new Dictionary<Sex, string>
-            {
-                {Sex.M, "М"},
-                {Sex.F, "Ж"}
-            };
-        }
-
-        public EmployeeController(IEmployeeService service, IAccountService accounts, IAuthenticationManager authenticationManager)
+        public EmployeeController(IEmployeeService service, IAccountService accounts, IMapper mapper)
         {
             this.service = service;
-            this.authenticationManager = authenticationManager;
             this.accounts = accounts;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
-        private static List<SelectListItem> GetEmployeeTypeSelectList()
+        private List<SelectListItem> GetEmployeeTypeList()
         {
-            return new List<SelectListItem>
+            return service.GetEmployeeTypes().Select(x => new SelectListItem
             {
-                new SelectListItem {Value = EmployeeType.E.ToString(), Text = Types[EmployeeType.E]},
-                new SelectListItem {Value = EmployeeType.J.ToString(), Text = Types[EmployeeType.J]}
-            };
+                Value = x.Key,
+                Text = x.Value
+            }).ToList();
         }
 
         private List<SelectListItem> GetEmployeeEducationList()
         {
             var list = service.GetEducationList();
-            return list.IsSuccessful
-                ? list.GetContent().Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()})
-                    .ToList()
-                : new List<SelectListItem>();
+            return list.Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()}).ToList();
         }
 
         [HttpGet]
         public ActionResult List()
         {
-            if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
-            var result = service.GetEmployeeList();
-            if (!result.IsSuccessful) return null;
+            if (TempData["Message"] != null)
+            {
+                ViewBag.Message = TempData["Message"].ToString();
+            }
 
-            return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.GetContent().ToList())
-                .Select(x =>
-                {
-                    x.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), x.Type)];
-                    x.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), x.Sex)];
-                    return x;
-                }));
+            var list = service.GetEmployeeList();
+
+            return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(list));
         }
 
         [HttpGet]
@@ -87,33 +61,30 @@ namespace CloudPublishing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model)
+        public ActionResult Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
-            var result = await accounts.AuthenticateUserAsync(new EmployeeDTO
+            if (!ModelState.IsValid)
             {
-                Email = model.Email,
-                Password = model.Password
-            });
+                return View(model);
+            }
 
-            if (!result.IsSuccessful)
+            var user = accounts.AuthenticateUser(model.Email, model.Password);
+
+            if (user == null)
             {
-                ModelState.AddModelError("", result.GetFailureMessage());
+                ModelState.AddModelError("", "Введены неверные данные");
                 model.Password = string.Empty;
                 return View(model);
             }
-            authenticationManager.SignOut();
-            authenticationManager.SignIn(new AuthenticationProperties
-            {
-                IsPersistent = model.CheckOut
-            }, result.GetContent());
+
+            FormsAuthentication.SetAuthCookie(user.Email, model.CheckOut);
 
             return RedirectToAction("List", "Employee");
         }
 
         public ActionResult Logout()
         {
-            authenticationManager.SignOut();
+            FormsAuthentication.SignOut();
             return RedirectToAction("List");
         }
 
@@ -123,7 +94,7 @@ namespace CloudPublishing.Controllers
         {
             var model = new EmployeeCreateModel
             {
-                TypeList = GetEmployeeTypeSelectList(),
+                TypeList = GetEmployeeTypeList(),
                 EducationList = GetEmployeeEducationList()
             };
             return View(model);
@@ -132,34 +103,28 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "ChiefEditor")]
-        public async Task<ActionResult> Create(EmployeeCreateModel model)
+        public ActionResult Create(EmployeeCreateModel model)
         {
             if (!ModelState.IsValid)
             {
-                model.TypeList = GetEmployeeTypeSelectList();
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
-            var result = await accounts.CreateAccountAsync(user);
-
-            if (!result.IsSuccessful)
+            if (user == null)
             {
-                ModelState.AddModelError("", result.GetFailureMessage());
-                model.TypeList = GetEmployeeTypeSelectList();
+                ModelState.AddModelError("", "Ошибка при получении данных пользователя.");
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
 
-            if (model.ChiefEditor)
-            {
-                authenticationManager.SignOut();
-            }
+            accounts.CreateAccount(user);
 
-            TempData["Message"] = result.GetContent();
-
+            TempData["Message"] = "Пользователь " + model.Email + " успешно создан";
 
             return RedirectToAction("List");
         }
@@ -168,16 +133,25 @@ namespace CloudPublishing.Controllers
         [Authorize(Roles = "ChiefEditor")]
         public ActionResult Edit(int? id)
         {
-            if (id == null) return null;
+            if (id == null)
+            {
+                return null;
+            }
 
             var result = service.GetEmployeeById(id.Value);
-            if (!result.IsSuccessful) return null;
+            if (result == null)
+            {
+                return null;
+            }
 
-            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result.GetContent());
-            model.TypeList = GetEmployeeTypeSelectList();
+            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result);
+            model.TypeList = GetEmployeeTypeList();
             model.EducationList = GetEmployeeEducationList();
 
-            if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
+            if (TempData["Message"] != null)
+            {
+                ViewBag.Message = TempData["Message"].ToString();
+            }
 
             return View(model);
         }
@@ -185,44 +159,61 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "ChiefEditor")]
-        public async Task<ActionResult> Edit(EmployeeEditModel model)
+        public ActionResult Edit(EmployeeEditModel model)
         {
             if (!ModelState.IsValid)
             {
-                model.TypeList = GetEmployeeTypeSelectList();
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
+
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
-            var result = await accounts.EditAccountAsync(user);
-            if (!result.IsSuccessful)
+            if (user == null)
             {
-                ModelState.AddModelError("", result.GetFailureMessage());
-                model.TypeList = GetEmployeeTypeSelectList();
+                ModelState.AddModelError("", "Возникла ошибка при получении данных пользователя");
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
 
-            if (model.ChiefEditor)
-            {
-                authenticationManager.SignOut();
-            }
+            accounts.EditAccount(user);
 
-            TempData["Message"] = result.GetContent();
+            TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
 
             return RedirectToAction("List");
         }
 
         [AjaxOnly]
         [Authorize(Roles = "ChiefEditor")]
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
-            var result = await accounts.DeleteAccountAsync(id);
+            if (id == null)
+            {
+                return Json(new
+                {
+                    isSuccessful = false,
+                    message = "Неверний идентификатор пользователя"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                accounts.DeleteAccount(id.Value);
+            }
+            catch (ChiefEditorRoleChangeException e)
+            {
+                return Json(new
+                {
+                    isSuccessful = false,
+                    message = e.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
 
             return Json(new
             {
-                isSuccessful = result.IsSuccessful,
-                message = result.IsSuccessful ? result.GetContent() : result.GetFailureMessage()
+                isSuccessful = true,
+                message = "Пользователь успешно удален"
             }, JsonRequestBehavior.AllowGet);
         }
     }

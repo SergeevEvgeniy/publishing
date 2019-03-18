@@ -1,7 +1,8 @@
-﻿using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Converters;
+﻿using AutoMapper;
+using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Publishings;
-using System.Linq;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace CloudPublishing.Controllers
@@ -9,15 +10,19 @@ namespace CloudPublishing.Controllers
     public class PublishingController : Controller
     {
         private IPublishingService publishingService;
+        private IMapper mapper;
 
-        public PublishingController(IPublishingService publishingService)
+        public PublishingController(IPublishingService publishingService, IMapper mapper)
         {
             this.publishingService = publishingService;
+            this.mapper = mapper;
         }
 
         public ActionResult List()
         {
-            var publishings = publishingService.GetAllPublishings().Select(x => new PublishingTableViewModel(x));
+            IEnumerable<PublishingTableViewModel> publishings = mapper
+                .Map<IEnumerable<PublishingTableViewModel>>(publishingService.GetAllPublishings());
+
             return View(publishings);
         }
 
@@ -26,21 +31,21 @@ namespace CloudPublishing.Controllers
             PublishingCreateViewModel publishingViewModel = new PublishingCreateViewModel
             {
                 Publishing = new PublishingViewModel(),
-                TopicsNotAtPublishing = publishingService.GetAllTopics().Select(x => x.ToViewModel()),
-                EmployeesNotInPublishing = publishingService.GetAllEmployees().Select(x => x.ToViewModel()),
-                EmployeesAtPublishing = null,
-                TopicsAtPublishing = null
-            };
 
-            ViewBag.Action = "CreatePublishing";
-            return View("PublishingInDetail", publishingViewModel);
+                AvailableTopics = mapper
+                .Map<IEnumerable<TopicViewModel>>(publishingService.GetAllTopics()),
+
+                AvailableEmployees = mapper
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetAllEmployees())
+            };
+            return View(publishingViewModel);
         }
 
         [HttpPost]
         public ActionResult CreatePublishing(PublishingViewModel publishing)
         {
-            //TODO: Валидация нового журнала
-            publishingService.CreatePublishing(publishing.ToDTO());
+            // TODO: Валидация нового журнала
+            publishingService.CreatePublishing(mapper.Map<PublishingDTO>(publishing));
             return RedirectToAction("List");
         }
 
@@ -52,24 +57,32 @@ namespace CloudPublishing.Controllers
                 return null;
             }
 
-            PublishingCreateViewModel publishingViewModel = new PublishingCreateViewModel
+            PublishingEditViewModel editViewModel = new PublishingEditViewModel
             {
-                Publishing = publishing.ToViewModel(),
-                EmployeesNotInPublishing = publishingService.GetNotInPublishingEmployees(id).Select(x => x.ToViewModel()),
-                TopicsNotAtPublishing = publishingService.GetNotAtPublishingTopics(id).Select(x => x.ToViewModel()),
-                EmployeesAtPublishing = publishing.Employees.Select(x => x.ToViewModel()),
-                TopicsAtPublishing = publishing.Topics.Select(x => x.ToViewModel())
+                Publishing = mapper.Map<PublishingViewModel>(publishing),
 
+                AvailableTopics = mapper
+                    .Map<IEnumerable<TopicViewModel>>(publishingService.GetTopicsNotInPublishing(id)),
+
+                AvailableEmployees = mapper
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEmployeesNotInPublishing(id)),
+
+                EmployeesAtPublishing = mapper
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Employees),
+
+                TopicsAtPublishing = mapper
+                    .Map<IEnumerable<TopicViewModel>>(publishing.Topics)
             };
-            ViewBag.Action = "EditPublishing";
-            return View("PublishingInDetail", publishingViewModel);
+
+            return View(editViewModel);
         }
 
         [HttpPost]
         public ActionResult EditPublishing(PublishingViewModel publishing)
         {
             // TODO: Валидация редактированного журнала
-            publishingService.UpdatePublishing(publishing.ToDTO());
+            PublishingDTO publishingDTO = mapper.Map<PublishingDTO>(publishing);
+            publishingService.UpdatePublishing(publishingDTO);
             return RedirectToAction("List");
         }
 

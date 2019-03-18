@@ -1,7 +1,7 @@
 var searchResultTemplate = require('./search-result.hbs');
 /**
  * Компонент для отображения таблицы с результами поиска.
- * @param {JQueryElement} $element - контейнер родителя к которому добавится таблица результата
+ * @param {jQuery} $element - контейнер родителя к которому добавится таблица результата
  */
 function SearchResultComponent($element) {
     /**

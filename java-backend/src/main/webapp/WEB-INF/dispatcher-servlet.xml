@@ -32,4 +32,4 @@
             <bean class="by.artezio.cloud.publishing.web.service.impl.AuthenticationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
-    </beans>
+</beans>

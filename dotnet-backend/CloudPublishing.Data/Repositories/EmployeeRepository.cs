@@ -19,7 +19,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Employee> GetAll()
         {
-            return context.Employees.Include(x => x.Education).AsNoTracking().Include("Publishings").ToList();
+            return context.Employees.Include(x => x.Education).Include("Publishings").AsNoTracking().AsEnumerable();
         }
 
         public Employee Get(int id)
@@ -29,7 +29,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Employee> Find(Func<Employee, bool> predicate)
         {
-            return context.Employees.Include(x => x.Education).AsNoTracking().AsEnumerable().Where(predicate);
+            return context.Employees.Include(x => x.Education).AsEnumerable().Where(predicate);
         }
 
         public void Create(Employee item)
@@ -43,13 +43,23 @@ namespace CloudPublishing.Data.Repositories
             {
                 item.Password = context.Employees.AsNoTracking().FirstOrDefault(x => x.Id == item.Id)?.Password;
             }
-            context.Entry(item).State = EntityState.Modified;
+
+            var entry = context.Entry(item);
+            if (entry.State != EntityState.Detached && entry.State != EntityState.Modified)
+            {
+                return;
+            }
+
+            entry.State = EntityState.Modified;
         }
 
         public void Delete(int id)
         {
             var entity = context.Employees.Find(id);
-            if (entity != null) context.Employees.Remove(entity);
+            if (entity != null)
+            {
+                context.Employees.Remove(entity);
+            }
         }
 
         public IEnumerable<Education> GetEducationList()

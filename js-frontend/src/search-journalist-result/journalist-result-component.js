@@ -1,31 +1,46 @@
 var resultTemplate = require('./journalist-result.hbs');
-var JournalistListComponent = require('../journalist-list/journalist-list-component');
-var $resultPage = $('<div>', {
-    id: 'searchJournalistResult'
-}).append(resultTemplate());
-var JournalistStatComponent = require('../journalist-info/journalist-component');
-var data = {
-    componentId: 'journalistResult'
-};
 
+/**
+ * Компонент поиска журналистов.
+ * @constructor
+ * @param  {JQuery} $parentElement Элемент-контейнер для размещения компонента.
+ */
 function JournalistResultComponent($parentElement) {
-    var $journalistListElement = $resultPage.find('tbody');
-
-    var journalistList = new JournalistListComponent($journalistListElement);
-    $parentElement.on('click', 'button', function onJournalistInfoClickEvent(event) {
-        var target = event.target;
-        var journalistName = target.closest('tr').firstElementChild.textContent;
-        var journalistStatComponent = new JournalistStatComponent($('#app'));
-        journalistStatComponent.appendComponent(journalistName);
-    });
-    $parentElement.append($('<div>', {
-        id: data.componentId
-    }));
-
-    this.render = function render(journalists) {
-        $parentElement.find('#journalistResult').empty().append($resultPage);
-        journalistList.render(journalists.slice(0, 10));
+    var data = {
+        journalistList: []
     };
+    var onJournalistInfoClickEventListener = null;
+
+    function render() {
+        $parentElement.empty().append(resultTemplate(data));
+    }
+
+    $parentElement.on('click', '.journalist-info', function onJournalistInfoClickEvent(event) {
+        var journalistName = event.target.closest('tr').firstElementChild.textContent;
+        onJournalistInfoClickEventListener(journalistName);
+    });
+
+    /**
+    * Установка функции обратного вызова для просмотра информации о журналисте
+    * @param {function} listener -вызывается, когда нажата кнопка просмотра информации о журналисте
+    */
+    this.onJournalistInfoButtonClick = function onJournalistInfoButtonClick(listener) {
+        onJournalistInfoClickEventListener = listener;
+    };
+
+    /**
+     * Установка данных о журналистах.
+     * @param  {Array} journalistList Данные с информацией о журналистах.
+     */
+    this.setJournalistList = function setJournalistList(journalistList) {
+        data.journalistList = journalistList;
+        render();
+    };
+
+    /**
+     * Отрисовка компонента.
+     */
+    this.render = render;
 }
 
 module.exports = JournalistResultComponent;
