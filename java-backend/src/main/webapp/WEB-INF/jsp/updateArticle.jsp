@@ -12,8 +12,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <tag:layout>
     <form class="form-horizontal center-block">
+
         <div class="form-group">
-            <label for="publishingSelector" class="label-control col-lg-4 col-md-4 col-sm-4 h4">Журнал</label>
+            <label for="publishingSelector" class="col-lg-4 col-md-4 col-sm-4 h4">Журнал</label>
             <div class="col-lg-8 col-md-8 col-sm-8">
                 <select id="publishingSelector" class="form-control">
                     <c:forEach items="${model.publishings}" var="publishing">
@@ -41,86 +42,104 @@
             </div>
         </div>
 
-        <div>
-            <div class="row col-lg-12 col-md-12 col-sm-12">
-                <label for="content" class="col-lg-4 col-md-4 col-sm-4 h4">Содержание</label>
+        <div class="form-group">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <label for="content" class="h4">Содержание</label>
             </div>
-            <div class="form-group">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <textarea id="content" class="form-control">${model.content}</textarea>
-                </div>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <textarea id="content" class="form-control">${model.content}</textarea>
             </div>
         </div>
 
 
         <div class="form-group">
-            <div class="row col-lg-12 col-md-12 col-sm-12">
-                <label class="label-control col-lg-4 col-md-4 col-sm-4 h4">Соавторы</label>
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading col-lg-12 col-md-12 col-sm-12">
-                        <div class="col-lg-8 col-md-8 col-sm-8">
-                            <select id="availableCoauthors" class="form-control">
-                                <option>---------------</option>
-                                <option>coauthor 1</option>
-                                <option>coauthor 2</option>
-                                <option>coauthor 3</option>
-                                <option>coauthor 4</option>
-                                <c:forEach var="availableCoauthor" items="${model.availableCoauthors}">
-                                    <option data-coauthorId="${availableCoauthor.id}">
-                                        ${availableCoauthor.firstName} ${availableCoauthor.lastName} ${availableCoauthor.middleName}
-                                    </option>
-                                </c:forEach>
-                            </select>
-                        </div>
+            <label class="label-control col-lg-4 col-md-4 col-sm-4 h4">Соавторы</label>
 
-                        <div class="col-lg-4 col-md-4 col-sm-4">
-                            <button id="addCoauthor" class="btn btn-success col-lg-12 col-md-12 col-sm-12">
-                                Добавить
-                            </button>
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select id="availableCoauthors" class="form-control ">
+                                    <option>---------------</option>
+                                    <option>coauthor 1</option>
+                                    <option>coauthor 4</option>
+                                    <option>coauthor 2</option>
+                                    <option>coauthor 3</option>
+                                    <c:forEach var="availableCoauthor" items="${model.availableCoauthors}">
+                                        <option data-coauthorId="${availableCoauthor.id}">
+                                                ${availableCoauthor.firstName} ${availableCoauthor.lastName} ${availableCoauthor.middleName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="row">
+                                    <button id="addCoauthor" class="btn btn-success col-md-11 col-sm-11 col-lg-11">
+                                        Добавить
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="panel panel-body col-lg-12 col-md-12 col-sm-12">
-                        <ul id="currentCoauthors" class="list-group">
+
+                    <ul id="currentCoauthors" class="list-group">
+                        <li class="list-group-item">
+                            <input type="hidden" value="1" name="currentCoauthorId"/>
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    Дед Игнат
+                                </div>
+                                <div class="col-xs-2 text-right">
+                                    <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <input type="hidden" value="2" name="currentCoauthorId"/>
+                            <div class="row">
+                                <div
+                                    class="col-xs-10">Тётка Валя
+                                </div>
+                                <div class="col-xs-2 text-right">
+                            <span class="glyphicon glyphicon-trash"
+                                  style="cursor: pointer"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <c:forEach var="currentCoauthor" items="${model.currentCoauthors}">
                             <li class="list-group-item">
-                                <input type="hidden" value="1" name="currentCoauthorId"/>
+                                <input type="hidden" value="${currentCoauthor.id}"
+                                       name="currentCoauthorId"/>
+
                                 <div class="row">
-                                    <div
-                                        class="col-xs-10">Дед Игнат
+                                    <div class="col-xs-10">
+                                            ${currentCoauthor.firstName}
+                                            ${currentCoauthor.lastName}
                                     </div>
                                     <div class="col-xs-2 text-right">
-                                        <span class="glyphicon glyphicon-trash"
-                                              style="cursor: pointer"></span>
+
+                                        <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
                                     </div>
                                 </div>
                             </li>
-                            <li class="list-group-item">
-                                <input type="hidden" value="2" name="currentCoauthorId"/>
-                                <div class="row">
-                                    <div
-                                        class="col-xs-10">Тётка Валя
-                                    </div>
-                                    <div class="col-xs-2 text-right">
-                                        <span class="glyphicon glyphicon-trash"
-                                              style="cursor: pointer"></span>
-                                    </div>
-                                </div>
-                            </li>
-                            <c:forEach var="currentCoauthor" items="${model.currentCoauthors}">
-                                <li class="list-group-item">
-                                    <input type="hidden" value="${currentCoauthor.id}" name="currentCoauthorId"/>
-                                    <div class="row">
-                                        <div
-                                            class="col-xs-10">${currentCoauthor.firstName} ${currentCoauthor.lastName}</div>
-                                        <div class="col-xs-2 text-right">
-                                            <span class="glyphicon glyphicon-trash"
-                                                  style="cursor: pointer"></span>
-                                        </div>
-                                    </div>
-                                </li>
-                            </c:forEach>
-                        </ul>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 col-sm-4 h4">Рецензенты</label>
+            <div class="panel panel-default">
+                <div class="row">
+                    <Label class="col-md-4 col-sm-4 col-lg-4"></Label>
+                    <div class="col-md-12 col-sm-12 col-lg-12">
+                        <Label class="h5 col-lg-4 col-md-4 col-sm-4">Рецензент</Label>
+                        <div class="col-lg-8 col-md-8 col-sm-8">
+                            <select id="reviewerSelector" class="form-control">
+                                <option>213</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
