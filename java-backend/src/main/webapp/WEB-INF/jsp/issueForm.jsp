@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h3 class="page-header">Форма добавления/просмотра/редактирования номеров</h3>
-        <%--@elvariable id="issueForm" type="by.artezio.cloud.publishing.dto.IssueForm"--%>
+        <%--@elvariable id="issueForm" type="by.artezio.cloud.publishing.dto.IssueInfo"--%>
         <form:form class="form-horizontal" method="${method}"
                    action="${pageContext.request.contextPath}/issues/issue" modelAttribute="issueForm">
 
