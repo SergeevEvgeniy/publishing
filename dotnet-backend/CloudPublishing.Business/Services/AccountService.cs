@@ -27,11 +27,6 @@ namespace CloudPublishing.Business.Services
 
         public void CreateAccount(EmployeeDTO entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-
             if (entity.ChiefEditor)
             {
                 var chief = unit.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
@@ -50,15 +45,10 @@ namespace CloudPublishing.Business.Services
 
         public void EditAccount(EmployeeDTO entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-
             var target = unit.Employees.Get(entity.Id);
             if (target == null)
             {
-                throw new NullReferenceException("Пользователь не найден");
+                throw new KeyNotFoundException("Пользователь не найден");
             }
 
             if (target.ChiefEditor && !entity.ChiefEditor)
@@ -85,18 +75,13 @@ namespace CloudPublishing.Business.Services
             unit.Save();
         }
 
-        public void DeleteAccount(int? id)
+        public void DeleteAccount(int id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            var target = unit.Employees.Get(id.Value);
+            var target = unit.Employees.Get(id);
 
             if (target == null)
             {
-                throw new NullReferenceException("Пользователь не найден");
+                throw new KeyNotFoundException("Пользователь не найден");
             }
 
             if (target.ChiefEditor)
@@ -104,7 +89,7 @@ namespace CloudPublishing.Business.Services
                 throw new ChiefEditorRoleChangeException();
             }
 
-            unit.Employees.Delete(id.Value);
+            unit.Employees.Delete(id);
             unit.Save();
         }
 

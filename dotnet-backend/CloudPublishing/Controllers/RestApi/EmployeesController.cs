@@ -6,6 +6,8 @@ using CloudPublishing.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace CloudPublishing.Controllers.RestApi
@@ -32,7 +34,11 @@ namespace CloudPublishing.Controllers.RestApi
         [HttpGet]
         public IHttpActionResult GetEmployeeData(int? id)
         {
-            var result = service.GetEmployeeById(id);
+            if (id == null)
+            {
+                return ResponseMessage(new HttpResponseMessage((HttpStatusCode) 422));
+            }
+            var result = service.GetEmployeeById(id.Value);
 
             return Json(mapper.Map<EmployeeDTO, EmployeeData>(result), new JsonSerializerSettings{ContractResolver = new CamelCasePropertyNamesContractResolver()});
         }

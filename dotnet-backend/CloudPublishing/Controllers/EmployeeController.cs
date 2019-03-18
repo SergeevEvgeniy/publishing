@@ -114,16 +114,15 @@ namespace CloudPublishing.Controllers
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Ошибка при получении данных пользователя.");
+                model.TypeList = GetEmployeeTypeList();
+                model.EducationList = GetEmployeeEducationList();
+                return View(model);
+            }
+
             accounts.CreateAccount(user);
-
-
-            //if (!result.IsSuccessful)
-            //{
-            //    ModelState.AddModelError("", result.GetFailureMessage());
-            //    model.TypeList = GetEmployeeTypeSelectList();
-            //    model.EducationList = GetEmployeeEducationList();
-            //    return View(model);
-            //}
 
             TempData["Message"] = "Пользователь " + model.Email + " успешно создан";
 
@@ -171,14 +170,14 @@ namespace CloudPublishing.Controllers
             }
 
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Возникла ошибка при получении данных пользователя");
+                model.TypeList = GetEmployeeTypeList();
+                model.EducationList = GetEmployeeEducationList();
+                return View(model);
+            }
             accounts.EditAccount(user);
-            //if (!result.IsSuccessful)
-            //{
-            //    ModelState.AddModelError("", result.GetFailureMessage());
-            //    model.TypeList = GetEmployeeTypeSelectList();
-            //    model.EducationList = GetEmployeeEducationList();
-            //    return View(model);
-            //}
 
             TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
 
@@ -189,9 +188,17 @@ namespace CloudPublishing.Controllers
         //[Authorize(Roles = "ChiefEditor")]
         public ActionResult Delete(int? id)
         {
+            if (id == null)
+            {
+                return Json(new
+                {
+                    isSuccessful = false,
+                    message = "Неверний идентификатор пользователя"
+                }, JsonRequestBehavior.AllowGet);
+            }
             try
             {
-                accounts.DeleteAccount(id);
+                accounts.DeleteAccount(id.Value);
             }
             catch (ChiefEditorRoleChangeException e)
             {

@@ -65,9 +65,9 @@ namespace CloudPublishing.Business.Services
             return mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Employees.GetEducationList());
         }
 
-        public EmployeeDTO GetEmployeeById(int? id)
+        public EmployeeDTO GetEmployeeById(int id)
         {
-            return id == null ? null : mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id.Value));
+            return mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id));
         }
 
         public IDictionary<string, string> GetEmployeeTypes()
