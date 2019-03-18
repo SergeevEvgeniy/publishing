@@ -43,11 +43,6 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            if (TempData["Message"] != null)
-            {
-                ViewBag.Message = TempData["Message"].ToString();
-            }
-
             var list = service.GetEmployeeList();
 
             return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(list));
@@ -147,11 +142,6 @@ namespace CloudPublishing.Controllers
             var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result);
             model.TypeList = GetEmployeeTypeList();
             model.EducationList = GetEmployeeEducationList();
-
-            if (TempData["Message"] != null)
-            {
-                ViewBag.Message = TempData["Message"].ToString();
-            }
 
             return View(model);
         }

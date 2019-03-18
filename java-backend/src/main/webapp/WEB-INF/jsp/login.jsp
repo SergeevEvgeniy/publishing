@@ -4,7 +4,10 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
     <head>
-        <jsp:include page="styleLinks.jsp"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/login.css">
+
         <title>Login Page</title>
     </head>
     <body>

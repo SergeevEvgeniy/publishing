@@ -9,12 +9,19 @@ using CloudPublishing.Data.Util;
 
 namespace CloudPublishing.Business.Services
 {
+    /// <inheritdoc />
     public class AccountService : IAccountService
     {
         private readonly IPasswordHasher hasher;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unit;
 
+        /// <summary>
+        ///     Создает экземпляр класса сервиса, используя UnitOfWork, хэшер для пароля и маппер для отображения сущностей
+        /// </summary>
+        /// <param name="unit">Экземпляр UnitOfWork для работы с базой данных</param>
+        /// <param name="hasher">Экземпляр хэшера для хеширования паролей</param>
+        /// <param name="mapper">Экземпляр маппера для отображения сущностей</param>
         public AccountService(IUnitOfWork unit, IPasswordHasher hasher, IMapper mapper)
         {
             this.unit = unit;
@@ -22,6 +29,7 @@ namespace CloudPublishing.Business.Services
             this.mapper = mapper;
         }
 
+        /// <inheritdoc />
         public void CreateAccount(EmployeeDTO entity)
         {
             if (entity.ChiefEditor)
@@ -40,6 +48,7 @@ namespace CloudPublishing.Business.Services
             unit.Save();
         }
 
+        /// <inheritdoc />
         public void EditAccount(EmployeeDTO entity)
         {
             var target = unit.Employees.Get(entity.Id);
@@ -72,6 +81,7 @@ namespace CloudPublishing.Business.Services
             unit.Save();
         }
 
+        /// <inheritdoc />
         public void DeleteAccount(int id)
         {
             var target = unit.Employees.Get(id);
@@ -90,6 +100,7 @@ namespace CloudPublishing.Business.Services
             unit.Save();
         }
 
+        /// <inheritdoc />
         public EmployeeDTO AuthenticateUser(string email, string password)
         {
             var hashedPassword = hasher.HashPassword(password);

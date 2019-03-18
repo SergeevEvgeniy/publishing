@@ -4,15 +4,20 @@ using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Data.Util
 {
+    /// <inheritdoc />
     public class PasswordHasher : IPasswordHasher
     {
         private readonly string salt;
 
+        /// <summary>
+        /// Создает экземпляр класса с предопределенной солью
+        /// </summary>
         public PasswordHasher()
         {
             salt = "Strongest salt ever";
         }
 
+        /// <inheritdoc />
         public string HashPassword(string password)
         {
             using(var provider = new MD5CryptoServiceProvider())

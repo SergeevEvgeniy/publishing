@@ -8,20 +8,27 @@ using CloudPublishing.Data.Repositories;
 
 namespace CloudPublishing.Business.Services
 {
+    /// <inheritdoc />
     public class RoleService : IRoleService
     {
         private readonly IUnitOfWork unit;
 
+        /// <summary>
+        ///     Создает экзепляр класса, при помощи создания UnitOfWork с параметром контекста CloudPublishingContext на основе
+        ///     строки подключения EmployeeContext из Web.Config
+        /// </summary>
         public RoleService()
         {
             unit = new UnitOfWork(new CloudPublishingContext("EmployeeContext"));
         }
 
+        /// <inheritdoc />
         public bool IsUserInRole(string email, string roleName)
         {
             return GetRolesForUser(email).Contains(roleName);
         }
 
+        /// <inheritdoc />
         public string[] GetRolesForUser(string email)
         {
             var user = unit.Employees.Find(x => x.Email == email).FirstOrDefault();

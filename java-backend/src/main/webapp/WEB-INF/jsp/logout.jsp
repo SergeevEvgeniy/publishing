@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <jsp:include page="styleLinks.jsp"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+
         <title>Logout Page</title>
         <meta charset="UTF-8">        
     </head>
@@ -24,7 +26,7 @@
                     </div>
                     <div class="form-actions">
                         <button id="logoutButton" class="btn btn-danger" type="submit">Logout</button>
-                        <a class="btn" href="${pageContext.request.contextPath}/home">Back</a>
+                        <a class="btn" onclick="javascript:history.back(); return false;">Back</a>
                     </div>
                 </fieldset>
             </form>
