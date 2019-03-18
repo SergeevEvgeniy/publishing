@@ -11,7 +11,7 @@ namespace CloudPublishing.Business.Services.Interfaces
 
         void EditAccount(EmployeeDTO entity);
 
-        void DeleteAccount(int? id);
+        void DeleteAccount(int id);
 
         EmployeeDTO AuthenticateUser(string email, string password);
     }

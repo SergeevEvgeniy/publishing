@@ -4,7 +4,6 @@ using System.Linq;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using CloudPublishing.Models.Employees.Enums;
@@ -32,10 +31,10 @@ namespace CloudPublishing.Business.Services
             };
         }
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        public EmployeeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
         public void Dispose()
@@ -65,9 +64,9 @@ namespace CloudPublishing.Business.Services
             return mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Employees.GetEducationList());
         }
 
-        public EmployeeDTO GetEmployeeById(int? id)
+        public EmployeeDTO GetEmployeeById(int id)
         {
-            return id == null ? null : mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id.Value));
+            return mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id));
         }
 
         public IDictionary<string, string> GetEmployeeTypes()

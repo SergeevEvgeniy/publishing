@@ -7,10 +7,8 @@
             <div class="row input-block">
                 <label class="col-sm-4 text-right font-weight-bold">Издание:</label>
                 <div class="col-sm-8">
-                    <select value="publishing.value" name="publishing" class="form-control">
-                        {{#if publishing.defaultText}}
-                        <option disabled selected>{{publishing.defaultText}}</option>
-                        {{/if}}
+                    <select name="publishing" class="form-control">
+                        <option disabled selected>Выберите издание</option>
                         {{#each publishing.elementList}}
                             {{#if selected}}
                                 <option  selected value={{value}}>{{text}}</option>
@@ -26,9 +24,7 @@
                 <label class="col-sm-4 text-right font-weight-bold">Выпуск:</label>
                 <div class="col-sm-8" id="issue">
                     <select name="issue" class="form-control">
-                        {{#if issue.defaultText}}
-                        <option disabled selected>{{issue.defaultText}}</option>
-                        {{/if}}
+                        <option disabled selected>Выбирите выпуск</option>
                         {{#each issue.elementList}}
                             {{#if selected}}
                                 <option  selected value={{value}}>{{text}}</option>
@@ -55,9 +51,7 @@
                 <label class="col-sm-4 text-right font-weight-bold">Рубрика:</label>
                 <div class="col-sm-8" id="topic">
                     <select name="topic" class="form-control">
-                        {{#if topic.defaultText}}
-                        <option disabled selected>{{topic.defaultText}}</option>
-                        {{/if}}
+                        <option disabled selected>Выберите рубрику</option>
                         {{#each topic.elementList}}
                             {{#if selected}}
                                 <option  selected value={{value}}>{{text}}</option>

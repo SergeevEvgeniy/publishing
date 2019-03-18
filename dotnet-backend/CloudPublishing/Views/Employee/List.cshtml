@@ -5,10 +5,10 @@
 }
 
 <div class="row justify-content-end mb-3">
-    @*@if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
-    {*@
+    @if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
+    {
         <a href="@Url.Action("Create")" class="btn btn-success"><i class="fas fa-user-plus"></i>Новый сотрудник</a>
-    @*}*@
+    }
 </div>
 <table class="table" id="listContainer">
     <thead>
@@ -28,10 +28,10 @@
         <th>
             @Html.DisplayName("Тип сотрудника")
         </th>
-        @*@if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
-        {*@
+        @if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
+        {
             <th></th>
-        @*}*@
+        }
     </tr>
     </thead>
     <tbody>
@@ -53,8 +53,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
-            @*@if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
-            {*@
+            @if (User.Identity.IsAuthenticated && User.IsInRole("ChiefEditor"))
+            {
                 <td>
                     <div>
                         <a href="@Url.Action("Edit", new {id = item.Id})" class="btn btn-default">
@@ -65,7 +65,7 @@
                         </button>
                     </div>
                 </td>
-            @*}*@
+            }
         </tr>
     }
     </tbody>
