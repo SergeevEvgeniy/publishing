@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Enums;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
-using CloudPublishing.Models.Employees.Enums;
 
 namespace CloudPublishing.Business.Services
 {
+    /// <inheritdoc />
     public class EmployeeService : IEmployeeService
     {
         private static readonly IDictionary<EmployeeType, string> Types;
@@ -31,17 +32,24 @@ namespace CloudPublishing.Business.Services
             };
         }
 
+        /// <summary>
+        ///     Создает экземпляр класса из UnitOfWork и маппера для отображения сущностей
+        /// </summary>
+        /// <param name="unitOfWork">Экземпляр класса для работы с базой данных</param>
+        /// <param name="mapper">Экземпляр маппера для отображения сущностей</param>
         public EmployeeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             unitOfWork?.Dispose();
         }
 
+        /// <inheritdoc />
         public IEnumerable<EmployeeDTO> GetEmployeeList()
         {
             return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unitOfWork.Employees.GetAll().Select(x =>
@@ -52,23 +60,27 @@ namespace CloudPublishing.Business.Services
             }));
         }
 
+        /// <inheritdoc />
         public IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList, string lastName)
         {
             var list = unitOfWork.Employees.Find(x =>
-                x.LastName.Contains(lastName ?? string.Empty) && idList.Contains(x.Id));
+                x.LastName.StartsWith(lastName ?? string.Empty) && idList.Contains(x.Id));
             return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
         }
 
+        /// <inheritdoc />
         public IEnumerable<EducationDTO> GetEducationList()
         {
             return mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unitOfWork.Employees.GetEducationList());
         }
 
+        /// <inheritdoc />
         public EmployeeDTO GetEmployeeById(int id)
         {
             return mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id));
         }
 
+        /// <inheritdoc />
         public IDictionary<string, string> GetEmployeeTypes()
         {
             return Types.Select(x => new {key = x.Key.ToString(), x.Value}).ToDictionary(x => x.key, y => y.Value);

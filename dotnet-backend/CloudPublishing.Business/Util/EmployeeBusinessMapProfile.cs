@@ -4,8 +4,16 @@ using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Business.Util
 {
+    /// <inheritdoc />
+    /// <summary>
+    ///     Профиль Automapper для отображения сущностей сторудика и типа образования
+    /// </summary>
     public class EmployeeBusinessMapProfile : Profile
     {
+        /// <summary>
+        ///     Создает экземпляр класса, настраивая отображение Employee и Education в EmployeeDTO и EducationDTO соответственно и
+        ///     наоборот
+        /// </summary>
         public EmployeeBusinessMapProfile()
         {
             CreateMap<Employee, EmployeeDTO>()
