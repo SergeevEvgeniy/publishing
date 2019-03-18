@@ -12,7 +12,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <tag:layout>
-    <span class="glyphicon glyphicon-search"></span>
     <div class="container">
         <form:form modelAttribute="data">
             <div class="text-right form-group">
