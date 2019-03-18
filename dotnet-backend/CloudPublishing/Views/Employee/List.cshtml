@@ -89,7 +89,7 @@
                     alertComponent.showAlert(result.isSuccessful, result.message);
                 });
 
-                var content = '@ViewBag.Message';
+                var content = '@TempData["Message"]';
 
                 if (content) {
                     alertComponent.showAlert(true, content);
