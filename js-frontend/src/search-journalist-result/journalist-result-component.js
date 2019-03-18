@@ -21,9 +21,8 @@ function JournalistResultComponent($parentElement) {
     });
 
     /**
-    * Установка функции обратного вызова для просмтора информации о журналисте
-    * @param {function} listener -вызывается, нажата кнопка просмотра информации о журналисте
-     * Отправляет аргумент - полное имя жкрналиста
+    * Установка функции обратного вызова для просмотра информации о журналисте
+    * @param {function} listener -вызывается, когда нажата кнопка просмотра информации о журналисте
     */
     this.onJournalistInfoButtonClick = function onJournalistInfoButtonClick(listener) {
         onJournalistInfoClickEventListener = listener;

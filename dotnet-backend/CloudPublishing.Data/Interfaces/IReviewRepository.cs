@@ -1,6 +1,4 @@
 ﻿using CloudPublishing.Data.Entities;
-using CloudPublishing.Data.Interfaces;
-using System;
 using System.Collections.Generic;
 
 namespace CloudPublishing.Data.Interfaces
@@ -18,7 +16,5 @@ namespace CloudPublishing.Data.Interfaces
         void Update(Review item);
 
         void Delete(int articleId, int reviewerId);
-
-        void Save();
     }
 }

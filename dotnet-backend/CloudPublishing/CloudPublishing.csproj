@@ -34,6 +34,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\CloudPublishing.xml</DocumentationFile>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -152,7 +166,6 @@
     <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Controllers\RestApi\EmployeesController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
-    <Compile Include="Converters\UIConvertersExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -179,6 +192,9 @@
     <Compile Include="Util\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\PublishingMapProfile.cs" />
+    <Compile Include="Util\PublishingValueResolvers\EmployeeShortName.cs" />
+    <Compile Include="Util\PublishingValueResolvers\TopicsNameToString.cs" />
     <Compile Include="Util\ReviewMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>

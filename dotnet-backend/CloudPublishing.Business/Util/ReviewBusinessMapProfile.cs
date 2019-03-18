@@ -4,7 +4,7 @@ using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Business.Util
 {
-    class ReviewBusinessMapProfile : Profile
+    public class ReviewBusinessMapProfile : Profile
     {
         public ReviewBusinessMapProfile()
         {
