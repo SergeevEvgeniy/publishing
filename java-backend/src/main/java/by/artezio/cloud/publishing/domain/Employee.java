@@ -253,23 +253,11 @@ public class Employee {
             return false;
         }
         Employee employee = (Employee) o;
-        return id.equals(employee.id)
-                && birthYear.equals(employee.birthYear)
-                && chiefEditor.equals(employee.chiefEditor)
-                && Objects.equals(firstName, employee.firstName)
-                && Objects.equals(lastName, employee.lastName)
-                && Objects.equals(middleName, employee.middleName)
-                && Objects.equals(email, employee.email)
-                && Objects.equals(password, employee.password)
-                && Objects.equals(sex, employee.sex)
-                && Objects.equals(address, employee.address)
-                && Objects.equals(type, employee.type)
-                && Objects.equals(educationId, employee.educationId);
+        return id.equals(employee.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, middleName,
-                email, password, sex, birthYear, address, type, educationId, chiefEditor);
+        return Objects.hash(id);
     }
 }

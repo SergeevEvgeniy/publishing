@@ -1,13 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib tagdir="/WEB-INF/tags/" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Форма добавления/редактирования номеров</title>
-    <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-theme.css"/>">
-</head>
-<body>
+
+<tag:layout>
     <div class="container">
         <h3 class="page-header">Форма добавления/просмотра/редактирования номеров</h3>
         <%--@elvariable id="issueForm" type="by.artezio.cloud.publishing.dto.IssueForm"--%>
@@ -92,12 +88,9 @@
         </form:form>
     </div>
 
-    <script type="text/javascript" src="<c:url value="/resources/js/libs/jquery.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/resources/js/libs/bootstrap.js"/>"></script>
     <c:choose>
         <c:when test="${method == 'POST'}">
             <script type="text/javascript" src="<c:url value="/resources/js/create-issue.js"/>"></script>
         </c:when>
     </c:choose>
-</body>
-</html>
+</tag:layout>
