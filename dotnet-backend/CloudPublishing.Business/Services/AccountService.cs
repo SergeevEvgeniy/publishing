@@ -48,7 +48,7 @@ namespace CloudPublishing.Business.Services
             var target = unit.Employees.Get(entity.Id);
             if (target == null)
             {
-                throw new KeyNotFoundException("Пользователь не найден");
+                throw new EntityNotFoundException("Пользователь не найден");
             }
 
             if (target.ChiefEditor && !entity.ChiefEditor)
@@ -81,7 +81,7 @@ namespace CloudPublishing.Business.Services
 
             if (target == null)
             {
-                throw new KeyNotFoundException("Пользователь не найден");
+                throw new EntityNotFoundException("Пользователь не найден");
             }
 
             if (target.ChiefEditor)

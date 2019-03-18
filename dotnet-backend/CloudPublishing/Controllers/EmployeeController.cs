@@ -126,7 +126,6 @@ namespace CloudPublishing.Controllers
 
             TempData["Message"] = "Пользователь " + model.Email + " успешно создан";
 
-
             return RedirectToAction("List");
         }
 

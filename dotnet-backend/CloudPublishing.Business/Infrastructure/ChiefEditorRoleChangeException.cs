@@ -2,7 +2,7 @@
 
 namespace CloudPublishing.Business.Infrastructure
 {
-    public class ChiefEditorRoleChangeException : Exception
+    public class ChiefEditorRoleChangeException : ApplicationException
     {
         public ChiefEditorRoleChangeException() : base("Сначала необходимо указать другого главного редактора")
         {
