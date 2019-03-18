@@ -1,6 +1,6 @@
-package by.artezio.cloud.publishing.web.service.impl;
+package by.artezio.cloud.publishing.web.security.impl;
 
-import by.artezio.cloud.publishing.web.service.EncoderService;
+import by.artezio.cloud.publishing.web.security.EncoderService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 
