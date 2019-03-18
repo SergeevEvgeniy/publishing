@@ -8,24 +8,18 @@ var api = require('../api/journalist-api');
  */
 function SearchJournalistComponent($parentElement) {
     var data = {
-        componentId: 'searchJournalist',
         publishing: {
             prevOptionIndex: 0,
-            defaultText: 'Выберите издание',
-            elementList: [],
-            value: null
+            elementList: []
         },
         issue: {
             prevOptionIndex: 0,
-            defaultText: 'Выбирите выпуск',
             elementList: [],
             isIssuesAdded: false
         },
         topic: {
             prevOptionIndex: 0,
-            defaultText: 'Выберите рубрику',
-            elementList: [],
-            value: null
+            elementList: []
         },
         lastName: null,
         article: null,
@@ -55,10 +49,8 @@ function SearchJournalistComponent($parentElement) {
         data.isSubmitButtonActive = false;
         render();
         api.postSearchJournalistForm(formData).then(function renderJournalistList(response) {
-            if (response.length !== 0 && journalistSearchListener) {
+            if (journalistSearchListener) {
                 journalistSearchListener(response);
-            } else {
-                console.log('Отсутствуют результаты поиска');
             }
             data.isLoading = false;
             data.isSubmitButtonActive = true;
@@ -67,13 +59,15 @@ function SearchJournalistComponent($parentElement) {
     }
 
     function onSearchClearEvent() {
+        if (clearSearchListener) {
+            clearSearchListener();
+        }
         data.lastName = null;
         data.article = null;
         data.issue.isIssuesAdded = false;
         data.publishing.elementList[data.publishing.prevOptionIndex].selected = false;
         data.topic.elementList[data.publishing.prevOptionIndex].selected = false;
         render();
-        clearSearchListener();
     }
 
     function onInputKeyUpEvent(event) {
