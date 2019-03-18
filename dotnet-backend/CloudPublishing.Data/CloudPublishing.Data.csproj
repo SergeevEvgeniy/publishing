@@ -81,7 +81,6 @@
     <Compile Include="Entities\Topic.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
     <Compile Include="Interfaces\IPublishingRepository.cs" />
-    <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IReviewRepository.cs" />
     <Compile Include="Interfaces\ITopicRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
