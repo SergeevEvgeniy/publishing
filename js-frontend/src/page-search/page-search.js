@@ -1,4 +1,4 @@
-var searchTemplate = require('./search-page.hbs');
+var searchTemplate = require('./search.hbs');
 var JournalistResultComponent = require('../search-journalist-result/journalist-result-component');
 var SearchJournalistComponent = require('../search-journalist/search-component');
 var JournalistStatComponent = require('../journalist-info/journalist-component');
@@ -56,14 +56,8 @@ function SearchPageComponent($parentElement) {
         journalistPaginationComponent.render();
     });
 
-    function render() {
-        $parentElement.empty().append($componentContainer);
-        searchJournalistComponent.render();
-    }
-    /**
-     * Отрисовка компонента.
-     */
-    this.render = render;
+    $parentElement.empty().append($componentContainer);
+    searchJournalistComponent.render();
 }
 
 module.exports = SearchPageComponent;
