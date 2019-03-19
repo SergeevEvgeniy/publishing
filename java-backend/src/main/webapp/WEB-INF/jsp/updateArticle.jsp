@@ -54,20 +54,14 @@
 
         <div class="form-group">
             <label class="label-control col-lg-4 col-md-4 col-sm-4 h4">Соавторы</label>
-
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <select id="availableCoauthors" class="form-control ">
-                                    <option>---------------</option>
-                                    <option>coauthor 1</option>
-                                    <option>coauthor 4</option>
-                                    <option>coauthor 2</option>
-                                    <option>coauthor 3</option>
                                     <c:forEach var="availableCoauthor" items="${model.availableCoauthors}">
-                                        <option data-coauthorId="${availableCoauthor.id}">
+                                        <option value="${availableCoauthor.id}">
                                                 ${availableCoauthor.firstName} ${availableCoauthor.lastName} ${availableCoauthor.middleName}
                                         </option>
                                     </c:forEach>
@@ -84,41 +78,14 @@
                     </div>
 
                     <ul id="currentCoauthors" class="list-group">
-                        <li class="list-group-item">
-                            <input type="hidden" value="1" name="currentCoauthorId"/>
-                            <div class="row">
-                                <div class="col-xs-10">
-                                    Дед Игнат
-                                </div>
-                                <div class="col-xs-2 text-right">
-                                    <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <input type="hidden" value="2" name="currentCoauthorId"/>
-                            <div class="row">
-                                <div
-                                    class="col-xs-10">Тётка Валя
-                                </div>
-                                <div class="col-xs-2 text-right">
-                            <span class="glyphicon glyphicon-trash"
-                                  style="cursor: pointer"></span>
-                                </div>
-                            </div>
-                        </li>
                         <c:forEach var="currentCoauthor" items="${model.currentCoauthors}">
-                            <li class="list-group-item">
-                                <input type="hidden" value="${currentCoauthor.id}"
-                                       name="currentCoauthorId"/>
-
+                            <li class="list-group-item" data-coauthor-id="${currentCoauthor.id}">
                                 <div class="row">
                                     <div class="col-xs-10">
                                             ${currentCoauthor.firstName}
                                             ${currentCoauthor.lastName}
                                     </div>
                                     <div class="col-xs-2 text-right">
-
                                         <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
                                     </div>
                                 </div>
@@ -129,16 +96,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-lg-4 col-md-4 col-sm-4 h4">Рецензенты</label>
-            <div class="panel panel-default">
-                <div class="row">
-                    <Label class="col-md-4 col-sm-4 col-lg-4"></Label>
-                    <div class="col-md-12 col-sm-12 col-lg-12">
-                        <Label class="h5 col-lg-4 col-md-4 col-sm-4">Рецензент</Label>
-                        <div class="col-lg-8 col-md-8 col-sm-8">
-                            <select id="reviewerSelector" class="form-control">
-                                <option>213</option>
-                            </select>
+            <label class="col-lg-4 col-md-4 col-sm-4 h4">Рецензия</label>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-md-12 col-sm-12 col-lg-12">
+                                <Label class="h4 col-lg-4 col-md-4 col-sm-4">Рецензент</Label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select id="reviewerSelector" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <textarea id="reviewContent" class="form-control textarea"></textarea>
                         </div>
                     </div>
                 </div>
