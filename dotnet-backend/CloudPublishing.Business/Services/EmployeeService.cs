@@ -85,5 +85,19 @@ namespace CloudPublishing.Business.Services
         {
             return Types.Select(x => new {key = x.Key.ToString(), x.Value}).ToDictionary(x => x.key, y => y.Value);
         }
+
+        /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetJournalistList()
+        {
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(
+                unitOfWork.Employees.Find(x => x.Type == EmployeeType.J.ToString()));
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetEditorList()
+        {
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(
+                unitOfWork.Employees.Find(x => x.Type == EmployeeType.E.ToString()));
+        }
     }
 }

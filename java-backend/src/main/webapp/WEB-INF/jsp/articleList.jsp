@@ -14,7 +14,7 @@
 <tag:layout>
     <form:form modelAttribute="data">
         <div class="text-right form-group">
-            <a href="update" class="btn btn-success ">Добавить статью</a>
+            <a href="article/new" class="btn btn-success ">Добавить статью</a>
         </div>
         <table class="table table-bordered table-hover ">
             <thead>
@@ -42,7 +42,7 @@
                             </ul>
                         </td>
                         <td>
-                            <a href="update/${element.articleId}">
+                            <a href="article/update/${element.articleId}">
                                 <span class="glyphicon glyphicon-edit btn btn-lg btn-success"> </span>
                             </a>
                             <span class="glyphicon glyphicon-trash btn btn-lg btn-danger"></span>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  * Контроллер, обрабатывающий запросы, связанные со статьями.
  */
 @Controller
+@RequestMapping("/article")
 public class ArticleController {
 
     private final ArticleService service;
@@ -36,7 +38,7 @@ public class ArticleController {
      * @param request HttpServletRequest
      * @return String
      */
-    @GetMapping(path = "/articleList")
+    @GetMapping
     public final String articleList(final Model model, final HttpServletRequest request) {
         List<ArticleInfo> data = service.getArticleInfoList(request);
         model.addAttribute("data", data);
@@ -49,7 +51,7 @@ public class ArticleController {
      * @param model Model
      * @return String название jsp страницы
      */
-    @GetMapping(path = "/update")
+    @GetMapping(path = "/new")
     public final String createArticle(final Model model) {
         ArticleForm data = service.getNewArticleForm();
         model.addAttribute("model", data);

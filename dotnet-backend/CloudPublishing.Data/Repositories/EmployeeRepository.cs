@@ -25,7 +25,7 @@ namespace CloudPublishing.Data.Repositories
         /// <inheritdoc />
         public IEnumerable<Employee> GetAll()
         {
-            return context.Employees.Include(x => x.Education).Include("Publishings").AsNoTracking().AsEnumerable();
+            return context.Employees.Include(x => x.Education).Include(x => x.Publishings).AsNoTracking().AsEnumerable();
         }
 
         /// <inheritdoc />
