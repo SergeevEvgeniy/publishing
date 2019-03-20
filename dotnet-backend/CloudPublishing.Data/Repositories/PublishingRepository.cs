@@ -4,6 +4,8 @@ using CloudPublishing.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
+using System.Diagnostics;
 
 namespace CloudPublishing.Data.Repositories
 {
@@ -18,17 +20,18 @@ namespace CloudPublishing.Data.Repositories
 
         public Publishing Get(int id)
         {
+            
             return context.Publishings.AsNoTracking()
-                .Include("Topics").AsNoTracking()
-                .Include("Employees").AsNoTracking()
-                .FirstOrDefault(x => x.Id == id);
+                .Include(p => p.Topics).AsNoTracking()
+                .Include(p => p.Employees).AsNoTracking()
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public IEnumerable<Publishing> GetAll()
         {
             return context.Publishings.AsNoTracking()
-                .Include("Topics").AsNoTracking()
-                .Include("Employees").AsNoTracking()
+                .Include(p => p.Topics).AsNoTracking()
+                .Include(p => p.Employees).AsNoTracking()
                 .ToList();
         }
 
@@ -40,8 +43,8 @@ namespace CloudPublishing.Data.Repositories
         public void Update(Publishing modifyPublishing)
         {
             Publishing publishingToUpdate = context.Publishings
-                .Include("Employees")
-                .Include("Topics")
+                .Include(p => p.Employees)
+                .Include(p => p.Topics)
                 .FirstOrDefault(x => x.Id == modifyPublishing.Id);
 
             if (publishingToUpdate == null)
@@ -49,11 +52,18 @@ namespace CloudPublishing.Data.Repositories
                 throw new Exception($"Publishing with Id '{modifyPublishing.Id}' not found");
             }
 
+            context.Database.Log = (s) => Debug.WriteLine(s);
+
             publishingToUpdate.Title = modifyPublishing.Title;
             publishingToUpdate.Type = modifyPublishing.Type;
             publishingToUpdate.Subjects = modifyPublishing.Subjects;
-            UpdatePublishingEmployees(publishingToUpdate, modifyPublishing.Employees);
-            UpdatePublishingTopics(publishingToUpdate, modifyPublishing.Topics);
+
+            var employeeIds = modifyPublishing.Employees.Select(e => e.Id);
+            publishingToUpdate.Employees = context.Employees.Where(e => employeeIds.Contains(e.Id)).ToList();
+            publishingToUpdate.Employees.Add(publishingToUpdate.Employees.FirstOrDefault());
+
+            var topicIds = modifyPublishing.Topics.Select(t => t.Id);
+            publishingToUpdate.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();
         }
 
         public void Delete(int id)
@@ -111,62 +121,5 @@ namespace CloudPublishing.Data.Repositories
             }
             return realTopics;
         }
-
-        private void UpdatePublishingEmployees(Publishing publishingToUpdate, ICollection<Employee> selectedEmployee)
-        {
-            if (selectedEmployee == null)
-            {
-                publishingToUpdate.Employees = new List<Employee>();
-                return;
-            }
-
-            foreach (var employee in context.Employees)
-            {
-                if (selectedEmployee.Select(x => x.Id).Contains(employee.Id))
-                {
-                    if (!publishingToUpdate.Employees.Select(x => x.Id).Contains(employee.Id))
-                    {
-                        publishingToUpdate.Employees.Add(employee);
-                    }
-                }
-                else
-                {
-                    if (publishingToUpdate.Employees.Select(x => x.Id).Contains(employee.Id))
-                    {
-                        publishingToUpdate.Employees.Remove(employee);
-                    }
-                }
-            }
-        }
-
-        private void UpdatePublishingTopics(Publishing publishingToUpdate, ICollection<Topic> selectedTopics)
-        {
-            if (selectedTopics == null)
-            {
-                publishingToUpdate.Topics = new List<Topic>();
-                return;
-            }
-
-            foreach (var topic in context.Topics)
-            {
-                if (selectedTopics.Select(x => x.Id).Contains(topic.Id))
-                {
-                    if (!publishingToUpdate.Topics.Select(x => x.Id).Contains(topic.Id))
-                    {
-                        publishingToUpdate.Topics.Add(topic);
-                    }
-                }
-                else
-                {
-                    if (publishingToUpdate.Topics.Select(x => x.Id).Contains(topic.Id))
-                    {
-                        publishingToUpdate.Topics.Remove(topic);
-                    }
-                }
-            }
-
-
-        }
-
     }
 }

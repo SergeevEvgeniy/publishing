@@ -11,9 +11,11 @@ function configureMultiSelectComponent(componentId, propertyName) {
     selector.addEventListener('change', onSelectListChange);
     listItems.addEventListener('click', onListClick);
     addButton.addEventListener('click', onAddButtonClick);
+    onSelectListChange();
 
     function onSelectListChange() {
         addButton.disabled = selector.selectedIndex == 0;
+        selector.disabled = selector.options.length == 1;
     }
 
     function onAddButtonClick() {
@@ -40,6 +42,7 @@ function configureMultiSelectComponent(componentId, propertyName) {
                 var option = new Option(text, value);
                 selector.appendChild(option);
                 listItems.removeChild(listItem);
+                onSelectListChange();
                 return;
             }
             target = target.parentElement;

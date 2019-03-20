@@ -6,6 +6,7 @@ namespace CloudPublishing.Models.Publishings
     {
         public PublishingViewModel Publishing { get; set; }
         public IEnumerable<TopicViewModel> AvailableTopics { get; set; }
-        public IEnumerable<PublishingEmployeeViewModel> AvailableEmployees { get; set; }
+        public IEnumerable<PublishingEmployeeViewModel> AvailableEditors { get; set; }
+        public IEnumerable<PublishingEmployeeViewModel> AvailableJournalists { get; set; }
     }
 }
