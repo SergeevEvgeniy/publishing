@@ -10,6 +10,7 @@ using CloudPublishing.Util;
 
 namespace CloudPublishing.Controllers
 {
+    [HandleError(ExceptionType = typeof(EntityNotFoundException))]
     public class EmployeeController : Controller
     {
         private readonly IAccountService accounts;
@@ -131,9 +132,16 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            accounts.EditAccount(user);
+            try
+            {
+                accounts.EditAccount(user);
 
-            TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
+                TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
+            }
+            catch (ChiefEditorRoleChangeException e)
+            {
+                TempData["Message"] = "Ошибка обновления данных пользователя: " + e.Message;
+            }
 
             return RedirectToAction("List");
         }

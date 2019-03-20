@@ -1,9 +1,23 @@
 ﻿@model System.Web.Mvc.HandleErrorInfo
 
 @{
-    ViewBag.Title = "Error";
+    ViewBag.Title = "Ошибка при обработке запроса";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div class="card bg-danger text-white">
+    <h4 class="card-header">Ошибка</h4>
+    <div class="card-body ">
+        <h5 class="card-title">При обработке запроса произошла внутренняя ошибка</h5>
+        <p class="card-text">
+            Попробуйте повторить попытку позднее или обратитесь к системному администратору
+        </p>
+        @if (Model.Exception is ApplicationException)
+        {
+            <h5 class="card-title">Описание ошибки:</h5>
+            <p class="card-text">
+                @Model.Exception.Message
+            </p>
+        }
+    </div>
+</div>
 
