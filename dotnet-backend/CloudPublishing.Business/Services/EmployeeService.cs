@@ -33,7 +33,7 @@ namespace CloudPublishing.Business.Services
         }
 
         /// <summary>
-        ///     Создает экземпляр класса из UnitOfWork и маппера для отображения сущностей
+        ///     Создает экземпляр класса из реализаций <see cref="IUnitOfWork"/> и маппера для отображения сущностей
         /// </summary>
         /// <param name="unitOfWork">Экземпляр класса для работы с базой данных</param>
         /// <param name="mapper">Экземпляр маппера для отображения сущностей</param>
