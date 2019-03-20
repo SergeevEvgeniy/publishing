@@ -20,8 +20,5 @@
         <constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
     </bean>
 
-    <!--Бин для отображения из Entity в DTO, и из DTO в Entity -->
-    <bean class="org.modelmapper.ModelMapper"/>
-
 </beans>
 
