@@ -8,7 +8,7 @@ namespace CloudPublishing.Util.PublishingValueResolvers
     {
         public string Resolve(EmployeeDTO source, PublishingEmployeeViewModel destination, string destMember, ResolutionContext context)
         {
-            string shortName = source.FirstName + ' ' + source.LastName[0] + '.';
+            string shortName = source.LastName + ' ' + source.FirstName[0] + '.';
 
             if (source.MiddleName != null)
             {

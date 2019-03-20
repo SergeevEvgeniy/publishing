@@ -167,7 +167,6 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Controllers\RestApi\EmployeesController.cs" />
-    <Compile Include="Controllers\RestApi\PublishingsController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -41,9 +41,11 @@ namespace CloudPublishing.Controllers
                 AvailableTopics = mapper
                     .Map<IEnumerable<TopicViewModel>>(publishingService.GetAllTopics()),
 
-                AvailableJournalists = availableEmployees.Where(e => e.Type == "Журналист"),
+                AvailableJournalists = mapper
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetJournalistList()),
 
-                AvailableEditors = availableEmployees.Where(e => e.Type == "Редактор")
+                AvailableEditors = mapper
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEditorList())
             };
             return View(publishingViewModel);
         }
@@ -80,13 +82,13 @@ namespace CloudPublishing.Controllers
                 TopicsAtPublishing = mapper
                     .Map<IEnumerable<TopicViewModel>>(publishing.Topics),
 
-                EditorsAtPublishing = employeesInPublishing.Where(e => e.Type == "J"),
+                EditorsAtPublishing = employeesInPublishing.Where(e => e.Type == "E"),
 
-                JournalistsAtPublishing = employeesInPublishing.Where(e => e.Type == "E"),
+                JournalistsAtPublishing = employeesInPublishing.Where(e => e.Type == "J"),
 
-                AvailableEditors = availableEmployees.Where(e => e.Type == "J"),
+                AvailableEditors = availableEmployees.Where(e => e.Type == "E"),
 
-                AvailableJournalists = availableEmployees.Where(e => e.Type == "E")
+                AvailableJournalists = availableEmployees.Where(e => e.Type == "J")
             };
 
             return View(editViewModel);

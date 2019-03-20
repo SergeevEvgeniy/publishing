@@ -37,7 +37,13 @@ namespace CloudPublishing.Data.Repositories
 
         public void Create(Publishing publishing)
         {
-            context.Publishings.Add(MapToRealPublishing(publishing));
+            var employeeIds = publishing.Employees.Select(e => e.Id);
+            publishing.Employees = context.Employees.Where(e => employeeIds.Contains(e.Id)).ToList();
+
+            var topicIds = publishing.Topics.Select(t => t.Id);
+            publishing.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();
+
+            context.Publishings.Add(publishing);
         }
 
         public void Update(Publishing modifyPublishing)
@@ -60,7 +66,6 @@ namespace CloudPublishing.Data.Repositories
 
             var employeeIds = modifyPublishing.Employees.Select(e => e.Id);
             publishingToUpdate.Employees = context.Employees.Where(e => employeeIds.Contains(e.Id)).ToList();
-            publishingToUpdate.Employees.Add(publishingToUpdate.Employees.FirstOrDefault());
 
             var topicIds = modifyPublishing.Topics.Select(t => t.Id);
             publishingToUpdate.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();
@@ -74,52 +79,6 @@ namespace CloudPublishing.Data.Repositories
                 throw new Exception($"Publishing with Id '{id}' not found");
             }
             context.Publishings.Remove(publishing);
-        }
-
-        private Publishing MapToRealPublishing(Publishing publishing)
-        {
-            publishing.Employees = MapToRealEmployees(publishing.Employees);
-            publishing.Topics = MapToRealTopics(publishing.Topics);
-            return publishing;
-        }
-
-        private ICollection<Employee> MapToRealEmployees(ICollection<Employee> employees)
-        {
-            var realPublishingEmployees = new List<Employee>();
-
-            if (employees != null)
-            {
-                foreach (var employee in employees)
-                {
-                    var realEmployee = context.Employees.FirstOrDefault(x => x.Id == employee.Id);
-                    if (realEmployee == null)
-                    {
-                        throw new Exception();
-                    }
-                    realPublishingEmployees.Add(realEmployee);
-                }
-            }
-            return realPublishingEmployees;
-        }
-
-        private ICollection<Topic> MapToRealTopics(ICollection<Topic> topics)
-        {
-            var realTopics = new List<Topic>();
-            if (topics != null)
-            {
-
-
-                foreach (var topic in topics)
-                {
-                    var realTopic = context.Topics.FirstOrDefault(x => x.Id == topic.Id);
-                    if (realTopic == null)
-                    {
-                        throw new Exception();
-                    }
-                    realTopics.Add(realTopic);
-                }
-            }
-            return realTopics;
         }
     }
 }
