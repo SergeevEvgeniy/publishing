@@ -42,5 +42,17 @@ namespace CloudPublishing.Business.Services.Interfaces
         /// </summary>
         /// <returns>Коллекция типов сотрудника, или пустая коллекция, если типы отстутствуют</returns>
         IDictionary<string, string> GetEmployeeTypes();
+
+        /// <summary>
+        ///     Получить коллекцию журналистов издательства
+        /// </summary>
+        /// <returns>Коллекция журналистов, или пустая коллекция, если типы отстутствуют</returns>
+        IEnumerable<EmployeeDTO> GetJournalistList();
+
+        /// <summary>
+        ///     Получить коллекцию редакторов издательства
+        /// </summary>
+        /// <returns>Коллекция редакторов, или пустая коллекция, если типы отстутствуют</returns>
+        IEnumerable<EmployeeDTO> GetEditorList();
     }
 }
