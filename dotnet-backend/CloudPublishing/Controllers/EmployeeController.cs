@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Security;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Infrastructure;
@@ -46,41 +45,6 @@ namespace CloudPublishing.Controllers
             var list = service.GetEmployeeList();
 
             return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(list));
-        }
-
-        [HttpGet]
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = accounts.AuthenticateUser(model.Email, model.Password);
-
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Введены неверные данные");
-                model.Password = string.Empty;
-                return View(model);
-            }
-
-            FormsAuthentication.SetAuthCookie(user.Email, model.CheckOut);
-
-            return RedirectToAction("List", "Employee");
-        }
-
-        public ActionResult Logout()
-        {
-            FormsAuthentication.SignOut();
-            return RedirectToAction("List");
         }
 
         [HttpGet]

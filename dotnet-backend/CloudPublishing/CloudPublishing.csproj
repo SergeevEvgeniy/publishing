@@ -163,6 +163,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacConfig\WebModule.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Controllers\RestApi\EmployeesController.cs" />
@@ -287,7 +288,7 @@
     <Content Include="Views\Review\Index.cshtml" />
     <Content Include="Views\Review\_ReviewLayout.cshtml" />
     <Content Include="Views\Review\InvalidModel.cshtml" />
-    <Content Include="Views\Employee\Login.cshtml" />
+    <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Review\Create.cshtml" />
     <Content Include="Views\Review\Details.cshtml" />
     <Content Include="Views\Review\GetTopicList.cshtml" />
