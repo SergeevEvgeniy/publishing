@@ -15,7 +15,8 @@ public class MD5EncoderService implements EncoderService {
 
     @Override
     public String encode(final String input) {
-        return DigestUtils.md5Hex(input + "Strongest salt ever");
+        String md5Hex = DigestUtils.md5Hex(input).toUpperCase();
+        md5Hex = DigestUtils.md5Hex("cloud" + md5Hex + "publishing").toUpperCase();
+        return md5Hex;
     }
-
 }
