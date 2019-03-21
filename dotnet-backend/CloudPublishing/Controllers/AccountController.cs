@@ -11,16 +11,16 @@ namespace CloudPublishing.Controllers
     /// </summary>
     public class AccountController : Controller
     {
-        private readonly IAccountService accounts;
+        private readonly IEmployeeService service;
 
         /// <inheritdoc />
         /// <summary>
-        ///     Создает экземпляр контроллера используя реализацию сервиса аккаунтов <see cref="IAccountService" />
+        ///     Создает экземпляр контроллера используя реализацию сервиса аккаунтов <see cref="IEmployeeService" />
         /// </summary>
-        /// <param name="accounts"></param>
-        public AccountController(IAccountService accounts)
+        /// <param name="service">Сервис для работы с профилями пользователей</param>
+        public AccountController(IEmployeeService service)
         {
-            this.accounts = accounts;
+            this.service = service;
         }
 
         /// <summary>
@@ -54,11 +54,11 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            var user = accounts.AuthenticateUser(model.Email, model.Password);
+            var user = service.AuthenticateEmployee(model.Email, model.Password);
 
             if (user == null)
             {
-                ModelState.AddModelError("", "Введены неверные данные");
+                TempData["Message"] = "Ошибка входа. Введены неверные данные";
                 model.Password = string.Empty;
                 return View(model);
             }

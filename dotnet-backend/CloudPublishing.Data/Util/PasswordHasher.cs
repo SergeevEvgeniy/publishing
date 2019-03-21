@@ -1,35 +1,46 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Data.Util
 {
     /// <inheritdoc />
     public class PasswordHasher : IPasswordHasher
     {
-        private readonly string salt;
+        private readonly string leftSalt;
+        private readonly string rightSalt;
 
         /// <summary>
-        /// Создает экземпляр класса с предопределенной солью
+        ///     Создает экземпляр класса с предопределенной солью
         /// </summary>
         public PasswordHasher()
         {
-            salt = "Strongest salt ever";
+            leftSalt = "cloud";
+            rightSalt = "publishing";
         }
 
         /// <inheritdoc />
         public string HashPassword(string password)
         {
-            using(var provider = new MD5CryptoServiceProvider())
+            using (var provider = new MD5CryptoServiceProvider())
             {
-                var bytes = provider.ComputeHash(Encoding.UTF8.GetBytes(password + salt));
+                var bytes = provider.ComputeHash(Encoding.UTF8.GetBytes(password));
                 var sb = new StringBuilder();
                 foreach (var b in bytes)
                 {
                     sb.Append(b.ToString("x2"));
                 }
 
-                return sb.ToString();
+                var hashedPassword = sb.ToString().ToUpper();
+                bytes = provider.ComputeHash(Encoding.UTF8.GetBytes(leftSalt + hashedPassword + rightSalt));
+
+                sb.Clear();
+
+                foreach (var b in bytes)
+                {
+                    sb.Append(b.ToString("x2"));
+                }
+
+                return sb.ToString().ToUpper();
             }
         }
     }

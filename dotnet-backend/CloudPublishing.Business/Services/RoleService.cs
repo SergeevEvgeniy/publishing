@@ -19,7 +19,7 @@ namespace CloudPublishing.Business.Services
         /// </summary>
         public RoleService()
         {
-            unit = new UnitOfWork(new CloudPublishingContext("EmployeeContext"));
+            unit = new UnitOfWork(new CloudPublishingContext("CloudPublishingContext"));
         }
 
         /// <inheritdoc />
