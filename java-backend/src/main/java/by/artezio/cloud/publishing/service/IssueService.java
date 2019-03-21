@@ -23,4 +23,10 @@ public interface IssueService {
      * */
     List<IssueInfo> getListOfAllIssueInfo();
 
+    /**
+     * Удаление номера по идентификатору.
+     * @param id - идентификатор {@link Issue}
+     * */
+    void deleteIssueById(final int id);
+
 }

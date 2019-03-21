@@ -35,7 +35,7 @@ public class ArticleRestController {
      * @param publishingId id журнала
      * @return список рубрик для указанного журнала
      */
-    @GetMapping(value = "/publishing/{publishingId}")
+    @GetMapping(value = "/topicsByPublishing/{publishingId}")
     public List<Topic> getTopicsById(@PathVariable("publishingId") final int publishingId) {
         return publishingService.getTopicsByPublishingId(publishingId);
     }
@@ -44,7 +44,7 @@ public class ArticleRestController {
      * @param publishingId id журнала
      * @return список сотрудников для указанного журнала
      */
-    @GetMapping(value = "/publishing/{publishingId}")
+    @GetMapping(value = "/employeesByPublishing/{publishingId}")
     public Set<Employee> getEmployeeByPublishingId(@PathVariable("publishingId") final int publishingId) {
         return employeeService.getEmployeesByPublishingId(publishingId);
     }

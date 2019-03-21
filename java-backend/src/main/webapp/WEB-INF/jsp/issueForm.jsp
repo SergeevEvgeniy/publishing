@@ -6,8 +6,8 @@
 <tag:layout>
     <h3 class="page-header">Форма добавления/просмотра/редактирования номеров</h3>
     <%--@elvariable id="issueForm" type="by.artezio.cloud.publishing.dto.IssueInfo"--%>
-    <form:form class="form-horizontal" method="${method}"
-               action="${pageContext.request.contextPath}/issues/issue" modelAttribute="issueForm">
+    <form:form class="form-horizontal"
+               action="${pageContext.request.contextPath}/issues/issue">
 
         <div class="form-group row">
             <label class="control-label col-sm-offset-2 col-sm-1" for="publishing">
@@ -15,10 +15,7 @@
             </label>
             <div class="col-sm-7">
                 <select class="form-control" id="publishing" name="publishingId">
-                    <option value="">Выберете журнал</option>
-                    <c:forEach var="p" items="${publishing}">
-                        <option value="${p.id}">${p.title}</option>
-                    </c:forEach>
+
                 </select>
             </div>
         </div>
@@ -28,21 +25,11 @@
                 Номер
             </label>
             <div class="col-sm-3">
-                <c:if test="${method == 'POST'}">
-                    <input type="text" class="form-control" id="number" name="number"/>
-                </c:if>
-                <c:if test="${method == 'PUT'}">
-                    <input type="text" class="form-control" id="number" name="number" value="${issueForm.number}"/>
-                </c:if>
+                <input type="text" class="form-control" id="number" name="number"/>
             </div>
             <label class="control-label col-sm-1" for="date">Дата</label>
             <div class="col-sm-3">
-                <c:if test="${method == 'POST'}">
-                    <input type="date" class="form-control" id="date" name="date"/>
-                </c:if>
-                <c:if test="${method == 'PUT'}">
-                    <input type="date" class="form-control" id="date" name="date" value="${issueForm.localDate}"/>
-                </c:if>
+                <input type="date" class="form-control" id="date" name="date"/>
             </div>
         </div>
 
@@ -53,12 +40,7 @@
                         <div class="form-group row">
                             <label class="control-label col-sm-2" for="topics">Рубрика</label>
                             <div class="col-sm-10">
-                                <c:if test="${method == 'POST'}">
-                                    <select class="form-control" id="topics" name="topicId" disabled></select>
-                                </c:if>
-                                <c:if test="${method == 'PUT'}">
-                                    <select class="form-control" id="topics" name="topicId"></select>
-                                </c:if>
+                                <select class="form-control" id="topics" name="topicId"></select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -79,15 +61,11 @@
                             </button>
                         </div>
                     </div>
-                    <div class="panel-body"></div>
+
                 </div>
             </div>
         </div>
     </form:form>
 
-    <c:choose>
-        <c:when test="${method == 'POST'}">
-            <script type="text/javascript" src="<c:url value="/resources/js/create-issue.js"/>"></script>
-        </c:when>
-    </c:choose>
+
 </tag:layout>

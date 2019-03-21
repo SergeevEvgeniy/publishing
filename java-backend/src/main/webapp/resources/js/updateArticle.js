@@ -3,7 +3,7 @@ $(function () {
         var selectedValue = event.target.value;
         $.ajax({
             method: "GET",
-            url: "publishing/" + selectedValue,
+            url: "topicsByPublishing/" + selectedValue,
             success: function (response) {
                 var topicSelector = $("#topicSelector");
                 topicSelector.empty();

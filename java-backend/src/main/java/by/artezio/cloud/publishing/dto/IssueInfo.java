@@ -22,6 +22,8 @@ public class IssueInfo {
 
     private boolean published;
 
+    private int issueId;
+
     /**
      * @return publishingId id публикации полученное с формы
      */
@@ -104,6 +106,20 @@ public class IssueInfo {
      * */
     public boolean isPublished() {
         return published;
+    }
+
+    /**
+     * @param issueId установка идентификатора номера.
+     * */
+    public void setIssueId(final int issueId) {
+        this.issueId = issueId;
+    }
+
+    /**
+     * @return issueId получение идентификатора номера.
+     * */
+    public int getIssueId() {
+        return issueId;
     }
 
 }

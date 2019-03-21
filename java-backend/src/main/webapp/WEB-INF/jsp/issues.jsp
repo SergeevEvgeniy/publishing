@@ -5,36 +5,56 @@
 <tag:layout>
     <fmt:setLocale value="ru-RU"/>
     <h3 class="page-header">Номера</h3>
-    <div class="text-right" style="margin-bottom: 10px">
-        <a href="<c:url value="?new"/>" class="btn btn-success">
-            <span class="glyphicon glyphicon-plus"></span>Добавить
-        </a>
-    </div>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Журнал/газета</th>
-                <th>Номер</th>
-                <th>Дата</th>
-                <th>Описание</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="issueInfo" items="${issueInfoList}">
+    <form>
+        <div class="text-right form-group">
+            <a href="<c:url value="?new"/>" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus"></span>Добавить
+            </a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>${issueInfo.publishingTitle}</td>
-                    <td>${issueInfo.number}</td>
-                    <td>
-                        <fmt:parseDate var="date" value="${issueInfo.localDate}" type="date" pattern="yyyy-MM-dd"/>
-                        <time datetime="${issueInfo.localDate}">
-                            <fmt:formatDate value="${date}" pattern="dd MMMM yyyy" type="date"/>
-                        </time>
-                    </td>
-                    <td>Будущее описание</td>
-                    <td>Будущие кнопки</td>
+                    <th width="20%">Журнал/газета</th>
+                    <th width="10%">Номер</th>
+                    <th width="20%">Дата</th>
+                    <th width="40%">Описание</th>
+                    <th width="10%"></th>
                 </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <c:forEach var="issueInfo" items="${issueInfoList}">
+                    <tr>
+                        <td>${issueInfo.publishingTitle}</td>
+                        <td>${issueInfo.number}</td>
+                        <td>
+                            <fmt:parseDate var="date" value="${issueInfo.localDate}" type="date" pattern="yyyy-MM-dd"/>
+                            <time datetime="${issueInfo.localDate}">
+                                <fmt:formatDate value="${date}" pattern="dd MMMM yyyy" type="date"/>
+                            </time>
+                        </td>
+                        <td>Будущее описание</td>
+                        <td>
+                            <c:if test="${!issueInfo.published}">
+                                <a class="btn btn-default btn-sm"
+                                   href="${pageContext.request.contextPath}/issues?editableIssue=${issueInfo.issueId}">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                <button type="button" class="btn btn-default btn-sm delete-button">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                                <input type="hidden" value="${issueInfo.issueId}">
+                            </c:if>
+                            <c:if test="${issueInfo.published}">
+                                <a class="btn btn-default btn-sm"
+                                   href="${pageContext.request.contextPath}/issues?viewedIssue=${issueInfo.issueId}">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </a>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </form>
+    <script src="${pageContext.request.contextPath}/resources/js/issues.js"></script>
 </tag:layout>
