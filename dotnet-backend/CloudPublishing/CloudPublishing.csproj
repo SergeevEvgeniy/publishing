@@ -295,9 +295,9 @@
     <Content Include="Views\Review\GetAuthorList.cshtml" />
     <Content Include="Views\Review\GetArticleList.cshtml" />
     <Content Include="Views\Publishing\List.cshtml" />
-    <Content Include="Views\Publishing\EditPublishing.cshtml" />
+    <Content Include="Views\Publishing\Edit.cshtml" />
     <Content Include="Views\Review\Edit.cshtml" />
-    <Content Include="Views\Publishing\CreatePublishing.cshtml" />
+    <Content Include="Views\Publishing\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -350,7 +350,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60008</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:53130/</IISUrl>
+          <IISUrl>http://localhost:53131/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:53131/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
