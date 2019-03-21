@@ -17,8 +17,6 @@ namespace CloudPublishing.Controllers
     [HandleError(ExceptionType = typeof(EntityNotFoundException))]
     public class EmployeeController : Controller
     {
-        private readonly IAccountService accounts;
-
         private readonly IMapper mapper;
         private readonly IEmployeeService service;
 
@@ -28,12 +26,10 @@ namespace CloudPublishing.Controllers
         ///     аккаунтов <see cref="T:CloudPublishing.Business.Services.Interfaces.IAccountService" /> и маппера <see cref="T:AutoMapper.IMapper" /> для отображения сущностей
         /// </summary>
         /// <param name="service">Сервис, предоставляющий доступ функциям по работе с сотрудниками</param>
-        /// <param name="accounts">Сервис, позволяющий создавать, удалять и редактировать профили пользователей</param>
         /// <param name="mapper">Маппер для отобраения сущностей пользвоателей на модели для представлений</param>
-        public EmployeeController(IEmployeeService service, IAccountService accounts, IMapper mapper)
+        public EmployeeController(IEmployeeService service, IMapper mapper)
         {
             this.service = service;
-            this.accounts = accounts;
             this.mapper = mapper;
         }
 
@@ -115,7 +111,7 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            accounts.CreateAccount(user);
+            service.CreateEmployee(user);
 
             TempData["Message"] = "Пользователь " + model.Email + " успешно создан";
 
@@ -185,7 +181,7 @@ namespace CloudPublishing.Controllers
 
             try
             {
-                accounts.EditAccount(user);
+                service.EditEmployee(user);
 
                 TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
             }
@@ -220,7 +216,7 @@ namespace CloudPublishing.Controllers
 
             try
             {
-                accounts.DeleteAccount(id.Value);
+                service.DeleteEmployee(id.Value);
             }
             catch (ChiefEditorRoleChangeException e)
             {
