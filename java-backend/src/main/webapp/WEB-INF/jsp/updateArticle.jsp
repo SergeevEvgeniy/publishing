@@ -11,6 +11,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <tag:layout>
+    <script type="text/javascript" src="<c:url value="/resources/js/updateArticle.js"/>"></script>
     <form class="form-horizontal center-block">
 
         <div class="form-group">
