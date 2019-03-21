@@ -54,3 +54,8 @@
 .multi-select-component {
     margin-bottom: 20px;
 }
+
+.publishing-list-actions {
+    text-align: center;
+    min-width: 115px;
+}
