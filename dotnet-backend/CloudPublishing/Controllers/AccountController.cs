@@ -65,7 +65,9 @@ namespace CloudPublishing.Controllers
 
             FormsAuthentication.SetAuthCookie(user.Email, model.CheckOut);
 
-            return Redirect(returnUrl);
+            return Url.IsLocalUrl(returnUrl)
+                ? (ActionResult) Redirect(returnUrl)
+                : RedirectToAction("List", "Employee");
         }
 
         /// <summary>
