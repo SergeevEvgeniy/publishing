@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +41,15 @@ public final class IssueDao {
      * */
     public List<Issue> getListOfAllIssues() {
         return jdbcTemplate.query("select * from issue", issueRowMapper);
+    }
+
+    /**
+     * Удаление {@link Issue} из базы данных.
+     * @param id - идентификатор номера.
+     * */
+    public void deleteIssueById(final int id) {
+        jdbcTemplate.update("delete from issue where id = :id",
+            Collections.singletonMap("id", id));
     }
 
 }
