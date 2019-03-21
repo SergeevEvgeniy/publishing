@@ -81,9 +81,7 @@
     <Compile Include="Infrastructure\ChiefEditorRoleChangeException.cs" />
     <Compile Include="Infrastructure\EntityNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
-    <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
     <Compile Include="Services\Interfaces\IPublishingService.cs" />
     <Compile Include="Services\Interfaces\IRoleService.cs" />

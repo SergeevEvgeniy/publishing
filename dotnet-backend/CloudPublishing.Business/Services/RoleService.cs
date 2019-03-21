@@ -14,12 +14,12 @@ namespace CloudPublishing.Business.Services
         private readonly IUnitOfWork unit;
 
         /// <summary>
-        ///     Создает экзепляр класса, при помощи создания UnitOfWork с параметром контекста CloudPublishingContext на основе
-        ///     строки подключения EmployeeContext из Web.Config
+        ///     Создает экзепляр класса, при помощи создания <see cref="UnitOfWork"/> с параметром контекста <see cref="CloudPublishingContext"/> на основе
+        ///     строки подключения из Web.Config
         /// </summary>
         public RoleService()
         {
-            unit = new UnitOfWork(new CloudPublishingContext("EmployeeContext"));
+            unit = new UnitOfWork(new CloudPublishingContext("CloudPublishingContext"));
         }
 
         /// <inheritdoc />

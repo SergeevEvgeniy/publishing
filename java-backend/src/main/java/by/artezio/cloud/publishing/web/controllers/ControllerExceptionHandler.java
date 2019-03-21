@@ -1,6 +1,6 @@
 package by.artezio.cloud.publishing.web.controllers;
 
-import java.rmi.AccessException;
+import by.artezio.cloud.publishing.web.security.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -18,7 +18,7 @@ public class ControllerExceptionHandler {
      *
      * @return название страницы с сообщением
      */
-    @ExceptionHandler(AccessException.class)
+    @ExceptionHandler(AccessDeniedException.class)
     public String handleForbiddenAction() {
         return "403";
     }

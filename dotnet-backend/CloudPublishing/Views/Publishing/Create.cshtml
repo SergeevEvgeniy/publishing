@@ -1,0 +1,105 @@
+﻿@model CloudPublishing.Models.Publishings.PublishingCreateViewModel
+@{
+    ViewBag.Title = "Новое издания";
+}
+
+@using (Html.BeginForm("Create", "Publishing", FormMethod.Post, new { @class = "publishing-form" }))
+{
+    <div>
+        @Html.HiddenFor(m => m.Publishing.Id)
+    </div>
+    <div class="form-group row">
+        <label class="col-2">Название</label>
+        <div class="col-10">
+            @Html.TextBoxFor(m => m.Publishing.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Publishing.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2">Тип</label>
+        <div class="col-10">
+            <span>@Html.RadioButtonFor(m => m.Publishing.Type, "n", new { @checked = "checked"})Газета</span>
+            <span>@Html.RadioButtonFor(m => m.Publishing.Type, "m")Журнал</span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2">Тематика</label>
+        <div class="col-10">
+            @Html.TextBoxFor(m => m.Publishing.Subjects, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Publishing.Subjects, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div id="topics" class="multi-select-component">
+        <label>Рубрики</label>
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-9">
+                        <select class="form-control">
+                            <option></option>
+                            @foreach (var topic in Model.AvailableTopics)
+                            {
+                                <option value="@topic.Id">@topic.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3 text-right">
+                        <button type="button" class="btn btn-success" disabled>Добавить</button>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush" name="Publishing.Topics"></ul>
+        </div>
+    </div>
+    <div id="journalists" class="multi-select-component">
+        <label>Журналисты</label>
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-9">
+                        <select class="form-control">
+                            <option></option>
+                            @foreach (var journalist in Model.AvailableJournalists)
+                            {
+                                <option value="@journalist.Id">@journalist.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3 text-right">
+                        <button type="button" class="btn btn-success" disabled>Добавить</button>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush"></ul>
+        </div>
+    </div>
+    <div id="editors" class="multi-select-component">
+        <label>Редакторы</label>
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-9">
+                        <select class="form-control">
+                            <option></option>
+                            @foreach (var editor in Model.AvailableEditors)
+                            {
+                                <option value="@editor.Id">@editor.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3 text-right">
+                        <button type="button" class="btn btn-success" disabled>Добавить</button>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush"></ul>
+        </div>
+    </div>
+    <div>
+        <a href=@Url.Action("List", "Publishing") class="btn btn-secondary active" role="button" aria-pressed="true">Отменить</a>
+        <button type="submit" class="btn btn-primary active">Сохранить</button>
+    </div>
+}
+@Scripts.Render("~/bundles/publishing-create-view")
+
+

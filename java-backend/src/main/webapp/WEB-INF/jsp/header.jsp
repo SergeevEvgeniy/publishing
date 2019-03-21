@@ -12,7 +12,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="${pageContext.request.contextPath}/mailing">Mailing</a></li>
-                <li><a href="${pageContext.request.contextPath}/articleList">Article</a></li>
+                <li><a href="${pageContext.request.contextPath}/article">Article</a></li>
                 <li><a href="${pageContext.request.contextPath}/issues">Issues</a></li>
             </ul>
             <div class="nav navbar-right navbar-brand">

@@ -25,7 +25,7 @@ namespace CloudPublishing.Data.Repositories
         /// <inheritdoc />
         public IEnumerable<Employee> GetAll()
         {
-            return context.Employees.Include(x => x.Education).Include("Publishings").AsNoTracking().AsEnumerable();
+            return context.Employees.Include(x => x.Education).Include(x => x.Publishings).AsNoTracking().AsEnumerable();
         }
 
         /// <inheritdoc />
@@ -54,13 +54,7 @@ namespace CloudPublishing.Data.Repositories
                 item.Password = context.Employees.AsNoTracking().FirstOrDefault(x => x.Id == item.Id)?.Password;
             }
 
-            var entry = context.Entry(item);
-            if (entry.State != EntityState.Detached && entry.State != EntityState.Modified)
-            {
-                return;
-            }
-
-            entry.State = EntityState.Modified;
+            context.Entry(item).State = EntityState.Modified;
         }
 
         /// <inheritdoc />

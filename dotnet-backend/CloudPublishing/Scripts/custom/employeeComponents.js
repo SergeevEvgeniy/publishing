@@ -1,10 +1,4 @@
-﻿window.AlertComponent = (function () {
-    function AlertComponent(container, fadeDelay) {
-        this.showAlert = function(successful, message) {
-            container.appendChild(generateAlert(successful, message, fadeDelay));
-        };
-    }
-
+﻿(function() {
     function generateAlert(successful, message, delay) {
         var div = document.createElement("DIV");
         var button = document.createElement("BUTTON");
@@ -31,7 +25,9 @@
         return div;
     }
 
-    return AlertComponent;
+    window.showAlert = function (successful, message, container, fadeDelay) {
+        container.appendChild(generateAlert(successful, message, fadeDelay));
+    }
 })();
 
 window.AjaxTableComponent = (function() {

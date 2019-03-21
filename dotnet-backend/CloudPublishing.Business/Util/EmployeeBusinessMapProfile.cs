@@ -11,8 +11,8 @@ namespace CloudPublishing.Business.Util
     public class EmployeeBusinessMapProfile : Profile
     {
         /// <summary>
-        ///     Создает экземпляр класса, настраивая отображение Employee и Education в EmployeeDTO и EducationDTO соответственно и
-        ///     наоборот
+        ///     Создает экземпляр класса, настраивая отображение <see cref="Employee" /> и <see cref="Education" /> на
+        ///     <see cref="EmployeeDTO" /> и <see cref="EducationDTO" /> соответственно и наоборот
         /// </summary>
         public EmployeeBusinessMapProfile()
         {
