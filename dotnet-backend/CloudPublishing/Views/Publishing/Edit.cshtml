@@ -3,7 +3,7 @@
     ViewBag.Title = "Редактирование издания";
 }
 
-@using (Html.BeginForm("Edit", "Publishing", FormMethod.Post, new { id = "publishingCreateForm" }))
+@using (Html.BeginForm("Edit", "Publishing", FormMethod.Post, new { @class = "publishing-form" }))
 {
     <div>
         @Html.HiddenFor(m => m.Publishing.Id)

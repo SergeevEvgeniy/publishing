@@ -15,3 +15,42 @@
 .dl-horizontal dt {
     white-space: normal;
 }
+
+.error-notification {
+    text-align: center;
+}
+
+.notification-img {
+    margin: 20px 0;
+}
+
+.status-code {
+    font-size: 70px;
+}
+
+.notification-list {
+    font-size: 20px;
+    display: inline-block;
+    width: 300px;
+}
+
+.list-header, .list-item {
+    text-align: left;
+}
+
+.list-item::before {
+    content: "•";
+}
+
+.list-header {
+    list-style: none;
+}
+
+.publishing-form {
+    width: 500px;
+    margin: auto;
+}
+
+.multi-select-component {
+    margin-bottom: 20px;
+}

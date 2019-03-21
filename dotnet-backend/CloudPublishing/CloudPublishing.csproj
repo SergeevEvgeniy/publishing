@@ -165,6 +165,7 @@
     <Compile Include="AutofacConfig\WebModule.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Controllers\RestApi\EmployeesController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
@@ -208,7 +209,7 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\custom\publishing-create-form-styles.css" />
+    <Content Include="Content\img\icon-not-found.png" />
     <Content Include="Controllers\ReadMe.txt" />
     <Content Include="Controllers\RestApi\ReadMe.txt" />
     <Content Include="favicon.ico" />
@@ -298,6 +299,7 @@
     <Content Include="Views\Publishing\Edit.cshtml" />
     <Content Include="Views\Review\Edit.cshtml" />
     <Content Include="Views\Publishing\Create.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
