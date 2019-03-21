@@ -58,7 +58,7 @@ namespace CloudPublishing.Controllers
 
             if (user == null)
             {
-                ModelState.AddModelError("", "Введены неверные данные");
+                TempData["Message"] = "Ошибка входа. Введены неверные данные";
                 model.Password = string.Empty;
                 return View(model);
             }
