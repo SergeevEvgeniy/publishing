@@ -1,228 +1,236 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using AutoMapper;
 using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Infrastructure;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Models.Employees.Enums;
 using CloudPublishing.Models.Employees.ViewModels;
 using CloudPublishing.Util;
-using Microsoft.Owin.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace CloudPublishing.Controllers
 {
+    /// <inheritdoc />
+    /// <summary>
+    ///     Контроллер для работы с сотрудниками издательства
+    /// </summary>
+    [HandleError(ExceptionType = typeof(EntityNotFoundException))]
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeService service;
-        private readonly IAccountService accounts;
-        private readonly IAuthenticationManager authenticationManager;
-
-        private static readonly IDictionary<EmployeeType, string> Types;
-        private static readonly IDictionary<Sex, string> Sexes;
         private readonly IMapper mapper;
+        private readonly IEmployeeService service;
 
-        static EmployeeController()
-        {
-            Types = new Dictionary<EmployeeType, string>
-            {
-                {EmployeeType.E, "Редактор"},
-                {EmployeeType.J, "Журналист"}
-            };
-            Sexes = new Dictionary<Sex, string>
-            {
-                {Sex.M, "М"},
-                {Sex.F, "Ж"}
-            };
-        }
-
-        public EmployeeController(IEmployeeService service, IAccountService accounts, IAuthenticationManager authenticationManager)
+        /// <inheritdoc />
+        /// <summary>
+        ///     Создает экземпляр класса, используя реализации сервиса пользователей <see cref="T:CloudPublishing.Business.Services.Interfaces.IEmployeeService" />, сервиса
+        ///     аккаунтов <see cref="T:CloudPublishing.Business.Services.Interfaces.IAccountService" /> и маппера <see cref="T:AutoMapper.IMapper" /> для отображения сущностей
+        /// </summary>
+        /// <param name="service">Сервис, предоставляющий доступ функциям по работе с сотрудниками</param>
+        /// <param name="mapper">Маппер для отобраения сущностей пользвоателей на модели для представлений</param>
+        public EmployeeController(IEmployeeService service, IMapper mapper)
         {
             this.service = service;
-            this.authenticationManager = authenticationManager;
-            this.accounts = accounts;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeMapProfile())).CreateMapper();
+            this.mapper = mapper;
         }
 
-        private static List<SelectListItem> GetEmployeeTypeSelectList()
+        private List<SelectListItem> GetEmployeeTypeList()
         {
-            return new List<SelectListItem>
+            return service.GetEmployeeTypes().Select(x => new SelectListItem
             {
-                new SelectListItem {Value = EmployeeType.E.ToString(), Text = Types[EmployeeType.E]},
-                new SelectListItem {Value = EmployeeType.J.ToString(), Text = Types[EmployeeType.J]}
-            };
+                Value = x.Key,
+                Text = x.Value
+            }).ToList();
         }
 
         private List<SelectListItem> GetEmployeeEducationList()
         {
             var list = service.GetEducationList();
-            return list.IsSuccessful
-                ? list.GetContent().Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()})
-                    .ToList()
-                : new List<SelectListItem>();
+            return list.Select(x => new SelectListItem {Text = x.Title, Value = x.Id.ToString()}).ToList();
         }
 
+        /// <summary>
+        ///     Метод для получения списка всех сотрудников издательства
+        /// </summary>
+        /// <returns>Представление со списком сотрудников издательства</returns>
         [HttpGet]
         public ActionResult List()
         {
-            if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
-            var result = service.GetEmployeeList();
-            if (!result.IsSuccessful) return null;
+            var list = service.GetEmployeeList();
 
-            return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(result.GetContent().ToList())
-                .Select(x =>
-                {
-                    x.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), x.Type)];
-                    x.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), x.Sex)];
-                    return x;
-                }));
+            return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(list));
         }
 
-        [HttpGet]
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model)
-        {
-            if (!ModelState.IsValid) return View(model);
-            var result = await accounts.AuthenticateUserAsync(new EmployeeDTO
-            {
-                Email = model.Email,
-                Password = model.Password
-            });
-
-            if (!result.IsSuccessful)
-            {
-                ModelState.AddModelError("", result.GetFailureMessage());
-                model.Password = string.Empty;
-                return View(model);
-            }
-            authenticationManager.SignOut();
-            authenticationManager.SignIn(new AuthenticationProperties
-            {
-                IsPersistent = model.CheckOut
-            }, result.GetContent());
-
-            return RedirectToAction("List", "Employee");
-        }
-
-        public ActionResult Logout()
-        {
-            authenticationManager.SignOut();
-            return RedirectToAction("List");
-        }
-
+        /// <summary>
+        ///     Метод для возврата представления с формой для создания профиля сотрудника
+        /// </summary>
+        /// <returns>Представление с формой создания</returns>
         [HttpGet]
         [Authorize(Roles = "ChiefEditor")]
         public ActionResult Create()
         {
             var model = new EmployeeCreateModel
             {
-                TypeList = GetEmployeeTypeSelectList(),
+                TypeList = GetEmployeeTypeList(),
                 EducationList = GetEmployeeEducationList()
             };
             return View(model);
         }
 
+        /// <summary>
+        ///     Метод для создания профиля сотрудника. Реализует проверку данных, введенных пользователем, а также добавление
+        ///     данных пользователя в базу, если они валидны
+        /// </summary>
+        /// <param name="model">Данные с формы создания пользователя</param>
+        /// <returns>
+        ///     Представление с ошибкой, если
+        ///     <see>
+        ///         <cref>model</cref>
+        ///     </see>
+        ///     не проходит валидацию, или переадресация к списку
+        ///     сотрудников с сообщением о результате создания
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "ChiefEditor")]
-        public async Task<ActionResult> Create(EmployeeCreateModel model)
+        public ActionResult Create(EmployeeCreateModel model)
         {
             if (!ModelState.IsValid)
             {
-                model.TypeList = GetEmployeeTypeSelectList();
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
 
             var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
 
-            var result = await accounts.CreateAccountAsync(user);
-
-            if (!result.IsSuccessful)
+            if (user == null)
             {
-                ModelState.AddModelError("", result.GetFailureMessage());
-                model.TypeList = GetEmployeeTypeSelectList();
+                ModelState.AddModelError("", "Ошибка при получении данных пользователя.");
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
 
-            if (model.ChiefEditor)
-            {
-                authenticationManager.SignOut();
-            }
+            service.CreateEmployee(user);
 
-            TempData["Message"] = result.GetContent();
-
+            TempData["Message"] = "Пользователь " + model.Email + " успешно создан";
 
             return RedirectToAction("List");
         }
 
+        /// <summary>
+        ///     Метод для возврата страницы с формой редактирования данных сотрудника
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя</param>
+        /// <returns>Представление с формой редактирования</returns>
         [HttpGet]
         [Authorize(Roles = "ChiefEditor")]
         public ActionResult Edit(int? id)
         {
-            if (id == null) return null;
+            if (id == null)
+            {
+                return null;
+            }
 
             var result = service.GetEmployeeById(id.Value);
-            if (!result.IsSuccessful) return null;
+            if (result == null)
+            {
+                return null;
+            }
 
-            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result.GetContent());
-            model.TypeList = GetEmployeeTypeSelectList();
+            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result);
+            model.TypeList = GetEmployeeTypeList();
             model.EducationList = GetEmployeeEducationList();
-
-            if (TempData["Message"] != null) ViewBag.Message = TempData["Message"].ToString();
 
             return View(model);
         }
 
+        /// <summary>
+        ///     Метод для реадктирования данных сотрудника. Реализует валидацию данных, введенных пользователем, а также обновляет
+        ///     данные пользователя
+        /// </summary>
+        /// <param name="model">Данные формы, измененные пользователем</param>
+        /// <returns>
+        ///     Представление с ошибкой, если
+        ///     <see>
+        ///         <cref>model</cref>
+        ///     </see>
+        ///     не проходит валидацию, или переадресация к списку
+        ///     сотрудников с сообщением о результате редактирования
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "ChiefEditor")]
-        public async Task<ActionResult> Edit(EmployeeEditModel model)
+        public ActionResult Edit(EmployeeEditModel model)
         {
             if (!ModelState.IsValid)
             {
-                model.TypeList = GetEmployeeTypeSelectList();
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
+
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
-            var result = await accounts.EditAccountAsync(user);
-            if (!result.IsSuccessful)
+            if (user == null)
             {
-                ModelState.AddModelError("", result.GetFailureMessage());
-                model.TypeList = GetEmployeeTypeSelectList();
+                ModelState.AddModelError("", "Возникла ошибка при получении данных пользователя");
+                model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
             }
 
-            if (model.ChiefEditor)
+            try
             {
-                authenticationManager.SignOut();
-            }
+                service.EditEmployee(user);
 
-            TempData["Message"] = result.GetContent();
+                TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
+            }
+            catch (ChiefEditorRoleChangeException e)
+            {
+                TempData["Message"] = "Ошибка обновления данных пользователя: " + e.Message;
+            }
 
             return RedirectToAction("List");
         }
 
+        /// <summary>
+        ///     Метод для удаления сотрудника
+        /// </summary>
+        /// <param name="id">Идентификатор сотрудника</param>
+        /// <returns>
+        ///     Если пользователя можно удалить, возвращается JSON-объект с сообщением об успешном удалении и соответствующим
+        ///     флагом, иначе JSON-объект с флагом об ошибке удаления и сообщением о причине ошибки
+        /// </returns>
         [AjaxOnly]
         [Authorize(Roles = "ChiefEditor")]
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
-            var result = await accounts.DeleteAccountAsync(id);
+            if (id == null)
+            {
+                return Json(new
+                {
+                    isSuccessful = false,
+                    message = "Неверний идентификатор пользователя"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                service.DeleteEmployee(id.Value);
+            }
+            catch (ChiefEditorRoleChangeException e)
+            {
+                return Json(new
+                {
+                    isSuccessful = false,
+                    message = e.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
 
             return Json(new
             {
-                isSuccessful = result.IsSuccessful,
-                message = result.IsSuccessful ? result.GetContent() : result.GetFailureMessage()
+                isSuccessful = true,
+                message = "Пользователь успешно удален"
             }, JsonRequestBehavior.AllowGet);
         }
     }

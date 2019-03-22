@@ -1,4 +1,4 @@
-﻿@using CloudPublishing.Models.Employees.Enums
+﻿@using CloudPublishing.Business.Enums
 @model CloudPublishing.Models.Employees.ViewModels.EmployeeEditModel
 
 @{
@@ -12,7 +12,7 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div>
-        @Html.Raw(ViewBag.Message)
+        @Html.Raw(TempData["Message"])
     </div>
     <div class="form-group row">
         @Html.LabelFor(model => model.FirstName, new { @class = "col-md-2" })

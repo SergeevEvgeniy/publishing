@@ -7,13 +7,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Cloud-publishing</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Cloud-publishing</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
                 <li><a href="${pageContext.request.contextPath}/mailing">Mailing</a></li>
-                <li><a href="${pageContext.request.contextPath}/articleList">Article</a></li>
+                <li><a href="${pageContext.request.contextPath}/article">Article</a></li>
+                <li><a href="${pageContext.request.contextPath}/issues">Issues</a></li>
             </ul>
             <div class="nav navbar-right navbar-brand">
                 <span>${currentUser.name}</span>

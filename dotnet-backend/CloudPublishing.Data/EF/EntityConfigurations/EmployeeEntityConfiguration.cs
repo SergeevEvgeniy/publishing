@@ -1,10 +1,18 @@
-﻿using CloudPublishing.Data.Entities;
-using System.Data.Entity.ModelConfiguration;
+﻿using System.Data.Entity.ModelConfiguration;
+using CloudPublishing.Data.Entities;
 
 namespace CloudPublishing.Data.EF.EntityConfigurations
 {
+    /// <inheritdoc />
+    /// <summary>
+    ///     Класс конфигурации FluentApi Entity Framework для сущности сотрудника
+    /// </summary>
     public class EmployeeEntityConfiguration : EntityTypeConfiguration<Employee>
     {
+        /// <inheritdoc />
+        /// <summary>
+        ///     Создает экземпляр класса, настроимвая поля сущности сотрудника и регистрируя связи базы данных
+        /// </summary>
         public EmployeeEntityConfiguration()
         {
             ToTable("publishing.employee");

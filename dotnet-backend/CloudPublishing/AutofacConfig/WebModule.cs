@@ -1,8 +1,13 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
+using AutoMapper;
+using AutoMapper.Configuration;
+using CloudPublishing.Business.Util;
+using CloudPublishing.Util;
 using System.Reflection;
-using System.Web;
 
 namespace CloudPublishing.AutofacConfig
 {
@@ -12,8 +17,15 @@ namespace CloudPublishing.AutofacConfig
         {
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-
-            builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).InstancePerRequest();
+            builder.Register(c => new MapperConfiguration(cfg => cfg.AddProfiles(new List<Type>
+            {
+                typeof(PublishingMapProfile),
+                typeof(EmployeeMapProfile),
+                typeof(ReviewMapProfile),
+                typeof(EmployeeBusinessMapProfile),
+                typeof(PublishingBusinessMapProfile),
+                typeof(ReviewBusinessMapProfile)
+            })).CreateMapper()).As<IMapper>();
         }
     }
 }

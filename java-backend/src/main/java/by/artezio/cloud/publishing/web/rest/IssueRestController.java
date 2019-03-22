@@ -2,13 +2,16 @@ package by.artezio.cloud.publishing.web.rest;
 
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Topic;
-import by.artezio.cloud.publishing.service.EmployeeService;
+import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.service.PublishingService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.Set;
@@ -22,16 +25,17 @@ import java.util.Set;
 public class IssueRestController {
 
     private PublishingService publishingService;
-    private EmployeeService employeeService;
+
+    private IssueService issueService;
 
     /**
      * @param publishingService {@link PublishingService}
-     * @param employeeService {@link EmployeeService}
+     * @param issueService {@link IssueService}
      */
     public IssueRestController(final PublishingService publishingService,
-                               final EmployeeService employeeService) {
+                               final IssueService issueService) {
         this.publishingService = publishingService;
-        this.employeeService = employeeService;
+        this.issueService = issueService;
     }
 
     /**
@@ -55,6 +59,24 @@ public class IssueRestController {
                                                  @PathVariable("tId") final int topicId) {
 
         return null;
+    }
+
+    /**
+     * @param id идентификатор {@link by.artezio.cloud.publishing.domain.Issue}
+     * */
+    @DeleteMapping("/issue/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteIssue(@PathVariable("id") final int id) {
+        issueService.deleteIssueById(id);
+    }
+
+    /**
+     * @param id идентификатор {@link by.artezio.cloud.publishing.domain.Issue}
+     * */
+    @PutMapping("/issue/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editIssue(@PathVariable("id") final int id) {
+        /*Контролле для обработки запросов на обновления ресурса Issue*/
     }
 
 }

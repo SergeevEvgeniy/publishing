@@ -1,6 +1,6 @@
 var $ = require('jquery');
-var HomeComponent = require('./home/home-component');
-var SearchComponent = require('./search-journalist/search-component');
+var HomeComponent = require('./page-home/page-home');
+var SearchComponent = require('./page-search/page-search');
 var MagazineComponent = require('./publishing/magazine/magazine-component');
 var navObj = {
     HomeComponent: HomeComponent,
@@ -13,7 +13,7 @@ $(function onReady() {
     var navbarSelector = '#navbar';
     $(navbarSelector).click(function navigate(event) {
         $app.empty();
-        new navObj[event.target.dataset.type]($app).render();
+        navObj[event.target.dataset.type]($app);
     });
 });
 

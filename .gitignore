@@ -488,3 +488,5 @@ nb-configuration.xml
 java-backend/src/main/resources/rest\.properties
 
 java-backend/src/main/resources/database\.properties
+java-backend/src/main/resources/application.properties
+.gitignore

@@ -8,50 +8,66 @@ using System.Linq;
 
 namespace CloudPublishing.Data.Repositories
 {
+    /// <inheritdoc />
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly CloudPublishingContext context;
 
+        /// <summary>
+        /// Создает экземпляр репозитория из контекста работы с базой данных
+        /// </summary>
+        /// <param name="context">Контекст работы с базой данных</param>
         public EmployeeRepository(CloudPublishingContext context)
         {
             this.context = context;
         }
 
+        /// <inheritdoc />
         public IEnumerable<Employee> GetAll()
         {
-            return context.Employees.Include(x => x.Education).AsNoTracking().Include("Publishings").ToList();
+            return context.Employees.Include(x => x.Education).Include(x => x.Publishings).AsNoTracking().AsEnumerable();
         }
 
+        /// <inheritdoc />
         public Employee Get(int id)
         {
             return context.Employees.Include(x => x.Education).FirstOrDefault(x => x.Id == id);
         }
 
+        /// <inheritdoc />
         public IEnumerable<Employee> Find(Func<Employee, bool> predicate)
         {
-            return context.Employees.Include(x => x.Education).AsNoTracking().AsEnumerable().Where(predicate);
+            return context.Employees.Include(x => x.Education).AsEnumerable().Where(predicate);
         }
 
+        /// <inheritdoc />
         public void Create(Employee item)
         {
             context.Employees.Add(item);
         }
 
+        /// <inheritdoc />
         public void Update(Employee item)
         {
             if (item.Password == null)
             {
                 item.Password = context.Employees.AsNoTracking().FirstOrDefault(x => x.Id == item.Id)?.Password;
             }
+
             context.Entry(item).State = EntityState.Modified;
         }
 
+        /// <inheritdoc />
         public void Delete(int id)
         {
             var entity = context.Employees.Find(id);
-            if (entity != null) context.Employees.Remove(entity);
+            if (entity != null)
+            {
+                context.Employees.Remove(entity);
+            }
         }
 
+        /// <inheritdoc />
         public IEnumerable<Education> GetEducationList()
         {
             return context.Educations.AsNoTracking().ToList();

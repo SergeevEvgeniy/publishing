@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\CloudPublishing.Business.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,20 +45,8 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.4.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -75,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacConfig\BusinessModule.cs" />
-    <Compile Include="Converters\ConvertersExtention.cs" />
     <Compile Include="DTO\AdvertisingDTO.cs" />
     <Compile Include="DTO\ArticleDTO.cs" />
     <Compile Include="DTO\DetailedReviewDTO.cs" />
@@ -88,19 +76,21 @@
     <Compile Include="DTO\PublishingDTO.cs" />
     <Compile Include="DTO\ReviewDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />
+    <Compile Include="Enums\EmployeeType.cs" />
+    <Compile Include="Enums\Sex.cs" />
+    <Compile Include="Infrastructure\ChiefEditorRoleChangeException.cs" />
+    <Compile Include="Infrastructure\EntityNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Results\BadResult.cs" />
-    <Compile Include="Results\Interfaces\IResult.cs" />
-    <Compile Include="Results\SuccessfulResult.cs" />
-    <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
-    <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
     <Compile Include="Services\Interfaces\IPublishingService.cs" />
+    <Compile Include="Services\Interfaces\IRoleService.cs" />
     <Compile Include="Services\PublishingService.cs" />
     <Compile Include="Services\Interfaces\IReviewService.cs" />
     <Compile Include="Services\ReviewService.cs" />
+    <Compile Include="Services\RoleService.cs" />
     <Compile Include="Util\EmployeeBusinessMapProfile.cs" />
+    <Compile Include="Util\PublishingBusinessMapProfile.cs" />
     <Compile Include="Util\ReviewBusinessMapProfile.cs" />
   </ItemGroup>
   <ItemGroup>

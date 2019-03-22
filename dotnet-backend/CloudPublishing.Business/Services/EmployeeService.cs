@@ -1,94 +1,189 @@
-﻿using AutoMapper;
-using CloudPublishing.Business.DTO;
-using CloudPublishing.Business.Results;
-using CloudPublishing.Business.Results.Interfaces;
-using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Business.Util;
-using CloudPublishing.Data.Entities;
-using CloudPublishing.Data.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using CloudPublishing.Business.DTO;
+using CloudPublishing.Business.Enums;
+using CloudPublishing.Business.Infrastructure;
+using CloudPublishing.Business.Services.Interfaces;
+using CloudPublishing.Data.Entities;
+using CloudPublishing.Data.Interfaces;
+using CloudPublishing.Data.Util;
 
 namespace CloudPublishing.Business.Services
 {
+    /// <inheritdoc />
     public class EmployeeService : IEmployeeService
     {
-        private readonly IMapper mapper;
-        private readonly IUnitOfWork unitOfWork;
+        private static readonly IDictionary<EmployeeType, string> Types;
+        private static readonly IDictionary<Sex, string> Sexes;
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        private readonly IPasswordHasher hasher;
+        private readonly IMapper mapper;
+        private readonly IUnitOfWork unit;
+
+        static EmployeeService()
         {
-            this.unitOfWork = unitOfWork;
-            mapper = new MapperConfiguration(cfg => cfg.AddProfile(new EmployeeBusinessMapProfile())).CreateMapper();
+            Types = new Dictionary<EmployeeType, string>
+            {
+                {EmployeeType.E, "Редактор"},
+                {EmployeeType.J, "Журналист"}
+            };
+            Sexes = new Dictionary<Sex, string>
+            {
+                {Sex.M, "М"},
+                {Sex.F, "Ж"}
+            };
         }
 
+        /// <summary>
+        ///     Создает экземпляр класса из реализаций <see cref="IUnitOfWork" />, маппера для отображения сущностей и хэшера для паролей
+        /// </summary>
+        /// <param name="unit">Экземпляр класса для работы с базой данных</param>
+        /// <param name="mapper">Экземпляр маппера для отображения сущностей</param>
+        /// <param name="hasher">Экземпляр класса для хэширования</param>
+        public EmployeeService(IUnitOfWork unit, IMapper mapper, IPasswordHasher hasher)
+        {
+            this.unit = unit;
+            this.mapper = mapper;
+            this.hasher = hasher;
+        }
+
+        /// <inheritdoc />
         public void Dispose()
         {
-            unitOfWork?.Dispose();
+            unit?.Dispose();
         }
 
-        public IResult<IEnumerable<EmployeeDTO>> GetEmployeeList()
+        /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetEmployeeList()
         {
-            try
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unit.Employees.GetAll().Select(x =>
             {
-                var list = mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unitOfWork.Employees.GetAll());
-                return new SuccessfulResult<IEnumerable<EmployeeDTO>>(list);
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>(e.Message, true);
-            }
+                x.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), x.Type)];
+                x.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), x.Sex)];
+                return x;
+            }));
         }
 
-        public IResult<IEnumerable<EmployeeDTO>> GetEmployeeList(IEnumerable<int> idList, string lastName)
+        /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList, string lastName)
         {
-            if (idList == null)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>("Отсутствует список идентификаторов");
-            }
-            try
-            {
-                var list = unitOfWork.Employees.Find(x =>
-                    x.LastName.Contains(lastName ?? string.Empty) && idList.Contains(x.Id));
-                return new SuccessfulResult<IEnumerable<EmployeeDTO>>(mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list));
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EmployeeDTO>>(e.Message, true);
-            }
+            var list = unit.Employees.Find(x =>
+                x.LastName.StartsWith(lastName ?? string.Empty) && idList.Contains(x.Id));
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
         }
 
-        public IResult<IEnumerable<EducationDTO>> GetEducationList()
+        /// <inheritdoc />
+        public IEnumerable<EducationDTO> GetEducationList()
         {
-            try
-            {
-                var list = mapper.Map<IEnumerable<Education>, List<EducationDTO>>(
-                    unitOfWork.Employees.GetEducationList());
-                return new SuccessfulResult<IEnumerable<EducationDTO>>(list);
-            }
-            catch (InvalidOperationException e)
-            {
-                return new BadResult<IEnumerable<EducationDTO>>(e.Message, true);
-            }
+            return mapper.Map<IEnumerable<Education>, List<EducationDTO>>(unit.Employees.GetEducationList());
         }
 
-        public IResult<EmployeeDTO> GetEmployeeById(int? id)
+        /// <inheritdoc />
+        public EmployeeDTO GetEmployeeById(int id)
         {
-            if (id == null) return new BadResult<EmployeeDTO>("Отсутствует идентификатор");
-            try
+            return mapper.Map<Employee, EmployeeDTO>(unit.Employees.Get(id));
+        }
+
+        /// <inheritdoc />
+        public IDictionary<string, string> GetEmployeeTypes()
+        {
+            return Types.Select(x => new {key = x.Key.ToString(), x.Value}).ToDictionary(x => x.key, y => y.Value);
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetJournalistList()
+        {
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(
+                unit.Employees.Find(x => x.Type == EmployeeType.J.ToString()));
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetEditorList()
+        {
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(
+                unit.Employees.Find(x => x.Type == EmployeeType.E.ToString()));
+        }
+
+        /// <inheritdoc />
+        public void CreateEmployee(EmployeeDTO entity)
+        {
+            if (entity.ChiefEditor)
             {
-                var employee = mapper.Map<Employee, EmployeeDTO>(unitOfWork.Employees.Get(id.Value));
-                if (employee == null)
+                var chief = unit.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
+                if (chief != null)
                 {
-                    return new BadResult<EmployeeDTO>("Пользователь не найден");
+                    chief.ChiefEditor = false;
+                    unit.Employees.Update(chief);
                 }
-                return new SuccessfulResult<EmployeeDTO>(employee);
             }
-            catch (InvalidOperationException e)
+
+            var employee = mapper.Map<EmployeeDTO, Employee>(entity);
+            employee.Password = hasher.HashPassword(entity.Password);
+            unit.Employees.Create(employee);
+            unit.Save();
+        }
+
+        /// <inheritdoc />
+        public void EditEmployee(EmployeeDTO entity)
+        {
+            var target = unit.Employees.Get(entity.Id);
+            if (target == null)
             {
-                return new BadResult<EmployeeDTO>(e.Message, true);
+                throw new EntityNotFoundException("Пользователь не найден");
             }
+
+            if (target.ChiefEditor && !entity.ChiefEditor)
+            {
+                throw new ChiefEditorRoleChangeException();
+            }
+
+            if (entity.ChiefEditor && !target.ChiefEditor)
+            {
+                var chief = unit.Employees.Find(x => x.ChiefEditor).FirstOrDefault();
+                if (chief != null)
+                {
+                    chief.ChiefEditor = false;
+                    unit.Employees.Update(chief);
+                }
+            }
+
+            if (entity.Password != null)
+            {
+                entity.Password = hasher.HashPassword(entity.Password);
+            }
+
+            unit.Employees.Update(mapper.Map(entity, target));
+            unit.Save();
+        }
+
+        /// <inheritdoc />
+        public void DeleteEmployee(int id)
+        {
+            var target = unit.Employees.Get(id);
+
+            if (target == null)
+            {
+                throw new EntityNotFoundException("Пользователь не найден");
+            }
+
+            if (target.ChiefEditor)
+            {
+                throw new ChiefEditorRoleChangeException();
+            }
+
+            unit.Employees.Delete(id);
+            unit.Save();
+        }
+
+        /// <inheritdoc />
+        public EmployeeDTO AuthenticateEmployee(string email, string password)
+        {
+            var hashedPassword = hasher.HashPassword(password);
+
+            var employee = unit.Employees.Find(x => x.Password == hashedPassword && x.Email == email).FirstOrDefault();
+            return mapper.Map<Employee, EmployeeDTO>(employee);
         }
     }
 }

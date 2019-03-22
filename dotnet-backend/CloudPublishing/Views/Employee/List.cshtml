@@ -80,19 +80,19 @@
     <script>
         document.addEventListener('DOMContentLoaded',
             function() {
-                var alertComponent = new AlertComponent(document.getElementById('alertContainer'), 2000);
                 var tableComponent = new AjaxTableComponent(document.getElementById('listContainer'),
                     'remove-button',
                     "/Employee/Delete?id=");
+                var alertContainer = document.getElementById('alertContainer');
 
                 tableComponent.onElementRemove(function(result) {
-                    alertComponent.showAlert(result.isSuccessful, result.message);
+                    window.showAlert(result.isSuccessful, result.message, alertContainer, 2000);
                 });
 
-                var content = '@ViewBag.Message';
+                var content = '@TempData["Message"]';
 
                 if (content) {
-                    alertComponent.showAlert(true, content);
+                    window.showAlert(true, content, alertContainer, 2000);
                 }
             });
 

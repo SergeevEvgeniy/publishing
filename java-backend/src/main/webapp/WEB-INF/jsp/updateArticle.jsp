@@ -11,135 +11,115 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <tag:layout>
-    <div class="container">
+    <script type="text/javascript" src="<c:url value="/resources/js/updateArticle.js"/>"></script>
+    <form class="form-horizontal center-block">
 
-        <form class="form-horizontal center-block">
-            <div class="form-group">
-                <label for="publishingSelector" class="label-control col-lg-4 col-md-4 col-sm-4 h4">Журнал</label>
-                <div class="col-lg-8 col-md-8 col-sm-8">
-                    <select id="publishingSelector" class="form-control">
-                        <c:forEach items="${model.publishings}" var="publishing">
-                            <option data-publishingId="${publishing.id}">${publishing.title}</option>
-                        </c:forEach>
-                    </select>
-                </div>
+        <div class="form-group">
+            <label for="publishingSelector" class="col-sm-4 h4">Журнал</label>
+            <div class="col-sm-8">
+                <select id="publishingSelector" class="form-control">
+                    <c:forEach items="${model.publishings}" var="publishing">
+                        <option value="${publishing.id}">${publishing.title}</option>
+                    </c:forEach>
+                </select>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="topicSelector" class="label-control col-lg-4 col-md-4 col-sm-4 h4">Рубрика</label>
-                <div class="col-lg-8 col-md-8 col-sm-8">
-                    <select id="topicSelector" class="form-control">
-                        <c:forEach items="${model.topics}" var="topic">
-                            <option data-topicId="${topic.id}">${topic.name}</option>
-                        </c:forEach>
-                    </select>
-                </div>
+        <div class="form-group">
+            <label for="topicSelector" class="label-control col-sm-4 h4">Рубрика</label>
+            <div class="col-sm-8">
+                <select id="topicSelector" class="form-control">
+                    <c:forEach items="${model.topics}" var="topic">
+                        <option data-topic-id="${topic.id}">${topic.name}</option>
+                    </c:forEach>
+                </select>
             </div>
-            <div class="form-group">
-                <label for="title" class="label-control col-lg-4 col-md-4 col-sm-4 h4">Название</label>
-                <div class="col-lg-8 col-md-8 col-sm-8">
-                    <input type="text" id="title" value="${model.title}" class="form-control"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="content" class="label-control col-lg-4 col-md-4 col-sm-4 h4">Содержание</label>
-                <div class="col-lg-8 col-md-8 col-sm-8">
-                    <textarea id="content" class="form-control">${model.content}</textarea>
-                </div>
-            </div>
-            <label class="label-control col-lg-4 col-md-4 col-sm-4 h4">Соавторы</label>
-            <div class="col-lg-8 col-md-8 col-sm-8">
+        </div>
 
-                <Label class="text-left">Соавторы</Label>
+        <div class="form-group">
+            <label for="title" class="label-control col-sm-4 h4">Название</label>
+            <div class="col-sm-8">
+                <input type="text" id="title" value="${model.title}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-4">
+                <label for="content" class="h4">Содержание</label>
+            </div>
+            <div class="col-sm-12">
+                <textarea id="content" class="form-control no-resize">${model.content}</textarea>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="label-control col-sm-4 h4">Соавторы</label>
+            <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-lg-9 col-md-7 form-group">
-                                <select id="availableCoauthors" class="form-control">
-                                    <option>---------------</option>
-                                    <option>coauthor 1</option>
-                                    <option>coauthor 2</option>
-                                    <option>coauthor 3</option>
-                                    <option>coauthor 4</option>
+                            <div class="col-sm-8">
+                                <select id="availableCoauthors" class="form-control ">
                                     <c:forEach var="availableCoauthor" items="${model.availableCoauthors}">
-                                        <option data-coauthorId="${availableCoauthor.id}">
+                                        <option value="${availableCoauthor.id}">
                                                 ${availableCoauthor.firstName} ${availableCoauthor.lastName} ${availableCoauthor.middleName}
                                         </option>
                                     </c:forEach>
                                 </select>
-
                             </div>
-                            <div class="col-lg-3 col-md-5">
-                                <button id="addCoauthor" class="btn btn-success">
+                            <div class="col-sm-4">
+                                <button id="addCoauthor" class="btn btn-block btn-success">
                                     Добавить
                                 </button>
                             </div>
                         </div>
                     </div>
+
                     <ul id="currentCoauthors" class="list-group">
-                        <li class="list-group-item">
-                            <input type="hidden" value="1" name="currentCoauthorId"/>
-                            <div class="row">
-                                <div
-                                    class="col-xs-10">Дед Игнат
-                                </div>
-                                <div class="col-xs-2 text-right">
-                                        <span class="glyphicon glyphicon-trash"
-                                              style="cursor: pointer"></span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <input type="hidden" value="2" name="currentCoauthorId"/>
-                            <div class="row">
-                                <div
-                                    class="col-xs-10">Тётка Валя
-                                </div>
-                                <div class="col-xs-2 text-right">
-                                        <span class="glyphicon glyphicon-trash"
-                                              style="cursor: pointer"></span>
-                                </div>
-                            </div>
-                        </li>
                         <c:forEach var="currentCoauthor" items="${model.currentCoauthors}">
-                            <li class="list-group-item">
-                                <input type="hidden" value="${currentCoauthor.id}" name="currentCoauthorId"/>
+                            <li class="list-group-item" data-coauthor-id="${currentCoauthor.id}">
                                 <div class="row">
-                                    <div
-                                        class="col-xs-10">${currentCoauthor.firstName} ${currentCoauthor.lastName}</div>
-                                    <div class="col-xs-2 text-right">
-                                        <span class="glyphicon glyphicon-trash"
-                                              style="cursor: pointer"></span>
+                                    <div class="col-sm-10">
+                                            ${currentCoauthor.firstName}
+                                            ${currentCoauthor.lastName}
+                                    </div>
+                                    <div class="col-sm-2 text-right">
+                                        <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
                                     </div>
                                 </div>
                             </li>
                         </c:forEach>
                     </ul>
                 </div>
-
-                <div class="form-group">
-                    <label for="reviewContainer" class="form-control">Рецензия</label>
-                    <div id="reviewContainer" class="border-gray row">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 h4">Рецензия</label>
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
                         <div class="form-group">
-                            <Label for="reviewerSelector">Рецензент</Label>
-                            <select id="reviewerSelector" class="form-control">
-                                <option></option>
-                                <option>рец1</option>
-                                <option>рец2</option>
-                                <option>рец3</option>
-                            </select>
+                            <div class="col-sm-12">
+                                <Label class="h4 col-sm-4">Рецензент</Label>
+                                <div class="col-sm-8">
+                                    <select id="reviewerSelector" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <textarea id="reviewContent" class="form-control no-resize"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div>
-                <a>
-                    <span class="btn btn-danger">Отменить</span>
-                    <span class="btn btn-primary">Сохранить</span>
-                </a>
-            </div>
-
-        </form>
-    </div>
+        </div>
+        <div class="text-right">
+            <a href="/" class="btn btn-default">
+                Отменить
+            </a>
+            <input type="submit" class="btn btn-success" value="Сохранить">
+        </div>
+    </form>
 </tag:layout>

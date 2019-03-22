@@ -1,19 +1,26 @@
-﻿configureMultiSelectComponent('topics', 'Publishing.TopicsId');
-configureMultiSelectComponent('journalists', 'Publishing.EmployeesId');
-configureMultiSelectComponent('editors','Publishing.EmployeesId');
+﻿configureMultiSelectComponent('#topics', 'Publishing.TopicsId');
+configureMultiSelectComponent('#journalists', 'Publishing.EmployeesId');
+configureMultiSelectComponent('#editors','Publishing.EmployeesId');
 
-function configureMultiSelectComponent(componentId, propertyName) {
-    var component = document.getElementById(componentId);
+function configureMultiSelectComponent(componentSelector, propertyName) {
+    var $component = $(componentId);
     var selector = component.querySelector('.form-control');
     var listItems = component.querySelector('ul');
     var addButton = component.querySelector('.btn-success');
 
-    selector.addEventListener('change', onSelectListChange);
+    $component
+        .on('change', 'select', updateSelectState)
+        .on('click', '.btn-success', onAddButtonClick)
+        .on('click', 'ul li button', onListClick);
+
+    selector.addEventListener('change', updateSelectState);
     listItems.addEventListener('click', onListClick);
     addButton.addEventListener('click', onAddButtonClick);
+    updateSelectState();
 
-    function onSelectListChange() {
+    function updateSelectState() {
         addButton.disabled = selector.selectedIndex == 0;
+        selector.disabled = selector.options.length == 1;
     }
 
     function onAddButtonClick() {
@@ -24,26 +31,21 @@ function configureMultiSelectComponent(componentId, propertyName) {
 
         createListItem(value, text);
         selector.removeChild(option);
-        onSelectListChange();
+        updateSelectState();
     }
 
-    function onListClick(event) {
-        target = event.target;
+    function onListClick() {
+        var $button = $(this);
 
-        while (target != this) {
-            if (target.tagName == 'BUTTON') {
-                var listItem = target.closest('li');
-                var contentDiv = target.parentElement.previousElementSibling;
-                var text = contentDiv.textContent;
-                var value = target.previousElementSibling.value;
+        var listItem = $button.closest('li');
+        var contentDiv = $button.parent().previousElementSibling;
+        var text = contentDiv.textContent;
+        var value = $button.previousElementSibling.value;
 
-                var option = new Option(text, value);
-                selector.appendChild(option);
-                listItems.removeChild(listItem);
-                return;
-            }
-            target = target.parentElement;
-        }
+        var option = new Option(text, value);
+        selector.appendChild(option);
+        listItems.removeChild(listItem);
+        updateSelectState();
     }
 
 
