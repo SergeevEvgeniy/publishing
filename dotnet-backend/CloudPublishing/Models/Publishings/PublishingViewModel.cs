@@ -12,7 +12,7 @@ namespace CloudPublishing.Models.Publishings
         public string Title { get; set; }
 
         [Required (ErrorMessage = "Не указан тип издания")]
-        [RegularExpression(@"m|n", ErrorMessage = "Некорректный тип ")]
+        [RegularExpression(@"M|P", ErrorMessage = "Некорректный тип ")]
         public string Type { get; set; }
 
         [Required (ErrorMessage = "Не указано описание")]

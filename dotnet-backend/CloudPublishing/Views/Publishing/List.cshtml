@@ -4,8 +4,8 @@
     ViewBag.Title = "Издания";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="row justify-content-end mb-3">
-    <a href=@Url.Action("Create", "Publishing") class="btn btn-success"><i class="fas fa-plus"></i>Добавить</a>
+<div class="text-right mb-3">
+    <a href=@Url.Action("Create", "Publishing") class="btn btn-success"><i class="fas fa-plus"></i> Добавить</a>
 </div>
 <table class="table table-bordered">
     <tr>
@@ -13,7 +13,7 @@
         <th>Тип</th>
         <th>Тематика</th>
         <th>Рубрики</th>
-        <th></th>
+        <th width="auto"></th>
     </tr>
     @foreach (var publishing in Model)
     {
@@ -22,11 +22,11 @@
             <td>@publishing.Type</td>
             <td>@publishing.Subjects</td>
             <td>@publishing.Topics</td>
-            <td class="publishing-list-actions">
-                <a href=@Url.Action("Edit", "Publishing", new { id = publishing.Id }) class="btn btn-outline-dark">
+            <td class="text-center">
+                <a href=@Url.Action("Edit", "Publishing", new { id = publishing.Id }) class="btn btn-sm btn-outline-dark">
                     <i class="fas fa-edit"></i>
                 </a>
-                <a href=@Url.Action("Delete", "Publishing", new { id = publishing.Id }) class="btn btn-outline-danger">
+                <a href=@Url.Action("Delete", "Publishing", new { id = publishing.Id }) class="btn btn-sm btn-outline-danger">
                     <i class="fas fa-trash-alt"></i>
                 </a>
             </td>

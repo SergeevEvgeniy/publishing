@@ -16,6 +16,15 @@
     white-space: normal;
 }
 
+.hidden {
+    display: none;
+}
+
+/* *************
+ * PUBLISHING
+ * *************
+ */
+
 .error-notification {
     text-align: center;
 }
@@ -46,16 +55,11 @@
     list-style: none;
 }
 
-.publishing-form {
+/* .publishing-form {
     width: 500px;
     margin: auto;
-}
+} */
 
 .multi-select-component {
     margin-bottom: 20px;
-}
-
-.publishing-list-actions {
-    text-align: center;
-    min-width: 115px;
 }
