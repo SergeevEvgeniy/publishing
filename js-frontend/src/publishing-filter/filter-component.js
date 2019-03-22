@@ -22,6 +22,7 @@ function Filter($parentElement, publicationType) {
                 publicationsTitles: publicationsTitles,
                 isSubmitting: isSubmitting,
             }));
+        console.log(isSubmitting);
     }
 
     /**
@@ -31,8 +32,10 @@ function Filter($parentElement, publicationType) {
     function onFilterFormSubmitEvent(event) {
         event.preventDefault();
         isSubmitting = true;
+
         onFilterSubmitListener($(event.target).serializeArray(), function foundIssue() {
             isSubmitting = false;
+            render();
         });
         render();
     }

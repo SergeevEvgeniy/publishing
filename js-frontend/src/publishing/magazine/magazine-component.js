@@ -16,7 +16,7 @@ function MagazineComponent($parentElement) {
     function onFilterSubmitListener(formData, next) {
         console.log('submit filter form');
         console.log(formData);
-        setTimeout(next(), 5000);
+        setTimeout(next, 5000);
     }
 
     function onSelectMagazineIssueListener(issueId) {
