@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
-using System.Diagnostics;
 
 namespace CloudPublishing.Data.Repositories
 {
@@ -57,8 +56,6 @@ namespace CloudPublishing.Data.Repositories
             {
                 throw new Exception($"Publishing with Id '{modifyPublishing.Id}' not found");
             }
-
-            context.Database.Log = (s) => Debug.WriteLine(s);
 
             publishingToUpdate.Title = modifyPublishing.Title;
             publishingToUpdate.Type = modifyPublishing.Type;
