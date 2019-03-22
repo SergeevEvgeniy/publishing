@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CloudPublishing.Business.DTO;
-using CloudPublishing.Models.Publishings;
+using CloudPublishing.Models.Publishings.ViewModels;
 using System.Linq;
 
 namespace CloudPublishing.Util.PublishingValueResolvers

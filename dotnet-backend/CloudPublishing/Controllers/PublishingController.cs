@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
-using CloudPublishing.Models.Publishings;
+using CloudPublishing.Models.Publishings.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;

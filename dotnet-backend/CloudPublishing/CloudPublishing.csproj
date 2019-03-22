@@ -168,6 +168,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PublishingController.cs" />
     <Compile Include="Controllers\RestApi\EmployeesController.cs" />
+    <Compile Include="Controllers\RestApi\PublishingsController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -177,16 +178,16 @@
     <Compile Include="Models\Employees\ViewModels\EmployeeCreateModel.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeEditModel.cs" />
     <Compile Include="Models\Employees\ViewModels\LoginViewModel.cs" />
-    <Compile Include="Models\Publishings\Enums\PublishingType.cs" />
-    <Compile Include="Models\Publishings\PublishingCreateViewModel.cs" />
-    <Compile Include="Models\Publishings\PublishingEditViewModel.cs" />
-    <Compile Include="Models\Publishings\PublishingEmployeeViewModel.cs" />
-    <Compile Include="Models\Publishings\PublishingViewModel.cs" />
-    <Compile Include="Models\Publishings\TopicViewModel.cs" />
+    <Compile Include="Models\Publishings\PublishingData.cs" />
+    <Compile Include="Models\Publishings\ViewModels\PublishingCreateViewModel.cs" />
+    <Compile Include="Models\Publishings\ViewModels\PublishingEditViewModel.cs" />
+    <Compile Include="Models\Publishings\ViewModels\PublishingEmployeeViewModel.cs" />
+    <Compile Include="Models\Publishings\ViewModels\PublishingViewModel.cs" />
+    <Compile Include="Models\Publishings\ViewModels\TopicViewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\ArticleModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\AuthorModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\CreateReviewModel.cs" />
-    <Compile Include="Models\Publishings\PublishingTableViewModel.cs" />
+    <Compile Include="Models\Publishings\ViewModels\PublishingTableViewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\DetailedReviewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\PublishingModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\ReviewModel.cs" />
