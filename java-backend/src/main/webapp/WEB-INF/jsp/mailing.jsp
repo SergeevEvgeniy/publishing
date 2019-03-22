@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <tag:layout>
+    <c:set var="pageTitle" value="Рассылки рассылки" scope="session"/>
     <div class="row panel-group">
         <div class="col-lg-6 col-md-8">
             <span class="h2">Список рассылки</span>

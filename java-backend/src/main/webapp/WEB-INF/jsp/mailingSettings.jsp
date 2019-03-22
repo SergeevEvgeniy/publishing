@@ -4,6 +4,7 @@
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <t:layout>
+    <c:set var="pageTitle" value="Настроечки рассылки" scope="session"/>
     <%--@elvariable id="subscribers" type="by.artezio.cloud.publishing.dto.Subscribers"--%>
     <form:form modelAttribute="subscribers" method="post" action="${pageContext.request.contextPath}/mailing/settings" class="form-horizontal">
         <div class="form-group">
