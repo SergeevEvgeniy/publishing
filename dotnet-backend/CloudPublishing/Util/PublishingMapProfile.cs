@@ -10,8 +10,8 @@ namespace CloudPublishing.Util
     {
         private Dictionary<string, string> publishingType = new Dictionary<string, string>
         {
-            { "m", "Журнал" },
-            { "n", "Газета" }
+            { "M", "Журнал" },
+            { "P", "Газета" }
         };
         public PublishingMapProfile()
         {

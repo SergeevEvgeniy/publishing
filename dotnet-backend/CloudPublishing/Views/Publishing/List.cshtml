@@ -22,8 +22,8 @@
             <td>@publishing.Type</td>
             <td>@publishing.Subjects</td>
             <td>@publishing.Topics</td>
-            <td width="110px">
-                <a href=@Url.Action("Edit", "Publishing", new { id = publishing.Id }) class="btn">
+            <td class="publishing-list-actions">
+                <a href=@Url.Action("Edit", "Publishing", new { id = publishing.Id }) class="btn btn-outline-dark">
                     <i class="fas fa-edit"></i>
                 </a>
                 <a href=@Url.Action("Delete", "Publishing", new { id = publishing.Id }) class="btn btn-outline-danger">
