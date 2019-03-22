@@ -19,20 +19,40 @@ function Pagination($parentElement) {
     var endPageIndex = 0;
     var index = 0;
     var pageChangeListener = null;
+    var self = this;
 
+    /**
+     * Отрисовка компонента
+     */
+    function render() {
+        $parentElement
+            .empty()
+            .append(paginationTemplate({
+                pages: visiblePages,
+                perPage: perPage,
+            }));
+    }
+
+    /**
+     * Обработчик события нажатия на страницу
+     * @param {Object} event объект описывающий произошедшее событие клика по старнице
+     */
     function onPageChangeEvent(event) {
         var target = event.target;
         var clickedPage = $(target).data('page');
 
         if (clickedPage === 'next') {
-            this.setCurrentPage(+currentPage + 1);
+            self.setCurrentPage(+currentPage + 1);
         } else if (clickedPage === 'prev') {
-            this.setCurrentPage(+currentPage - 1);
+            self.setCurrentPage(+currentPage - 1);
         } else {
-            this.setCurrentPage(+clickedPage);
+            self.setCurrentPage(+clickedPage);
         }
     }
 
+    /**
+     * Определение отображаемых страниц
+     */
     function recount() {
         if (amountRecord === 0) {
             return;
@@ -53,7 +73,6 @@ function Pagination($parentElement) {
      * Установка метода обратного вызова на изменение текущей страницы
      * @param {function} listener вызывается, когда была изменена текущая страница
      * Отправляет аргумент - новая страница
-     * @returns {void}
      */
     this.onPageChange = function onPageChange(listener) {
         pageChangeListener = listener;
@@ -62,43 +81,33 @@ function Pagination($parentElement) {
     /**
      * Установка количества элементов на странице
      * @param {Number} newPerPage - количество элементов на странице
-     * @returns {void}
      */
     this.setPerPage = function setPerPage(newPerPage) {
         perPage = newPerPage;
         currentPage = 1;
         recount();
-        this.render();
+        render();
     };
 
     /**
      * Установка текущей страницы
      * @param {Number} newCurrentPage - текущая страница
-     * @returns {void}
      */
     this.setCurrentPage = function setCurrentPage(newCurrentPage) {
-        if (!pageChangeListener) {
-            return;
-        }
-        if (newCurrentPage > amountPages || newCurrentPage < 1) {
-            return;
-        }
+        currentPage = Math.min(amountPages, newCurrentPage);
         if (newCurrentPage < 1) {
             currentPage = 1;
-        } else if (newCurrentPage > amountPages) {
-            currentPage = amountPages;
-        } else {
-            currentPage = newCurrentPage;
         }
-        pageChangeListener(currentPage);
+        if (pageChangeListener) {
+            pageChangeListener(currentPage);
+        }
         recount();
-        this.render();
+        render();
     };
 
     /**
      * Установка количества записей
      * @param {Number} newAmountRecord - количество элементов
-     * @returns {void}
      */
     this.setAmountRecord = function setAmountRecord(newAmountRecord) {
         if (newAmountRecord === 0) {
@@ -106,23 +115,11 @@ function Pagination($parentElement) {
         }
         amountRecord = newAmountRecord;
         recount();
-        this.render();
+        render();
     };
 
-    $parentElement.on('click', 'span', onPageChangeEvent.bind(this));
-
-    /**
-     * Отрисовка компонента
-     * @returns {void}
-     */
-    this.render = function render() {
-        $parentElement
-            .empty()
-            .append(paginationTemplate({
-                pages: visiblePages,
-                perPage: perPage,
-            }));
-    };
+    $parentElement.on('click', 'span', onPageChangeEvent);
+    render();
 }
 
 require('./pagination.css');

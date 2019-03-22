@@ -1,20 +1,63 @@
 var selectPerPageTemplate = require('./select-per-page.hbs');
-var $ = require('jquery');
 
 /**
  * Создаёт компонент позволяющий выбрать количество элементов на странице
  * @constructor
- * @param {JQuery element} $parentElement - элемент-контейнер для размещения компонента
+ * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
  */
 function SelectPerPage($parentElement) {
-    var $selectPerPageWrapper = $('<div />');
+    var currentPerPage = 5;
+    var perPages = [
+        {
+            class: 'd-none',
+            value: 5,
+        },
+        {
+            class: '',
+            value: 10,
+        },
+        {
+            class: '',
+            value: 25,
+        },
+        {
+            class: '',
+            value: 50,
+        },
+    ];
     var selectPerPageChangeListener = null;
+    var indexPerPage;
+    var target;
 
+    /**
+     * Отрисовка компонента
+     */
+    function render() {
+        $parentElement
+            .empty()
+            .append(selectPerPageTemplate({
+                perPage: currentPerPage,
+                perPages: perPages,
+            }));
+    }
+
+    /**
+     * Обработчик события на изменения количества записей на странице
+     * @param {Object} event содержит свойства произошедшего события
+     */
     function onSelectPerPageChangeEvent(event) {
-        if (!!selectPerPageChangeListener) {
+        if (!selectPerPageChangeListener) {
             return;
         }
-        selectPerPageChangeListener(+event.target.value);
+        target = $(event.target);
+        currentPerPage = target.data('per-page');
+        indexPerPage = target.data('per-page-index');
+        perPages.forEach(function clearClassPerPage(item, index) {
+            perPages[index].class = '';
+        });
+        perPages[indexPerPage].class = 'd-none';
+        selectPerPageChangeListener(+currentPerPage);
+        render();
     }
 
     /**
@@ -26,19 +69,8 @@ function SelectPerPage($parentElement) {
         selectPerPageChangeListener = listener;
     };
 
-    $selectPerPageWrapper.on('change', 'ul', onSelectPerPageChangeEvent);
-
-    /**
-     * Отрисовка компонента
-     */
-    this.render = function render() {
-        $selectPerPageWrapper
-            .empty()
-            .append(selectPerPageTemplate());
-        $parentElement
-            .empty()
-            .append(selectPerPageWrapper);
-    };
+    $parentElement.on('click', 'li a', onSelectPerPageChangeEvent);
+    render();
 }
 
 module.exports = SelectPerPage;

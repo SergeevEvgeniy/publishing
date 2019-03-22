@@ -1,15 +1,15 @@
 <div class="btn-group">
-    <button class="btn border page-quantity" id="pageQuantity" type="button">
-        5
-    </button>
+    <span class="btn border page-quantity" id="pageQuantity">
+        {{perPage}}
+    </span>
     <button type="button" class="btn  dropdown-toggle dropdown-toggle-split border" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
         <span class="sr-only">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu select-per-page">
-        <li><a class="dropdown-item d-none" href="#">5</a></li>
-        <li><a class="dropdown-item" href="#">10</a></li>
-        <li><a class="dropdown-item" href="#">25</a></li>
-        <li><a class="dropdown-item" href="#">50</a></li>
+        {{#each perPages}}
+            <li><a class="dropdown-item {{this.class}}" href="#" 
+                data-per-page="{{this.value}}" data-per-page-index="{{@index}}">{{this.value}}</a></li>
+        {{/each}}
     </ul>
 </div>

@@ -2,8 +2,14 @@ var filterResultTemplate = require('./filter-result.hbs');
 
 var $ = require('jquery');
 
+/**
+ * Создаёт компонент отображающий результаты поиска в виде таблицы.
+ * Один столбец - название, кнопка - отображать вызывает переданную функцию обратного
+ * вызова.
+ * @constructor
+ * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
+ */
 function FilterResult($parentElement) {
-    var $filterResultWrapper = $('<div />');
     var issues = [];
     var visibleIssues = [];
     var perPage = 5;
@@ -13,14 +19,22 @@ function FilterResult($parentElement) {
     var startItemIndex;
     var endItemIndex;
 
-    function onSelectIssueEvent(event) {
-        var tr = $(event.target).parent('tr');
-        tr.parent('tbody')
-            .find('tr')
-            .removeClass('table-active');
+    /**
+     * Отрисовка компонента
+     */
+    function render() {
+        $parentElement
+            .empty()
+            .append(filterResultTemplate({
+                issues: visibleIssues,
+            }));
+    }
 
-        tr.addClass('table-active');
-        onShowIssueListener(tr.data('id'));
+    function onSelectIssueEvent(event) {
+        var tr = $(event.target)
+            .closest('tr')
+            .data('id');
+        onShowIssueListener(tr);
     }
 
     function recount() {
@@ -37,41 +51,46 @@ function FilterResult($parentElement) {
         render();
     }
 
+    /**
+     * Установка номеров которые нужно отобразить
+     * @param {Array.<{id: Number, title: String}>} newIssues - номера
+     */
     this.setIssues = function setIssues(newIssues) {
         issues = newIssues;
         recount();
         render();
     };
 
+    /**
+     * Установка количества элементов на странице
+     * @param {Number} newPerPage - количество элементов на странице
+     */
     this.setPerPage = function setPerPage(newPerPage) {
         perPage = newPerPage;
         currentPage = 1;
         recount();
-        this.render();
+        render();
     };
 
+    /**
+     * Установка текущей страницы
+     * @param {Number} newCurrentPage - текущая страница
+     */
     this.setCurrentPage = function setCurrentPage(newCurrentPage) {
         currentPage = newCurrentPage;
         recount();
         render();
     };
 
-    this.setShowIssueCallback = function setOnSelectIssueListener(listener) {
+    /**
+     * Установка метода обратного вызова на выбор номера
+     * @param {function} listener - вызывается, когда был выбран номер
+     */
+    this.setShowIssueListener = function setOnSelectIssueListener(listener) {
         onShowIssueListener = listener;
     };
 
-    $filterResultWrapper.on('click', 'td', onSelectIssueEvent);
-
-    this.render = function render() {
-        $filterResultWrapper
-            .empty()
-            .append(filterResultTemplate({
-                issues: visibleIssues,
-            }));
-        $parentElement
-            .empty()
-            .append($filterResultWrapper);
-    };
+    $parentElement.on('click', 'td button', onSelectIssueEvent.bind(this));
 
     render();
 }
