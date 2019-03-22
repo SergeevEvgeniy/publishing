@@ -52,4 +52,14 @@ public final class IssueDao {
             Collections.singletonMap("id", id));
     }
 
+    /**
+     * Получение номера по id.
+     * @param id - идентификатор {@link Issue}
+     * @return {@link Issue}
+     * */
+    public Issue getIssueById(final int id) {
+        return jdbcTemplate.queryForObject("select * from issue where id = :id",
+            Collections.singletonMap("id", id), issueRowMapper);
+    }
+
 }

@@ -39,18 +39,30 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
+    public IssueInfo mapIssueToIssueInfo(final Issue issue) {
+        Publishing publishing = publishingService.getPublishingById(issue.getPublishingId());
+        IssueInfo issueInfo = new IssueInfo();
+        issueInfo.setPublishingId(issue.getPublishingId());
+        issueInfo.setPublishingTitle(publishing.getTitle());
+        issueInfo.setNumber(issue.getNumber());
+        issueInfo.setLocalDate(issue.getDate());
+        issueInfo.setPublished(issue.isPublished());
+        issueInfo.setIssueId(issue.getId());
+        return issueInfo;
+    }
+
+    @Override
+    public IssueInfo getIssueInfoByIssueId(final int issueId) {
+        Issue issue = issueDao.getIssueById(issueId);
+        return mapIssueToIssueInfo(issue);
+    }
+
+    @Override
     public List<IssueInfo> getListOfAllIssueInfo() {
         List<Issue> issueList = issueDao.getListOfAllIssues();
         List<IssueInfo> issueInfoList = new ArrayList<>();
         for (Issue issue : issueList) {
-            Publishing publishing = publishingService.getPublishingById(issue.getPublishingId());
-            IssueInfo issueInfo = new IssueInfo();
-            issueInfo.setPublishingId(issue.getPublishingId());
-            issueInfo.setPublishingTitle(publishing.getTitle());
-            issueInfo.setNumber(issue.getNumber());
-            issueInfo.setLocalDate(issue.getDate());
-            issueInfo.setPublished(issue.isPublished());
-            issueInfo.setIssueId(issue.getId());
+            IssueInfo issueInfo = mapIssueToIssueInfo(issue);
             issueInfoList.add(issueInfo);
         }
         return issueInfoList;

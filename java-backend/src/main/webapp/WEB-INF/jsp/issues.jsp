@@ -7,7 +7,7 @@
     <h3 class="page-header">Номера</h3>
     <form>
         <div class="text-right form-group">
-            <a href="<c:url value="?new"/>" class="btn btn-success">
+            <a href="<c:url value="?mode=create"/>" class="btn btn-success">
                 <span class="glyphicon glyphicon-plus"></span>Добавить
             </a>
         </div>
@@ -36,7 +36,7 @@
                         <td>
                             <c:if test="${!issueInfo.published}">
                                 <a class="btn btn-default btn-sm"
-                                   href="${pageContext.request.contextPath}/issues?editableIssue=${issueInfo.issueId}">
+                                   href="${pageContext.request.contextPath}/issues?mode=edit&id=${issueInfo.issueId}">
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </a>
                                 <button type="button" class="btn btn-default btn-sm delete-button">
@@ -46,7 +46,7 @@
                             </c:if>
                             <c:if test="${issueInfo.published}">
                                 <a class="btn btn-default btn-sm"
-                                   href="${pageContext.request.contextPath}/issues?viewedIssue=${issueInfo.issueId}">
+                                   href="${pageContext.request.contextPath}/issues?mode=view&id=${issueInfo.issueId}">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </a>
                             </c:if>

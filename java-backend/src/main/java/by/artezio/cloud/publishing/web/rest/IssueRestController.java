@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PutMapping;
+
 import java.util.List;
 import java.util.Set;
 
@@ -66,6 +68,15 @@ public class IssueRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIssue(@PathVariable("id") final int id) {
         issueService.deleteIssueById(id);
+    }
+
+    /**
+     * @param id идентификатор {@link by.artezio.cloud.publishing.domain.Issue}
+     * */
+    @PutMapping("/issue/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editIssue(@PathVariable("id") final int id) {
+        /*Контролле для обработки запросов на обновления ресурса Issue*/
     }
 
 }

@@ -25,8 +25,10 @@ public class ArticleRestController {
 
     /**
      * @param publishingService {@link PublishingService}
+     * @param employeeService {@link EmployeeService}
      */
-    public ArticleRestController(PublishingService publishingService, EmployeeService employeeService) {
+    public ArticleRestController(final PublishingService publishingService,
+                                 final EmployeeService employeeService) {
         this.publishingService = publishingService;
         this.employeeService = employeeService;
     }

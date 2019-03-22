@@ -29,4 +29,19 @@ public interface IssueService {
      * */
     void deleteIssueById(final int id);
 
+    /**
+     * Получение {@link IssueInfo} по идентификатору {@link Issue}.
+     * @param issueId идентификатор {@link Issue}
+     * @return {@link IssueInfo}
+     */
+    IssueInfo getIssueInfoByIssueId(final int issueId);
+
+    /**
+     * Функция преобразования сущности {@link Issue}
+     * в объект dto {@link IssueInfo}.
+     * @param issue сущность {@link Issue}
+     * @return {@link IssueInfo}
+     * */
+    IssueInfo mapIssueToIssueInfo(final Issue issue);
+
 }
