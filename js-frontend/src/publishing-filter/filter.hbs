@@ -1,15 +1,15 @@
 <form class="form-horizontal" id="form-filter">
     <h4 class="form-title">Поиск журналов</h4>
     <div class="form-group">
-        <label for="titlePublication" class="col-lg-12 control-label">{{typePublication}}</label>
+        <label for="publicationTitle" class="col-lg-12 control-label">{{publicationType}}</label>
         <div class="col-lg-12">
-            <select class="form-control" name="titlePublication" id="titlePublication">
-                {{#each publicationsTitles}}
-                        {{#if_eq this.title '123'}}
-                            <option selected data-item="{{this.id}}">{{this.title}}</option>
-                        {{else}}
-                            <option data-item="{{this.id}}">{{this.title}}</option>
-                        {{/if_eq}}
+            <select class="form-control" name="publicationTitle" id="publicationTitle">
+                {{#each publications}}
+                    {{#if this.selected}}
+                        <option selected data-item="{{this.id}}">{{this.title}}</option>
+                    {{else}}
+                        <option data-item="{{this.id}}">{{this.title}}</option>
+                    {{/if}}
                 {{else}}
                     <option value=""> - Не найдено - </option>
                 {{/each}}
@@ -17,10 +17,10 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="dateNumber" class="col-lg-12 control-label">Номер/Дата</label>
+        <label for="numberDate" class="col-lg-12 control-label">Номер/Дата</label>
         <div class="col-lg-12">
-            <input class="form-control" value="{{inputs.dateNumber}}" name="dateNumber" type="text" 
-                id="dateNumber" placeholder="Номер/Дата">
+            <input class="form-control" value="{{inputs.numberDate}}" name="numberDate" type="text" 
+                id="numberDate" placeholder="Номер/Дата">
         </div>
     </div>
     <div class="form-group">

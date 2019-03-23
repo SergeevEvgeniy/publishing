@@ -1,13 +1,9 @@
+var filteredIssues = require('../../data/filtered-issues.json');
+
 var IssueAPI = {
+    // eslint-disable-next-line no-unused-vars
     getIssuesByFilter: function getIssuesByFilter(formData) {
-        return fetch('http://localhost:3010/api/issue/filter', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: formData,
-            mode: 'cors',
-        });
+        return Promise.resolve(filteredIssues);
     },
 };
 

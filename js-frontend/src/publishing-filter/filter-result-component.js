@@ -31,10 +31,10 @@ function FilterResult($parentElement) {
     }
 
     function onSelectIssueEvent(event) {
-        var tr = $(event.target)
+        var index = $(event.target)
             .closest('tr')
-            .data('id');
-        onShowIssueListener(tr);
+            .data('index');
+        onShowIssueListener(visibleIssues[index]);
     }
 
     function recount() {

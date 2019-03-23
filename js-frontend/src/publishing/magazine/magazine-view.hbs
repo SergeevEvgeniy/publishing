@@ -1,0 +1,99 @@
+{{#if magazine.title}}
+    {{#if loading.status}}
+        <div class="row">
+            <div class="col-md-12">
+                <p class="text-center">
+                    {{loading.stage}}
+                </p>
+            </div>
+        </div>
+    {{else}}
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-center">
+                    <b>{{magazine.title}}</b>
+                </h3>
+            </div>
+            <div class="col-md-12">
+                <small>
+                    <span>{{magazine.number}}</span>
+                    <span>{{magazine.date}}</span>
+                </small>
+            </div>
+            <div class="col-md-12">
+                <h4>
+                    <b>{{magazine.subject}}</b>
+                </h4>
+            </div>
+            <div class="col-md-8">
+                <ul class="nav nav-tabs">
+                    {{#each magazine.topics}}
+                        {{#if this.class}}
+                            <li class="active"><a href="#">{{this.title}}</a></li>
+                        {{else}}
+                            <li><a href="#">{{this.title}}</a></li>
+                        {{/if}}
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-8">
+                        {{#each magazine.topics}}
+                            {{#if this.class}}
+                                {{#each this.articles}}
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">{{this.title}}</div>
+                                        <div class="panel-body">{{this.content}}</div>
+                                    </div>
+                                {{/each}}
+                            {{/if}}
+                        {{/each}}
+                    </div>
+                    <div class="col-md-4">
+                        {{#each magazine.advertising}}
+                            <div>
+                                <img src="{{this.url}}" class="rounded float-left" alt="Рекламное изображение {{@index}}">
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Авторы</div>
+                            <ul class="list-group">
+                                {{#each magazine.authors}}
+                                    <li class="list-group-item">{{this.lastName}} {{this.firstName}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Редакторы</div>
+                            <ul class="list-group">
+                                {{#each magazine.editors}}
+                                    <li class="list-group-item">{{this.lastName}} {{this.firstName}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+{{else}}
+    <div class="row">
+        <div class="col-md-12">
+            <p class="text-center">
+                Номер журнала не выбран
+            </p>
+        </div>
+    </div>
+{{/if}}

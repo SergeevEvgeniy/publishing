@@ -8,8 +8,8 @@
         </thead>
         <tbody>
             {{#each issues}}
-                <tr data-id="{{this.id}}">
-                    <td>{{this.title}}</td>
+                <tr data-index="{{@index}}">
+                    <td>{{this.number}}, {{this.date}}, {{this.subject}}</td>
                     <td class="text-right">
                         <button class="btn btn-primary btn-sm">
                             <i class="fas fa-info-circle"></i>

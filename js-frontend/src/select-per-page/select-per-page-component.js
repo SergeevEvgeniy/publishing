@@ -6,6 +6,7 @@ var selectPerPageTemplate = require('./select-per-page.hbs');
  * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
  */
 function SelectPerPage($parentElement) {
+    var isShown = false;
     var currentPerPage = 5;
     var perPages = [
         {
@@ -38,6 +39,7 @@ function SelectPerPage($parentElement) {
             .append(selectPerPageTemplate({
                 perPage: currentPerPage,
                 perPages: perPages,
+                isShown: isShown,
             }));
     }
 
@@ -67,6 +69,15 @@ function SelectPerPage($parentElement) {
      */
     this.onSelectPerPageChange = function onSelectPerPageChange(listener) {
         selectPerPageChangeListener = listener;
+    };
+
+    /**
+     * Установка видимости компонента
+     * @param {Boolean} status видимость компонента
+     */
+    this.setVisible = function setVisible(status) {
+        isShown = status;
+        render();
     };
 
     $parentElement.on('click', 'li a', onSelectPerPageChangeEvent);

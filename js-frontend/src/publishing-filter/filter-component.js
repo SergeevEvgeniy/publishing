@@ -7,9 +7,14 @@ var filterTemplate = require('./filter.hbs');
  * @param {String} publicationType - название вида публикации "Журнал" или "Газета"
  */
 function Filter($parentElement, publicationType) {
-    var publicationsTitles = [];
+    var publications = [];
     var onFilterSubmitListener = null;
     var isSubmitting = false;
+    var inputs = {
+        publicationTitle: '',
+        numberDate: '',
+        articleTitle: '',
+    };
 
     /**
      * Отрисовка компонента
@@ -18,11 +23,11 @@ function Filter($parentElement, publicationType) {
         $parentElement
             .empty()
             .append(filterTemplate({
-                typePublication: publicationType,
-                publicationsTitles: publicationsTitles,
+                publicationType: publicationType,
+                publications: publications,
                 isSubmitting: isSubmitting,
+                inputs: inputs,
             }));
-        console.log(isSubmitting);
     }
 
     /**
@@ -41,6 +46,19 @@ function Filter($parentElement, publicationType) {
     }
 
     /**
+     * Обработчик события на изменение полей формы
+     * @param {Object} event содержит свойства произошедшего события
+     */
+    function onInputChangeEvent(event) {
+        var $target = $(event.target);
+        var inputName = $target.attr('name');
+        inputs[inputName] = $target.val();
+        publications.forEach(function enumerationTitles(publication, index) {
+            publications[index].selected = inputs.publicationTitle === publication.title;
+        });
+    }
+
+    /**
      * Установка метода обратного вызова на поиск номеров
      * @param {function} listener - вызывается, когда нажата кнопка "Найти"
      */
@@ -49,15 +67,18 @@ function Filter($parentElement, publicationType) {
     };
 
     /**
-     * Установка наваний публикаций, для отображения в combobox
+     * Установка публикаций, для отображения в combobox
      * @param {Array.<{id: Number, title: String}>} titles - массив объектов публикаций с именем и id
      */
-    this.setPublicationsTitles = function setPublicationsTitles(titles) {
-        publicationsTitles = titles;
+    this.setPublications = function setPublications(titles) {
+        publications = titles;
         render();
     };
 
     $parentElement.on('submit', '#form-filter', onFilterFormSubmitEvent);
+    $parentElement.on('change', '#publicationTitle', onInputChangeEvent);
+    $parentElement.on('change', '#numberDate', onInputChangeEvent);
+    $parentElement.on('change', '#articleTitle', onInputChangeEvent);
 
     render();
 }

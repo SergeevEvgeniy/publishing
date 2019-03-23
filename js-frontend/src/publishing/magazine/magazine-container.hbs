@@ -1,27 +1,35 @@
 <div class="row">
-    <div class="col-md-12 col-lg-4">
-        <div class="row">
-            <div class="col-md-12 filter-container">
-                
+    {{#if loading.status}}
+        <div class="col-md-12">
+            <p class="text-center">
+                {{loading.stage}}
+            </p>
+        </div>
+    {{else}}
+        <div class="col-md-12 col-lg-4">
+            <div class="row">
+                <div class="col-md-12 filter-container">
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 filter-result-container">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9 pagination-container">
+
+                </div>
+                <div class="col-md-3 text-right select-per-page-container">
+
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12 filter-result-container">
+        <div class="col-md-12 col-lg-8">
+            <div class="view-container">
 
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-9 pagination-container">
-
-            </div>
-            <div class="col-md-3 text-right select-per-page-container">
-
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12 col-lg-8">
-        <div class="view-container">
-
-        </div>
-    </div>
+    {{/if}}
 </div>
