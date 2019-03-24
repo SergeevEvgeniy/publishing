@@ -2,10 +2,12 @@ var $ = require('jquery');
 var HomeComponent = require('./page-home/page-home');
 var SearchComponent = require('./page-search/page-search');
 var MagazineComponent = require('./publishing/magazine/magazine-component');
+var NewspaperComponent = require('./publishing/newspaper/newspaper-component');
 var navObj = {
     HomeComponent: HomeComponent,
     SearchComponent: SearchComponent,
     MagazineComponent: MagazineComponent,
+    NewspaperComponent: NewspaperComponent,
 };
 
 $(function onReady() {
@@ -20,4 +22,5 @@ $(function onReady() {
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap/dist/js/bootstrap');
 require('@fortawesome/fontawesome-free/css/all.css');
-require('./handlebars-helpers/handlebars_helpers_if_eq');
+require('./handlebars-helpers/if-equals');
+require('./handlebars-helpers/increment');

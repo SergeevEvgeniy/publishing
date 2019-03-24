@@ -1,5 +1,5 @@
-var magazineContainerTemplate = require('../publication-container.hbs');
-var magazineViewTemplate = require('./magazine-view.hbs');
+var newspaperContainerTemplate = require('../publication-container.hbs');
+var newspaperViewTemplate = require('./newspaper-view.hbs');
 
 var $ = require('jquery');
 var FilterComponent = require('../../publishing-filter/filter-component');
@@ -10,7 +10,7 @@ var PublicationViewComponent = require('../publication-view-component');
 
 var PublicationService = require('../../services/publication-service');
 
-function MagazineComponent($parentElement) {
+function NewspaperComponent($parentElement) {
     var filterComponent;
     var filterResultComponent;
     var paginationComponent;
@@ -18,15 +18,15 @@ function MagazineComponent($parentElement) {
     var publicationViewComponent;
     var loading = {
         status: true,
-        stage: 'Загрузка наименований журналов',
+        stage: 'Загрузка наименований газет',
     };
-    var magazineTitle;
+    var newspaperTitle;
 
     function onFilterSubmitListener(formData, next) {
         PublicationService
             .getFilteredIssues(formData)
             .then(function handleResponse(response) {
-                magazineTitle = formData[0].value;
+                newspaperTitle = formData[0].value;
                 filterResultComponent.setIssues(response);
                 paginationComponent.setAmountRecord(response.length);
                 selectPerPageComponent.setVisible(response.length > 0);
@@ -37,9 +37,9 @@ function MagazineComponent($parentElement) {
             });
     }
 
-    function onSelectMagazineIssueListener(issue) {
+    function onSelectNewspaperIssueListener(issue) {
         publicationViewComponent.setPublicationIssue({
-            publicationTitle: magazineTitle,
+            publicationTitle: newspaperTitle,
             issueId: issue.id,
             issueDate: issue.date,
             issueNumber: issue.number,
@@ -59,7 +59,7 @@ function MagazineComponent($parentElement) {
     function render() {
         $parentElement
             .empty()
-            .append(magazineContainerTemplate({
+            .append(newspaperContainerTemplate({
                 loading: loading,
             }));
     }
@@ -67,17 +67,17 @@ function MagazineComponent($parentElement) {
     render();
 
     PublicationService
-        .getMagazinesTitles()
+        .getNewspapersTitles()
         .then(function handleResponse(response) {
             loading.status = false;
             render();
 
-            filterComponent = new FilterComponent($('.filter-container'), 'Журнал');
+            filterComponent = new FilterComponent($('.filter-container'), 'Газета');
             filterComponent.setFilterSubmitListener(onFilterSubmitListener);
             filterComponent.setPublications(response);
 
             filterResultComponent = new FilterResultComponent($('.filter-result-container'));
-            filterResultComponent.setShowIssueListener(onSelectMagazineIssueListener);
+            filterResultComponent.setShowIssueListener(onSelectNewspaperIssueListener);
 
             paginationComponent = new PaginationComponent($('.pagination-container'));
             paginationComponent.onPageChange(onPageChangeListener);
@@ -85,7 +85,7 @@ function MagazineComponent($parentElement) {
             selectPerPageComponent = new SelectPerPageComponent($('.select-per-page-container'));
             selectPerPageComponent.onSelectPerPageChange(onSelectPerPageChangeListener);
 
-            publicationViewComponent = new PublicationViewComponent($('.view-container'), magazineViewTemplate);
+            publicationViewComponent = new PublicationViewComponent($('.view-container'), newspaperViewTemplate);
         })
         .catch(function handleError(error) {
             loading.stage = error;
@@ -93,4 +93,4 @@ function MagazineComponent($parentElement) {
         });
 }
 
-module.exports = MagazineComponent;
+module.exports = NewspaperComponent;

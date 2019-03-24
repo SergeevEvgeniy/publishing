@@ -1,4 +1,4 @@
-var MagazineService = require('../services/magazine-service');
+var PublicationService = require('../services/publication-service');
 
 /**
  * Создаёт компонент отображающий номер публикации
@@ -24,7 +24,7 @@ function PublicationView($parentElement, template) {
         $parentElement
             .empty()
             .append(template({
-                magazine: {
+                publication: {
                     title: publicationIssue.publicationTitle,
                     date: publicationIssue.issueDate,
                     number: publicationIssue.issueNumber,
@@ -59,7 +59,7 @@ function PublicationView($parentElement, template) {
         loading.stage = 'Загрузка статей номера...';
         render();
         groupedArticles = [];
-        MagazineService
+        PublicationService
             .getArticlesByIssueId(newPublicationIssue.issueId)
             .then(function handleResponse(response) {
                 articles = response;
@@ -69,7 +69,7 @@ function PublicationView($parentElement, template) {
                 loading.stage = 'Загрузка редакторов и авторов...';
                 render();
 
-                return MagazineService.getEmployeeByArticlesIds(articles.map(function mapArticles(article) {
+                return PublicationService.getEmployeeByArticlesIds(articles.map(function mapArticles(article) {
                     return article.id;
                 }));
             })
@@ -105,7 +105,7 @@ function PublicationView($parentElement, template) {
                 loading.stage = 'Загрузка рекламы...';
                 render();
 
-                return MagazineService.getAdvertisingByIssueId(publicationIssue.id);
+                return PublicationService.getAdvertisingByIssueId(publicationIssue.id);
             })
             .then(function handleResponse(response) {
                 advertising = response;
