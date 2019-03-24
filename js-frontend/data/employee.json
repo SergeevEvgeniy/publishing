@@ -1,0 +1,254 @@
+[
+    {
+        "author": {
+            "firstName": "Ефросинья",
+            "lastName": "Кумовьева"
+        },
+        "coauthors": [
+            {
+                "firstName": "Галина",
+                "lastName": "Сигачёва"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            },
+            {
+                "firstName": "Денис",
+                "lastName": "Китаев"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Христина",
+                "lastName": "Ивлева"
+            },
+            {
+                "firstName": "Тимофей",
+                "lastName": "Шубин"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Тимофей",
+            "lastName": "Шубин"
+        },
+        "coauthors": [
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            },
+            {
+                "firstName": "Галина",
+                "lastName": "Сигачёва"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Елизавета",
+                "lastName": "Ефимова"
+            },
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Феофан",
+            "lastName": "Яночкин"
+        },
+        "coauthors": [
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Елизавета",
+                "lastName": "Ефимова"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Давид",
+            "lastName": "Подоров"
+        },
+        "coauthors": [
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Елизавета",
+                "lastName": "Ефимова"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Феофан",
+            "lastName": "Яночкин"
+        },
+        "coauthors": [
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Елизавета",
+                "lastName": "Ефимова"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Виктор",
+            "lastName": "Астафьев"
+        },
+        "coauthors": [
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Елизавета",
+                "lastName": "Ефимова"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Давид",
+            "lastName": "Подоров"
+        },
+        "coauthors": [
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Елизавета",
+                "lastName": "Ефимова"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Ефросинья",
+            "lastName": "Кумовьева"
+        },
+        "coauthors": [
+            {
+                "firstName": "Галина",
+                "lastName": "Сигачёва"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            },
+            {
+                "firstName": "Денис",
+                "lastName": "Китаев"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Христина",
+                "lastName": "Ивлева"
+            },
+            {
+                "firstName": "Тимофей",
+                "lastName": "Шубин"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Тимофей",
+            "lastName": "Шубин"
+        },
+        "coauthors": [
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            },
+            {
+                "firstName": "Галина",
+                "lastName": "Сигачёва"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Елизавета",
+                "lastName": "Ефимова"
+            },
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            }
+        ]
+    },
+    {
+        "author": {
+            "firstName": "Феофан",
+            "lastName": "Яночкин"
+        },
+        "coauthors": [
+            {
+                "firstName": "Феофан",
+                "lastName": "Яночкин"
+            },
+            {
+                "firstName": "Давид",
+                "lastName": "Подоров"
+            }
+        ],
+        "editors": [
+            {
+                "firstName": "Елизавета",
+                "lastName": "Ефимова"
+            }
+        ]
+    }
+]

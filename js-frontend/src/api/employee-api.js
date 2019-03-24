@@ -1,13 +1,9 @@
+var employee = require('../../data/employee.json');
+
 var EmployeeAPI = {
-    getEmployeeById: function getEmployeeById(id) {
-        return fetch('http://localhost:3000/api/employee/id', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: id,
-            mode: 'cors',
-        });
+    // eslint-disable-next-line no-unused-vars
+    getEmployeeByArticlesIds: function getEmployeeByArticlesIds(ids) {
+        return Promise.resolve(employee);
     },
 };
 

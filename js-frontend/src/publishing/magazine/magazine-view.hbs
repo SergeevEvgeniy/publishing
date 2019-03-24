@@ -26,12 +26,16 @@
                 </h4>
             </div>
             <div class="col-md-8">
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs tabs-topics">
                     {{#each magazine.topics}}
                         {{#if this.class}}
-                            <li class="active"><a href="#">{{this.title}}</a></li>
+                            <li class="nav-item" data-index="{{@index}}">
+                                <a class="nav-link active" href="#">{{this.title}}</a>
+                            </li>
                         {{else}}
-                            <li><a href="#">{{this.title}}</a></li>
+                            <li class="nav-item" data-index="{{@index}}">
+                                <a class="nav-link" href="#">{{this.title}}</a>
+                            </li>
                         {{/if}}
                     {{/each}}
                 </ul>
@@ -42,9 +46,20 @@
                         {{#each magazine.topics}}
                             {{#if this.class}}
                                 {{#each this.articles}}
-                                    <div class="panel panel-primary">
-                                        <div class="panel-heading">{{this.title}}</div>
-                                        <div class="panel-body">{{this.content}}</div>
+                                    <div class="card my-2">
+                                        <div class="card-header">
+                                            {{this.title}}
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                {{this.content}}
+                                            </p>
+                                        </div>
+                                        <div class="card-footer text-muted text-right">
+                                            Автор: 
+                                            <span>{{this.author.lastName}}</span> 
+                                            <span>{{this.author.firstName}}</span>
+                                        </div>
                                     </div>
                                 {{/each}}
                             {{/if}}
@@ -52,8 +67,8 @@
                     </div>
                     <div class="col-md-4">
                         {{#each magazine.advertising}}
-                            <div>
-                                <img src="{{this.url}}" class="rounded float-left" alt="Рекламное изображение {{@index}}">
+                            <div class="my-2">
+                                <img src="{{this}}" class="rounded" alt="Рекламное изображение {{@index}}">
                             </div>
                         {{/each}}
                     </div>
@@ -66,10 +81,19 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="panel panel-info">
-                            <div class="panel-heading">Авторы</div>
+                            <div class="panel-heading">Соавторы</div>
                             <ul class="list-group">
-                                {{#each magazine.authors}}
-                                    <li class="list-group-item">{{this.lastName}} {{this.firstName}}</li>
+                                {{#each magazine.topics}}
+                                    {{#if this.class}}
+                                        {{#each this.articles}}
+                                            <li class="list-group-item">
+                                                <strong>Статья: {{this.title}}</strong>
+                                            </li>
+                                            {{#each this.coauthors}}
+                                                <li class="list-group-item">{{this.lastName}} {{this.firstName}}</li>
+                                            {{/each}}
+                                        {{/each}}
+                                    {{/if}}
                                 {{/each}}
                             </ul>
                         </div>
@@ -78,8 +102,17 @@
                         <div class="panel panel-info">
                             <div class="panel-heading">Редакторы</div>
                             <ul class="list-group">
-                                {{#each magazine.editors}}
-                                    <li class="list-group-item">{{this.lastName}} {{this.firstName}}</li>
+                                {{#each magazine.topics}}
+                                    {{#if this.class}}
+                                        {{#each this.articles}}
+                                            <li class="list-group-item">
+                                                <strong>Статья: {{this.title}}</strong>
+                                            </li>
+                                            {{#each this.editors}}
+                                                <li class="list-group-item">{{this.lastName}} {{this.firstName}}</li>
+                                            {{/each}}
+                                        {{/each}}
+                                    {{/if}}
                                 {{/each}}
                             </ul>
                         </div>
