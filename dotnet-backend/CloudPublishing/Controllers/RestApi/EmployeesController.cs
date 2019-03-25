@@ -52,9 +52,13 @@ namespace CloudPublishing.Controllers.RestApi
         //[Route("employees")]
         public IHttpActionResult GetEmployeeData(EmployeeFilter filter)
         {
-            var result = service.GetEmployeeList(filter.Type, filter.IdList, filter.LastName);
-            return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result),
-                new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+            if (!string.IsNullOrEmpty(filter.Type))
+            {
+                return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(service.GetEmployeeList(filter.Type, filter.IdList, filter.LastName)),
+                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            }
+            return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(service.GetEmployeeList(filter.IdList, filter.LastName)),
+                new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
         }
     }
 }

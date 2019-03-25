@@ -64,6 +64,15 @@ namespace CloudPublishing.Business.Services
         }
 
         /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList, string lastName,
+            bool outsideList = false)
+        {
+            var list = unit.Employees.Find(x => outsideList ? !idList.Contains(x.Id) : idList.Contains(x.Id));
+
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list.Select(MapEmployeeTypeAndSex));
+        }
+
+        /// <inheritdoc />
         public IEnumerable<EmployeeDTO> GetEmployeeList(string type)
         {
             var list = unit.Employees.Find(x => x.Type == type);

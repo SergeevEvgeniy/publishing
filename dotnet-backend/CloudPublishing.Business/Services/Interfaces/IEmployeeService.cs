@@ -18,6 +18,16 @@ namespace CloudPublishing.Business.Services.Interfaces
         IEnumerable<EmployeeDTO> GetEmployeeList();
 
         /// <summary>
+        ///     Получить коллекцию сотрудников определенного типа с определенной фамилией по коллекции идентификаторов
+        /// </summary>
+        /// <param name="idList">Список идентификаторов сотрудников</param> 
+        /// <param name="lastName">Строка, с которой начинается фамилия сотрудника</param>
+        /// <param name="outsideList">Флаг, определяющий, искать сотрудников внутри <see cref="idList" /> или снаружи</param>
+        /// <returns>Коллекция сотрудников издательства или пустая коллекция, если такие сотрудники не найдены</returns>
+        IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList,
+            string lastName, bool outsideList = false);
+
+        /// <summary>
         ///     Получить коллекцию сотрудников определенного типа
         /// </summary>
         /// <param name="type">Тип сотрудника</param>
