@@ -1,4 +1,4 @@
-﻿namespace CloudPublishing.Models.Employees
+﻿namespace CloudPublishing.Models.Employees.ApiModels
 {
     public class EmployeeData
     {

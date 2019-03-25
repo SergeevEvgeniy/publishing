@@ -37,7 +37,8 @@ namespace CloudPublishing.Business.Services
         }
 
         /// <summary>
-        ///     Создает экземпляр класса из реализаций <see cref="IUnitOfWork" />, маппера для отображения сущностей и хэшера для паролей
+        ///     Создает экземпляр класса из реализаций <see cref="IUnitOfWork" />, маппера для отображения сущностей и хэшера для
+        ///     паролей
         /// </summary>
         /// <param name="unit">Экземпляр класса для работы с базой данных</param>
         /// <param name="mapper">Экземпляр маппера для отображения сущностей</param>
@@ -58,20 +59,36 @@ namespace CloudPublishing.Business.Services
         /// <inheritdoc />
         public IEnumerable<EmployeeDTO> GetEmployeeList()
         {
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unit.Employees.GetAll().Select(x =>
-            {
-                x.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), x.Type)];
-                x.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), x.Sex)];
-                return x;
-            }));
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unit.Employees.GetAll()
+                .Select(MapEmployeeTypeAndSex));
         }
 
         /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList, string lastName)
+        public IEnumerable<EmployeeDTO> GetEmployeeList(string type)
+        {
+            var list = unit.Employees.Find(x => x.Type == type);
+
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list.Select(MapEmployeeTypeAndSex));
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetEmployeeList(string type, IEnumerable<int> idList, bool outsideList = false)
         {
             var list = unit.Employees.Find(x =>
-                x.LastName.StartsWith(lastName ?? string.Empty) && idList.Contains(x.Id));
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
+                x.Type == type && (outsideList ? !idList.Contains(x.Id) : idList.Contains(x.Id)));
+
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list.Select(MapEmployeeTypeAndSex));
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<EmployeeDTO> GetEmployeeList(string type, IEnumerable<int> idList,
+            string lastName, bool outsideList = false)
+        {
+            var list = unit.Employees.Find(x =>
+                x.LastName.StartsWith(lastName ?? string.Empty) && x.Type == type &&
+                (outsideList ? !idList.Contains(x.Id) : idList.Contains(x.Id)));
+
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list.Select(MapEmployeeTypeAndSex));
         }
 
         /// <inheritdoc />
@@ -90,20 +107,6 @@ namespace CloudPublishing.Business.Services
         public IDictionary<string, string> GetEmployeeTypes()
         {
             return Types.Select(x => new {key = x.Key.ToString(), x.Value}).ToDictionary(x => x.key, y => y.Value);
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetJournalistList()
-        {
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(
-                unit.Employees.Find(x => x.Type == EmployeeType.J.ToString()));
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEditorList()
-        {
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(
-                unit.Employees.Find(x => x.Type == EmployeeType.E.ToString()));
         }
 
         /// <inheritdoc />
@@ -184,6 +187,13 @@ namespace CloudPublishing.Business.Services
 
             var employee = unit.Employees.Find(x => x.Password == hashedPassword && x.Email == email).FirstOrDefault();
             return mapper.Map<Employee, EmployeeDTO>(employee);
+        }
+
+        private static Employee MapEmployeeTypeAndSex(Employee target)
+        {
+            target.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), target.Type)];
+            target.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), target.Sex)];
+            return target;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace CloudPublishing.Controllers
     /// <summary>
     ///     Контроллер для работы с сотрудниками издательства
     /// </summary>
-    [HandleError(ExceptionType = typeof(EntityNotFoundException))]
+    [HandleError]
     public class EmployeeController : Controller
     {
         private readonly IMapper mapper;

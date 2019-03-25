@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CloudPublishing.Business.DTO;
-using CloudPublishing.Models.Employees;
+using CloudPublishing.Models.Employees.ApiModels;
 using CloudPublishing.Models.Employees.ViewModels;
 
 namespace CloudPublishing.Util
@@ -12,7 +12,8 @@ namespace CloudPublishing.Util
     public class EmployeeMapProfile : Profile
     {
         /// <summary>
-        ///     Создает экземпляр класса, настраивая отображение <see cref="EmployeeDTO"/>  на <see cref="EmployeeViewModel"/>, <see cref="EmployeeEditModel"/>, <see cref="EmployeeCreateModel"/> и наоборот. Также
+        ///     Создает экземпляр класса, настраивая отображение <see cref="EmployeeDTO" />  на <see cref="EmployeeViewModel" />,
+        ///     <see cref="EmployeeEditModel" />, <see cref="EmployeeCreateModel" /> и наоборот. Также
         ///     используется для отображения сущностей для WebApi
         /// </summary>
         public EmployeeMapProfile()

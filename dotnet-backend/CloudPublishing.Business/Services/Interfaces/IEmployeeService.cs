@@ -7,23 +7,42 @@ namespace CloudPublishing.Business.Services.Interfaces
 {
     /// <inheritdoc />
     /// <summary>
-    ///     Предоставляет средства для работы с данными пользователей
+    ///     Предоставляет средства для работы с данными сотрудников
     /// </summary>
     public interface IEmployeeService : IDisposable
     {
         /// <summary>
-        ///     Получить коллекцию сотрудников, работающих в издательстве
+        ///     Получить коллекцию всех сотрудников
         /// </summary>
         /// <returns>Коллекция сотрудников издательства или пустая коллекция, если сотрудники отсутствуют</returns>
         IEnumerable<EmployeeDTO> GetEmployeeList();
 
         /// <summary>
-        ///     Получить коллекцию сотрудников с определенной фамилией по коллекции идентификаторов
+        ///     Получить коллекцию сотрудников определенного типа
         /// </summary>
-        /// <param name="idList">Список идентификаторов сотрудников</param>
+        /// <param name="type">Тип сотрудника</param>
+        /// <returns>Коллекция сотрудников определенного типа или пустая коллекция, если сотрудники отсутствуют</returns>
+        IEnumerable<EmployeeDTO> GetEmployeeList(string type);
+
+        /// <summary>
+        ///     Получить колекцию сотрудников определенного типа по коллекции идентификаторов
+        /// </summary>
+        /// <param name="type">Тип сотрудника</param>
+        /// <param name="idList">Коллекция идентификаторов сотрудников</param>
+        /// <param name="outsideList">Флаг, определяющий, искать сотрудников внутри <see cref="idList" /> или снаружи</param>
+        /// <returns>Коллекция сотрудников издательства или пустая коллекция, если такие сотрудники не найдены</returns>
+        IEnumerable<EmployeeDTO> GetEmployeeList(string type, IEnumerable<int> idList, bool outsideList = false);
+
+        /// <summary>
+        ///     Получить коллекцию сотрудников определенного типа с определенной фамилией по коллекции идентификаторов
+        /// </summary>
+        /// <param name="type">Тип сотрудника</param>
+        /// <param name="idList">Список идентификаторов сотрудников</param> 
         /// <param name="lastName">Строка, с которой начинается фамилия сотрудника</param>
-        /// <returns>Коллекция сотрудников издательства или пустая коллекция, если сотрудники отсутствуютК</returns>
-        IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList, string lastName);
+        /// <param name="outsideList">Флаг, определяющий, искать сотрудников внутри <see cref="idList" /> или снаружи</param>
+        /// <returns>Коллекция сотрудников издательства или пустая коллекция, если такие сотрудники не найдены</returns>
+        IEnumerable<EmployeeDTO> GetEmployeeList(string type, IEnumerable<int> idList,
+            string lastName, bool outsideList = false);
 
         /// <summary>
         ///     Получить коллекцию возможных типов образования сотрудников
@@ -43,18 +62,6 @@ namespace CloudPublishing.Business.Services.Interfaces
         /// </summary>
         /// <returns>Коллекция типов сотрудника, или пустая коллекция, если типы отстутствуют</returns>
         IDictionary<string, string> GetEmployeeTypes();
-
-        /// <summary>
-        ///     Получить коллекцию журналистов издательства
-        /// </summary>
-        /// <returns>Коллекция журналистов, или пустая коллекция, если типы отстутствуют</returns>
-        IEnumerable<EmployeeDTO> GetJournalistList();
-
-        /// <summary>
-        ///     Получить коллекцию редакторов издательства
-        /// </summary>
-        /// <returns>Коллекция редакторов, или пустая коллекция, если типы отстутствуют</returns>
-        IEnumerable<EmployeeDTO> GetEditorList();
 
         /// <summary>
         ///     Создать нового прользователя
