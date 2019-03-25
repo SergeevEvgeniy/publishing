@@ -14,25 +14,19 @@ namespace CloudPublishing.Data.EF.EntityConfigurations
             Property(x => x.Type).HasMaxLength(1).HasColumnName("type").IsRequired();
             Property(x => x.Subjects).HasMaxLength(255).HasColumnName("subjects").IsRequired();
 
-            HasMany<Topic>(x => x.Topics)
+            HasMany(x => x.Topics)
                 .WithMany(x => x.Publishings)
-                .Map( x =>
-                    {
-                        x.MapLeftKey("publishing_id");
-                        x.MapRightKey("topic_id");
-                        x.ToTable("publishing_topic");
-                    }
+                .Map(x =>
+                   {
+                       x.MapLeftKey("publishing_id");
+                       x.MapRightKey("topic_id");
+                       x.ToTable("publishing_topic");
+                   }
                 );
 
-            HasMany<Employee>(x => x.Employees)
-                .WithMany(x => x.Publishings)
-                .Map( x =>
-                    {
-                        x.MapLeftKey("publishing_id");
-                        x.MapRightKey("employee_id");
-                        x.ToTable("publishing_employee");
-                    }
-                );
+            HasMany(e => e.PublishingEmployees)
+                .WithRequired()
+                .HasForeignKey(e => e.PublishingId);
         }
     }
 }

@@ -3,6 +3,7 @@ using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 
 namespace CloudPublishing.Data.Repositories
 {
@@ -17,7 +18,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Topic> GetAll()
         {
-            return context.Topics.AsNoTracking().Include("Publishings").ToList();
+            return context.Topics.ToList();
         }
     }
 }

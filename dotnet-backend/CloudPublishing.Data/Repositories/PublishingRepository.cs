@@ -22,7 +22,7 @@ namespace CloudPublishing.Data.Repositories
             
             return context.Publishings.AsNoTracking()
                 .Include(p => p.Topics).AsNoTracking()
-                .Include(p => p.Employees).AsNoTracking()
+                .Include(p => p.PublishingEmployees).AsNoTracking()
                 .FirstOrDefault(p => p.Id == id);
         }
 
@@ -30,15 +30,12 @@ namespace CloudPublishing.Data.Repositories
         {
             return context.Publishings.AsNoTracking()
                 .Include(p => p.Topics).AsNoTracking()
-                .Include(p => p.Employees).AsNoTracking()
+                .Include(p => p.PublishingEmployees).AsNoTracking()
                 .ToList();
         }
 
         public void Create(Publishing publishing)
         {
-            var employeeIds = publishing.Employees.Select(e => e.Id);
-            publishing.Employees = context.Employees.Where(e => employeeIds.Contains(e.Id)).ToList();
-
             var topicIds = publishing.Topics.Select(t => t.Id);
             publishing.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();
 
@@ -48,7 +45,7 @@ namespace CloudPublishing.Data.Repositories
         public void Update(Publishing modifyPublishing)
         {
             Publishing publishingToUpdate = context.Publishings
-                .Include(p => p.Employees)
+                .Include(p => p.PublishingEmployees)
                 .Include(p => p.Topics)
                 .FirstOrDefault(x => x.Id == modifyPublishing.Id);
 
@@ -60,9 +57,7 @@ namespace CloudPublishing.Data.Repositories
             publishingToUpdate.Title = modifyPublishing.Title;
             publishingToUpdate.Type = modifyPublishing.Type;
             publishingToUpdate.Subjects = modifyPublishing.Subjects;
-
-            var employeeIds = modifyPublishing.Employees.Select(e => e.Id);
-            publishingToUpdate.Employees = context.Employees.Where(e => employeeIds.Contains(e.Id)).ToList();
+            publishingToUpdate.PublishingEmployees = modifyPublishing.PublishingEmployees;
 
             var topicIds = modifyPublishing.Topics.Select(t => t.Id);
             publishingToUpdate.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();

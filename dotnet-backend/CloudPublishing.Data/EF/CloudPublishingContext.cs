@@ -52,6 +52,7 @@ namespace CloudPublishing.Data.EF
             modelBuilder.Configurations.Add(new ReviewEntityConfiguration());
             modelBuilder.Configurations.Add(new PublishingEntityConfiguration());
             modelBuilder.Configurations.Add(new TopicEntityConfiguration());
+            modelBuilder.Configurations.Add(new PublishingEmployeeEntityConfiguration());
         }
     }
 }

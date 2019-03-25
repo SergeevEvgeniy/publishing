@@ -26,14 +26,11 @@ namespace CloudPublishing.Controllers
         {
             IEnumerable<PublishingTableViewModel> publishings = mapper
                 .Map<IEnumerable<PublishingTableViewModel>>(publishingService.GetAllPublishings());
-
             return View(publishings);
         }
 
         public ActionResult Create()
         {
-            IEnumerable<PublishingEmployeeViewModel> availableEmployees = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployeeList());
 
             PublishingCreateViewModel publishingViewModel = new PublishingCreateViewModel
             {
@@ -43,10 +40,10 @@ namespace CloudPublishing.Controllers
                     .Map<IEnumerable<TopicViewModel>>(publishingService.GetAllTopics()),
 
                 AvailableJournalists = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployeeList(EmployeeType.J.ToString())),
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetJournalistList()),
 
                 AvailableEditors = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployeeList(EmployeeType.E.ToString()))
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditorList())
             };
             return View(publishingViewModel);
         }
@@ -67,12 +64,6 @@ namespace CloudPublishing.Controllers
                 return null;
             }
 
-            IEnumerable<PublishingEmployeeViewModel> availableEmployees = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEmployeesNotInPublishing(id));
-
-            IEnumerable<PublishingEmployeeViewModel> employeesInPublishing = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Employees);
-
             PublishingEditViewModel editViewModel = new PublishingEditViewModel
             {
                 Publishing = mapper.Map<PublishingViewModel>(publishing),
@@ -83,13 +74,17 @@ namespace CloudPublishing.Controllers
                 TopicsAtPublishing = mapper
                     .Map<IEnumerable<TopicViewModel>>(publishing.Topics),
 
-                EditorsAtPublishing = employeesInPublishing.Where(e => e.Type == "E"),
+                EditorsAtPublishing = mapper
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Editors),
 
-                JournalistsAtPublishing = employeesInPublishing.Where(e => e.Type == "J"),
+                JournalistsAtPublishing = mapper
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Journalists),
 
-                AvailableEditors = availableEmployees.Where(e => e.Type == "E"),
+                AvailableEditors = mapper
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditorsNotInPublishing(id)),
 
-                AvailableJournalists = availableEmployees.Where(e => e.Type == "J")
+                AvailableJournalists = mapper
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetJournalistsNotInPublishing(id)),
             };
 
             return View(editViewModel);
