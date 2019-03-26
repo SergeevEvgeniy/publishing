@@ -1,3 +1,4 @@
+var AlertBoxComponent = require('../alert-box/alert-box-component');
 var PublicationService = require('../services/publication-service');
 
 /**
@@ -16,6 +17,7 @@ function PublicationView($parentElement, template) {
     var groupedArticles;
     var articleGroupByTopic;
     var advertising;
+    var alert = new AlertBoxComponent($parentElement);
 
     /**
      * Отрисовка омпонента
@@ -50,6 +52,34 @@ function PublicationView($parentElement, template) {
     }
 
     /**
+     * Групировка статей по темам
+     */
+    function groupArticlesByTopic() {
+        articleGroupByTopic = {
+            title: articles[0].topic,
+            articles: [],
+            class: 'active',
+        };
+        articles.forEach(function enumerationArticles(article) {
+            if (article.topic !== articleGroupByTopic.title) {
+                groupedArticles.push(articleGroupByTopic);
+                articleGroupByTopic = {
+                    title: article.topic,
+                    articles: [],
+                };
+            }
+            articleGroupByTopic.articles.push({
+                title: article.title,
+                content: article.content,
+                author: article.author,
+                editors: article.editors,
+                coauthors: article.coauthors,
+            });
+        });
+        groupedArticles.push(articleGroupByTopic);
+    }
+
+    /**
      * Установка номера публикации
      * @param {Object} newPublicationIssue описывает номер публикации, которую нужно показать
      */
@@ -79,29 +109,7 @@ function PublicationView($parentElement, template) {
                     articles[index].coauthors = articleEmployees.coauthors;
                     articles[index].editors = articleEmployees.editors;
                 });
-                articleGroupByTopic = {
-                    title: articles[0].topic,
-                    articles: [],
-                    class: 'active',
-                };
-                articles.forEach(function enumerationArticles(article) {
-                    if (article.topic !== articleGroupByTopic.title) {
-                        groupedArticles.push(articleGroupByTopic);
-                        articleGroupByTopic = {
-                            title: article.topic,
-                            articles: [],
-                        };
-                    }
-                    articleGroupByTopic.articles.push({
-                        title: article.title,
-                        content: article.content,
-                        author: article.author,
-                        editors: article.editors,
-                        coauthors: article.coauthors,
-                    });
-                });
-                groupedArticles.push(articleGroupByTopic);
-
+                groupArticlesByTopic();
                 loading.stage = 'Загрузка рекламы...';
                 render();
 
@@ -113,7 +121,13 @@ function PublicationView($parentElement, template) {
                 render();
             })
             .catch(function handleError(error) {
-                console.log(error);
+                loading.stage = error;
+                render();
+                alert.alert({
+                    variant: 'danger',
+                    message: error,
+                    duration: 5000,
+                });
             });
     };
 

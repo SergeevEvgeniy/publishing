@@ -30,6 +30,10 @@ function FilterResult($parentElement) {
             }));
     }
 
+    /**
+     * Обработчик события на выбор номера для подробностей
+     * @param {Object} event содержит свойства произошедшего события
+     */
     function onSelectIssueEvent(event) {
         var index = $(event.target)
             .closest('tr')
@@ -37,6 +41,9 @@ function FilterResult($parentElement) {
         onShowIssueListener(visibleIssues[index]);
     }
 
+    /**
+     * Определение отображаемых номеров
+     */
     function recount() {
         if (issues.length === 0) {
             visibleIssues = [];

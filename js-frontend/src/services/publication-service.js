@@ -14,8 +14,8 @@ var PublicationService = {
                         resolve(response);
                     }, 500);
                 })
-                .catch(function handleError(error) {
-                    reject(error);
+                .catch(function handleError() {
+                    reject('Произошла ошибка при загрузке наименований журналов! Повторите попытку позже!');
                 });
         });
     },
@@ -29,8 +29,8 @@ var PublicationService = {
                         resolve(response);
                     }, 500);
                 })
-                .catch(function handleError(error) {
-                    reject(error);
+                .catch(function handleError() {
+                    reject('Произошла ошибка при загрузке наименований газет! Повторите попытку позже!');
                 });
         });
     },
@@ -44,8 +44,8 @@ var PublicationService = {
                         resolve(response);
                     }, 500);
                 })
-                .catch(function handleError(error) {
-                    reject(error);
+                .catch(function handleError() {
+                    reject('Произошла ошибка при загрузке номеров! Повторите попытку позже!');
                 });
         });
     },
@@ -59,8 +59,8 @@ var PublicationService = {
                         resolve(response);
                     }, 500);
                 })
-                .catch(function handleError(error) {
-                    reject(error);
+                .catch(function handleError() {
+                    reject('Произошла ошибка при загрузке статей! Повторите попытку позже!');
                 });
         });
     },
@@ -74,8 +74,8 @@ var PublicationService = {
                         resolve(response);
                     }, 500);
                 })
-                .catch(function handleError(error) {
-                    reject(error);
+                .catch(function handleError() {
+                    reject('Произошла ошибка при загрузке редакторов и авторов! Повторите попытку позже!');
                 });
         });
     },
@@ -89,8 +89,8 @@ var PublicationService = {
                         resolve(response);
                     }, 500);
                 })
-                .catch(function handleError(error) {
-                    reject(error);
+                .catch(function handleError() {
+                    reject('Произошла ошибка при загрузке рекламы! Повторите попытку позже!');
                 });
         });
     }

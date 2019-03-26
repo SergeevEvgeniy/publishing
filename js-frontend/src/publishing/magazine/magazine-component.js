@@ -7,9 +7,15 @@ var FilterResultComponent = require('../../publishing-filter/filter-result-compo
 var PaginationComponent = require('../../pagination/pagination-component');
 var SelectPerPageComponent = require('../../select-per-page/select-per-page-component');
 var PublicationViewComponent = require('../publication-view-component');
+var AlertBoxComponent = require('../../alert-box/alert-box-component');
 
 var PublicationService = require('../../services/publication-service');
 
+/**
+ * Создаёт компонент управления журналами, а именно поиск и отображение.
+ * @constructor
+ * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
+ */
 function MagazineComponent($parentElement) {
     var filterComponent;
     var filterResultComponent;
@@ -21,7 +27,13 @@ function MagazineComponent($parentElement) {
         stage: 'Загрузка наименований журналов',
     };
     var magazineTitle;
+    var alert;
 
+    /**
+     * Функция обратного вызова выполняющая запрос по данным формы фильтрации
+     * @param {Array.<{name: String, value: String}>} formData данные формы
+     * @param {Function} next функция обратного вызова
+     */
     function onFilterSubmitListener(formData, next) {
         PublicationService
             .getFilteredIssues(formData)
@@ -33,10 +45,19 @@ function MagazineComponent($parentElement) {
                 next();
             })
             .catch(function handleError(error) {
-                console.log(error);
+                alert.alert({
+                    variant: 'danger',
+                    message: error,
+                    duration: 5000,
+                });
+                next();
             });
     }
 
+    /**
+     * Функция обратного вызова устанавливающая выбранный номер в компонент отображения номера
+     * @param {Array.<Object>} issue выбранный номер
+     */
     function onSelectMagazineIssueListener(issue) {
         publicationViewComponent.setPublicationIssue({
             publicationTitle: magazineTitle,
@@ -47,15 +68,26 @@ function MagazineComponent($parentElement) {
         });
     }
 
+    /**
+     * Функция обратного вызова устанавливающая выбранную страницу
+     * @param {Number} currentPage текущая страница
+     */
     function onPageChangeListener(currentPage) {
         filterResultComponent.setCurrentPage(currentPage);
     }
 
+    /**
+     * Функция обратного вызова устанавливающая количество отображаемых элементов
+     * @param {Number} perPage количество отображаемых элементов
+     */
     function onSelectPerPageChangeListener(perPage) {
         paginationComponent.setPerPage(perPage);
         filterResultComponent.setPerPage(perPage);
     }
 
+    /**
+     * Отображение компонета
+     */
     function render() {
         $parentElement
             .empty()
@@ -86,9 +118,15 @@ function MagazineComponent($parentElement) {
             selectPerPageComponent.onSelectPerPageChange(onSelectPerPageChangeListener);
 
             publicationViewComponent = new PublicationViewComponent($('.view-container'), magazineViewTemplate);
+            alert = new AlertBoxComponent($parentElement);
         })
         .catch(function handleError(error) {
             loading.stage = error;
+            alert.alert({
+                variant: 'danger',
+                message: error,
+                duration: 5000,
+            });
             render();
         });
 }
