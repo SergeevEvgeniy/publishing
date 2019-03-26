@@ -9,7 +9,7 @@ var filterTemplate = require('./filter.hbs');
 function Filter($parentElement, publicationType) {
     var publications = [];
     var onFilterSubmitListener = null;
-    var isSubmitting = false;
+    var loading = false;
     var inputs = {
         publicationTitle: '',
         numberDate: '',
@@ -25,7 +25,7 @@ function Filter($parentElement, publicationType) {
             .append(filterTemplate({
                 publicationType: publicationType,
                 publications: publications,
-                isSubmitting: isSubmitting,
+                loading: loading,
                 inputs: inputs,
             }));
     }
@@ -36,10 +36,10 @@ function Filter($parentElement, publicationType) {
      */
     function onFilterFormSubmitEvent(event) {
         event.preventDefault();
-        isSubmitting = true;
+        loading = true;
 
-        onFilterSubmitListener($(event.target).serializeArray(), function foundIssue() {
-            isSubmitting = false;
+        onFilterSubmitListener($(event.target).serializeArray(), function stopLoading() {
+            loading = false;
             render();
         });
         render();
@@ -60,7 +60,7 @@ function Filter($parentElement, publicationType) {
 
     /**
      * Установка метода обратного вызова на поиск номеров
-     * @param {function} listener - вызывается, когда нажата кнопка "Найти"
+     * @param {Function} listener - вызывается, когда нажата кнопка "Найти"
      */
     this.setFilterSubmitListener = function setFilterSubmitListener(listener) {
         onFilterSubmitListener = listener;

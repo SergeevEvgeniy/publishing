@@ -64,7 +64,7 @@ function SelectPerPage($parentElement) {
 
     /**
      * Установка метода обратного вызова на изменение количества записей на странице
-     * @param {function} listener - вызывается, когда было изменено количество элементов на странице
+     * @param {Function} listener - вызывается, когда было изменено количество элементов на странице
      * Отправляет аргумент - количество элементов на странице
      */
     this.onSelectPerPageChange = function onSelectPerPageChange(listener) {
