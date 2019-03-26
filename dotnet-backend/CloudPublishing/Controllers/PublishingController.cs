@@ -3,22 +3,18 @@ using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Publishings.ViewModels;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
-using CloudPublishing.Business.Enums;
 
 namespace CloudPublishing.Controllers
 {
     public class PublishingController : Controller
     {
         private IPublishingService publishingService;
-        private IEmployeeService employeeService;
         private IMapper mapper;
 
-        public PublishingController(IPublishingService publishingService, IEmployeeService employeeService, IMapper mapper)
+        public PublishingController(IPublishingService publishingService, IMapper mapper)
         {
             this.publishingService = publishingService;
-            this.employeeService = employeeService;
             this.mapper = mapper;
         }
 
@@ -40,10 +36,10 @@ namespace CloudPublishing.Controllers
                     .Map<IEnumerable<TopicViewModel>>(publishingService.GetAllTopics()),
 
                 AvailableJournalists = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetJournalistList()),
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetJournalistList()),
 
                 AvailableEditors = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditorList())
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditorList())
             };
             return View(publishingViewModel);
         }
@@ -52,7 +48,8 @@ namespace CloudPublishing.Controllers
         public ActionResult Create(PublishingViewModel publishing)
         {
             // TODO: Валидация нового журнала
-            publishingService.CreatePublishing(mapper.Map<PublishingDTO>(publishing));
+            var publishingDTO = mapper.Map<PublishingDTO>(publishing);
+            publishingService.CreatePublishing(publishingDTO);
             return RedirectToAction("List");
         }
 
@@ -75,16 +72,16 @@ namespace CloudPublishing.Controllers
                     .Map<IEnumerable<TopicViewModel>>(publishing.Topics),
 
                 EditorsAtPublishing = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Employees.Where(e => e.Type == "E")),
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Editors),
 
                 JournalistsAtPublishing = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Employees.Where(e => e.Type == "J")),
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Journalists),
 
                 AvailableEditors = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditorsNotInPublishing(id)),
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditorsNotInPublishing(id)),
 
                 AvailableJournalists = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetJournalistsNotInPublishing(id)),
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetJournalistsNotInPublishing(id)),
             };
 
             return View(editViewModel);

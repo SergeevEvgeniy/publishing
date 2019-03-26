@@ -3,7 +3,6 @@ using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data.Entity;
 
 namespace CloudPublishing.Data.Repositories
 {

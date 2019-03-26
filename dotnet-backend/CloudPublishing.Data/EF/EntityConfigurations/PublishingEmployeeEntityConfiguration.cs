@@ -8,9 +8,9 @@ namespace CloudPublishing.Data.EF.EntityConfigurations
         public PublishingEmployeeEntityConfiguration()
         {
             ToTable("publishing_employee");
-            HasKey(pe => new { pe.Employeee, pe.PublishingId });
+            HasKey(pe => new { pe.EmployeeId, pe.PublishingId });
             Property(pe => pe.PublishingId).HasColumnName("publishing_id");
-            Property(pe => pe.Employeee).HasColumnName("employee_id");
+            Property(pe => pe.EmployeeId).HasColumnName("employee_id");
         }
     }
 }

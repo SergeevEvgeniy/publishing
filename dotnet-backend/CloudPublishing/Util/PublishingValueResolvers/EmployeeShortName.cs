@@ -10,7 +10,7 @@ namespace CloudPublishing.Util.PublishingValueResolvers
         {
             string shortName = source.LastName + ' ' + source.FirstName[0] + '.';
 
-            if (source.MiddleName != null)
+            if (!string.IsNullOrEmpty(source.MiddleName))
             {
                 shortName = shortName + source.MiddleName[0] + '.';
             }

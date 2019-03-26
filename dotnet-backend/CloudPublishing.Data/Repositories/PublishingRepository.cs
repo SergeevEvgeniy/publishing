@@ -3,9 +3,8 @@ using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
-using System.Diagnostics;
+using System.Linq;
 
 namespace CloudPublishing.Data.Repositories
 {
@@ -20,25 +19,24 @@ namespace CloudPublishing.Data.Repositories
 
         public Publishing Get(int id)
         {
-            
-            return context.Publishings.AsNoTracking()
-                .Include(p => p.Topics).AsNoTracking()
-                .Include(p => p.PublishingEmployees).AsNoTracking()
+            return context.Publishings
+                .AsNoTracking()
+                .Include(p => p.Topics)
+                .Include(p => p.PublishingEmployees)
                 .FirstOrDefault(p => p.Id == id);
         }
 
         public IEnumerable<Publishing> GetAll()
         {
-            context.Database.Log = (s) => Debug.WriteLine(s);
-            return context.Publishings.AsNoTracking()
-                .Include(p => p.Topics).AsNoTracking()
-                .Include(p => p.PublishingEmployees).AsNoTracking()
+            return context.Publishings
+                .AsNoTracking()
+                .Include(p => p.Topics)
+                .Include(p => p.PublishingEmployees)
                 .ToList();
         }
 
         public void Create(Publishing publishing)
         {
-            context.Database.Log = (s) => Debug.WriteLine(s);
             var topicIds = publishing.Topics.Select(t => t.Id);
             publishing.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();
 
