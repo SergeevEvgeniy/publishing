@@ -75,10 +75,10 @@ namespace CloudPublishing.Controllers
                     .Map<IEnumerable<TopicViewModel>>(publishing.Topics),
 
                 EditorsAtPublishing = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Editors),
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Employees.Where(e => e.Type == "E")),
 
                 JournalistsAtPublishing = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Journalists),
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(publishing.Employees.Where(e => e.Type == "J")),
 
                 AvailableEditors = mapper
                 .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditorsNotInPublishing(id)),

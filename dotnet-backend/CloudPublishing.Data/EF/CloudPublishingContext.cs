@@ -44,6 +44,8 @@ namespace CloudPublishing.Data.EF
         /// </summary>
         public DbSet<Topic> Topics { get; set; }
 
+        public DbSet<PublishingEmployee> PublishingEmployees { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

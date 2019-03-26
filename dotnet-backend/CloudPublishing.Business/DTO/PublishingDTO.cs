@@ -9,7 +9,6 @@ namespace CloudPublishing.Business.DTO
         public string Type { get; set; }
         public string Subjects { get; set; }
         public IEnumerable<TopicDTO> Topics { get; set; }
-        public IEnumerable<EmployeeDTO> Editors { get; set; }
-        public IEnumerable<EmployeeDTO> Journalists { get; set; }
+        public IEnumerable<EmployeeDTO> Employees { get; set; }
     }
 }

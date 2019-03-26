@@ -22,8 +22,7 @@ namespace CloudPublishing.Util
             CreateMap<PublishingDTO, PublishingViewModel>();
 
             CreateMap<PublishingViewModel, PublishingDTO>()
-                .ForMember(dest => dest.Journalists, opt => opt.MapFrom(src => src.EmployeesId))
-                .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.EmployeesId))
+                .ForMember(dest => dest.Employees, opt => opt.MapFrom(src => src.EmployeesId))
                 .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.TopicsId));
 
             CreateMap<TopicDTO, TopicViewModel>();

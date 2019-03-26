@@ -31,18 +31,18 @@ namespace CloudPublishing.Business.Services
         {
             var publishing = unitOfWork.Publishings.Get(id);
             var publishingDTO = mapper.Map<PublishingDTO>(publishing);
-            publishingDTO.Editors = employeeService
-                .GetEmployeeList("E", publishing.PublishingEmployees.Select(p => p.EmployeeId));
-            publishingDTO.Journalists = employeeService
-                .GetEmployeeList("J", publishing.PublishingEmployees.Select(p => p.EmployeeId));
+            publishingDTO.Employees = employeeService
+                .GetEmployeeList("E", publishing.PublishingEmployees.Select(p => p.Employeee))
+                .Union(employeeService
+                .GetEmployeeList("J", publishing.PublishingEmployees.Select(p => p.Employeee)));
             return publishingDTO;
         }
 
         public void CreatePublishing(PublishingDTO publishing)
         {
             var publishingEntity = mapper.Map<Publishing>(publishing);
-            publishingEntity.PublishingEmployees = publishing.Editors.Union(publishing.Journalists)
-                .Select(e => new PublishingEmployee { EmployeeId = e.Id, PublishingId = publishing.Id }).ToList();
+            publishingEntity.PublishingEmployees = publishing.Employees
+                .Select(e => new PublishingEmployee { Employeee = e.Id, PublishingId = publishing.Id }).ToList();
             unitOfWork.Publishings.Create(publishingEntity);
             unitOfWork.Save();
         }
@@ -50,8 +50,8 @@ namespace CloudPublishing.Business.Services
         public void UpdatePublishing(PublishingDTO publishing)
         {
             Publishing publishingEntity = mapper.Map<Publishing>(publishing);
-            publishingEntity.PublishingEmployees = publishing.Editors.Union(publishing.Journalists)
-                .Select(e => new PublishingEmployee { EmployeeId = e.Id, PublishingId = publishing.Id }).ToList();
+            publishingEntity.PublishingEmployees = publishing.Employees
+                .Select(e => new PublishingEmployee { Employeee = e.Id, PublishingId = publishing.Id }).ToList();
             unitOfWork.Publishings.Update(publishingEntity);
             unitOfWork.Save();
         }
@@ -89,13 +89,13 @@ namespace CloudPublishing.Business.Services
         public IEnumerable<EmployeeDTO> GetEditorsNotInPublishing(int publishingId)
         {
             var publishing = unitOfWork.Publishings.Get(publishingId);
-            return employeeService.GetEmployeeList("E", publishing.PublishingEmployees.Select(p => p.EmployeeId), true);
+            return employeeService.GetEmployeeList("E", publishing.PublishingEmployees.Select(p => p.Employeee), true);
         }
 
         public IEnumerable<EmployeeDTO> GetJournalistsNotInPublishing(int publishingId)
         {
             var publishing = unitOfWork.Publishings.Get(publishingId);
-           return  employeeService.GetEmployeeList("E", publishing.PublishingEmployees.Select(p => p.EmployeeId), true);
+           return  employeeService.GetEmployeeList("E", publishing.PublishingEmployees.Select(p => p.Employeee), true);
         }
     }
 }

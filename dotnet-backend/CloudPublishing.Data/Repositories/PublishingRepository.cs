@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using System.Diagnostics;
 
 namespace CloudPublishing.Data.Repositories
 {
@@ -28,6 +29,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Publishing> GetAll()
         {
+            context.Database.Log = (s) => Debug.WriteLine(s);
             return context.Publishings.AsNoTracking()
                 .Include(p => p.Topics).AsNoTracking()
                 .Include(p => p.PublishingEmployees).AsNoTracking()
@@ -36,6 +38,7 @@ namespace CloudPublishing.Data.Repositories
 
         public void Create(Publishing publishing)
         {
+            context.Database.Log = (s) => Debug.WriteLine(s);
             var topicIds = publishing.Topics.Select(t => t.Id);
             publishing.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();
 
