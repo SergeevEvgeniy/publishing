@@ -9,6 +9,7 @@ namespace CloudPublishing.Controllers
     /// <summary>
     ///     Контроллер, реализующий функционал аутентификации
     /// </summary>
+    [HandleError]
     public class AccountController : Controller
     {
         private readonly IEmployeeService service;

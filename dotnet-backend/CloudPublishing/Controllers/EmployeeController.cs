@@ -14,7 +14,7 @@ namespace CloudPublishing.Controllers
     /// <summary>
     ///     Контроллер для работы с сотрудниками издательства
     /// </summary>
-    [HandleError(ExceptionType = typeof(EntityNotFoundException))]
+    [HandleError]
     public class EmployeeController : Controller
     {
         private readonly IMapper mapper;
@@ -55,7 +55,7 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            var list = service.GetEmployeeList();
+            var list = service.GetEmployees();
 
             return View(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeViewModel>>(list));
         }

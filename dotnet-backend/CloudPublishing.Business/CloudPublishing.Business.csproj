@@ -75,7 +75,9 @@
     <Compile Include="DTO\MailingSubscriberDTO.cs" />
     <Compile Include="DTO\PublishingDTO.cs" />
     <Compile Include="DTO\ReviewDTO.cs" />
+    <Compile Include="DTO\SexDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />
+    <Compile Include="DTO\TypeDTO.cs" />
     <Compile Include="Enums\EmployeeType.cs" />
     <Compile Include="Enums\Sex.cs" />
     <Compile Include="Infrastructure\ChiefEditorRoleChangeException.cs" />
