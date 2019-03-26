@@ -33,9 +33,9 @@ namespace CloudPublishing.Business.Services
             var publishing = unitOfWork.Publishings.Get(id);
             var publishingDTO = mapper.Map<PublishingDTO>(publishing);
             publishingDTO.Editors = employeeService
-                .GetEmployeeList("E", publishing.PublishingEmployees.Select(p => p.EmployeeId));
+                .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type.Id == "E");
             publishingDTO.Journalists = employeeService
-                .GetEmployeeList("J", publishing.PublishingEmployees.Select(p => p.EmployeeId));
+                 .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type.Id == "J");
             return publishingDTO;
         }
 
@@ -73,12 +73,12 @@ namespace CloudPublishing.Business.Services
 
         public IEnumerable<EmployeeDTO> GetJournalistList()
         {
-            return employeeService.GetEmployeeList("J");
+            return employeeService.GetEmployees("J");
         }
 
         public IEnumerable<EmployeeDTO> GetEditorList()
         {
-            return employeeService.GetEmployeeList("E");
+            return employeeService.GetEmployees("E");
         }
 
         public IEnumerable<TopicDTO> GetTopicsNotInPublishing(int publishingId)
@@ -92,14 +92,14 @@ namespace CloudPublishing.Business.Services
         public IEnumerable<EmployeeDTO> GetEditorsNotInPublishing(int publishingId)
         {
             var publishingEmployeesIds = unitOfWork.Publishings.Get(publishingId).PublishingEmployees.Select(e => e.EmployeeId);
-            var editors = employeeService.GetEmployeeList("E");
+            var editors = employeeService.GetEmployees("E");
             return editors.Where(e => !publishingEmployeesIds.Contains(e.Id));
         }
 
         public IEnumerable<EmployeeDTO> GetJournalistsNotInPublishing(int publishingId)
         {
             var publishingEmployeesIds = unitOfWork.Publishings.Get(publishingId).PublishingEmployees.Select(e => e.EmployeeId);
-            var journalists = employeeService.GetEmployeeList("J");
+            var journalists = employeeService.GetEmployees("J");
             return journalists.Where(e => !publishingEmployeesIds.Contains(e.Id));
         }
     }
