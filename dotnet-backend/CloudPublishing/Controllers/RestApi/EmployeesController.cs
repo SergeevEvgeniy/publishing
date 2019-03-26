@@ -29,8 +29,7 @@ namespace CloudPublishing.Controllers.RestApi
         {
             var result = service.GetEmployees();
 
-            return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result),
-                new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+            return Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result));
         }
 
         [HttpGet]
@@ -44,18 +43,16 @@ namespace CloudPublishing.Controllers.RestApi
 
             var result = service.GetEmployeeById(id.Value);
 
-            return Json(mapper.Map<EmployeeDTO, EmployeeData>(result),
-                new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+            return Ok(mapper.Map<EmployeeDTO, EmployeeData>(result));
         }
 
         [HttpPost]
         //[Route("employees")]
         public IHttpActionResult GetEmployeeData(EmployeeFilter filter)
         {
-            return Json(
+            return Ok(
                 mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(
-                    service.GetEmployeesFromList(filter.IdList, filter.LastName, filter.Type)),
-                new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+                    service.GetEmployeesFromList(filter.IdList, filter.LastName, filter.Type)));
         }
     }
 }
