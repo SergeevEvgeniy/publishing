@@ -27,7 +27,7 @@ namespace CloudPublishing.Controllers.RestApi
         //[Route("employees")]
         public IHttpActionResult GetEmployeeData()
         {
-            var result = service.GetEmployeeList();
+            var result = service.GetEmployees();
 
             return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result),
                 new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
@@ -52,13 +52,10 @@ namespace CloudPublishing.Controllers.RestApi
         //[Route("employees")]
         public IHttpActionResult GetEmployeeData(EmployeeFilter filter)
         {
-            if (!string.IsNullOrEmpty(filter.Type))
-            {
-                return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(service.GetEmployeeList(filter.Type, filter.IdList, filter.LastName)),
-                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
-            }
-            return Json(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(service.GetEmployeeList(filter.IdList, filter.LastName)),
-                new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            return Json(
+                mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(
+                    service.GetEmployeesFromList(filter.IdList, filter.LastName, filter.Type)),
+                new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
         }
     }
 }

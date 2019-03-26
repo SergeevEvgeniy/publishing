@@ -57,47 +57,49 @@ namespace CloudPublishing.Business.Services
         }
 
         /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEmployeeList()
+        public IEnumerable<EmployeeDTO> GetEmployees()
         {
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unit.Employees.GetAll()
-                .Select(MapEmployeeTypeAndSex));
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(unit.Employees.GetAll());
         }
 
         /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEmployeeList(IEnumerable<int> idList, string lastName,
-            bool outsideList = false)
-        {
-            var list = unit.Employees.Find(x => outsideList ? !idList.Contains(x.Id) : idList.Contains(x.Id));
-
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list.Select(MapEmployeeTypeAndSex));
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEmployeeList(string type)
+        public IEnumerable<EmployeeDTO> GetEmployees(string type)
         {
             var list = unit.Employees.Find(x => x.Type == type);
 
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list.Select(MapEmployeeTypeAndSex));
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
         }
 
         /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEmployeeList(string type, IEnumerable<int> idList, bool outsideList = false)
+        public IEnumerable<EmployeeDTO> GetEmployeesFromList(IEnumerable<int> idList)
         {
-            var list = unit.Employees.Find(x =>
-                x.Type == type && (outsideList ? !idList.Contains(x.Id) : idList.Contains(x.Id)));
+            if (idList == null)
+            {
+                return new List<EmployeeDTO>();
+            }
 
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list.Select(MapEmployeeTypeAndSex));
+            var list = unit.Employees.Find(x => idList.Contains(x.Id));
+
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
         }
 
         /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEmployeeList(string type, IEnumerable<int> idList,
-            string lastName, bool outsideList = false)
+        public IEnumerable<EmployeeDTO> GetEmployeesFromList(IEnumerable<int> idList, string lastName, string type)
         {
-            var list = unit.Employees.Find(x =>
-                x.LastName.StartsWith(lastName ?? string.Empty) && x.Type == type &&
-                (outsideList ? !idList.Contains(x.Id) : idList.Contains(x.Id)));
+            if (idList == null)
+            {
+                return new List<EmployeeDTO>();
+            }
 
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list.Select(MapEmployeeTypeAndSex));
+            var list = unit.Employees.Find(x =>
+                idList.Contains(x.Id) && x.LastName.StartsWith(lastName ?? string.Empty));
+
+            if (!string.IsNullOrEmpty(type))
+            {
+                list = list.Where(x => x.Type == type);
+            }
+
+            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
         }
 
         /// <inheritdoc />
@@ -196,13 +198,6 @@ namespace CloudPublishing.Business.Services
 
             var employee = unit.Employees.Find(x => x.Password == hashedPassword && x.Email == email).FirstOrDefault();
             return mapper.Map<Employee, EmployeeDTO>(employee);
-        }
-
-        private static Employee MapEmployeeTypeAndSex(Employee target)
-        {
-            target.Type = Types[(EmployeeType) Enum.Parse(typeof(EmployeeType), target.Type)];
-            target.Sex = Sexes[(Sex) Enum.Parse(typeof(Sex), target.Sex)];
-            return target;
         }
     }
 }

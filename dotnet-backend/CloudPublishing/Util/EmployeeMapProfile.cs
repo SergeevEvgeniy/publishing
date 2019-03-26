@@ -18,13 +18,25 @@ namespace CloudPublishing.Util
         /// </summary>
         public EmployeeMapProfile()
         {
-            CreateMap<EmployeeDTO, EmployeeEditModel>();
-            CreateMap<EmployeeEditModel, EmployeeDTO>();
+            CreateMap<EmployeeDTO, EmployeeViewModel>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.Title))
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex.Title));
 
-            CreateMap<EmployeeCreateModel, EmployeeDTO>();
+            CreateMap<EmployeeDTO, EmployeeEditModel>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.Title))
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex.Title));
+            CreateMap<EmployeeEditModel, EmployeeDTO>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new TypeDTO{Id = src.Type}))
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => new SexDTO{Id = src.Sex}));
+
+            CreateMap<EmployeeCreateModel, EmployeeDTO>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new TypeDTO { Id = src.Type }))
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => new SexDTO { Id = src.Sex }));
 
             CreateMap<EmployeeDTO, EmployeeData>()
-                .ForMember(dest => dest.Education, opt => opt.MapFrom(src => src.Education.Title));
+                .ForMember(dest => dest.Education, opt => opt.MapFrom(src => src.Education.Title))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.Title))
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex.Title));
         }
     }
 }

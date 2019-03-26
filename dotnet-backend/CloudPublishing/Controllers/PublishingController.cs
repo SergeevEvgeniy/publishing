@@ -33,7 +33,7 @@ namespace CloudPublishing.Controllers
         public ActionResult Create()
         {
             IEnumerable<PublishingEmployeeViewModel> availableEmployees = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployeeList());
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployees());
 
             PublishingCreateViewModel publishingViewModel = new PublishingCreateViewModel
             {
@@ -43,10 +43,10 @@ namespace CloudPublishing.Controllers
                     .Map<IEnumerable<TopicViewModel>>(publishingService.GetAllTopics()),
 
                 AvailableJournalists = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployeeList(EmployeeType.J.ToString())),
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployees(EmployeeType.J.ToString())),
 
                 AvailableEditors = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployeeList(EmployeeType.E.ToString()))
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployees(EmployeeType.E.ToString()))
             };
             return View(publishingViewModel);
         }
