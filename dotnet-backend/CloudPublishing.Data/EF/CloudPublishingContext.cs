@@ -44,6 +44,8 @@ namespace CloudPublishing.Data.EF
         /// </summary>
         public DbSet<Topic> Topics { get; set; }
 
+        public DbSet<PublishingEmployee> PublishingEmployees { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -52,6 +54,7 @@ namespace CloudPublishing.Data.EF
             modelBuilder.Configurations.Add(new ReviewEntityConfiguration());
             modelBuilder.Configurations.Add(new PublishingEntityConfiguration());
             modelBuilder.Configurations.Add(new TopicEntityConfiguration());
+            modelBuilder.Configurations.Add(new PublishingEmployeeEntityConfiguration());
         }
     }
 }

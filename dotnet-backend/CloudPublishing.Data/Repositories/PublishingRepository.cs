@@ -3,8 +3,8 @@ using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
 
 namespace CloudPublishing.Data.Repositories
 {
@@ -19,26 +19,24 @@ namespace CloudPublishing.Data.Repositories
 
         public Publishing Get(int id)
         {
-            
-            return context.Publishings.AsNoTracking()
-                .Include(p => p.Topics).AsNoTracking()
-                .Include(p => p.Employees).AsNoTracking()
+            return context.Publishings
+                .AsNoTracking()
+                .Include(p => p.Topics)
+                .Include(p => p.PublishingEmployees)
                 .FirstOrDefault(p => p.Id == id);
         }
 
         public IEnumerable<Publishing> GetAll()
         {
-            return context.Publishings.AsNoTracking()
-                .Include(p => p.Topics).AsNoTracking()
-                .Include(p => p.Employees).AsNoTracking()
+            return context.Publishings
+                .AsNoTracking()
+                .Include(p => p.Topics)
+                .Include(p => p.PublishingEmployees)
                 .ToList();
         }
 
         public void Create(Publishing publishing)
         {
-            var employeeIds = publishing.Employees.Select(e => e.Id);
-            publishing.Employees = context.Employees.Where(e => employeeIds.Contains(e.Id)).ToList();
-
             var topicIds = publishing.Topics.Select(t => t.Id);
             publishing.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();
 
@@ -48,7 +46,7 @@ namespace CloudPublishing.Data.Repositories
         public void Update(Publishing modifyPublishing)
         {
             Publishing publishingToUpdate = context.Publishings
-                .Include(p => p.Employees)
+                .Include(p => p.PublishingEmployees)
                 .Include(p => p.Topics)
                 .FirstOrDefault(x => x.Id == modifyPublishing.Id);
 
@@ -60,9 +58,7 @@ namespace CloudPublishing.Data.Repositories
             publishingToUpdate.Title = modifyPublishing.Title;
             publishingToUpdate.Type = modifyPublishing.Type;
             publishingToUpdate.Subjects = modifyPublishing.Subjects;
-
-            var employeeIds = modifyPublishing.Employees.Select(e => e.Id);
-            publishingToUpdate.Employees = context.Employees.Where(e => employeeIds.Contains(e.Id)).ToList();
+            publishingToUpdate.PublishingEmployees = modifyPublishing.PublishingEmployees;
 
             var topicIds = modifyPublishing.Topics.Select(t => t.Id);
             publishingToUpdate.Topics = context.Topics.Where(t => topicIds.Contains(t.Id)).ToList();

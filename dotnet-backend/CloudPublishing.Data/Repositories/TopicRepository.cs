@@ -17,7 +17,7 @@ namespace CloudPublishing.Data.Repositories
 
         public IEnumerable<Topic> GetAll()
         {
-            return context.Topics.AsNoTracking().Include("Publishings").ToList();
+            return context.Topics.ToList();
         }
     }
 }
