@@ -21,7 +21,7 @@ namespace CloudPublishing.Business.Services
             this.employeeService = employeeService;
         }
 
-        public IEnumerable<PublishingDTO> GetAllPublishings()
+        public IEnumerable<PublishingDTO> GetPublishings()
         {
             var publishings = unitOfWork.Publishings.GetAll();
             var publishingsDTO = mapper.Map<IEnumerable<PublishingDTO>>(publishings);
@@ -65,18 +65,18 @@ namespace CloudPublishing.Business.Services
             unitOfWork.Save();
         }
 
-        public IEnumerable<TopicDTO> GetAllTopics()
+        public IEnumerable<TopicDTO> GetTopics()
         {
             var topics = unitOfWork.Topics.GetAll();
             return mapper.Map<IEnumerable<TopicDTO>>(topics);
         }
 
-        public IEnumerable<EmployeeDTO> GetJournalistList()
+        public IEnumerable<EmployeeDTO> GetJournalists()
         {
             return employeeService.GetEmployees("J");
         }
 
-        public IEnumerable<EmployeeDTO> GetEditorList()
+        public IEnumerable<EmployeeDTO> GetEditors()
         {
             return employeeService.GetEmployees("E");
         }
@@ -101,6 +101,12 @@ namespace CloudPublishing.Business.Services
             var publishingEmployeesIds = unitOfWork.Publishings.Get(publishingId).PublishingEmployees.Select(e => e.EmployeeId);
             var journalists = employeeService.GetEmployees("J");
             return journalists.Where(e => !publishingEmployeesIds.Contains(e.Id));
+        }
+
+        public IEnumerable<PublishingDTO> GetPublishingsByType(string type)
+        {
+            var publishingsByType = unitOfWork.Publishings.GetAll().Where(p => p.Type == type);
+            return mapper.Map<IEnumerable<PublishingDTO>>(publishingsByType);
         }
     }
 }

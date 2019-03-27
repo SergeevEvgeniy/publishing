@@ -21,7 +21,7 @@ namespace CloudPublishing.Controllers
         public ActionResult List()
         {
             IEnumerable<PublishingTableViewModel> publishings = mapper
-                .Map<IEnumerable<PublishingTableViewModel>>(publishingService.GetAllPublishings());
+                .Map<IEnumerable<PublishingTableViewModel>>(publishingService.GetPublishings());
             return View(publishings);
         }
 
@@ -33,13 +33,13 @@ namespace CloudPublishing.Controllers
                 Publishing = new PublishingViewModel(),
 
                 AvailableTopics = mapper
-                    .Map<IEnumerable<TopicViewModel>>(publishingService.GetAllTopics()),
+                    .Map<IEnumerable<TopicViewModel>>(publishingService.GetTopics()),
 
                 AvailableJournalists = mapper
-                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetJournalistList()),
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetJournalists()),
 
                 AvailableEditors = mapper
-                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditorList())
+                    .Map<IEnumerable<PublishingEmployeeViewModel>>(publishingService.GetEditors())
             };
             return View(publishingViewModel);
         }
