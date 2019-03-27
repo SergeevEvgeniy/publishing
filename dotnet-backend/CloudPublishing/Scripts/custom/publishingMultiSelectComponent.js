@@ -1,6 +1,6 @@
-﻿configureMultiSelectComponent('topics', 'Publishing.TopicsId');
-configureMultiSelectComponent('journalists', 'Publishing.EmployeesId');
-configureMultiSelectComponent('editors', 'Publishing.EmployeesId');
+﻿configureMultiSelectComponent('topics', 'Publishing.TopicsIds');
+configureMultiSelectComponent('journalists', 'Publishing.JournalistsIds');
+configureMultiSelectComponent('editors', 'Publishing.EditorsIds');
 
 function configureMultiSelectComponent(componentId, propertyName) {
     var component = document.getElementById(componentId);

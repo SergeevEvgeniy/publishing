@@ -12,33 +12,39 @@ namespace CloudPublishing.Business.Services
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        public PublishingService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IEmployeeService employeeService;
+
+        public PublishingService(IUnitOfWork unitOfWork, IMapper mapper, IEmployeeService employeeService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.employeeService = employeeService;
         }
 
         public IEnumerable<PublishingDTO> GetAllPublishings()
         {
-            IEnumerable<Publishing> publishings = unitOfWork.Publishings.GetAll();
+            var publishings = unitOfWork.Publishings.GetAll();
+            var publishingsDTO = mapper.Map<IEnumerable<PublishingDTO>>(publishings);
             return mapper.Map<IEnumerable<PublishingDTO>>(publishings);
-        }
-
-        public IEnumerable<EmployeeDTO> GetPublishingEmployees(int publishingId)
-        {
-            IEnumerable<Employee> employees = unitOfWork.Publishings.Get(publishingId).Employees;
-            return mapper.Map<IEnumerable<EmployeeDTO>>(employees);
         }
 
         public PublishingDTO GetPublishing(int id)
         {
-            Publishing publishing = unitOfWork.Publishings.Get(id);
-            return mapper.Map<PublishingDTO>(publishing);
+            var publishing = unitOfWork.Publishings.Get(id);
+            var publishingDTO = mapper.Map<PublishingDTO>(publishing);
+            publishingDTO.Editors = employeeService
+                .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type.Id == "E");
+            publishingDTO.Journalists = employeeService
+                 .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type.Id == "J");
+            return publishingDTO;
         }
 
         public void CreatePublishing(PublishingDTO publishing)
         {
-            Publishing publishingEntity = mapper.Map<Publishing>(publishing);
+            var publishingEntity = mapper.Map<Publishing>(publishing);
+            var employees = publishing.Journalists.Concat(publishing.Editors);
+            publishingEntity.PublishingEmployees = employees
+                .Select(e => new PublishingEmployee { EmployeeId = e.Id, PublishingId = publishing.Id }).ToList();
             unitOfWork.Publishings.Create(publishingEntity);
             unitOfWork.Save();
         }
@@ -46,6 +52,9 @@ namespace CloudPublishing.Business.Services
         public void UpdatePublishing(PublishingDTO publishing)
         {
             Publishing publishingEntity = mapper.Map<Publishing>(publishing);
+            var employees = publishing.Journalists.Concat(publishing.Editors);
+            publishingEntity.PublishingEmployees = employees
+                .Select(e => new PublishingEmployee { EmployeeId = e.Id, PublishingId = publishing.Id }).ToList();
             unitOfWork.Publishings.Update(publishingEntity);
             unitOfWork.Save();
         }
@@ -58,30 +67,40 @@ namespace CloudPublishing.Business.Services
 
         public IEnumerable<TopicDTO> GetAllTopics()
         {
-            IEnumerable<Topic> topics = unitOfWork.Topics.GetAll();
+            var topics = unitOfWork.Topics.GetAll();
             return mapper.Map<IEnumerable<TopicDTO>>(topics);
         }
 
-        public IEnumerable<EmployeeDTO> GetAllEmployees()
+        public IEnumerable<EmployeeDTO> GetJournalistList()
         {
-            IEnumerable<Employee> employees = unitOfWork.Employees.GetAll();
-            return mapper.Map<IEnumerable<EmployeeDTO>>(employees);
+            return employeeService.GetEmployees("J");
+        }
+
+        public IEnumerable<EmployeeDTO> GetEditorList()
+        {
+            return employeeService.GetEmployees("E");
         }
 
         public IEnumerable<TopicDTO> GetTopicsNotInPublishing(int publishingId)
         {
-            IEnumerable<Topic> topics = unitOfWork.Topics.GetAll()
+            var topics = unitOfWork.Topics.GetAll()
                 .Where(t => !t.Publishings.Select(p => p.Id).Contains(publishingId));
 
             return mapper.Map<IEnumerable<TopicDTO>>(topics);
         }
 
-        public IEnumerable<EmployeeDTO> GetEmployeesNotInPublishing(int publishingId)
+        public IEnumerable<EmployeeDTO> GetEditorsNotInPublishing(int publishingId)
         {
-            IEnumerable<Employee> employees = unitOfWork.Employees.GetAll()
-                   .Where(e => !e.Publishings.Select(p => p.Id).Contains(publishingId));
+            var publishingEmployeesIds = unitOfWork.Publishings.Get(publishingId).PublishingEmployees.Select(e => e.EmployeeId);
+            var editors = employeeService.GetEmployees("E");
+            return editors.Where(e => !publishingEmployeesIds.Contains(e.Id));
+        }
 
-            return mapper.Map<IEnumerable<EmployeeDTO>>(employees);
+        public IEnumerable<EmployeeDTO> GetJournalistsNotInPublishing(int publishingId)
+        {
+            var publishingEmployeesIds = unitOfWork.Publishings.Get(publishingId).PublishingEmployees.Select(e => e.EmployeeId);
+            var journalists = employeeService.GetEmployees("J");
+            return journalists.Where(e => !publishingEmployeesIds.Contains(e.Id));
         }
     }
 }

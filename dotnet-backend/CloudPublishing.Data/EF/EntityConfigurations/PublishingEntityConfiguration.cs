@@ -16,23 +16,17 @@ namespace CloudPublishing.Data.EF.EntityConfigurations
 
             HasMany<Topic>(x => x.Topics)
                 .WithMany(x => x.Publishings)
-                .Map( x =>
-                    {
-                        x.MapLeftKey("publishing_id");
-                        x.MapRightKey("topic_id");
-                        x.ToTable("publishing_topic");
-                    }
+                .Map(x =>
+                   {
+                       x.MapLeftKey("publishing_id");
+                       x.MapRightKey("topic_id");
+                       x.ToTable("publishing_topic");
+                   }
                 );
 
-            HasMany<Employee>(x => x.Employees)
-                .WithMany(x => x.Publishings)
-                .Map( x =>
-                    {
-                        x.MapLeftKey("publishing_id");
-                        x.MapRightKey("employee_id");
-                        x.ToTable("publishing_employee");
-                    }
-                );
+            HasMany<PublishingEmployee>(e => e.PublishingEmployees)
+                .WithRequired()
+                .HasForeignKey(e => e.PublishingId);
         }
     }
 }
