@@ -1,4 +1,3 @@
-/* eslint-disable no-invalid-this */
 var paginationTemplate = require('./pagination.hbs');
 var $ = require('jquery');
 
@@ -35,7 +34,7 @@ function Pagination($parentElement) {
 
     /**
      * Обработчик события нажатия на страницу
-     * @param {Object} event объект описывающий произошедшее событие клика по старнице
+     * @param {object} event объект описывающий произошедшее событие клика по старнице
      */
     function onPageChangeEvent(event) {
         var target = event.target;
@@ -80,7 +79,7 @@ function Pagination($parentElement) {
 
     /**
      * Установка количества элементов на странице
-     * @param {Number} newPerPage - количество элементов на странице
+     * @param {number} newPerPage - количество элементов на странице
      */
     this.setPerPage = function setPerPage(newPerPage) {
         perPage = newPerPage;
@@ -91,7 +90,7 @@ function Pagination($parentElement) {
 
     /**
      * Установка текущей страницы
-     * @param {Number} newCurrentPage - текущая страница
+     * @param {number} newCurrentPage - текущая страница
      */
     this.setCurrentPage = function setCurrentPage(newCurrentPage) {
         currentPage = Math.min(amountPages, newCurrentPage);
@@ -107,7 +106,7 @@ function Pagination($parentElement) {
 
     /**
      * Установка количества записей
-     * @param {Number} newAmountRecord - количество элементов
+     * @param {number} newAmountRecord - количество элементов
      */
     this.setAmountRecord = function setAmountRecord(newAmountRecord) {
         if (newAmountRecord === 0) {

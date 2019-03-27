@@ -5,7 +5,7 @@ var PublicationService = require('../services/publication-service');
  * Создаёт компонент отображающий номер публикации
  * @constructor
  * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
- * @param {Function} template - шаблон handlebars
+ * @param {function} template - шаблон handlebars
  */
 function PublicationView($parentElement, template) {
     var publicationIssue = {};
@@ -40,7 +40,7 @@ function PublicationView($parentElement, template) {
 
     /**
      * Обработчик события на нажатие по теме статей
-     * @param {Object} event содержит свойства произошедшего события
+     * @param {object} event содержит свойства произошедшего события
      */
     function onTopicClickEvent(event) {
         var $li = $(event.target.closest('li'));
@@ -81,7 +81,7 @@ function PublicationView($parentElement, template) {
 
     /**
      * Установка номера публикации
-     * @param {Object} newPublicationIssue описывает номер публикации, которую нужно показать
+     * @param {object} newPublicationIssue описывает номер публикации, которую нужно показать
      */
     this.setPublicationIssue = function setPublicationIssue(newPublicationIssue) {
         publicationIssue = newPublicationIssue;
@@ -123,11 +123,7 @@ function PublicationView($parentElement, template) {
             .catch(function handleError(error) {
                 loading.stage = error;
                 render();
-                alert.alert({
-                    variant: 'danger',
-                    message: error,
-                    duration: 5000,
-                });
+                alert.error(error);
             });
     };
 

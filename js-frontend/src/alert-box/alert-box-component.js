@@ -2,19 +2,13 @@ var alertBoxTemplate = require('./alert-box.hbs');
 var $ = require('jquery');
 
 /**
- * Создаёт компонент показывать уведомления
+ * Создаёт компонент для отображения уведомлений
  * @constructor
- * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
- * По умолчанию:
- * variant = 'success',
- * duration = 5 сек,
- * message = ''
  */
-function AlertBox($parentElement) {
-    var variant = 'success';
-    var message = '';
+function AlertBox() {
     var duration = 5000;
     var interval;
+    var $body = $(document.body);
 
     /**
      * Обработчик закрытия оповещения
@@ -26,9 +20,11 @@ function AlertBox($parentElement) {
 
     /**
      * Отрисовка компонета
+     * @param {string} message сообщение для оповещения
+     * @param {string} variant вариант отображения
      */
-    function render() {
-        $parentElement
+    function render(message, variant) {
+        $body
             .append(alertBoxTemplate({
                 variant: variant,
                 message: message,
@@ -37,17 +33,14 @@ function AlertBox($parentElement) {
     }
 
     /**
-     * Отображение оповещения
-     * @param {{variant: String, message: String, duration: Number}} options параметры оповещения
+     * Отображение оповещения об ошибке
+     * @param {string} message сообщение для отображения
      */
-    this.alert = function alert(options) {
-        variant = options.variant || 'success';
-        message = options.message || '';
-        duration = options.duration || 5000;
-        render();
+    this.error = function error(message) {
+        render(message, 'danger');
     };
 
-    $parentElement.on('click', '.close', removeAlert);
+    $body.on('click', '.close', removeAlert);
 }
 
 module.exports = AlertBox;

@@ -27,12 +27,12 @@ function NewspaperComponent($parentElement) {
         stage: 'Загрузка наименований газет',
     };
     var newspaperTitle;
-    var alert;
+    var alert = new AlertBoxComponent();
 
     /**
      * Функция обратного вызова выполняющая запрос по данным формы фильтрации
-     * @param {Array.<{name: String, value: String}>} formData данные формы
-     * @param {Function} next функция обратного вызова
+     * @param {Array.<{name: string, value: string}>} formData данные формы
+     * @param {function} next функция обратного вызова
      */
     function onFilterSubmitListener(formData, next) {
         PublicationService
@@ -45,17 +45,13 @@ function NewspaperComponent($parentElement) {
                 next();
             })
             .catch(function handleError(error) {
-                alert.alert({
-                    variant: 'danger',
-                    message: error,
-                    duration: 5000,
-                });
+                alert.error(error);
             });
     }
 
     /**
      * Функция обратного вызова устанавливающая выбранный номер в компонент отображения номера
-     * @param {Array.<Object>} issue выбранный номер
+     * @param {Array.<object>} issue выбранный номер
      */
     function onSelectNewspaperIssueListener(issue) {
         publicationViewComponent.setPublicationIssue({
@@ -69,7 +65,7 @@ function NewspaperComponent($parentElement) {
 
     /**
      * Функция обратного вызова устанавливающая выбранную страницу
-     * @param {Number} currentPage текущая страница
+     * @param {number} currentPage текущая страница
      */
     function onPageChangeListener(currentPage) {
         filterResultComponent.setCurrentPage(currentPage);
@@ -77,7 +73,7 @@ function NewspaperComponent($parentElement) {
 
     /**
      * Функция обратного вызова устанавливающая количество отображаемых элементов
-     * @param {Number} perPage количество отображаемых элементов
+     * @param {number} perPage количество отображаемых элементов
      */
     function onSelectPerPageChangeListener(perPage) {
         paginationComponent.setPerPage(perPage);
@@ -117,15 +113,10 @@ function NewspaperComponent($parentElement) {
             selectPerPageComponent.onSelectPerPageChange(onSelectPerPageChangeListener);
 
             publicationViewComponent = new PublicationViewComponent($('.view-container'), newspaperViewTemplate);
-            alert = new AlertBoxComponent($parentElement);
         })
         .catch(function handleError(error) {
             loading.stage = error;
-            alert.alert({
-                variant: 'danger',
-                message: error,
-                duration: 5000,
-            });
+            alert.error(error);
             render();
         });
 }

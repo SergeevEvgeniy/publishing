@@ -45,7 +45,7 @@ function SelectPerPage($parentElement) {
 
     /**
      * Обработчик события на изменения количества записей на странице
-     * @param {Object} event содержит свойства произошедшего события
+     * @param {object} event содержит свойства произошедшего события
      */
     function onSelectPerPageChangeEvent(event) {
         if (!selectPerPageChangeListener) {
@@ -64,7 +64,7 @@ function SelectPerPage($parentElement) {
 
     /**
      * Установка метода обратного вызова на изменение количества записей на странице
-     * @param {Function} listener - вызывается, когда было изменено количество элементов на странице
+     * @param {function} listener - вызывается, когда было изменено количество элементов на странице
      * Отправляет аргумент - количество элементов на странице
      */
     this.onSelectPerPageChange = function onSelectPerPageChange(listener) {
@@ -73,7 +73,7 @@ function SelectPerPage($parentElement) {
 
     /**
      * Установка видимости компонента
-     * @param {Boolean} status видимость компонента
+     * @param {boolean} status видимость компонента
      */
     this.setVisible = function setVisible(status) {
         isShown = status;
