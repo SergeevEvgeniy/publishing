@@ -15,15 +15,18 @@ namespace CloudPublishing.Controllers
     public class ReviewController : Controller
     {
         private IReviewService reviewService;
+        private IPublishingService publishingService;
         private IMapper mapper;
 
         /// <summary>
         /// Конструктор контроллера
         /// </summary>
-        /// <param name="service">Сервис работы с рецензиями</param>
-        public ReviewController(IReviewService service)
+        /// <param name="reviewService">Сервис работы с рецензиями</param>
+        /// <param name="publishingService">Сервис работы с публикациями</param>
+        public ReviewController(IReviewService reviewService, IPublishingService publishingService)
         {
-            reviewService = service;
+            this.reviewService = reviewService;
+            this.publishingService = publishingService;
 
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ReviewMapProfile())).CreateMapper();
         }
@@ -51,7 +54,7 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var pl = reviewService.GetPublishingList();
+            var pl = publishingService.GetPublishings();
             var model = new CreateReviewModel()
             {
                 PublishingList = mapper.Map<IEnumerable<PublishingDTO>, List<PublishingModel>>(pl)
@@ -86,8 +89,7 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult GetTopicList(int? publishingId)
         {
-            List<TopicModel> topicList = mapper.Map<IEnumerable<TopicDTO>, List<TopicModel>>
-                (reviewService.GetTopicList(publishingId));
+            var topicList = mapper.Map<IEnumerable<TopicModel>>(reviewService.GetTopicList(publishingId));
             return PartialView(topicList);
         }
 
@@ -100,8 +102,7 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult GetAuthorList(int? publishingId, int? topicId)
         {
-            List<AuthorModel> authorList = mapper.Map<IEnumerable<EmployeeDTO>, List<AuthorModel>>
-                (reviewService.GetAuthorList(publishingId, topicId));
+            var authorList = mapper.Map<IEnumerable<AuthorModel>>(reviewService.GetAuthorList(publishingId, topicId));
             return PartialView(authorList);
         }
 
@@ -115,7 +116,7 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult GetArticleList(int? publishingId, int? topicId, int? authorId)
         {
-            List<ArticleModel> articleList = mapper.Map<IEnumerable<ArticleDTO>, List<ArticleModel>>
+             var articleList = mapper.Map<IEnumerable<ArticleModel>>
                 (reviewService.GetArticleList(publishingId, topicId, authorId));
             return PartialView(articleList);
         }
