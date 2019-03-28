@@ -50,7 +50,7 @@ function ArticlesComponent($parentElement) {
         JournalistService
             .getIssueList()
             .then(function handleResponse(response) {
-                $(releaseBodySelector).append(releaseTemplate({
+                $(releaseBodySelector).empty().append(releaseTemplate({
                     data: response
                 }));
             })
@@ -59,7 +59,9 @@ function ArticlesComponent($parentElement) {
             });
     }
 
-    ($parentElement).off().on('click', '#findArticle', findArticles)
+    ($parentElement)
+        .off()
+        .on('click', '#findArticle', findArticles)
         .on('click', '#clearFields', clearForm)
         .on('change', editionSelector, getIssue);
 
@@ -85,7 +87,8 @@ function ArticlesComponent($parentElement) {
     }
 
     /**
-     * @param {Object} data - входные данные, которые будут записаны в componentData
+     * Получение данных и рендеринг шаблона.
+     * @param {Object} data - входные данные, которые будут записаны в componentData.
      */
     this.setData = function setData(data) {
         componentData = data;
