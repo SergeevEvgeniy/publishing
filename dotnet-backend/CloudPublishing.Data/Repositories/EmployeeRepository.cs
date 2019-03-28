@@ -25,7 +25,7 @@ namespace CloudPublishing.Data.Repositories
         /// <inheritdoc />
         public IEnumerable<Employee> GetAll()
         {
-            return context.Employees.Include(x => x.Education).AsNoTracking().AsEnumerable();
+            return context.Employees.Include(x => x.Education).OrderBy(x => x.Id).AsNoTracking().ToList();
         }
 
         /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace CloudPublishing.Data.Repositories
         /// <inheritdoc />
         public IEnumerable<Employee> Find(Func<Employee, bool> predicate)
         {
-            return context.Employees.Include(x => x.Education).AsEnumerable().Where(predicate);
+            return context.Employees.Include(x => x.Education).AsEnumerable().Where(predicate).ToList();
         }
 
         /// <inheritdoc />

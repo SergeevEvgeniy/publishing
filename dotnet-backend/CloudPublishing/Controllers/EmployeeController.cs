@@ -4,9 +4,10 @@ using System.Web.Mvc;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Infrastructure;
+using CloudPublishing.Business.Resources.Messages;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.ViewModels;
-using CloudPublishing.Util;
+using CloudPublishing.Util.Attributes;
 
 namespace CloudPublishing.Controllers
 {
@@ -22,8 +23,10 @@ namespace CloudPublishing.Controllers
 
         /// <inheritdoc />
         /// <summary>
-        ///     Создает экземпляр класса, используя реализации сервиса пользователей <see cref="T:CloudPublishing.Business.Services.Interfaces.IEmployeeService" />, сервиса
-        ///     аккаунтов <see cref="T:CloudPublishing.Business.Services.Interfaces.IAccountService" /> и маппера <see cref="T:AutoMapper.IMapper" /> для отображения сущностей
+        ///     Создает экземпляр класса, используя реализации сервиса пользователей
+        ///     <see cref="T:CloudPublishing.Business.Services.Interfaces.IEmployeeService" />, сервиса
+        ///     аккаунтов <see cref="T:CloudPublishing.Business.Services.Interfaces.IAccountService" /> и маппера
+        ///     <see cref="T:AutoMapper.IMapper" /> для отображения сущностей
         /// </summary>
         /// <param name="service">Сервис, предоставляющий доступ функциям по работе с сотрудниками</param>
         /// <param name="mapper">Маппер для отобраения сущностей пользвоателей на модели для представлений</param>
@@ -105,7 +108,7 @@ namespace CloudPublishing.Controllers
 
             if (user == null)
             {
-                ModelState.AddModelError("", "Ошибка при получении данных пользователя.");
+                ModelState.AddModelError("", Error.NoDataAqueiredEmployee);
                 model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
@@ -113,7 +116,7 @@ namespace CloudPublishing.Controllers
 
             service.CreateEmployee(user);
 
-            TempData["Message"] = "Пользователь " + model.Email + " успешно создан";
+            TempData["Message"] = string.Format(Success.AddedEmployee, model.Email);
 
             return RedirectToAction("List");
         }
@@ -173,7 +176,7 @@ namespace CloudPublishing.Controllers
             var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
             if (user == null)
             {
-                ModelState.AddModelError("", "Возникла ошибка при получении данных пользователя");
+                ModelState.AddModelError("", Error.NoDataAqueiredEmployee);
                 model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
@@ -183,11 +186,11 @@ namespace CloudPublishing.Controllers
             {
                 service.EditEmployee(user);
 
-                TempData["Message"] = "Данные пользователя " + model.Email + " успешно обновлены";
+                TempData["Message"] = string.Format(Success.UpdatedEmployee, model.Email);
             }
             catch (ChiefEditorRoleChangeException e)
             {
-                TempData["Message"] = "Ошибка обновления данных пользователя: " + e.Message;
+                TempData["Message"] = string.Format(Error.UpdateFailedEmployee, e.Message);
             }
 
             return RedirectToAction("List");
@@ -210,7 +213,7 @@ namespace CloudPublishing.Controllers
                 return Json(new
                 {
                     isSuccessful = false,
-                    message = "Неверний идентификатор пользователя"
+                    message = Error.InvalidIdentifierEmployee
                 }, JsonRequestBehavior.AllowGet);
             }
 
@@ -230,7 +233,7 @@ namespace CloudPublishing.Controllers
             return Json(new
             {
                 isSuccessful = true,
-                message = "Пользователь успешно удален"
+                message = Success.DeletedEmployee
             }, JsonRequestBehavior.AllowGet);
         }
     }

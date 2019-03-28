@@ -2,9 +2,9 @@
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Reviews.ViewModels;
-using CloudPublishing.Util;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using CloudPublishing.Util.Profiles;
 
 namespace CloudPublishing.Controllers
 {

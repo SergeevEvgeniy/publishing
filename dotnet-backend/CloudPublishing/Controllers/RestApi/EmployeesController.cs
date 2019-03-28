@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -6,12 +7,10 @@ using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.ApiModels;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace CloudPublishing.Controllers.RestApi
 {
-    //[RoutePrefix("api")]
+    [RoutePrefix("api")]
     public class EmployeesController : ApiController
     {
         private readonly IMapper mapper;
@@ -24,16 +23,16 @@ namespace CloudPublishing.Controllers.RestApi
         }
 
         [HttpGet]
-        //[Route("employees")]
+        [Route("employees")]
         public IHttpActionResult GetEmployeeData()
         {
             var result = service.GetEmployees();
 
-            return Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(result));
+            return Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeItemModel>>(result));
         }
 
         [HttpGet]
-        //[Route("employees/{id}")]
+        [Route("employees/{id}")]
         public IHttpActionResult GetEmployeeData(int? id)
         {
             if (id == null)
@@ -47,12 +46,22 @@ namespace CloudPublishing.Controllers.RestApi
         }
 
         [HttpPost]
-        //[Route("employees")]
+        [Route("employees")]
         public IHttpActionResult GetEmployeeData(EmployeeFilter filter)
         {
-            return Ok(
-                mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(
-                    service.GetEmployeesFromList(filter.IdList, filter.LastName, filter.Type)));
+            var list = service.GetEmployeesFromList(filter.IdList, filter.LastName).ToList();
+            if (!list.Any())
+            {
+                return ResponseMessage(new HttpResponseMessage((HttpStatusCode.NoContent)));
+            }
+            return Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(list));
+        }
+
+        [HttpGet]
+        [Route("journalists/{id}")]
+        public IHttpActionResult GetEmployeeStatistics(int? id)
+        {
+            return Ok();
         }
     }
 }
