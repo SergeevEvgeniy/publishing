@@ -1,4 +1,4 @@
-﻿@using CloudPublishing.Business.Enums
+﻿@using CloudPublishing.Business.Constants
 @model CloudPublishing.Models.Employees.ViewModels.EmployeeEditModel
 
 @{
@@ -69,11 +69,11 @@
         @Html.LabelFor(model => model.Sex, new { @class = "col-md-2" })
         <div class="col-md-10">
             <div class="form-check form-check-inline">
-                @Html.RadioButtonFor(model => model.Sex, Sex.M, new { id = "SexM", htmlAttributes = new { @class = "form-check-input"} })
+                @Html.RadioButtonFor(model => model.Sex, EmployeeSex.Male, new { id = "SexM", htmlAttributes = new { @class = "form-check-input"} })
                 @Html.Label("Мужской", new { @for = "SexM", @class = "form-check-label" })
             </div>
             <div class="form-check form-check-inline">
-                @Html.RadioButtonFor(model => model.Sex, Sex.F, new { id = "SexF", htmlAttributes = new { @class = "form-check-input"} })
+                @Html.RadioButtonFor(model => model.Sex, EmployeeSex.Female, new { id = "SexF", htmlAttributes = new { @class = "form-check-input"} })
                 @Html.Label("Женский", new { @for = "SexF", @class = "form-check-label" })
             </div>
         </div>

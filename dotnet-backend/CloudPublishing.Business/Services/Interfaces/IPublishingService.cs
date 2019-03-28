@@ -17,5 +17,6 @@ namespace CloudPublishing.Business.Services.Interfaces
         IEnumerable<TopicDTO> GetTopicsNotInPublishing(int publishingId);
         IEnumerable<EmployeeDTO> GetJournalists();
         IEnumerable<EmployeeDTO> GetEditors();
+        IEnumerable<TopicDTO> GetPublishingTopics(int id);
     }
 }
