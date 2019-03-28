@@ -16,7 +16,7 @@ namespace CloudPublishing.Business.Constants
             {EmployeeSex.Female, "Ж" }
         };
 
-        public static Dictionary<string, string> PublishingTypes= new Dictionary<string, string>
+        public static Dictionary<string, string> PublishingTypes = new Dictionary<string, string>
         {
             {PublishingType.Magazine, "Журнал" },
             {PublishingType.Paper, "Газета" }
