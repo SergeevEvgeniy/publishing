@@ -25,20 +25,12 @@ namespace CloudPublishing.Business.Services.Interfaces
         IEnumerable<EmployeeDTO> GetEmployees(string type);
 
         /// <summary>
-        ///     Получить коллекцию сотрудников по коллекции идентификаторов
+        ///     Получить коллекцию сотрудников с определенной фамилией по коллекции идентификаторов
         /// </summary>
         /// <param name="idList">Список идентификаторов сотрудников</param> 
+        /// <param name="lastName">Строка, с которой начинается фамилия сотрудника или null, если фильтр по фамилии не нужен</param>
         /// <returns>Коллекция сотрудников издательства или пустая коллекция, если такие сотрудники не найдены</returns>
-        IEnumerable<EmployeeDTO> GetEmployeesFromList(IEnumerable<int> idList);
-
-        /// <summary>
-        ///     Получить коллекцию сотрудников определенного типа с определенной фамилией по коллекции идентификаторов
-        /// </summary>
-        /// <param name="idList">Список идентификаторов сотрудников</param> 
-        /// <param name="lastName">Строка, с которой начинается фамилия сотрудника</param>
-        /// <param name="type">Тип сотрудника</param>
-        /// <returns>Коллекция сотрудников издательства или пустая коллекция, если такие сотрудники не найдены</returns>
-        IEnumerable<EmployeeDTO> GetEmployeesFromList(IEnumerable<int> idList, string lastName, string type);
+        IEnumerable<EmployeeDTO> GetEmployeesFromList(IEnumerable<int> idList, string lastName = null);
 
         /// <summary>
         ///     Получить коллекцию возможных типов образования сотрудников
@@ -52,6 +44,13 @@ namespace CloudPublishing.Business.Services.Interfaces
         /// <param name="id">Идентификатор сотрудника</param>
         /// <returns>Данные сотрудника или null, если сотрудник не найден</returns>
         EmployeeDTO GetEmployeeById(int id);
+
+        /// <summary>
+        ///     Получить статистику по статьям журналиста
+        /// </summary>
+        /// <param name="id">Идентификатор сотрудника</param>
+        /// <returns>Данные о сотруднике и статистика по его статьям</returns>
+        JournalistStatisticsDTO GetJournalistStatistics(int id);
 
         /// <summary>
         ///     Получить коллекцию типов сотрудника

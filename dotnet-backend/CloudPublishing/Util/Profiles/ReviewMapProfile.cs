@@ -2,7 +2,7 @@
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Models.Reviews.ViewModels;
 
-namespace CloudPublishing.Util
+namespace CloudPublishing.Util.Profiles
 {
     public class ReviewMapProfile : Profile
     {

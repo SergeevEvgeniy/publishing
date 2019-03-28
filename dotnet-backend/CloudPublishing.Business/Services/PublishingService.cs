@@ -5,6 +5,7 @@ using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using CloudPublishing.Business.Constants;
 
 namespace CloudPublishing.Business.Services
 {
@@ -33,9 +34,9 @@ namespace CloudPublishing.Business.Services
             var publishing = unitOfWork.Publishings.Get(id);
             var publishingDTO = mapper.Map<PublishingDTO>(publishing);
             publishingDTO.Editors = employeeService
-                .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type.Id == "E");
+                .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type == EmployeeType.Editor);
             publishingDTO.Journalists = employeeService
-                 .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type.Id == "J");
+                 .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type == EmployeeType.Journalist);
             return publishingDTO;
         }
 

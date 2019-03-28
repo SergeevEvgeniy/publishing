@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace CloudPublishing.Util
+namespace CloudPublishing.Util.Attributes
 {
     public class AjaxOnlyAttribute : ActionMethodSelectorAttribute
     {

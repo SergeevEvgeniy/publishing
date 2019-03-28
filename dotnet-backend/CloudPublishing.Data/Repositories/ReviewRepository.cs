@@ -2,19 +2,20 @@
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace CloudPublishing.Data.Repositories
 {
     /// <summary>
-    /// Репозиторий рецензий
+    ///     Репозиторий рецензий
     /// </summary>
     public class ReviewRepository : IReviewRepository
     {
         private CloudPublishingContext context;
 
         /// <summary>
-        /// Конструктор класса
+        ///     Конструктор класса
         /// </summary>
         /// <param name="context">Контекст, производный от DbContext для взаимодействия с БД</param>
         public ReviewRepository(CloudPublishingContext context)
@@ -23,7 +24,7 @@ namespace CloudPublishing.Data.Repositories
         }
 
         /// <summary>
-        /// Метод создания рецензии
+        ///     Метод создания рецензии
         /// </summary>
         /// <param name="item">Объект рецензии</param>
         public void Create(Review item)
@@ -32,7 +33,7 @@ namespace CloudPublishing.Data.Repositories
         }
 
         /// <summary>
-        /// Метод получения списка рецензий
+        ///     Метод получения списка рецензий
         /// </summary>
         /// <returns>Список рецензий</returns>
         public IEnumerable<Review> GetAll()
@@ -41,7 +42,7 @@ namespace CloudPublishing.Data.Repositories
         }
 
         /// <summary>
-        /// Метод получения рецензий конкретного редактора
+        ///     Метод получения рецензий конкретного редактора
         /// </summary>
         /// <param name="reviewerId">Id редактора</param>
         /// <returns>Список рецензий</returns>
@@ -51,7 +52,7 @@ namespace CloudPublishing.Data.Repositories
         }
 
         /// <summary>
-        /// Метод получения рецензии
+        ///     Метод получения рецензии
         /// </summary>
         /// <param name="articleId">Id статьи</param>
         /// <param name="reviewerId">Id редактора</param>
@@ -62,16 +63,16 @@ namespace CloudPublishing.Data.Repositories
         }
 
         /// <summary>
-        /// Метод обновления рецензии
+        ///     Метод обновления рецензии
         /// </summary>
         /// <param name="item">Рецензия</param>
         public void Update(Review item)
         {
-            context.Set<Review>().Attach(item);
+            context.Entry(item).State = EntityState.Modified;
         }
 
         /// <summary>
-        /// Метод удаления рецензии
+        ///     Метод удаления рецензии
         /// </summary>
         /// <param name="articleId">Id статьи</param>
         /// <param name="reviewerId">Id рецензии</param>

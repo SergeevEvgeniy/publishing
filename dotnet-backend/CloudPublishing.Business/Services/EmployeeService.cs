@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using CloudPublishing.Business.Constants;
 using CloudPublishing.Business.DTO;
-using CloudPublishing.Business.Enums;
 using CloudPublishing.Business.Infrastructure;
+using CloudPublishing.Business.Resources.Messages;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
@@ -15,26 +16,10 @@ namespace CloudPublishing.Business.Services
     /// <inheritdoc />
     public class EmployeeService : IEmployeeService
     {
-        private static readonly IDictionary<EmployeeType, string> Types;
-        private static readonly IDictionary<Sex, string> Sexes;
-
         private readonly IPasswordHasher hasher;
         private readonly IMapper mapper;
+        private readonly IJournalistStatisticsService service;
         private readonly IUnitOfWork unit;
-
-        static EmployeeService()
-        {
-            Types = new Dictionary<EmployeeType, string>
-            {
-                {EmployeeType.E, "Редактор"},
-                {EmployeeType.J, "Журналист"}
-            };
-            Sexes = new Dictionary<Sex, string>
-            {
-                {Sex.M, "М"},
-                {Sex.F, "Ж"}
-            };
-        }
 
         /// <summary>
         ///     Создает экземпляр класса из реализаций <see cref="IUnitOfWork" />, маппера для отображения сущностей и хэшера для
@@ -43,11 +28,14 @@ namespace CloudPublishing.Business.Services
         /// <param name="unit">Экземпляр класса для работы с базой данных</param>
         /// <param name="mapper">Экземпляр маппера для отображения сущностей</param>
         /// <param name="hasher">Экземпляр класса для хэширования</param>
-        public EmployeeService(IUnitOfWork unit, IMapper mapper, IPasswordHasher hasher)
+        /// <param name="service">Экземпляр класса для получения статистики журналистов</param>
+        public EmployeeService(IUnitOfWork unit, IMapper mapper, IPasswordHasher hasher,
+            IJournalistStatisticsService service)
         {
             this.unit = unit;
             this.mapper = mapper;
             this.hasher = hasher;
+            this.service = service;
         }
 
         /// <inheritdoc />
@@ -71,33 +59,15 @@ namespace CloudPublishing.Business.Services
         }
 
         /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEmployeesFromList(IEnumerable<int> idList)
+        public IEnumerable<EmployeeDTO> GetEmployeesFromList(IEnumerable<int> idList, string lastName = null)
         {
-            if (idList == null)
-            {
-                return new List<EmployeeDTO>();
-            }
-
-            var list = unit.Employees.Find(x => idList.Contains(x.Id));
-
-            return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<EmployeeDTO> GetEmployeesFromList(IEnumerable<int> idList, string lastName, string type)
-        {
-            if (idList == null)
+            if (idList == null || !idList.Any())
             {
                 return new List<EmployeeDTO>();
             }
 
             var list = unit.Employees.Find(x =>
                 idList.Contains(x.Id) && x.LastName.StartsWith(lastName ?? string.Empty));
-
-            if (!string.IsNullOrEmpty(type))
-            {
-                list = list.Where(x => x.Type == type);
-            }
 
             return mapper.Map<IEnumerable<Employee>, List<EmployeeDTO>>(list);
         }
@@ -115,9 +85,22 @@ namespace CloudPublishing.Business.Services
         }
 
         /// <inheritdoc />
+        public JournalistStatisticsDTO GetJournalistStatistics(int id)
+        {
+            var journalist = unit.Employees.Get(id);
+
+            if (journalist == null || journalist.Type != EmployeeType.Journalist)
+            {
+                throw new EntityNotFoundException(Error.NotFoundJournalist);
+            }
+
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
         public IDictionary<string, string> GetEmployeeTypes()
         {
-            return Types.Select(x => new {key = x.Key.ToString(), x.Value}).ToDictionary(x => x.key, y => y.Value);
+            return DataCorrelation.EmployeeTypes;
         }
 
         /// <inheritdoc />
@@ -145,7 +128,7 @@ namespace CloudPublishing.Business.Services
             var target = unit.Employees.Get(entity.Id);
             if (target == null)
             {
-                throw new EntityNotFoundException("Пользователь не найден");
+                throw new EntityNotFoundException(Error.NotFoundUser);
             }
 
             if (target.ChiefEditor && !entity.ChiefEditor)
@@ -179,7 +162,7 @@ namespace CloudPublishing.Business.Services
 
             if (target == null)
             {
-                throw new EntityNotFoundException("Пользователь не найден");
+                throw new EntityNotFoundException(Error.NotFoundUser);
             }
 
             if (target.ChiefEditor)
