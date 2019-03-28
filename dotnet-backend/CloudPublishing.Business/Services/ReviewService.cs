@@ -158,6 +158,7 @@ namespace CloudPublishing.Business.Services
         public void CreateReview(ReviewDTO review)
         {
             db.Reviews.Create(mapper.Map<ReviewDTO, Review>(review));
+            db.Save();
         }
 
         /// <summary>
@@ -167,6 +168,7 @@ namespace CloudPublishing.Business.Services
         public void UpdateReview(ReviewDTO review)
         {
             db.Reviews.Update(mapper.Map<ReviewDTO, Review>(review));
+            db.Save();
         }
 
         /// <summary>
@@ -177,6 +179,7 @@ namespace CloudPublishing.Business.Services
         public void DeleteReview(int articleId, int authorId)
         {
             db.Reviews.Delete(articleId, authorId);
+            db.Save();
         }
     }
 }
