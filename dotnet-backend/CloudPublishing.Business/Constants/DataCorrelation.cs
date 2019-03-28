@@ -2,7 +2,7 @@
 
 namespace CloudPublishing.Business.Constants
 {
-    public class DataCorrelation
+    public static class DataCorrelation
     {
         public static Dictionary<string, string> EmployeeTypes = new Dictionary<string, string>
         {
@@ -14,6 +14,12 @@ namespace CloudPublishing.Business.Constants
         {
             {EmployeeSex.Male, "М" },
             {EmployeeSex.Female, "Ж" }
+        };
+
+        public static Dictionary<string, string> PublishingTypes= new Dictionary<string, string>
+        {
+            {PublishingType.Magazine, "Журнал" },
+            {PublishingType.Paper, "Газета" }
         };
     }
 }
