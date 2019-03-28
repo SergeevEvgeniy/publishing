@@ -84,13 +84,17 @@ namespace CloudPublishing.Controllers
         /// <summary>
         /// Метод обработки запроса на получение списка рубрик журнала
         /// </summary>
-        /// <param name="publishingId">Id журнала, рубрики которого требуется получить</param>
+        /// <param name="id">Id журнала, рубрики которого требуется получить</param>
         /// <returns>Частичное представление, содержащее option-ы, ключом которых является id рубрики, значением - наименование</returns>
         [HttpGet]
-        public ActionResult GetTopicList(int? publishingId)
+        public ActionResult GetTopicList(int? id)
         {
-            var topicList = mapper.Map<IEnumerable<TopicModel>>(reviewService.GetTopicList(publishingId));
-            return PartialView(topicList);
+            if (id != null)
+            {
+                var topicList = mapper.Map<IEnumerable<TopicModel>>(publishingService.GetPublishingTopics((int)id));
+                return PartialView(topicList);
+            }
+            return null;
         }
 
         /// <summary>
