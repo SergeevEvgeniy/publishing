@@ -108,5 +108,11 @@ namespace CloudPublishing.Business.Services
             var publishingsByType = unitOfWork.Publishings.GetAll().Where(p => p.Type == type);
             return mapper.Map<IEnumerable<PublishingDTO>>(publishingsByType);
         }
+
+        public IEnumerable<TopicDTO> GetPublishingTopics(int publishingId)
+        {
+            var publishing = unitOfWork.Publishings.Get(publishingId);
+            return mapper.Map<IEnumerable<TopicDTO>>(publishing.Topics);
+        }
     }
 }
