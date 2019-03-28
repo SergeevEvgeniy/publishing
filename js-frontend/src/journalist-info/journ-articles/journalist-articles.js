@@ -2,8 +2,8 @@ var $ = require('jquery');
 var articlesTemplate = require('./journalist-articles.hbs');
 var releaseTemplate = require('./release.hbs');
 var SearchResultComponent = require('../search-result/search-result');
-
-
+var JournalistService = require('../../services/journalist-service');
+var AlertBoxComponent = require('../../alert-box/alert-box-component');
 /**
  * Компонент для вкладки 'Поиск статей'.
  * @constructor
@@ -15,7 +15,7 @@ function ArticlesComponent($parentElement) {
     var releaseBodySelector = '#releaseBody';
     var searchBodySelector = '#searchResultBody';
     var updateCallBack = null;
-
+    var alert = new AlertBoxComponent();
     /**
      * Метод для обработки события при нажатии кнопки 'Найти'.
      * Добавляет к родительскому компоненту шаблон результатов поиска статей.
@@ -47,15 +47,16 @@ function ArticlesComponent($parentElement) {
      * Метод для добавления шаблона выпадающего списка на форму.
      */
     function getIssue() {
-        var release;
-        $(releaseBodySelector).empty();
-        release = [{
-            id: 500,
-            name: '24124'
-        }];
-        $(releaseBodySelector).append(releaseTemplate({
-            data: release
-        }));
+        JournalistService
+            .getIssueList()
+            .then(function handleResponse(response) {
+                $(releaseBodySelector).append(releaseTemplate({
+                    data: response
+                }));
+            })
+            .catch(function handleError(error) {
+                alert.error(error);
+            });
     }
 
     ($parentElement).off().on('click', '#findArticle', findArticles)
@@ -66,26 +67,21 @@ function ArticlesComponent($parentElement) {
      * Фукнция для добавления шаблона articlesTemplate в родительский контейнер.
      */
     function render() {
-        componentData.edition = [
-            {
-                id: 1,
-                name: 'name'
-            },
-            {
-                id: 2,
-                name: 'name2'
-            },
-        ];
-        componentData.heading = [
-            {
-                id: 100,
-                name: 'meow'
-            }
-        ];
-
-        $parentElement.empty().append(articlesTemplate({
-            data: componentData
-        }));
+        JournalistService
+            .getTopicList()
+            .then(function handleResponse(response) {
+                componentData.edition = response;
+                return JournalistService.getPublishingList();
+            })
+            .then(function handleResponse(response) {
+                componentData.heading = response;
+                $parentElement.empty().append(articlesTemplate({
+                    data: componentData
+                }));
+            })
+            .catch(function handleError(error) {
+                alert.error(error);
+            });
     }
 
     /**

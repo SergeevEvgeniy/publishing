@@ -1,8 +1,10 @@
 var journalistTemplate = require('./journalist.hbs');
 var $ = require('jquery');
-var journalistApi = require('../api/journalist-api');
 var InfoComponent = require('./journ-info/journalist-info');
-
+var StatisticsComponent = require('./journ-statistics/journalist-statistics');
+var ArticlesComponent = require('./journ-articles/journalist-articles');
+var JournalistService = require('../services/journalist-service');
+var AlertBoxComponent = require('../alert-box/alert-box-component');
 /**
  * Компонент для управлением отображением инфомрации и
  * статистики журналиста.
@@ -13,9 +15,11 @@ function JournalistStatComponent($parentElement) {
     var componentData = {};
     var navigationSelector = '.nav-tabs';
     var returnButtonSelector = '#returnToSearchForm';
-    var infoComponent;
+    var $componentsBody = {};
+    var components = {};
+    var $parentComponentBody;
     var returnButtonClickEventListener = null;
-
+    var alert = new AlertBoxComponent();
     /**
      * Событие на переключение вкладок меню 'Информация, Статистика, Статьи'
      * @param {Event} event - объект события.
@@ -23,12 +27,20 @@ function JournalistStatComponent($parentElement) {
     function toggleTabs(event) {
         var parent = event.currentTarget;
         var target = event.target;
+        var pick;
+        var bodyPick;
+        var data;
         while (parent !== target) {
             if (target.tagName === 'LI') {
-                componentPick = target.dataset.type;
+                data = target.dataset.type;
+                bodyPick = $componentsBody[data];
+                componentPick = data + 'Component';
                 $(parent).find('a').removeClass('active');
                 $(target).children().first().addClass('active');
-                console.log(componentPick);
+                $parentComponentBody.children().hide();
+                pick = components[componentPick];
+                pick.setData(componentData);
+                bodyPick.show();
                 return;
             }
             target = target.parentNode;
@@ -56,7 +68,13 @@ function JournalistStatComponent($parentElement) {
         $parentElement.empty().append(journalistTemplate({
             data: componentData
         }));
-        infoComponent = new InfoComponent($parentElement.find('.journalist-info-content'));
+        $parentComponentBody = $parentElement.find('.components');
+        $componentsBody.info = $parentElement.find('.journalist-info-content');
+        $componentsBody.articles = $parentElement.find('.journalist-statistics-content');
+        $componentsBody.statistics = $parentElement.find('.journalist-statistics-content');
+        components.infoComponent = new InfoComponent($componentsBody.info);
+        components.statisticsComponent = new StatisticsComponent($componentsBody.articles);
+        components.articlesComponent = new ArticlesComponent($componentsBody.statistics);
     }
 
     /**
@@ -73,14 +91,16 @@ function JournalistStatComponent($parentElement) {
      * @param {string} id - id журналиста.
      */
     this.appendComponent = function appendComponent(id) {
-        journalistApi.getJournalistInfo(id)
-            .then(function response(journalistData) {
+        JournalistService
+            .getJournalistInfo(id)
+            .then(function handleResponse(journalistData) {
                 componentData = journalistData;
                 render();
-                infoComponent.setData(componentData);
+                components.infoComponent.setData(componentData);
+                $componentsBody.info.show();
             })
             .catch(function errorResponse(error) {
-                console.log(error);
+                alert.error(error);
             });
     };
 
