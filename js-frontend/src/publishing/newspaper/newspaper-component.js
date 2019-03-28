@@ -7,9 +7,15 @@ var FilterResultComponent = require('../../publishing-filter/filter-result-compo
 var PaginationComponent = require('../../pagination/pagination-component');
 var SelectPerPageComponent = require('../../select-per-page/select-per-page-component');
 var PublicationViewComponent = require('../publication-view-component');
+var AlertBoxComponent = require('../../alert-box/alert-box-component');
 
 var PublicationService = require('../../services/publication-service');
 
+/**
+ * Создаёт компонент управления газетами, а именно поиск и отображение.
+ * @constructor
+ * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
+ */
 function NewspaperComponent($parentElement) {
     var filterComponent;
     var filterResultComponent;
@@ -21,7 +27,13 @@ function NewspaperComponent($parentElement) {
         stage: 'Загрузка наименований газет',
     };
     var newspaperTitle;
+    var alert = new AlertBoxComponent();
 
+    /**
+     * Функция обратного вызова выполняющая запрос по данным формы фильтрации
+     * @param {Array.<{name: string, value: string}>} formData данные формы
+     * @param {function} next функция обратного вызова
+     */
     function onFilterSubmitListener(formData, next) {
         PublicationService
             .getFilteredIssues(formData)
@@ -33,10 +45,14 @@ function NewspaperComponent($parentElement) {
                 next();
             })
             .catch(function handleError(error) {
-                console.log(error);
+                alert.error(error);
             });
     }
 
+    /**
+     * Функция обратного вызова устанавливающая выбранный номер в компонент отображения номера
+     * @param {Array.<object>} issue выбранный номер
+     */
     function onSelectNewspaperIssueListener(issue) {
         publicationViewComponent.setPublicationIssue({
             publicationTitle: newspaperTitle,
@@ -47,15 +63,26 @@ function NewspaperComponent($parentElement) {
         });
     }
 
+    /**
+     * Функция обратного вызова устанавливающая выбранную страницу
+     * @param {number} currentPage текущая страница
+     */
     function onPageChangeListener(currentPage) {
         filterResultComponent.setCurrentPage(currentPage);
     }
 
+    /**
+     * Функция обратного вызова устанавливающая количество отображаемых элементов
+     * @param {number} perPage количество отображаемых элементов
+     */
     function onSelectPerPageChangeListener(perPage) {
         paginationComponent.setPerPage(perPage);
         filterResultComponent.setPerPage(perPage);
     }
 
+    /**
+     * Отображение компонета
+     */
     function render() {
         $parentElement
             .empty()
@@ -89,6 +116,7 @@ function NewspaperComponent($parentElement) {
         })
         .catch(function handleError(error) {
             loading.stage = error;
+            alert.error(error);
             render();
         });
 }

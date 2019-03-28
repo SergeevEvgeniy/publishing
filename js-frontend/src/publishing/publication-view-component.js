@@ -1,10 +1,11 @@
+var AlertBoxComponent = require('../alert-box/alert-box-component');
 var PublicationService = require('../services/publication-service');
 
 /**
  * Создаёт компонент отображающий номер публикации
  * @constructor
  * @param {JQuery} $parentElement - элемент-контейнер для размещения компонента
- * @param {Function} template - шаблон handlebars
+ * @param {function} template - шаблон handlebars
  */
 function PublicationView($parentElement, template) {
     var publicationIssue = {};
@@ -16,6 +17,7 @@ function PublicationView($parentElement, template) {
     var groupedArticles;
     var articleGroupByTopic;
     var advertising;
+    var alert = new AlertBoxComponent($parentElement);
 
     /**
      * Отрисовка омпонента
@@ -38,7 +40,7 @@ function PublicationView($parentElement, template) {
 
     /**
      * Обработчик события на нажатие по теме статей
-     * @param {Object} event содержит свойства произошедшего события
+     * @param {object} event содержит свойства произошедшего события
      */
     function onTopicClickEvent(event) {
         var $li = $(event.target.closest('li'));
@@ -50,8 +52,36 @@ function PublicationView($parentElement, template) {
     }
 
     /**
+     * Групировка статей по темам
+     */
+    function groupArticlesByTopic() {
+        articleGroupByTopic = {
+            title: articles[0].topic,
+            articles: [],
+            class: 'active',
+        };
+        articles.forEach(function enumerationArticles(article) {
+            if (article.topic !== articleGroupByTopic.title) {
+                groupedArticles.push(articleGroupByTopic);
+                articleGroupByTopic = {
+                    title: article.topic,
+                    articles: [],
+                };
+            }
+            articleGroupByTopic.articles.push({
+                title: article.title,
+                content: article.content,
+                author: article.author,
+                editors: article.editors,
+                coauthors: article.coauthors,
+            });
+        });
+        groupedArticles.push(articleGroupByTopic);
+    }
+
+    /**
      * Установка номера публикации
-     * @param {Object} newPublicationIssue описывает номер публикации, которую нужно показать
+     * @param {object} newPublicationIssue описывает номер публикации, которую нужно показать
      */
     this.setPublicationIssue = function setPublicationIssue(newPublicationIssue) {
         publicationIssue = newPublicationIssue;
@@ -79,29 +109,7 @@ function PublicationView($parentElement, template) {
                     articles[index].coauthors = articleEmployees.coauthors;
                     articles[index].editors = articleEmployees.editors;
                 });
-                articleGroupByTopic = {
-                    title: articles[0].topic,
-                    articles: [],
-                    class: 'active',
-                };
-                articles.forEach(function enumerationArticles(article) {
-                    if (article.topic !== articleGroupByTopic.title) {
-                        groupedArticles.push(articleGroupByTopic);
-                        articleGroupByTopic = {
-                            title: article.topic,
-                            articles: [],
-                        };
-                    }
-                    articleGroupByTopic.articles.push({
-                        title: article.title,
-                        content: article.content,
-                        author: article.author,
-                        editors: article.editors,
-                        coauthors: article.coauthors,
-                    });
-                });
-                groupedArticles.push(articleGroupByTopic);
-
+                groupArticlesByTopic();
                 loading.stage = 'Загрузка рекламы...';
                 render();
 
@@ -113,7 +121,9 @@ function PublicationView($parentElement, template) {
                 render();
             })
             .catch(function handleError(error) {
-                console.log(error);
+                loading.stage = error;
+                render();
+                alert.error(error);
             });
     };
 

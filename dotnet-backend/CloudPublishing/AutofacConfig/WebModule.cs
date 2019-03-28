@@ -6,6 +6,7 @@ using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using AutoMapper;
 using CloudPublishing.Business.Util;
+using CloudPublishing.Util;
 using CloudPublishing.Util.Profiles;
 using Module = Autofac.Module;
 

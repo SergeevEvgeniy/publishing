@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Models.Publishings.ViewModels;
 using CloudPublishing.Util.PublishingValueResolvers;
+using System.Collections.Generic;
 
-namespace CloudPublishing.Util.Profiles
+namespace CloudPublishing.Util
 {
     public class PublishingMapProfile : Profile
     {
@@ -22,8 +22,9 @@ namespace CloudPublishing.Util.Profiles
             CreateMap<PublishingDTO, PublishingViewModel>();
 
             CreateMap<PublishingViewModel, PublishingDTO>()
-                .ForMember(dest => dest.Employees, opt => opt.MapFrom(src => src.EmployeesId))
-                .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.TopicsId));
+                .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.TopicsIds))
+                .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.EditorsIds))
+                .ForMember(dest => dest.Journalists, opt => opt.MapFrom(src => src.JournalistsIds));
 
             CreateMap<TopicDTO, TopicViewModel>();
 

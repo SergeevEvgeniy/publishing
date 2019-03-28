@@ -71,12 +71,14 @@
     <Compile Include="EF\CloudPublishingContext.cs" />
     <Compile Include="EF\EntityConfigurations\EducationEntityConfiguration.cs" />
     <Compile Include="EF\EntityConfigurations\EmployeeEntityConfiguration.cs" />
+    <Compile Include="EF\EntityConfigurations\PublishingEmployeeEntityConfiguration.cs" />
     <Compile Include="EF\EntityConfigurations\PublishingEntityConfiguration.cs" />
     <Compile Include="EF\EntityConfigurations\ReviewEntityConfiguration.cs" />
     <Compile Include="EF\EntityConfigurations\TopicEntityConfiguration.cs" />
     <Compile Include="Entities\Education.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\Publishing.cs" />
+    <Compile Include="Entities\PublishingEmployee.cs" />
     <Compile Include="Entities\Review.cs" />
     <Compile Include="Entities\Topic.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />

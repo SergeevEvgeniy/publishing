@@ -71,10 +71,5 @@ namespace CloudPublishing.Data.Entities
         ///     Возвращиет или задает тип образования сотрудника
         /// </summary>
         public Education Education { get; set; }
-
-        /// <summary>
-        ///     Возвращиет или задает коллекцию изданий, в которых данный сотрудник является журналистом или редактором
-        /// </summary>
-        public ICollection<Publishing> Publishings { get; set; }
     }
 }

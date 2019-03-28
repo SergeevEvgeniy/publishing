@@ -19,8 +19,9 @@ namespace CloudPublishing.Models.Publishings.ViewModels
         [StringLength(255, ErrorMessage = "Максимальная длина описания 255 символов")]
         public string Subjects { get; set; }
 
-        public IEnumerable<int> TopicsId { get; set; }
-        public IEnumerable<int> EmployeesId { get; set; }
+        public IEnumerable<int> TopicsIds { get; set; }
+        public IEnumerable<int> EditorsIds { get; set; }
+        public IEnumerable<int> JournalistsIds { get; set; }
 
     }
 }

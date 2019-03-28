@@ -1,14 +1,7 @@
 ﻿using AutoMapper;
 using CloudPublishing.Business.Services.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System.Web.Http;
-using CloudPublishing.Business.DTO;
-using CloudPublishing.Models.Publishings;
 
 namespace CloudPublishing.Controllers.RestApi
 {
@@ -23,11 +16,22 @@ namespace CloudPublishing.Controllers.RestApi
             this.publishingService = publishingService;
         }
 
-        public IHttpActionResult GetAllPublishings()
+        public IHttpActionResult GetPublishings()
         {
-            var result = publishingService.GetAllPublishings();
-            return Json(mapper.Map<IEnumerable<PublishingDTO>, List<PublishingData>>(result),
-                new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            var publishings = publishingService.GetPublishings();
+            return Ok(publishings.Select(p => new { p.Id, p.Title}));
+        }
+
+        public IHttpActionResult GetPublishings(int id)
+        {
+            var publishing = publishingService.GetPublishing(id);
+            return Ok(new { publishing.Id, publishing.Title });
+        }
+
+        public IHttpActionResult GetPublishings(string type)
+        {
+            var publishingsByType = publishingService.GetPublishingsByType(type);
+            return Ok(publishingsByType.Select(p => new { p.Id, p.Title }));
         }
     }
 }
