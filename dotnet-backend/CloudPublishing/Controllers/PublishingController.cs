@@ -5,7 +5,7 @@ using CloudPublishing.Models.Publishings.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using CloudPublishing.Business.Enums;
+using CloudPublishing.Business.Constants;
 
 namespace CloudPublishing.Controllers
 {
@@ -43,10 +43,10 @@ namespace CloudPublishing.Controllers
                     .Map<IEnumerable<TopicViewModel>>(publishingService.GetAllTopics()),
 
                 AvailableJournalists = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployees(EmployeeType.J.ToString())),
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployees(EmployeeType.Journalist)),
 
                 AvailableEditors = mapper
-                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployees(EmployeeType.E.ToString()))
+                .Map<IEnumerable<PublishingEmployeeViewModel>>(employeeService.GetEmployees(EmployeeType.Editor))
             };
             return View(publishingViewModel);
         }
