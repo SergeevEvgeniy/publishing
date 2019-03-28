@@ -64,26 +64,33 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacConfig\BusinessModule.cs" />
-    <Compile Include="DTO\AdvertisingDTO.cs" />
+    <Compile Include="Constants\DataCorrelation.cs" />
+    <Compile Include="Constants\EmployeeSex.cs" />
+    <Compile Include="Constants\EmployeeType.cs" />
     <Compile Include="DTO\ArticleDTO.cs" />
     <Compile Include="DTO\DetailedReviewDTO.cs" />
     <Compile Include="DTO\EducationDTO.cs" />
     <Compile Include="DTO\EmployeeDTO.cs" />
-    <Compile Include="DTO\IssueDTO.cs" />
-    <Compile Include="DTO\MailingDTO.cs" />
-    <Compile Include="DTO\MailingResultDTO.cs" />
-    <Compile Include="DTO\MailingSubscriberDTO.cs" />
+    <Compile Include="DTO\JournalistStatisticsDTO.cs" />
     <Compile Include="DTO\PublishingDTO.cs" />
     <Compile Include="DTO\ReviewDTO.cs" />
-    <Compile Include="DTO\SexDTO.cs" />
     <Compile Include="DTO\TopicDTO.cs" />
-    <Compile Include="DTO\TypeDTO.cs" />
-    <Compile Include="Enums\EmployeeType.cs" />
-    <Compile Include="Enums\Sex.cs" />
     <Compile Include="Infrastructure\ChiefEditorRoleChangeException.cs" />
     <Compile Include="Infrastructure\EntityNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Messages\Error.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Error.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Messages\Success.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Success.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\FakeArticleService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\Interfaces\IJournalistStatisticsService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
     <Compile Include="Services\Interfaces\IPublishingService.cs" />
     <Compile Include="Services\Interfaces\IRoleService.cs" />
@@ -106,5 +113,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Messages\Error.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Error.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Messages\Success.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Success.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

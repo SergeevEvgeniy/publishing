@@ -38,7 +38,7 @@
         /// <summary>
         ///     Возвращиет или задает пол сотрудника
         /// </summary>
-        public SexDTO Sex { get; set; }
+        public string Sex { get; set; }
 
         /// <summary>
         ///     Возвращиет или задает год рождения сотрудника
@@ -53,7 +53,7 @@
         /// <summary>
         ///     Возвращиет или задает тип сотрудника
         /// </summary>
-        public TypeDTO Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         ///     Возвращиет или задает идентификатор типа образования сотрудника
