@@ -9,6 +9,7 @@ function SearchResultComponent($element) {
      */
     this.render = function render() {
         $element.empty().append(searchResultTemplate({
+
         }));
     };
 }
