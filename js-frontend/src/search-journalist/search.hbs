@@ -11,9 +11,9 @@
                         <option disabled selected>Выберите издание</option>
                         {{#each publishing.elementList}}
                             {{#if selected}}
-                                <option  selected value={{value}}>{{text}}</option>
+                                <option  selected value={{id}}>{{name}}</option>
                             {{else}}
-                                <option value={{value}}>{{text}}</option>
+                                <option value={{id}}>{{name}}</option>
                             {{/if}}
                         {{/each}}
                     </select>
@@ -27,9 +27,9 @@
                         <option disabled selected>Выбирите выпуск</option>
                         {{#each issue.elementList}}
                             {{#if selected}}
-                                <option  selected value={{value}}>{{text}}</option>
+                                <option  selected value={{id}}>{{name}}</option>
                             {{else}}
-                                <option value={{value}}>{{text}}</option>
+                                <option value={{id}}>{{name}}</option>
                             {{/if}}
                         {{/each}}
                     </select>
@@ -54,9 +54,9 @@
                         <option disabled selected>Выберите рубрику</option>
                         {{#each topic.elementList}}
                             {{#if selected}}
-                                <option  selected value={{value}}>{{text}}</option>
+                                <option  selected value={{id}}>{{name}}</option>
                             {{else}}
-                                <option value={{value}}>{{text}}</option>
+                                <option value={{id}}>{{name}}</option>
                             {{/if}}
                         {{/each}}
                     </select>

@@ -1,0 +1,29 @@
+button:hover {
+    outline: none;
+}
+.spinner {
+    margin: 0 auto;
+    width: 120px;
+    height: 120px;
+    border: 0.4em solid transparent;
+    border-color: #eee;
+    border-top-color: #52C495;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    25% {
+        transform: rotate(100deg);
+        border-top-color: #52C495;
+    }
+    35% {
+        transform: rotate(180deg);
+    }
+    50% {
+        transform: rotate(260deg);
+        border-top-color: #a733eb;
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

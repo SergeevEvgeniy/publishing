@@ -20,7 +20,18 @@
             </tr>
         </thead>
         <tbody id="searchResults">
- 
+            {{#each data}}
+            <tr data-id={{id}}>
+                <td>{{title}}</td>
+                <td>{{topic}}</td>
+                <td>
+                    {{#each issue}}
+                        {{number}}<br/>
+                    {{/each}}
+                </td>
+                <td>{{date}}</td>
+            </tr>
+            {{/each}}
         </tbody>
     </table>
 </div>

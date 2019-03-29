@@ -4,13 +4,19 @@ var searchResultTemplate = require('./search-result.hbs');
  * @param {jQuery} $element - контейнер родителя к которому добавится таблица результата
  */
 function SearchResultComponent($element) {
+    var componentData = {};
     /**
      * Очищает контейнер родителя и добавляет шаблон таблицы в него
      */
-    this.render = function render() {
+    function render() {
         $element.empty().append(searchResultTemplate({
-
+            data: componentData
         }));
+    }
+
+    this.setData = function setData(data) {
+        componentData = data;
+        render();
     };
 }
 

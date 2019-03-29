@@ -9,9 +9,9 @@ function Spinner() {
 
     /**
      * Добавляет к parent тело спиннера.
-     * @param {Object} parent
+     * @param {Object} parent - контейнер, к которому будет добавлено тело спиннера.
      */
-    this.appendSpinner = function (parent) {
+    this.appendSpinner = function appendSpinner(parent) {
         currentParent = parent;
         currentParent.append(spinnerTemplate);
     };
@@ -19,7 +19,7 @@ function Spinner() {
     /**
      * Находит в родительском контейнере тело спиннера и удаляет его.
      */
-    this.removeSpinner = function () {
+    this.removeSpinner = function removeSpinner() {
         currentParent.find(spinnerBodySelector).remove();
     };
 }

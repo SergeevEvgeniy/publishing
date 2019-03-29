@@ -4,6 +4,8 @@ var releaseTemplate = require('./release.hbs');
 var SearchResultComponent = require('../search-result/search-result');
 var JournalistService = require('../../services/journalist-service');
 var AlertBoxComponent = require('../../alert-box/alert-box-component');
+var ArticleService = require('../../services/articles-service');
+var Spinner = require('../spinner/spinner');
 /**
  * Компонент для вкладки 'Поиск статей'.
  * @constructor
@@ -16,6 +18,7 @@ function ArticlesComponent($parentElement) {
     var searchBodySelector = '#searchResultBody';
     var updateCallBack = null;
     var alert = new AlertBoxComponent();
+    var spinner = new Spinner();
     /**
      * Метод для обработки события при нажатии кнопки 'Найти'.
      * Добавляет к родительскому компоненту шаблон результатов поиска статей.
@@ -24,8 +27,20 @@ function ArticlesComponent($parentElement) {
     function findArticles(event) {
         var searchResult;
         event.preventDefault();
-        searchResult = new SearchResultComponent($(searchBodySelector));
-        searchResult.render();
+        $(searchBodySelector).empty();
+        spinner.appendSpinner($(searchBodySelector));
+        ArticleService
+            .getJournalistInfo()
+            .then(function handleResponse(response) {
+                spinner.removeSpinner();
+                componentData = response;
+                searchResult = new SearchResultComponent($(searchBodySelector));
+                searchResult.setData(componentData);
+            })
+            .catch(function handleError(error) {
+                spinner.removeSpinner();
+                alert.error(error);
+            });
     }
 
     /**
@@ -48,7 +63,7 @@ function ArticlesComponent($parentElement) {
      */
     function getIssue() {
         JournalistService
-            .getIssueList()
+            .getTopicList()
             .then(function handleResponse(response) {
                 $(releaseBodySelector).empty().append(releaseTemplate({
                     data: response
@@ -69,6 +84,8 @@ function ArticlesComponent($parentElement) {
      * Фукнция для добавления шаблона articlesTemplate в родительский контейнер.
      */
     function render() {
+        var isWasLoadedBefore = componentData.edition !== undefined || componentData.heading !== undefined;
+        isWasLoadedBefore || spinner.appendSpinner($parentElement);
         JournalistService
             .getTopicList()
             .then(function handleResponse(response) {
@@ -77,11 +94,13 @@ function ArticlesComponent($parentElement) {
             })
             .then(function handleResponse(response) {
                 componentData.heading = response;
+                isWasLoadedBefore || spinner.removeSpinner();
                 $parentElement.empty().append(articlesTemplate({
                     data: componentData
                 }));
             })
             .catch(function handleError(error) {
+                isWasLoadedBefore || spinner.removeSpinner();
                 alert.error(error);
             });
     }
