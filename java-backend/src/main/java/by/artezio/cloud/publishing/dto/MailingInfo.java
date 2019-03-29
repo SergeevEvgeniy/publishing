@@ -1,5 +1,7 @@
 package by.artezio.cloud.publishing.dto;
 
+import by.artezio.cloud.publishing.domain.MailingResultType;
+
 import java.util.Date;
 
 /**
@@ -117,5 +119,15 @@ public class MailingInfo {
      */
     public void setResult(final String result) {
         this.result = result;
+    }
+
+    /**
+     * Проверяет идентичность сообщения message и значения в константе MailingResultType.SUCCESS.
+     *
+     * @return <code>true</code>, если message соответствует значению в константе MailingResultType.SUCCESS,
+     *         <code>false</code>, иначе.
+     */
+    public boolean isSuccess() {
+        return MailingResultType.SUCCESS.toString().compareTo(this.result.trim()) == 0;
     }
 }

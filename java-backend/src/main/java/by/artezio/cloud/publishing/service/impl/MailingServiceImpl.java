@@ -4,6 +4,7 @@ import by.artezio.cloud.publishing.dao.MailingDao;
 import by.artezio.cloud.publishing.dto.MailingInfo;
 import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,10 +25,17 @@ public class MailingServiceImpl implements MailingService {
     /**
      * Конструктор с параметрами.
      * @param mailingDao dao для взаимодействия с БД.
+     */
+    public MailingServiceImpl(final MailingDao mailingDao) {
+        this.mailingDao = mailingDao;
+    }
+
+    /**
+     * Устанавливает отправителя писем.
      * @param mailSender отправитель писем.
      */
-    public MailingServiceImpl(final MailingDao mailingDao, final MailSender mailSender) {
-        this.mailingDao = mailingDao;
+    @Autowired
+    public void setMailSender(final MailSender mailSender) {
         this.mailSender = mailSender;
     }
 
@@ -63,7 +71,7 @@ public class MailingServiceImpl implements MailingService {
 
     @Override
     public void sendMail(final LocalDateTime dateTime) {
-        mailSender.sendMail(Arrays.asList("mail@mail.ru"), "AutoMailing", dateTime.toString() + " Hi. This is AutoMailing");
-        //TODO add mailing_result
+        mailSender.sendMail(Arrays.asList("team00_10@mail.ru"), "AutoMailing", dateTime.toString() + " Hi. This is AutoMailing");
+        //TODO: add mailing_result
     }
 }
