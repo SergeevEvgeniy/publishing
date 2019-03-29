@@ -1,4 +1,5 @@
 ﻿using System;
+using CloudPublishing.Business.Resources.Messages;
 
 namespace CloudPublishing.Business.Infrastructure
 {
@@ -13,7 +14,7 @@ namespace CloudPublishing.Business.Infrastructure
         ///     Создает экземпляр класса исключения используя конструктор базвого класса и задает сообщение о необходимости
         ///     передачи роли главного редактора
         /// </summary>
-        public ChiefEditorRoleChangeException() : base("Сначала необходимо указать другого главного редактора")
+        public ChiefEditorRoleChangeException() : base(Error.RoleChangeFaildChiefEditor)
         {
         }
     }

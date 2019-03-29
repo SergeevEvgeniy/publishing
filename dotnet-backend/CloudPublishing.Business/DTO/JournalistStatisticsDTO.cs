@@ -33,11 +33,6 @@ namespace CloudPublishing.Business.DTO
         public string Email { get; set; }
 
         /// <summary>
-        ///     Возвращиет или задает общее количество статей журналиста
-        /// </summary>
-        public int ArticleCount { get; set; }
-
-        /// <summary>
         ///     Возвращиет или задает пол сотрудника
         /// </summary>
         public string Sex { get; set; }
@@ -46,6 +41,11 @@ namespace CloudPublishing.Business.DTO
         ///     Возвращиет или задает год рождения сотрудника
         /// </summary>
         public short BirthYear { get; set; }
+
+        /// <summary>
+        ///     Возвращиет или задает общее количество статей журналиста
+        /// </summary>
+        public int ArticleCount { get; set; }
 
         /// <summary>
         ///     Возвращиет или задает количество статей журналиста по изданиям

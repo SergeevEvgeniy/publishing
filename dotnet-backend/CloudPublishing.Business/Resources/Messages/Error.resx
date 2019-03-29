@@ -123,11 +123,20 @@
   <data name="NoDataAqueiredEmployee" xml:space="preserve">
     <value>Ошибка при получении данных сотрудника</value>
   </data>
+  <data name="NoDataAquiredRemoteHost" xml:space="preserve">
+    <value>Ошибка получения данных с удаленного хоста</value>
+  </data>
   <data name="NotFoundJournalist" xml:space="preserve">
     <value>Журналист не найден</value>
   </data>
   <data name="NotFoundUser" xml:space="preserve">
     <value>Пользователь не найден</value>
+  </data>
+  <data name="RoleChangeFaildChiefEditor" xml:space="preserve">
+    <value>Сначала необходимо указать другого главного редактора</value>
+  </data>
+  <data name="UnavaibleRemoteHost" xml:space="preserve">
+    <value>Невозможно получить данные стороннего сервиса</value>
   </data>
   <data name="UpdateFailedEmployee" xml:space="preserve">
     <value>Ошибка обновления данных пользователя: {0}</value>

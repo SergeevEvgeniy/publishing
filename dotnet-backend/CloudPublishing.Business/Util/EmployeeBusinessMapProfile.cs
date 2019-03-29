@@ -25,7 +25,7 @@ namespace CloudPublishing.Business.Util
 
             CreateMap<Education, EducationDTO>();
 
-            CreateMap<EmployeeDTO, JournalistStatisticsDTO>();
+            CreateMap<Employee, JournalistStatisticsDTO>();
         }
     }
 }
