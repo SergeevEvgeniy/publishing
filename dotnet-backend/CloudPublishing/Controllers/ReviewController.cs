@@ -5,13 +5,14 @@ using CloudPublishing.Models.Reviews.ViewModels;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using CloudPublishing.Util.Profiles;
+using CloudPublishing.Util.Attributes;
 
 namespace CloudPublishing.Controllers
 {
-    // [Authorize(Roles = "redactor")]
     /// <summary>
     /// Контроллер рецензий
     /// </summary>
+    [HandleException]
     public class ReviewController : Controller
     {
         private IReviewService reviewService;
@@ -36,6 +37,7 @@ namespace CloudPublishing.Controllers
         /// Метод обработки запроса на получение главной страницы рецензий
         /// </summary>
         /// <returns>Возвращает представление, содержащее список рецензий</returns>
+        [HttpGet]
         public ActionResult Index()
         {
             // Заглушка. Будет заменено на получение id текущего пользователя

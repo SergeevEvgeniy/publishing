@@ -194,6 +194,7 @@
     <Compile Include="Models\Reviews\ViewModels\ReviewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\TopicModel.cs" />
     <Compile Include="Util\Attributes\AjaxOnlyAttribute.cs" />
+    <Compile Include="Util\Attributes\HandleExceptionAttribute.cs" />
     <Compile Include="Util\Profiles\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -289,8 +290,6 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Review\Index.cshtml" />
-    <Content Include="Views\Review\_ReviewLayout.cshtml" />
-    <Content Include="Views\Review\InvalidModel.cshtml" />
     <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Review\Create.cshtml" />
     <Content Include="Views\Review\Details.cshtml" />
