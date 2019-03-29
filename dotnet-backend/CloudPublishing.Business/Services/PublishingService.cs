@@ -85,7 +85,7 @@ namespace CloudPublishing.Business.Services
         public IEnumerable<TopicDTO> GetTopicsNotInPublishing(int publishingId)
         {
             var topics = unitOfWork.Topics.GetAll()
-                .Where(t => !t.Publishings.Select(p => p.Id).Contains(publishingId));
+                .Where(t => !t.Publishings.Any(p => p.Id == publishingId));
 
             return mapper.Map<IEnumerable<TopicDTO>>(topics);
         }

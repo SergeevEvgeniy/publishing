@@ -194,6 +194,7 @@
     <Compile Include="Models\Reviews\ViewModels\ReviewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\TopicModel.cs" />
     <Compile Include="Util\Attributes\AjaxOnlyAttribute.cs" />
+    <Compile Include="Util\Attributes\HttpRequestExceptionAttribute.cs" />
     <Compile Include="Util\Attributes\HandleExceptionAttribute.cs" />
     <Compile Include="Util\Profiles\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />

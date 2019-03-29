@@ -2,22 +2,17 @@
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Models.Publishings.ViewModels;
 using CloudPublishing.Util.PublishingValueResolvers;
-using System.Collections.Generic;
+using CloudPublishing.Business.Constants;
 
 namespace CloudPublishing.Util
 {
     public class PublishingMapProfile : Profile
     {
-        private Dictionary<string, string> publishingType = new Dictionary<string, string>
-        {
-            { "M", "Журнал" },
-            { "P", "Газета" }
-        };
         public PublishingMapProfile()
         {
             CreateMap<PublishingDTO, PublishingTableViewModel>()
                 .ForMember(dest => dest.Topics, opt => opt.ResolveUsing<TopicsNameToString>())
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => publishingType[src.Type]));
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => DataCorrelation.PublishingTypes[src.Type]));
 
             CreateMap<PublishingDTO, PublishingViewModel>();
 

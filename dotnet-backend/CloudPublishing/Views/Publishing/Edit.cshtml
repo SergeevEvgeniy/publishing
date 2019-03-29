@@ -1,4 +1,5 @@
-﻿@model CloudPublishing.Models.Publishings.ViewModels.PublishingEditViewModel
+﻿@using CloudPublishing.Business.Constants
+@model CloudPublishing.Models.Publishings.ViewModels.PublishingEditViewModel
 @{
     ViewBag.Title = "Редактирование издания";
 }
@@ -21,12 +22,12 @@
                 <label class="col-2">Тип</label>
                 <div class="col-10">
                     <div class="form-check form-check-inline">
-                        @Html.RadioButtonFor(m => m.Publishing.Type, "P", new { @class = "form-check-input" })
-                        <label class="form-check-label" for="radioJournal">Газета</label>
+                        @Html.RadioButtonFor(m => m.Publishing.Type, PublishingType.Paper, new { @class = "form-check-input" })
+                        <label class="form-check-label" for="radioJournal">@DataCorrelation.PublishingTypes[PublishingType.Paper]</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        @Html.RadioButtonFor(m => m.Publishing.Type, "M", new { @class = "form-check-input" })
-                        <label class="form-check-label" for="inlineRadio2">Журнал</label>
+                        @Html.RadioButtonFor(m => m.Publishing.Type, PublishingType.Magazine, new { @class = "form-check-input" })
+                        <label class="form-check-label" for="inlineRadio2">@DataCorrelation.PublishingTypes[PublishingType.Magazine]</label>
                     </div>
                 </div>
             </div>

@@ -67,6 +67,7 @@
     <Compile Include="Constants\DataCorrelation.cs" />
     <Compile Include="Constants\EmployeeSex.cs" />
     <Compile Include="Constants\EmployeeType.cs" />
+    <Compile Include="Constants\PublishingType.cs" />
     <Compile Include="DTO\ArticleDTO.cs" />
     <Compile Include="DTO\DetailedReviewDTO.cs" />
     <Compile Include="DTO\EducationDTO.cs" />

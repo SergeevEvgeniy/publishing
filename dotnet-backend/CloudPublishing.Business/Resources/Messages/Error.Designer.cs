@@ -79,6 +79,15 @@ namespace CloudPublishing.Business.Resources.Messages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ошибка получения данных с удаленного хоста.
+        /// </summary>
+        public static string NoDataAquiredRemoteHost {
+            get {
+                return ResourceManager.GetString("NoDataAquiredRemoteHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Журналист не найден.
         /// </summary>
         public static string NotFoundJournalist {
@@ -93,6 +102,24 @@ namespace CloudPublishing.Business.Resources.Messages {
         public static string NotFoundUser {
             get {
                 return ResourceManager.GetString("NotFoundUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сначала необходимо указать другого главного редактора.
+        /// </summary>
+        public static string RoleChangeFaildChiefEditor {
+            get {
+                return ResourceManager.GetString("RoleChangeFaildChiefEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Невозможно получить данные стороннего сервиса.
+        /// </summary>
+        public static string UnavaibleRemoteHost {
+            get {
+                return ResourceManager.GetString("UnavaibleRemoteHost", resourceCulture);
             }
         }
         

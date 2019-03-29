@@ -7,6 +7,7 @@ using AutoMapper;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Employees.ApiModels;
+using CloudPublishing.Util.Attributes;
 
 namespace CloudPublishing.Controllers.RestApi
 {
@@ -26,9 +27,11 @@ namespace CloudPublishing.Controllers.RestApi
         [Route("employees")]
         public IHttpActionResult GetEmployeeData()
         {
-            var result = service.GetEmployees();
+            var result = service.GetEmployees().ToList();
 
-            return Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeItemModel>>(result));
+            return !result.Any()
+                ? (IHttpActionResult) ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent))
+                : Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeItemModel>>(result));
         }
 
         [HttpGet]
@@ -37,12 +40,14 @@ namespace CloudPublishing.Controllers.RestApi
         {
             if (id == null)
             {
-                return ResponseMessage(new HttpResponseMessage((HttpStatusCode) 422));
+                return BadRequest();
             }
 
             var result = service.GetEmployeeById(id.Value);
 
-            return Ok(mapper.Map<EmployeeDTO, EmployeeData>(result));
+            return result == null
+                ? (IHttpActionResult) ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent))
+                : Ok(mapper.Map<EmployeeDTO, EmployeeData>(result));
         }
 
         [HttpPost]
@@ -50,18 +55,17 @@ namespace CloudPublishing.Controllers.RestApi
         public IHttpActionResult GetEmployeeData(EmployeeFilter filter)
         {
             var list = service.GetEmployeesFromList(filter.IdList, filter.LastName).ToList();
-            if (!list.Any())
-            {
-                return ResponseMessage(new HttpResponseMessage((HttpStatusCode.NoContent)));
-            }
-            return Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(list));
+            return !list.Any()
+                ? (IHttpActionResult) ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent))
+                : Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(list));
         }
 
         [HttpGet]
         [Route("journalists/{id}")]
+        [HttpRequestException]
         public IHttpActionResult GetEmployeeStatistics(int? id)
         {
-            return Ok();
+            return id == null ? (IHttpActionResult) BadRequest() : Ok(service.GetJournalistStatistics(id.Value));
         }
     }
 }

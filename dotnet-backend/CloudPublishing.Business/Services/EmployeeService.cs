@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using AutoMapper;
 using CloudPublishing.Business.Constants;
 using CloudPublishing.Business.DTO;
@@ -94,7 +94,14 @@ namespace CloudPublishing.Business.Services
                 throw new EntityNotFoundException(Error.NotFoundJournalist);
             }
 
-            throw new NotImplementedException();
+            var statistics = service.GetJournalistStatistics(id);
+
+            if (statistics?.ArticleCountByPublishing == null || statistics.ArticleCountByTopics == null)
+            {
+                throw new HttpRequestException(Error.NoDataAquiredRemoteHost);
+            }
+
+            return mapper.Map(journalist, statistics);
         }
 
         /// <inheritdoc />
