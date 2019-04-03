@@ -233,7 +233,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     }
 
     @Override
-    public Article getArticleById(int articleId) {
+    public Article getArticleById(final int articleId) {
         return articleDao.getArticleByArticleId(articleId);
     }
 }

@@ -62,5 +62,11 @@ public interface ArticleService {
      */
     ArticleForm getUpdateArticleFormByArticleId(int articleId);
 
+    /**
+     * Получение статьи по ее идентификатору.
+     *
+     * @param articleId - id статьи
+     * @return {@link Article}
+     * */
     Article getArticleById(int articleId);
 }

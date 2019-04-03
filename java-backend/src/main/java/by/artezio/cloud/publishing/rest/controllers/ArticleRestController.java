@@ -29,6 +29,7 @@ public class ArticleRestController {
     /**
      * @param publishingService {@link PublishingService}
      * @param employeeService   {@link EmployeeService}
+     * @param articleService {@link ArticleService}
      */
     public ArticleRestController(final PublishingService publishingService,
                                  final EmployeeService employeeService,
@@ -56,6 +57,10 @@ public class ArticleRestController {
         return employeeService.getEmployeesByPublishingId(publishingId);
     }
 
+    /**
+     * @param articleId - id статьи
+     * @return статья {@link Article}
+     * */
     @GetMapping(value = "/articleById/{articleId}")
     public Article getArticleById(@PathVariable("articleId") final int articleId) {
         return articleService.getArticleById(articleId);
