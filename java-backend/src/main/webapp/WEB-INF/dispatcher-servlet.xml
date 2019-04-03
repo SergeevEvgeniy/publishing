@@ -13,8 +13,9 @@
     <!-- Статические ресурсы(js, css, fonts, images) доступны по пути resources -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
-    <!-- Сканирование пакета web на наличие @RestController и @Controller-->
+    <!-- Сканирование пакета web, rest на наличие @RestController и @Controller-->
     <context:component-scan base-package="by.artezio.cloud.publishing.web"/>
+    <context:component-scan base-package="by.artezio.cloud.publishing.rest"/>
 
     <!-- Бин необходим для поиска наших представлений(jsp файлов) по их названиям, которые могут возвращаться
     в качестве результата работы методов контроллеров -->

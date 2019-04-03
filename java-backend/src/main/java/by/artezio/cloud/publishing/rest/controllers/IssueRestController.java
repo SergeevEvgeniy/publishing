@@ -1,4 +1,4 @@
-package by.artezio.cloud.publishing.web.rest;
+package by.artezio.cloud.publishing.rest.controllers;
 
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Topic;
