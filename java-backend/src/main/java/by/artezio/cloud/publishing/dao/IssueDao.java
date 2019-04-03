@@ -13,7 +13,7 @@ import java.util.List;
  * @author Igor Kuzmin
  */
 @Repository
-public final class IssueDao {
+public class IssueDao {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -31,7 +31,7 @@ public final class IssueDao {
      * Конструктор с параметром {@param jdbcTemplate}.
      * @param jdbcTemplate jdbcTemplate, дает доступ к БД.
      */
-    private IssueDao(final NamedParameterJdbcTemplate jdbcTemplate) {
+    public IssueDao(final NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
