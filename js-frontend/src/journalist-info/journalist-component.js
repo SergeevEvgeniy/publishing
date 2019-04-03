@@ -5,6 +5,7 @@ var StatisticsComponent = require('./journ-statistics/journalist-statistics');
 var ArticlesComponent = require('./journ-articles/journalist-articles');
 var JournalistService = require('../services/journalist-service');
 var AlertBoxComponent = require('../alert-box/alert-box-component');
+var Spinner = require('./spinner/spinner');
 /**
  * Компонент для управлением отображением инфомрации и
  * статистики журналиста.
@@ -20,6 +21,7 @@ function JournalistStatComponent($parentElement) {
     var $parentComponentBody;
     var returnButtonClickEventListener = null;
     var alert = new AlertBoxComponent();
+    var spinner = new Spinner();
     /**
      * Событие на переключение вкладок меню 'Информация, Статистика, Статьи'
      * @param {Event} event - объект события.
@@ -32,12 +34,12 @@ function JournalistStatComponent($parentElement) {
         var data;
         while (parent !== target) {
             if (target.tagName === 'LI') {
+                $parentComponentBody.children().hide();
+                $(parent).find('a').removeClass('active');
+                $(target).children().first().addClass('active');
                 data = target.dataset.type;
                 bodyPick = $componentsBody[data];
                 componentPick = data + 'Component';
-                $(parent).find('a').removeClass('active');
-                $(target).children().first().addClass('active');
-                $parentComponentBody.children().hide();
                 pick = components[componentPick];
                 pick.setData(componentData);
                 bodyPick.show();
@@ -70,11 +72,11 @@ function JournalistStatComponent($parentElement) {
         }));
         $parentComponentBody = $parentElement.find('.components');
         $componentsBody.info = $parentElement.find('.journalist-info-content');
-        $componentsBody.articles = $parentElement.find('.journalist-statistics-content');
+        $componentsBody.articles = $parentElement.find('.journalist-articles-content');
         $componentsBody.statistics = $parentElement.find('.journalist-statistics-content');
         components.infoComponent = new InfoComponent($componentsBody.info);
-        components.statisticsComponent = new StatisticsComponent($componentsBody.articles);
-        components.articlesComponent = new ArticlesComponent($componentsBody.statistics);
+        components.statisticsComponent = new StatisticsComponent($componentsBody.statistics);
+        components.articlesComponent = new ArticlesComponent($componentsBody.articles);
     }
 
     /**
@@ -91,15 +93,18 @@ function JournalistStatComponent($parentElement) {
      * @param {string} id - id журналиста.
      */
     this.appendComponent = function appendComponent(id) {
+        spinner.appendSpinner($parentElement);
         JournalistService
             .getJournalistInfo(id)
             .then(function handleResponse(journalistData) {
                 componentData = journalistData;
+                spinner.removeSpinner();
                 render();
                 components.infoComponent.setData(componentData);
                 $componentsBody.info.show();
             })
             .catch(function errorResponse(error) {
+                spinner.removeSpinner();
                 alert.error(error);
             });
     };

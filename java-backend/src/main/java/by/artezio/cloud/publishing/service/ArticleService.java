@@ -1,5 +1,6 @@
 package by.artezio.cloud.publishing.service;
 
+import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.dto.ArticleForm;
@@ -60,4 +61,6 @@ public interface ArticleService {
      * @return {@link ArticleForm}
      */
     ArticleForm getUpdateArticleFormByArticleId(int articleId);
+
+    Article getArticleById(int articleId);
 }

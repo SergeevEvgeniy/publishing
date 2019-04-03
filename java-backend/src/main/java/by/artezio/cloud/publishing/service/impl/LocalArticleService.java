@@ -33,6 +33,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     private TopicDao topicDao;
     private PublishingService publishingService;
     private EmployeeService employeeService;
+
     /**
      * Конструктор с параметрами.
      *
@@ -229,5 +230,10 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
         form.setReviews(reviews);
 
         return form;
+    }
+
+    @Override
+    public Article getArticleById(int articleId) {
+        return articleDao.getArticleByArticleId(articleId);
     }
 }

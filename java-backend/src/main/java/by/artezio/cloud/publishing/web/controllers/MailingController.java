@@ -1,8 +1,10 @@
 package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dto.Subscribers;
+import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
 import by.artezio.cloud.publishing.service.PublishingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Arrays;
 
 /**
  * Контроллер для страницы рассылки.
@@ -21,6 +25,9 @@ public class MailingController {
 
     private MailingService mailingService;
     private PublishingService publishingService;
+
+    @Autowired
+    private MailSender mailSender;
 
     /**
      * Конструктор с параметрами.
@@ -77,5 +84,19 @@ public class MailingController {
         System.out.println(isSuccessUpdated ? "YES" : "NO");
 
         return "redirect:/mailing/settings";
+    }
+
+    /**
+     * Инициирует рассылку.
+     * @return mailing.jsp
+     */
+    @GetMapping("/do_it")
+    public String doIt() {
+        mailSender.sendMail(
+            Arrays.asList("team00_10@mail.ru", "team00_11@mail.ru"),
+            "Рассылка на русском",
+            "Это тело письма. Оно на руском языке. Пробуем кодировки на вкус..."
+        );
+        return "redirect:/mailing";
     }
 }

@@ -40,11 +40,15 @@
                     <td>
                         <fmt:formatDate value="${mailingInfo.date}" dateStyle="long" pattern="d MMMM YYYY"/>
                     </td>
-                    <td style="color: ${mailingInfo.result.equals('Успешно') ? 'green' : 'red'}">
+                    <td style="color: ${mailingInfo.success ? 'green' : 'red'}">
                         <c:out value="${mailingInfo.result}"/>
                     </td>
                 </tr>
             </c:forEach>
         </tbody>
     </table>
+
+    <div class="row panel-group">
+        <a class="btn btn-info" href="${pageContext.request.contextPath}/mailing/do_it">Сделать рассылку</a>
+    </div>
 </tag:layout>

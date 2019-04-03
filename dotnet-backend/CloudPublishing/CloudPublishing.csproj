@@ -195,6 +195,7 @@
     <Compile Include="Models\Reviews\ViewModels\TopicModel.cs" />
     <Compile Include="Util\Attributes\AjaxOnlyAttribute.cs" />
     <Compile Include="Util\Attributes\HttpRequestExceptionAttribute.cs" />
+    <Compile Include="Util\Attributes\HandleExceptionAttribute.cs" />
     <Compile Include="Util\Profiles\EmployeeMapProfile.cs" />
     <Compile Include="Models\Employees\ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -212,6 +213,7 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\icon-internal-exception.png" />
     <Content Include="Content\img\icon-not-found.png" />
     <Content Include="Controllers\ReadMe.txt" />
     <Content Include="Controllers\RestApi\ReadMe.txt" />
@@ -290,8 +292,6 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Review\Index.cshtml" />
-    <Content Include="Views\Review\_ReviewLayout.cshtml" />
-    <Content Include="Views\Review\InvalidModel.cshtml" />
     <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Review\Create.cshtml" />
     <Content Include="Views\Review\Details.cshtml" />
@@ -303,6 +303,7 @@
     <Content Include="Views\Review\Edit.cshtml" />
     <Content Include="Views\Publishing\Create.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\InternalServerError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

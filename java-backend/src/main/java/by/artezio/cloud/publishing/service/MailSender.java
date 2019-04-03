@@ -14,6 +14,7 @@ public interface MailSender {
      * @param addressees список адресатов.
      * @param subject тема письма.
      * @param message содержание письма.
+     * @return Список произошедших во время рассылки ошибок.
      */
-    void sendMail(List<String> addressees, String subject, String message);
+    List<String> sendMail(List<String> addressees, String subject, String message);
 }
