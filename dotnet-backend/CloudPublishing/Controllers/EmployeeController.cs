@@ -135,13 +135,13 @@ namespace CloudPublishing.Controllers
                 return null;
             }
 
-            var result = service.GetEmployeeById(id.Value);
-            if (result == null)
+            var employee = service.GetEmployeeById(id.Value);
+            if (employee == null)
             {
                 return null;
             }
 
-            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result);
+            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(employee);
             model.TypeList = GetEmployeeTypeList();
             model.EducationList = GetEmployeeEducationList();
 
