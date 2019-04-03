@@ -1,10 +1,9 @@
-﻿@model int
-@{
+﻿@{
     ViewBag.Title = "NotFound";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="error-notification">
-    <h1 class="status-code">@Model</h1>
+    <h1 class="status-code">404</h1>
     <img src=@Url.Content("~/Content/img/icon-not-found.png") class="notification-img">
     <h2>Простите, мы не смогли найти то, что вы ищите</h2>
     <h4>

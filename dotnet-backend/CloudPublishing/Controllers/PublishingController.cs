@@ -27,7 +27,6 @@ namespace CloudPublishing.Controllers
 
         public ActionResult Create()
         {
-
             PublishingCreateViewModel publishingViewModel = new PublishingCreateViewModel
             {
                 Publishing = new PublishingViewModel(),
