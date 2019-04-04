@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * REST-controller для обработки запросов, связанных со статьями.
@@ -29,7 +28,7 @@ public class ArticleRestController {
     /**
      * @param publishingService {@link PublishingService}
      * @param employeeService   {@link EmployeeService}
-     * @param articleService {@link ArticleService}
+     * @param articleService    {@link ArticleService}
      */
     public ArticleRestController(final PublishingService publishingService,
                                  final EmployeeService employeeService,
@@ -53,14 +52,14 @@ public class ArticleRestController {
      * @return список сотрудников для указанного журнала
      */
     @GetMapping(value = "/employeesByPublishing/{publishingId}")
-    public Set<Employee> getEmployeeByPublishing(@PathVariable("publishingId") final int publishingId) {
+    public List<Employee> getEmployeeByPublishing(@PathVariable("publishingId") final int publishingId) {
         return employeeService.getEmployeesByPublishingId(publishingId);
     }
 
     /**
      * @param articleId - id статьи
      * @return статья {@link Article}
-     * */
+     */
     @GetMapping(value = "/articleById/{articleId}")
     public Article getArticleById(@PathVariable("articleId") final int articleId) {
         return articleService.getArticleById(articleId);

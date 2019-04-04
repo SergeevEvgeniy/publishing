@@ -2,11 +2,7 @@ package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.ArticleCoauthor;
-import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
-import by.artezio.cloud.publishing.domain.Topic;
-import by.artezio.cloud.publishing.service.impl.LocalArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -26,35 +22,17 @@ public class ArticleDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private LocalArticleService service;
-
-    @Autowired
-    private TopicDao topicDao;
-
     private RowMapper<Article> articleRowMapper = (rs, i) -> {
         Article article = new Article();
-        Publishing p = service.getPublishingById(rs.getInt("publishing_id"));
-        Topic t = topicDao.getTopicById(rs.getInt("topic_id"));
-        Employee e = service.getAuthorById(rs.getInt("author_id"));
 
         article.setId(rs.getInt("id"));
-        article.setPublishing(p);
-        article.setTopic(t);
+        article.setPublishingId(rs.getInt("publishing_id"));
+        article.setTopicId(rs.getInt("topic_id"));
         article.setTitle(rs.getString("title"));
         article.setContent(rs.getString("content"));
-        article.setAuthor(e);
+        article.setAuthorId(rs.getInt("author_id"));
 
         return article;
-    };
-
-    private RowMapper<Topic> topicRowMapper = (rs, rowNum) -> {
-        Topic t = new Topic();
-
-        t.setId(rs.getInt("id"));
-        t.setName(rs.getString("name"));
-
-        return t;
     };
 
     private RowMapper<ArticleCoauthor> articleCoauthorRowMapper = (rs, rowNum) -> {
@@ -116,15 +94,18 @@ public class ArticleDao {
             Collections.singletonMap("id", id), articleRowMapper);
     }
 
+
     /**
-     * Возвращает список рецензий {@link Review} по идентификатору статьи.
-     *
-     * @param articleId идентификатор статьи
-     * @return {@link List}&lt;{@link Review}&gt;
+     * @param articleId id статьи
+     * @return список рецензий
      */
     public List<Review> getReviewsByArticleId(final int articleId) {
-        return jdbcTemplate.query("SELECT * FROM review WHERE article_id = :articleId",
-            Collections.singletonMap("articleId", articleId), reviewRowMapper);
+        return jdbcTemplate.query("SELECT r.* "
+                + "FROM review r "
+                + "INNER JOIN article a "
+                + "ON a.id = r.article_id "
+                + "WHERE a.id = :articleId",
+            Collections.singletonMap("articleId", articleId),
+            reviewRowMapper);
     }
-
 }

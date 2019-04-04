@@ -1,7 +1,8 @@
 package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.domain.Employee;
-import java.util.Set;
+
+import java.util.List;
 
 /**
  * Сервис, реализующий бизнес-логику по обработке сущности {@link Employee}.
@@ -23,22 +24,22 @@ public interface EmployeeService {
      * они работают.
      *
      * @param id идентификатор журнала/газеты
-     * @return {@link Set}&lt;{@link Employee}&gt;
+     * @return {@link List}&lt;{@link Employee}&gt;
      */
-    Set<Employee> getEmployeesByPublishingId(final Integer id);
+    List<Employee> getEmployeesByPublishingId(final Integer id);
 
     /**
      * Получение списка сотрудников по идентификатору журнала/газеты, в которой
      * они работают.
      *
-     * @param email значение почты
+     * @param email    значение почты
      * @param password значение пароля
      * @return Employee
      */
     Employee getEmployee(final String email, final String password);
 
     /**
-     * @param email значение почты
+     * @param email          значение почты
      * @param encodePassword закэшированное значение пароля
      * @return Employee
      */
