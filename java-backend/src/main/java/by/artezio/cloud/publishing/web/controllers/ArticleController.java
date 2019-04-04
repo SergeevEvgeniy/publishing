@@ -42,8 +42,8 @@ public class ArticleController {
      */
     @GetMapping
     public final String articleList(final Model model) {
-        List<ArticleInfo> data = articleFacade.getArticleInfoList();
         boolean isJournalist = articleFacade.isJournalist();
+        List<ArticleInfo> data = articleFacade.getArticleInfoList();
         model.addAttribute("data", data);
         model.addAttribute("isJournalist", isJournalist);
         return "articleList";

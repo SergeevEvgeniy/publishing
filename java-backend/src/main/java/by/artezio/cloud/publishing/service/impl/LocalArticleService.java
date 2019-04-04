@@ -73,7 +73,12 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     public List<ArticleInfo> getArticleInfoList(final User user) {
         List<ArticleInfo> articleLists = new ArrayList<>();
 
-        List<Article> articles = articleDao.getArticleListByJournalistId(user.getId());
+        List<Article> articles;
+        if (user.getType().equals('J')) {
+            articles = articleDao.getArticleListByJournalistId(user.getId());
+        } else {
+            articles = articleDao.getAllArticles();
+        }
         for (Article a : articles) {
             ArticleInfo articleInfo = new ArticleInfo();
             articleInfo.setArticleId(a.getId());
