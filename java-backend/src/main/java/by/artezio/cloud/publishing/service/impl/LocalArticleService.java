@@ -122,23 +122,6 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     }
 
     /**
-     * Получение объекта с данными.
-     *
-     * <p>
-     * Используется для заполнения формы и для хранения данных при создании
-     * новой статьи.
-     *
-     * @return объект класса {@link ArticleForm} с данными для заполнения формы
-     * на странице update_article.jsp
-     */
-    @Override
-    public ArticleForm getNewArticleForm() {
-        ArticleForm af = new ArticleForm();
-        af.setPublishing(publishingDao.getPublishingList());
-        return af;
-    }
-
-    /**
      * Получение сотрудника из сервиса Employee по его идентификатору.
      *
      * @param id идентификатор сотрудника

@@ -18,37 +18,41 @@
         </div>
         <table class="table table-bordered table-hover ">
             <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Журнал/газета</th>
-                    <th>Рубрика</th>
+            <tr>
+                <th>Название</th>
+                <th>Журнал/газета</th>
+                <th>Рубрика</th>
+                <c:if test="${not isJournalist}">
                     <th>Автор</th>
-                    <th>Соавторы</th>
-                    <th></th>
-                </tr>
+                </c:if>
+                <th>Соавторы</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                <c:forEach var="element" items="${data}">
-                    <tr>
-                        <td>${element.title}</td>
-                        <td>${element.publishing}</td>
-                        <td>${element.topic}</td>
+            <c:forEach var="element" items="${data}">
+                <tr>
+                    <td>${element.title}</td>
+                    <td>${element.publishing}</td>
+                    <td>${element.topic}</td>
+                    <c:if test="${not isJournalist}">
                         <td>${element.authorFullName}</td>
-                        <td>
-                            <ul>
-                                <c:forEach items="${element.coauthors}" var="coauthor">
-                                    <li> ${coauthor}</li>
-                                    </c:forEach>
-                            </ul>
-                        </td>
-                        <td>
-                            <a href="article/update/${element.articleId}">
-                                <span class="glyphicon glyphicon-edit btn btn-lg btn-success"> </span>
-                            </a>
-                            <span class="glyphicon glyphicon-trash btn btn-lg btn-danger"></span>
-                        </td>
-                    </tr>
-                </c:forEach>
+                    </c:if>
+                    <td>
+                        <ul>
+                            <c:forEach items="${element.coauthors}" var="coauthor">
+                                <li> ${coauthor}</li>
+                            </c:forEach>
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="article/update/${element.articleId}">
+                            <span class="glyphicon glyphicon-edit btn btn-lg btn-success"> </span>
+                        </a>
+                        <span class="glyphicon glyphicon-trash btn btn-lg btn-danger"></span>
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
         </table>
     </form:form>

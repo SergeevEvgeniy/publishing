@@ -2,12 +2,8 @@ package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
-import by.artezio.cloud.publishing.dto.User;
-import by.artezio.cloud.publishing.service.ArticleService;
-import by.artezio.cloud.publishing.service.EmployeeService;
-import by.artezio.cloud.publishing.service.PublishingService;
+import by.artezio.cloud.publishing.web.facade.ArticleWebFacade;
 import by.artezio.cloud.publishing.web.security.SecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,27 +21,17 @@ import java.util.List;
 @RequestMapping("/article")
 public class ArticleController {
 
-    private final ArticleService articleService;
+    private final ArticleWebFacade articleFacade;
     private final SecurityService securityService;
-    private final PublishingService publishingService;
-    private final EmployeeService employeeService;
 
 
     /**
-     * @param articleService ArticalService
-     * @param securityService SecurityService
-     * @param employeeService EmployeeService
-     * @param publishingService PublishingService
+     * @param articleFacade {@link ArticleWebFacade}
      */
-    @Autowired
-    public ArticleController(final ArticleService articleService,
-                             final SecurityService securityService,
-                             final PublishingService publishingService,
-                             final EmployeeService employeeService) {
-        this.articleService = articleService;
+    public ArticleController(final ArticleWebFacade articleFacade,
+                             final SecurityService securityService) {
+        this.articleFacade = articleFacade;
         this.securityService = securityService;
-        this.publishingService = publishingService;
-        this.employeeService = employeeService;
     }
 
     /**
@@ -56,9 +42,10 @@ public class ArticleController {
      */
     @GetMapping
     public final String articleList(final Model model) {
-        User current = securityService.getCurrentUser();
-        List<ArticleInfo> data = articleService.getArticleInfoList(current);
+        List<ArticleInfo> data = articleFacade.getArticleInfoList();
+        boolean isJournalist = articleFacade.isJournalist();
         model.addAttribute("data", data);
+        model.addAttribute("isJournalist", isJournalist);
         return "articleList";
     }
 
@@ -70,7 +57,7 @@ public class ArticleController {
      */
     @GetMapping(path = "/new")
     public final String createArticle(final Model model) {
-        ArticleForm data = articleService.getNewArticleForm();
+        ArticleForm data = articleFacade.getNewArticleForm();
         model.addAttribute("model", data);
         return "updateArticle";
     }
@@ -84,7 +71,7 @@ public class ArticleController {
      */
     @GetMapping(path = "/update/{articleId}")
     public final String updateArticle(@PathVariable final int articleId, final Model model) {
-        ArticleForm form = articleService.getUpdateArticleFormByArticleId(articleId);
+        ArticleForm form = articleFacade.getUpdateArticleFormByArticleId(articleId);
         model.addAttribute("model", form);
         return "updateArticle";
     }

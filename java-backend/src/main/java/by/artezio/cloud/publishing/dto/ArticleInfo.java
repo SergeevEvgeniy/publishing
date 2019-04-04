@@ -124,4 +124,12 @@ public class ArticleInfo {
     public void setCoauthors(final List<String> coauthors) {
         this.coauthors = coauthors;
     }
+
+    /**
+     *
+     * @param newPublishing {@link String} название журнала\газеты
+     */
+    public void setPublishing(String newPublishing) {
+        this.publishing = newPublishing;
+    }
 }

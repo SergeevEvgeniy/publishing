@@ -3,6 +3,7 @@ package by.artezio.cloud.publishing.rest.controllers;
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Topic;
+import by.artezio.cloud.publishing.rest.facade.ArticleRestFacade;
 import by.artezio.cloud.publishing.service.ArticleService;
 import by.artezio.cloud.publishing.service.EmployeeService;
 import by.artezio.cloud.publishing.service.PublishingService;
@@ -21,21 +22,14 @@ import java.util.List;
 @RequestMapping(path = "/article")
 public class ArticleRestController {
 
-    private PublishingService publishingService;
-    private EmployeeService employeeService;
-    private ArticleService articleService;
+    private ArticleRestFacade articleFacade;
 
     /**
-     * @param publishingService {@link PublishingService}
-     * @param employeeService   {@link EmployeeService}
-     * @param articleService    {@link ArticleService}
+     *
+     * @param articleFacade {@link ArticleRestFacade}
      */
-    public ArticleRestController(final PublishingService publishingService,
-                                 final EmployeeService employeeService,
-                                 final ArticleService articleService) {
-        this.publishingService = publishingService;
-        this.employeeService = employeeService;
-        this.articleService = articleService;
+    public ArticleRestController(final ArticleRestFacade articleFacade) {
+        this.articleFacade = articleFacade;
     }
 
     /**
@@ -44,7 +38,7 @@ public class ArticleRestController {
      */
     @GetMapping(value = "/topicsByPublishing/{publishingId}")
     public List<Topic> getTopicsByPublishing(@PathVariable("publishingId") final int publishingId) {
-        return publishingService.getTopicsByPublishingId(publishingId);
+        return articleFacade.getTopicsByPublishingId(publishingId);
     }
 
     /**
@@ -53,7 +47,7 @@ public class ArticleRestController {
      */
     @GetMapping(value = "/employeesByPublishing/{publishingId}")
     public List<Employee> getEmployeeByPublishing(@PathVariable("publishingId") final int publishingId) {
-        return employeeService.getEmployeesByPublishingId(publishingId);
+        return articleFacade.getEmployeesByPublishingId(publishingId);
     }
 
     /**
@@ -62,6 +56,6 @@ public class ArticleRestController {
      */
     @GetMapping(value = "/articleById/{articleId}")
     public Article getArticleById(@PathVariable("articleId") final int articleId) {
-        return articleService.getArticleById(articleId);
+        return articleFacade.getArticleById(articleId);
     }
 }

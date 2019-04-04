@@ -35,18 +35,6 @@ public interface ArticleService {
     Publishing getPublishingById(int publishingId);
 
     /**
-     * Получение объекта с данными.
-     *
-     * <p>
-     * Используется для заполнения формы и для хранения данных при создании
-     * новой статьи.
-     *
-     * @return объект класса {@link ArticleForm} с данными для заполнения формы
-     * на странице update_article.jsp
-     */
-    ArticleForm getNewArticleForm();
-
-    /**
      * Получение сотрудника из сервиса Employee по его идентификатору.
      *
      * @param id идентификатор сотрудника
