@@ -24,7 +24,6 @@ public class ArticleDao {
 
     private RowMapper<Article> articleRowMapper = (rs, i) -> {
         Article article = new Article();
-
         article.setId(rs.getInt("id"));
         article.setPublishingId(rs.getInt("publishing_id"));
         article.setTopicId(rs.getInt("topic_id"));
@@ -107,5 +106,16 @@ public class ArticleDao {
                 + "WHERE a.id = :articleId",
             Collections.singletonMap("articleId", articleId),
             reviewRowMapper);
+    }
+
+    public boolean isPublished(final Integer articleId) {
+        Integer id = jdbcTemplate.queryForObject("SELECT COUNT(*) " +
+                "FROM article a " +
+                "INNER JOIN issue_article ia " +
+                "ON ia.article_id = a.id " +
+                "WHERE a.id = :articleId",
+            Collections.singletonMap("articleId", articleId),
+            Integer.class);
+        return id > 0;
     }
 }
