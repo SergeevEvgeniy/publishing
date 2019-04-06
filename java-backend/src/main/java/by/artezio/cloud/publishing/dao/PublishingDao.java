@@ -53,7 +53,7 @@ public class PublishingDao {
     }
 
     /**
-     * Возвращает объект публикации {@link Publishing} c id == {@link id}.
+     * Возвращает объект публикации {@link Publishing} по идентификатору.
      *
      * @param id - publishing id
      * @return Publishing объект, если он существует, иначе <code>null</code>.
@@ -68,8 +68,8 @@ public class PublishingDao {
     }
 
     /**
-     * Возвращает список рубрик {@link Topic} входящие в состав журнала с id ==
-     * {@link publishingId}.
+     * Возвращает список рубрик {@link Topic} входящие в состав журнала
+     * с id = publishingId.
      *
      * @param publishingId - id журнала из которого извлекаем список рубрик
      * @return List<Topic> список объектов Topic (рубрики)
@@ -102,4 +102,17 @@ public class PublishingDao {
         }
         return bldr.toString();
     }
+
+    /**
+     * Метод получения списка журналов/газет по id сотрудника данных журналов/газет.
+     * @param employeeId - id {@link by.artezio.cloud.publishing.domain.Employee}
+     * @return список {@link Publishing} - все журналы/газуты в которых задействован сотрудник
+     * */
+    public List<Publishing> getPublishingListByEmployeeId(final int employeeId) {
+        return jdbcTemplate.query("select * from publishing p "
+                + "join publishing_employee pe on p.id = pe.publishing_id "
+                + "where pe.employee_id = :employeeId",
+            Collections.singletonMap("employeeId", employeeId), publishingRowMapper);
+    }
+
 }

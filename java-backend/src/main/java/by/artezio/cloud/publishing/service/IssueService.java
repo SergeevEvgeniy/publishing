@@ -44,4 +44,19 @@ public interface IssueService {
      * */
     IssueInfo mapIssueToIssueInfo(final Issue issue);
 
+    /**
+     * Функция преобразования списка {@link Issue}
+     * в список {@link IssueInfo}.
+     * @param issueList список {@link Issue}
+     * @return список {@link IssueInfo}
+     * */
+    List<IssueInfo> mapIssueListToIssueInfoList(final List<Issue> issueList);
+
+    /**
+     * Метод получения списка {@link IssueInfo} по id журнала/газеты.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}
+     * @return список {@link IssueInfo}
+     * */
+    List<IssueInfo> getIssueInfoListByPublishingId(final int publishingId);
+
 }

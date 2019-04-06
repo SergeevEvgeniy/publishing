@@ -52,14 +52,7 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
-    public IssueInfo getIssueInfoByIssueId(final int issueId) {
-        Issue issue = issueDao.getIssueById(issueId);
-        return mapIssueToIssueInfo(issue);
-    }
-
-    @Override
-    public List<IssueInfo> getListOfAllIssueInfo() {
-        List<Issue> issueList = issueDao.getListOfAllIssues();
+    public List<IssueInfo> mapIssueListToIssueInfoList(final List<Issue> issueList) {
         List<IssueInfo> issueInfoList = new ArrayList<>();
         for (Issue issue : issueList) {
             IssueInfo issueInfo = mapIssueToIssueInfo(issue);
@@ -69,8 +62,25 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
+    public IssueInfo getIssueInfoByIssueId(final int issueId) {
+        Issue issue = issueDao.getIssueById(issueId);
+        return mapIssueToIssueInfo(issue);
+    }
+
+    @Override
+    public List<IssueInfo> getListOfAllIssueInfo() {
+        List<Issue> issueList = issueDao.getListOfAllIssues();
+        return mapIssueListToIssueInfoList(issueList);
+    }
+
+    @Override
     public void deleteIssueById(final int id) {
         issueDao.deleteIssueById(id);
     }
 
+    @Override
+    public List<IssueInfo> getIssueInfoListByPublishingId(final int publishingId) {
+        List<Issue> issueList = issueDao.getIssueListByPublishingId(publishingId);
+        return mapIssueListToIssueInfoList(issueList);
+    }
 }

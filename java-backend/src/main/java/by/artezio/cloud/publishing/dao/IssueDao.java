@@ -28,7 +28,7 @@ public class IssueDao {
     };
 
     /**
-     * Конструктор с параметром {@param jdbcTemplate}.
+     * Конструктор с параметром.
      * @param jdbcTemplate jdbcTemplate, дает доступ к БД.
      */
     public IssueDao(final NamedParameterJdbcTemplate jdbcTemplate) {
@@ -60,6 +60,17 @@ public class IssueDao {
     public Issue getIssueById(final int id) {
         return jdbcTemplate.queryForObject("select * from issue where id = :id",
             Collections.singletonMap("id", id), issueRowMapper);
+    }
+
+    /**
+     * Метод получения всех номеров определенного журнала/газеты.
+     * @param publishingId - идентификатор журнала/газеты
+     * @return список {@link Issue} журнала/газеты
+     * */
+    public List<Issue> getIssueListByPublishingId(final int publishingId) {
+        return jdbcTemplate.query("select * from issue "
+                + "where publishing_id = :publishingId",
+            Collections.singletonMap("publishingId", publishingId), issueRowMapper);
     }
 
 }

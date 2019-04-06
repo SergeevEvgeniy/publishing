@@ -32,4 +32,10 @@ public class FakePublishingService implements PublishingService {
     public Publishing getPublishingById(final Integer publishingId) {
         return publishingDao.getPublishingById(publishingId);
     }
+
+    @Override
+    public List<Publishing> getPublishingListByEmployeeId(final int employeeId) {
+        return publishingDao.getPublishingListByEmployeeId(employeeId);
+    }
+
 }
