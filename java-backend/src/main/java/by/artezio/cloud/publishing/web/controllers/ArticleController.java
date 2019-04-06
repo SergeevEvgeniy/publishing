@@ -1,5 +1,7 @@
 package by.artezio.cloud.publishing.web.controllers;
 
+import by.artezio.cloud.publishing.domain.Employee;
+import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
 import by.artezio.cloud.publishing.web.facade.ArticleWebFacade;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -74,5 +77,28 @@ public class ArticleController {
         ArticleForm form = articleFacade.getUpdateArticleFormByArticleId(articleId);
         model.addAttribute("model", form);
         return "updateArticle";
+    }
+
+    /**
+     * @param publishingId id журнала
+     * @return список рубрик для указанного журнала
+     */
+    @GetMapping(value = "/topicsByPublishing/{publishingId}")
+    @ResponseBody
+    public List<Topic> getTopicsByPublishing(@PathVariable("publishingId") final int publishingId) {
+        return articleFacade.getTopicsByPublishingId(publishingId);
+    }
+
+    /**
+     * @param publishingId id журнала
+     * @return список сотрудников для указанного журнала
+     */
+    @GetMapping(value = "/employeesByPublishing/{publishingId}")
+    @ResponseBody
+    public List<Employee> getEmployeeByPublishing(@PathVariable("publishingId") final int publishingId) {
+        List<Employee> employees = articleFacade.getEmployeesByPublishingId(publishingId);
+        Employee current = articleFacade.getEmployeeById(securityService.getCurrentUser().getId());
+        employees.remove(current);
+        return employees;
     }
 }

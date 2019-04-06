@@ -13,9 +13,11 @@
 
 <tag:layout>
     <form:form modelAttribute="data">
-        <div class="text-right form-group">
-            <a href="article/new" class="btn btn-success ">Добавить статью</a>
-        </div>
+        <c:if test="${isJournalist}">
+            <div class="text-right form-group">
+                <a href="article/new" class="btn btn-success ">Добавить статью</a>
+            </div>
+        </c:if>
         <table class="table table-bordered table-hover ">
             <thead>
             <tr>
@@ -39,16 +41,18 @@
                         <td>${element.authorFullName}</td>
                     </c:if>
                     <td>
-                        <ul>
+                        <ul class="list-unstyled">
                             <c:forEach items="${element.coauthors}" var="coauthor">
                                 <li> ${coauthor}</li>
                             </c:forEach>
                         </ul>
                     </td>
                     <td>
-                        <a href="article/update/${element.articleId}">
-                            <span class="glyphicon glyphicon-edit btn btn-lg btn-success"> </span>
-                        </a>
+                        <c:if test="${isJournalist and not element.published}">
+                            <a href="article/update/${element.articleId}">
+                                <span class="glyphicon glyphicon-edit btn btn-lg btn-success"> </span>
+                            </a>
+                        </c:if>
                         <span class="glyphicon glyphicon-trash btn btn-lg btn-danger"></span>
                     </td>
                 </tr>

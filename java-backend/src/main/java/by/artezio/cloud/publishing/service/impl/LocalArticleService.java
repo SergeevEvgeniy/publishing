@@ -6,7 +6,6 @@ import by.artezio.cloud.publishing.dao.EmployeeDao;
 import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.dao.TopicDao;
 import by.artezio.cloud.publishing.domain.Article;
-import by.artezio.cloud.publishing.domain.ArticleCoauthor;
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
@@ -109,6 +108,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
 
             List<String> coauthors = getCoauthorsShortNames(coauthorsList);
             articleInfo.setCoauthors(coauthors);
+            articleInfo.setPublished(articleDao.isPublished(a.getId()));
             articleLists.add(articleInfo);
         }
 
@@ -176,16 +176,6 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
                 .append(".");
         }
         return bldr.toString();
-    }
-
-
-    private List<Employee> getArticleCoauthorsByArticleId(final int articleId) {
-        List<ArticleCoauthor> list = articleDao.getArticleCoauthorsByArticleId(articleId);
-        List<Employee> employees = new ArrayList<>();
-        for (ArticleCoauthor ac : list) {
-            employees.add(employeeDao.getEmployeeById(ac.getEmployeeId()));
-        }
-        return employees;
     }
 
     /**

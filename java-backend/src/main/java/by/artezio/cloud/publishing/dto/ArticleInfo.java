@@ -16,6 +16,7 @@ public class ArticleInfo {
     private String topic;
     private String authorFullName;
     private List<String> coauthors;
+    private boolean isPublished;
 
     /**
      * Возвращает идентификатор статьи.
@@ -131,5 +132,21 @@ public class ArticleInfo {
      */
     public void setPublishing(String newPublishing) {
         this.publishing = newPublishing;
+    }
+
+    /**
+     *
+     * @return {@code true}, если статья опубликована, иначе {@code false}
+     */
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    /**
+     *
+     * @param published признак того, опубликована ли статья
+     */
+    public void setPublished(boolean published) {
+        isPublished = published;
     }
 }

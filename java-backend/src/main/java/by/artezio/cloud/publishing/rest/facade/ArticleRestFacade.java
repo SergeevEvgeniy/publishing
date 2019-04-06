@@ -2,13 +2,9 @@ package by.artezio.cloud.publishing.rest.facade;
 
 import by.artezio.cloud.publishing.dao.TopicDao;
 import by.artezio.cloud.publishing.domain.Article;
-import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.service.ArticleService;
 import by.artezio.cloud.publishing.service.EmployeeService;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * @author Denis Shubin
@@ -28,14 +24,10 @@ public class ArticleRestFacade {
         this.articleService = articleService;
     }
 
-    public List<Topic> getTopicsByPublishingId(final int publishingId) {
-        return topicDao.getTopicsByPublishingId(publishingId);
-    }
-
-    public List<Employee> getEmployeesByPublishingId(final int publishingId) {
-        return employeeService.getEmployeesByPublishingId(publishingId);
-    }
-
+    /**
+     * @param articleId id статьи
+     * @return статья
+     */
     public Article getArticleById(final int articleId) {
         return articleService.getArticleById(articleId);
     }
