@@ -49,12 +49,12 @@ public class SendingMailSender implements MailSender {
                 javaMailSender.send(mimeMessage);
             } catch (MailException | MessagingException e) {
                 System.out.println(e.getMessage());
-                results.add(MailingResultType.BAD_SUBSCRIBER + " " + address);
+                results.add(MailingResultType.BAD_SUBSCRIBER.getMessage() + " " + address);
             }
         }
 
         if (results.size() == 0) {
-            results.add(MailingResultType.SUCCESS.toString());
+            results.add(MailingResultType.SUCCESS.getMessage());
         }
 
         return results;

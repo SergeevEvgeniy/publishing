@@ -11,10 +11,8 @@ import java.util.Date;
 public class MailingInfo {
 
     private int mailingId;
-    private int publishingId;
-    //TODO must be private String publishingName;
-    private int issueId;
-    //TODO must be private String issueNumber;
+    private String publishingTitle;
+    private String issueNumber;
     private Date date;
     private String result;
 
@@ -27,16 +25,16 @@ public class MailingInfo {
     /**
      * Конструктор с параметрами.
      * @param mailingId -- id рассылки.
-     * @param publishingId -- id издания, по которому была сделана рассылка.
-     * @param issueId -- id номера, который пошел в рассылку.
+     * @param publishingTitle -- id издания, по которому была сделана рассылка.
+     * @param issueNumber -- id номера, который пошел в рассылку.
      * @param date -- Время, когда была сделана рассылка.
      * @param result -- Результат рассылки.
      */
-    public MailingInfo(final int mailingId, final int publishingId, final int issueId,
+    public MailingInfo(final int mailingId, final String publishingTitle, final String issueNumber,
                        final Date date, final String result) {
         this.mailingId = mailingId;
-        this.publishingId = publishingId;
-        this.issueId = issueId;
+        this.publishingTitle = publishingTitle;
+        this.issueNumber = issueNumber;
         this.date = date;
         this.result = result;
     }
@@ -61,32 +59,32 @@ public class MailingInfo {
      * Возвращает id издания, по которому была сделана рассылка.
      * @return id издания, по которому была сделана рассылка.
      */
-    public int getPublishingId() {
-        return publishingId;
+    public String getPublishingTitle() {
+        return publishingTitle;
     }
 
     /**
      * Устанавливает id издания, по которому была сделана рассылка.
-     * @param publishingId id издания, по которому была сделана рассылка.
+     * @param publishingTitle id издания, по которому была сделана рассылка.
      */
-    public void setPublishingId(final int publishingId) {
-        this.publishingId = publishingId;
+    public void setPublishingTitle(final String publishingTitle) {
+        this.publishingTitle = publishingTitle;
     }
 
     /**
      * Возвращает id номера, который пошел в рассылку.
      * @return id номера, который пошел в рассылку.
      */
-    public int getIssueId() {
-        return issueId;
+    public String getIssueNumber() {
+        return issueNumber;
     }
 
     /**
      * Устанавливает id номера, на который была сделана рассылка.
-     * @param issueId id номера, на который была сделана рассылка.
+     * @param issueNumber id номера, на который была сделана рассылка.
      */
-    public void setIssueId(final int issueId) {
-        this.issueId = issueId;
+    public void setIssueNumber(final String issueNumber) {
+        this.issueNumber = issueNumber;
     }
 
     /**

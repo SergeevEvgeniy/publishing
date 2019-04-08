@@ -1,6 +1,7 @@
 package by.artezio.cloud.publishing.dao;
 
-import by.artezio.cloud.publishing.dto.MailingInfo;
+import by.artezio.cloud.publishing.domain.Mailing;
+import by.artezio.cloud.publishing.domain.MailingResult;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -22,16 +23,17 @@ import java.util.Map;
 @Repository
 public class MailingDao {
 
-    private RowMapper<MailingInfo> mailingInfoRowMapper = (rs, i) -> {
-        System.out.println(rs.getDate("date"));
-        return new MailingInfo(
-            rs.getInt("mailing_id"),
-            rs.getInt("publishing_id"),
-            rs.getInt("issue_id"),
-            Timestamp.valueOf(rs.getTimestamp("date").toLocalDateTime()),
-            rs.getString("result")
-        );
-    };
+    private RowMapper<MailingResult> mailingResultRowMapper = (rs, i) -> new MailingResult(
+        rs.getInt("mailing_id"),
+        rs.getInt("issue_id"),
+        rs.getTimestamp("date").toLocalDateTime(),
+        rs.getString("result")
+    );
+
+    private RowMapper<Mailing> mailingRowMapper = (rs, i) -> new Mailing(
+        rs.getInt("id"),
+        rs.getInt("publishing_id")
+    );
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -45,46 +47,47 @@ public class MailingDao {
     }
 
     /**
-     * Возвращает список email адресов, которые подписаны на издание с id == publishingId.
+     * Возвращает список email адресов, которые подписаны на издание с <code>id == publishingId</code>.
      *
-     * @param publishingId id публикации
-     * @return Список email адресов, которые были в последней рассылке публикации с id == publishingId
+     * @param publishingId id издания
+     * @return Список email адресов подписчиков, которые подписаны на издание <code>id == publishingId</code>
      */
     public List<String> getEmailList(final int publishingId) {
         return jdbcTemplate.query(
-            "select ms.email\n"
-                + "from mailing m join mailing_subscriber ms on m.id = ms.mailing_id\n"
-                + "where publishing_id = :publishing_id;",
+            "select `ms`.`email`"
+                + " from `mailing` `m` join `mailing_subscriber` `ms` on `m`.`id` = `ms`.`mailing_id`"
+                + " where `publishing_id` = :publishing_id;",
             new MapSqlParameterSource(Collections.singletonMap("publishing_id", publishingId)),
             (rs, rowNum) -> rs.getString(1)
         );
     }
 
     /**
-     * Возвращает информацию о всех произошедших рассылках.
-     *
-     * @return список объектов {@link MailingInfo}.
+     * Возвращает список результатов рассылок.
+     * @return список результатов рассылок
      */
-    public List<MailingInfo> getAllMailingInfo() {
-        return jdbcTemplate.query(
-            "select mailing_id, publishing_id, issue_id, `date`, result\n"
-                + "from mailing m\n"
-                + "       join mailing_result mr on m.id = mr.mailing_id\n"
-                + "order by mr.date desc",
-            mailingInfoRowMapper
-        );
+    public List<MailingResult> getAllMailingResult() {
+        return jdbcTemplate.query("select * from `mailing_result` `m` order by `m`.`date` desc", mailingResultRowMapper);
     }
 
     /**
-     * Возвращает id рассылки, привязанной к изданию с id == publishingId.
+     * Возвращает список всех рассылок, которые прикреплены к какому-либо изданию.
+     * @return список объектов Mailing.
+     */
+    public List<Mailing> getAllMailing() {
+        return jdbcTemplate.query("select * from `mailing`", mailingRowMapper);
+    }
+
+    /**
+     * Возвращает id рассылки, привязанной к изданию с <code>id == publishingId</code>.
      *
      * @param publishingId id издания, по которому проходила рассылка.
-     * @return id последней рассылки рассылки. Целое число, если рассылка существует, иначе null.
+     * @return id последней рассылки рассылки. Целое число, если рассылка существует, иначе <code>null</code>.
      */
     public Integer getMailingIdByPublishingId(final int publishingId) {
         try {
             return this.jdbcTemplate.queryForObject(
-                "select id from mailing where publishing_id = :publishingId",
+                "select `id` from `mailing` where `publishing_id` = :publishingId",
                 Collections.singletonMap("publishingId", publishingId),
                 (rs, index) -> rs.getInt("id"));
         } catch (DataAccessException ex) {
@@ -93,7 +96,7 @@ public class MailingDao {
     }
 
     /**
-     * Добавляет email-адрес подписчика к уже добавленным на рассылку с id == mailingId.
+     * Добавляет email-адрес подписчика к уже добавленным на рассылку с <code>id == mailingId</code>.
      *
      * @param mailingId id рассылки, которая прикреплена к изданию.
      * @param email email-адрес нового подписчика.
@@ -106,7 +109,7 @@ public class MailingDao {
         int countAffectedRows;
         try {
             countAffectedRows = this.jdbcTemplate.update(
-                "insert into mailing_subscriber (mailing_id, email) values (:mailingId, :email)",
+                "insert into `mailing_subscriber` (`mailing_id`, `email`) values (:mailingId, :email)",
                 map
             );
         } catch (DataAccessException ex) {
@@ -116,8 +119,9 @@ public class MailingDao {
         return countAffectedRows == 1;
     }
 
+
     /**
-     * Создается новая запись в таблице mailing, которая привязывается к изданию с id == publishingId
+     * Создается новая запись в таблице mailing, которая привязывается к изданию с <code>id == publishingId</code>
      *      и возвращается id этой рассылки.
      *
      * @param publishingId id издания, на которую создается рассылка.
@@ -125,19 +129,19 @@ public class MailingDao {
      */
     public Integer createMailingRecord(final int publishingId) {
         this.jdbcTemplate.update(
-            "insert into mailing (publishing_id) values (:publishingId)",
+            "insert into `mailing` (`publishing_id`) values (:publishingId)",
             Collections.singletonMap("publishingId", publishingId)
         );
         return this.getMailingIdByPublishingId(publishingId);
     }
 
     /**
-     * Удаляет всех подписчиков, которые подписаны на рассылку с id == mailingId.
+     * Удаляет всех подписчиков, которые подписаны на рассылку с <code>id == mailingId</code>.
      * @param mailingId id рассылки.
      */
     public void clearMailingSubscribersByMailingId(final Integer mailingId) {
         this.jdbcTemplate.update(
-            "delete from mailing_subscriber where mailing_id = :mailing_id",
+            "delete from `mailing_subscriber` where `mailing_id` = :mailing_id",
             Collections.singletonMap("mailing_id", mailingId)
         );
     }
@@ -150,7 +154,7 @@ public class MailingDao {
      * @param issueId идентификатор номера, по которому происходила рассылка.
      * @param dateTime день, на момент которого произошла рассылка.
      * @param result результат рассылки.
-     * @return <code>true</code>, если добавление результата рассылки произошла успешноб иначе <code>false</code>.
+     * @return <code>true</code>, если добавление результата рассылки произошла успешно, иначе <code>false</code>.
      */
     public boolean addMailingResult(final int mailingId, final int issueId, final LocalDateTime dateTime, final String result) {
         Map<String, Object> map = new LinkedHashMap<>();
@@ -162,13 +166,13 @@ public class MailingDao {
         int affectedRows;
         try {
             affectedRows = this.jdbcTemplate.update(
-                "insert into mailing_result values (:mailingId, :issueId, \":dateTime\", \":result\")",
+                "insert into `mailing_result` values (:mailingId, :issueId, \":dateTime\", \":result\")",
                 map
             );
         } catch (DataAccessException ex) {
             System.out.println(ex.getMessage());
             affectedRows = 0;
         }
-        return affectedRows != 1;
+        return affectedRows == 1;
     }
 }
