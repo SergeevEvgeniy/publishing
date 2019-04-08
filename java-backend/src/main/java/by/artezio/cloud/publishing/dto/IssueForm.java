@@ -8,7 +8,7 @@ import java.util.List;
  * на главной странице номеров.
  * @author Igor Kuzmin
  */
-public class IssueInfo {
+public class IssueForm {
 
     private Integer publishingId;
 

@@ -1,7 +1,8 @@
 package by.artezio.cloud.publishing.web.controllers;
 
-import by.artezio.cloud.publishing.domain.Publishing;
-import by.artezio.cloud.publishing.dto.IssueInfo;
+import by.artezio.cloud.publishing.domain.Advertising;
+import by.artezio.cloud.publishing.domain.Article;
+import by.artezio.cloud.publishing.dto.IssueForm;
 import by.artezio.cloud.publishing.web.facade.IssueWebFacade;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -35,9 +37,9 @@ public class IssueController {
      * */
     @GetMapping
     public ModelAndView getIssuesPage() {
-        List<IssueInfo> issueInfoList = issueFacade.getIssueInfoList();
+        List<IssueForm> issueFormList = issueFacade.getIssueFormList();
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("issueInfoList", issueInfoList);
+        modelAndView.addObject("issueFormList", issueFormList);
         modelAndView.setViewName("issues");
         return modelAndView;
     }
@@ -49,9 +51,10 @@ public class IssueController {
      */
     @GetMapping(params = "mode=create")
     public ModelAndView openFormInCreationMode() {
-        List<Publishing> publishingList = issueFacade.getPublishingList();
+        Map<Integer, String> publishingMap = issueFacade.getPublishingMap();
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("publishing", publishingList);
+        modelAndView.addObject("publishing", publishingMap);
+        modelAndView.addObject(new IssueForm());
         modelAndView.setViewName("issueForm");
         return modelAndView;
     }
@@ -64,9 +67,17 @@ public class IssueController {
      */
     @GetMapping(params = "mode=edit")
     public ModelAndView openFormInEditingMode(@RequestParam("id") final int issueId) {
-        IssueInfo issueInfo = issueFacade.getIssueInfoByIssueId(issueId);
+        IssueForm issueForm = issueFacade.getIssueFormByIssueId(issueId);
+        Map<Integer, String> publishingMap = issueFacade.getPublishingMap();
+        List<Article> articles =
+            issueFacade.getArticleListByIssueId(issueId);
+        List<Advertising> advertising =
+            issueFacade.getAdvertisingListByIssueId(issueId);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(issueInfo);
+        modelAndView.addObject("publishing", publishingMap);
+        modelAndView.addObject("articles", articles);
+        modelAndView.addObject("advertising", advertising);
+        modelAndView.addObject(issueForm);
         modelAndView.setViewName("issueForm");
         return modelAndView;
     }
@@ -80,8 +91,14 @@ public class IssueController {
     @GetMapping(params = "mode=view")
     public ModelAndView openFormInViewingMode(@RequestParam("id") final int issueId) {
         ModelAndView modelAndView = new ModelAndView();
-        IssueInfo issueInfo = issueFacade.getIssueInfoByIssueId(issueId);
-        modelAndView.addObject(issueInfo);
+        IssueForm issueForm = issueFacade.getIssueFormByIssueId(issueId);
+        List<Article> articles =
+            issueFacade.getArticleListByIssueId(issueId);
+        List<Advertising> advertising =
+            issueFacade.getAdvertisingListByIssueId(issueId);
+        modelAndView.addObject(issueForm);
+        modelAndView.addObject("articles", articles);
+        modelAndView.addObject("advertising", advertising);
         modelAndView.setViewName("issueForm");
         return modelAndView;
     }

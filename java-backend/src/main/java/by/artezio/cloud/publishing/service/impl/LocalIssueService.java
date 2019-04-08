@@ -1,14 +1,11 @@
 package by.artezio.cloud.publishing.service.impl;
 
+import by.artezio.cloud.publishing.dao.IssueArticleDao;
 import by.artezio.cloud.publishing.dao.IssueDao;
 import by.artezio.cloud.publishing.domain.Issue;
-import by.artezio.cloud.publishing.domain.Publishing;
-import by.artezio.cloud.publishing.dto.IssueInfo;
+import by.artezio.cloud.publishing.domain.IssueArticle;
 import by.artezio.cloud.publishing.service.IssueService;
-import by.artezio.cloud.publishing.service.PublishingService;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,17 +17,17 @@ public class LocalIssueService implements IssueService {
 
     private IssueDao issueDao;
 
-    private PublishingService publishingService;
+    private IssueArticleDao issueArticleDao;
 
     /**
      * Конструктор с параметрами.
      * @param issueDao {@link IssueDao}
-     * @param publishingService {@link PublishingService}
+     * @param issueArticleDao {@link IssueArticleDao}
      * */
     public LocalIssueService(final IssueDao issueDao,
-                             final PublishingService publishingService) {
+                             final IssueArticleDao issueArticleDao) {
         this.issueDao = issueDao;
-        this.publishingService = publishingService;
+        this.issueArticleDao = issueArticleDao;
     }
 
     @Override
@@ -39,38 +36,8 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
-    public IssueInfo mapIssueToIssueInfo(final Issue issue) {
-        Publishing publishing = publishingService.getPublishingById(issue.getPublishingId());
-        IssueInfo issueInfo = new IssueInfo();
-        issueInfo.setPublishingId(issue.getPublishingId());
-        issueInfo.setPublishingTitle(publishing.getTitle());
-        issueInfo.setNumber(issue.getNumber());
-        issueInfo.setLocalDate(issue.getDate());
-        issueInfo.setPublished(issue.isPublished());
-        issueInfo.setIssueId(issue.getId());
-        return issueInfo;
-    }
-
-    @Override
-    public List<IssueInfo> mapIssueListToIssueInfoList(final List<Issue> issueList) {
-        List<IssueInfo> issueInfoList = new ArrayList<>();
-        for (Issue issue : issueList) {
-            IssueInfo issueInfo = mapIssueToIssueInfo(issue);
-            issueInfoList.add(issueInfo);
-        }
-        return issueInfoList;
-    }
-
-    @Override
-    public IssueInfo getIssueInfoByIssueId(final int issueId) {
-        Issue issue = issueDao.getIssueById(issueId);
-        return mapIssueToIssueInfo(issue);
-    }
-
-    @Override
-    public List<IssueInfo> getListOfAllIssueInfo() {
-        List<Issue> issueList = issueDao.getListOfAllIssues();
-        return mapIssueListToIssueInfoList(issueList);
+    public Issue getIssueById(final int issueId) {
+        return issueDao.getIssueById(issueId);
     }
 
     @Override
@@ -79,8 +46,13 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
-    public List<IssueInfo> getIssueInfoListByPublishingId(final int publishingId) {
-        List<Issue> issueList = issueDao.getIssueListByPublishingId(publishingId);
-        return mapIssueListToIssueInfoList(issueList);
+    public List<Issue> getIssueListByPublishingId(final int publishingId) {
+        return issueDao.getIssueListByPublishingId(publishingId);
     }
+
+    @Override
+    public List<IssueArticle> getIssueArticleListByIssueId(final int issueId) {
+        return issueArticleDao.getIssueArticleListByIssueId(issueId);
+    }
+
 }
