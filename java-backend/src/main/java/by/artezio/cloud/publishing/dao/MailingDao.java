@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,8 +68,9 @@ public class MailingDao {
     public List<MailingInfo> getAllMailingInfo() {
         return jdbcTemplate.query(
             "select mailing_id, publishing_id, issue_id, `date`, result\n"
-                + "from mailing\n"
-                + "       join mailing_result on mailing.id = mailing_result.mailing_id",
+                + "from mailing m\n"
+                + "       join mailing_result mr on m.id = mr.mailing_id\n"
+                + "order by mr.date desc",
             mailingInfoRowMapper
         );
     }
@@ -138,5 +140,35 @@ public class MailingDao {
             "delete from mailing_subscriber where mailing_id = :mailing_id",
             Collections.singletonMap("mailing_id", mailingId)
         );
+    }
+
+    /**
+     * Добавляет результат рассылки в базу данных. При удачном добавлении вызвращает <code>true</code>,
+     * в случае возникновения какой-либо ошибки возвращает <code>false</code>.
+     *
+     * @param mailingId идентификатор рассылки.
+     * @param issueId идентификатор номера, по которому происходила рассылка.
+     * @param dateTime день, на момент которого произошла рассылка.
+     * @param result результат рассылки.
+     * @return <code>true</code>, если добавление результата рассылки произошла успешноб иначе <code>false</code>.
+     */
+    public boolean addMailingResult(final int mailingId, final int issueId, final LocalDateTime dateTime, final String result) {
+        Map<String, Object> map = new LinkedHashMap<>();
+
+        map.put("mailingId", mailingId);
+        map.put("issueId", issueId);
+        map.put("dateTime", Timestamp.valueOf(dateTime));
+        map.put("result", result);
+        int affectedRows;
+        try {
+            affectedRows = this.jdbcTemplate.update(
+                "insert into mailing_result values (:mailingId, :issueId, \":dateTime\", \":result\")",
+                map
+            );
+        } catch (DataAccessException ex) {
+            System.out.println(ex.getMessage());
+            affectedRows = 0;
+        }
+        return affectedRows != 1;
     }
 }
