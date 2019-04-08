@@ -130,7 +130,7 @@ public class ArticleInfo {
      *
      * @param newPublishing {@link String} название журнала\газеты
      */
-    public void setPublishing(String newPublishing) {
+    public void setPublishing(final String newPublishing) {
         this.publishing = newPublishing;
     }
 
@@ -146,7 +146,7 @@ public class ArticleInfo {
      *
      * @param published признак того, опубликована ли статья
      */
-    public void setPublished(boolean published) {
+    public void setPublished(final boolean published) {
         isPublished = published;
     }
 }
