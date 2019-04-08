@@ -1,8 +1,8 @@
 package by.artezio.cloud.publishing.web.controllers;
 
+import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.dto.IssueInfo;
-import by.artezio.cloud.publishing.service.IssueService;
-import by.artezio.cloud.publishing.service.PublishingService;
+import by.artezio.cloud.publishing.web.facade.IssueWebFacade;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,19 +19,14 @@ import java.util.List;
 @RequestMapping("/issues")
 public class IssueController {
 
-    private PublishingService publishingService;
-
-    private IssueService issueService;
+    private IssueWebFacade issueFacade;
 
     /**
      * Конструктор с параметрами.
-     * @param publishingService {@link PublishingService}
-     * @param issueService {@link IssueService}
+     * @param issueFacade {@link IssueWebFacade}
      * */
-    public IssueController(final PublishingService publishingService,
-                           final IssueService issueService) {
-        this.publishingService = publishingService;
-        this.issueService = issueService;
+    public IssueController(final IssueWebFacade issueFacade) {
+        this.issueFacade = issueFacade;
     }
 
     /**
@@ -40,8 +35,8 @@ public class IssueController {
      * */
     @GetMapping
     public ModelAndView getIssuesPage() {
+        List<IssueInfo> issueInfoList = issueFacade.getIssueInfoList();
         ModelAndView modelAndView = new ModelAndView();
-        List<IssueInfo> issueInfoList = issueService.getListOfAllIssueInfo();
         modelAndView.addObject("issueInfoList", issueInfoList);
         modelAndView.setViewName("issues");
         return modelAndView;
@@ -54,9 +49,9 @@ public class IssueController {
      */
     @GetMapping(params = "mode=create")
     public ModelAndView openFormInCreationMode() {
+        List<Publishing> publishingList = issueFacade.getPublishingList();
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("publishing",
-            publishingService.getPublishingList());
+        modelAndView.addObject("publishing", publishingList);
         modelAndView.setViewName("issueForm");
         return modelAndView;
     }
@@ -69,10 +64,8 @@ public class IssueController {
      */
     @GetMapping(params = "mode=edit")
     public ModelAndView openFormInEditingMode(@RequestParam("id") final int issueId) {
+        IssueInfo issueInfo = issueFacade.getIssueInfoByIssueId(issueId);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("publishing",
-            publishingService.getPublishingList());
-        IssueInfo issueInfo = issueService.getIssueInfoByIssueId(issueId);
         modelAndView.addObject(issueInfo);
         modelAndView.setViewName("issueForm");
         return modelAndView;
@@ -87,7 +80,7 @@ public class IssueController {
     @GetMapping(params = "mode=view")
     public ModelAndView openFormInViewingMode(@RequestParam("id") final int issueId) {
         ModelAndView modelAndView = new ModelAndView();
-        IssueInfo issueInfo = issueService.getIssueInfoByIssueId(issueId);
+        IssueInfo issueInfo = issueFacade.getIssueInfoByIssueId(issueId);
         modelAndView.addObject(issueInfo);
         modelAndView.setViewName("issueForm");
         return modelAndView;

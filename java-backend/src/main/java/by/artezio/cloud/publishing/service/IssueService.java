@@ -3,6 +3,7 @@ package by.artezio.cloud.publishing.service;
 import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.dto.IssueInfo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -20,13 +21,13 @@ public interface IssueService {
     /**
      * Получение списка dto для раздела "номера".
      * @return {@link List} {@link IssueInfo}
-     * */
+     */
     List<IssueInfo> getListOfAllIssueInfo();
 
     /**
      * Удаление номера по идентификатору.
      * @param id - идентификатор {@link Issue}
-     * */
+     */
     void deleteIssueById(final int id);
 
     /**
@@ -41,7 +42,29 @@ public interface IssueService {
      * в объект dto {@link IssueInfo}.
      * @param issue сущность {@link Issue}
      * @return {@link IssueInfo}
-     * */
+     */
     IssueInfo mapIssueToIssueInfo(final Issue issue);
+
+    /**
+     * Возвращает все номера, дата публикации которых равна date.
+     * @param date Дата выпуска номером
+     * @return Список номеров
+     */
+    List<Issue> getIssuesByDate(LocalDate date);
+
+    /**
+     * Функция преобразования списка {@link Issue}
+     * в список {@link IssueInfo}.
+     * @param issueList список {@link Issue}
+     * @return список {@link IssueInfo}
+     */
+    List<IssueInfo> mapIssueListToIssueInfoList(final List<Issue> issueList);
+
+    /**
+     * Метод получения списка {@link IssueInfo} по id журнала/газеты.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}
+     * @return список {@link IssueInfo}
+     */
+    List<IssueInfo> getIssueInfoListByPublishingId(final int publishingId);
 
 }

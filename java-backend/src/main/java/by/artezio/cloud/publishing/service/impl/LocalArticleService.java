@@ -1,25 +1,23 @@
 package by.artezio.cloud.publishing.service.impl;
 
+import by.artezio.cloud.publishing.dao.ArticleCoauthorsDao;
 import by.artezio.cloud.publishing.dao.ArticleDao;
+import by.artezio.cloud.publishing.dao.EmployeeDao;
+import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.dao.TopicDao;
 import by.artezio.cloud.publishing.domain.Article;
-import by.artezio.cloud.publishing.domain.ArticleCoauthor;
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
-import by.artezio.cloud.publishing.service.EmployeeService;
-import by.artezio.cloud.publishing.service.PublishingService;
+import by.artezio.cloud.publishing.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Сервис, содержащий бизнес-логику по обработке статей.
@@ -27,30 +25,32 @@ import java.util.Set;
 @Service
 public class LocalArticleService implements by.artezio.cloud.publishing.service.ArticleService {
 
-    private static final int JOURNALIST_ID = 3;
-
     private ArticleDao articleDao;
     private TopicDao topicDao;
-    private PublishingService publishingService;
-    private EmployeeService employeeService;
+    private PublishingDao publishingDao;
+    private EmployeeDao employeeDao;
+    private ArticleCoauthorsDao coauthorsDao;
 
     /**
      * Конструктор с параметрами.
      *
-     * @param articleDao        класс для взаимодействия с таблицей aarticle
-     * @param topicDao          класс для взаимодействия с таблицей topic
-     * @param publishingService сервис, содержащий бизнес-логику по обработке изданий
-     * @param employeeService   сервис, содержащий бизнес-логику по обработке сотрудников
+     * @param articleDao    класс для взаимодействия с таблицей article
+     * @param topicDao      класс для взаимодействия с таблицей topic
+     * @param publishingDao класс для взаимодействия с таблицей publishing
+     * @param employeeDao   класс для взаимодействия с таблицей employee
+     * @param coauthorsDao  класс для взаимодействия с таблицей article_coauthors
      */
     @Autowired
     public LocalArticleService(final ArticleDao articleDao,
                                final TopicDao topicDao,
-                               final PublishingService publishingService,
-                               final EmployeeService employeeService) {
+                               final PublishingDao publishingDao,
+                               final EmployeeDao employeeDao,
+                               final ArticleCoauthorsDao coauthorsDao) {
         this.articleDao = articleDao;
         this.topicDao = topicDao;
-        this.publishingService = publishingService;
-        this.employeeService = employeeService;
+        this.publishingDao = publishingDao;
+        this.employeeDao = employeeDao;
+        this.coauthorsDao = coauthorsDao;
     }
 
     /**
@@ -66,38 +66,49 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
      * Используется для получения данных в контроллере
      * {@link by.artezio.cloud.publishing.web.controllers.ArticleController}</p>
      *
-     * @param request запрос пользователя, объект класса
-     *                {@link HttpServletRequest}
      * @return список объектов класса {@link ArticleInfo}
      */
     @Override
-    public List<ArticleInfo> getArticleInfoList(final HttpServletRequest request) {
+    public List<ArticleInfo> getArticleInfoList(final User user) {
         List<ArticleInfo> articleLists = new ArrayList<>();
 
-        Employee empl = (Employee) request.getSession().getAttribute("user");
-
-//        List<Article> articles = articleDao.getArticleListByJournalistId(empl.getId());
-        List<Article> articles = articleDao.getArticleListByJournalistId(JOURNALIST_ID);
-
+        List<Article> articles;
+        if (user.getType().equals('J')) {
+            articles = articleDao.getArticleListByJournalistId(user.getId());
+        } else {
+            articles = articleDao.getAllArticles();
+        }
         for (Article a : articles) {
             ArticleInfo articleInfo = new ArticleInfo();
             articleInfo.setArticleId(a.getId());
             articleInfo.setTitle(a.getTitle());
 
-            String publishing = a.getPublishing().getTitle();
-            articleInfo.setPublishing(publishing);
+            Integer publishingId = a.getPublishingId();
+            Publishing publishing = publishingDao.getPublishingById(publishingId);
 
-            String topic = a.getTopic().getName();
-            articleInfo.setTopic(topic);
+            articleInfo.setPublishingName(publishing.getTitle());
 
-            Employee author = a.getAuthor();
+            Integer topicId = a.getTopicId();
+            Topic topic = topicDao.getTopicById(topicId);
+            String topicName = topic.getName();
+            articleInfo.setTopic(topicName);
+
+            Integer authorId = a.getAuthorId();
+            Employee author = employeeDao.getEmployeeById(authorId);
 
             String authorFullName = getEmployeeShortName(author);
 
             articleInfo.setAuthorFullName(authorFullName);
+            List<Integer> coauthorsId = coauthorsDao.getCoauthorsIdByArticleId(a.getId());
 
-            Set<String> coauthors = getCoauthorsShortNames(a.getCoauthors());
+            List<Employee> coauthorsList = new ArrayList<>(coauthorsId.size());
+            for (Integer id : coauthorsId) {
+                coauthorsList.add(employeeDao.getEmployeeById(id));
+            }
+
+            List<String> coauthors = getCoauthorsShortNames(coauthorsList);
             articleInfo.setCoauthors(coauthors);
+            articleInfo.setPublished(articleDao.isPublished(a.getId()));
             articleLists.add(articleInfo);
         }
 
@@ -112,24 +123,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
      */
     @Override
     public Publishing getPublishingById(final int publishingId) {
-        return publishingService.getPublishingById(publishingId);
-    }
-
-    /**
-     * Получение объекта с данными.
-     *
-     * <p>
-     * Используется для заполнения формы и для хранения данных при создании
-     * новой статьи.
-     *
-     * @return объект класса {@link ArticleForm} с данными для заполнения формы
-     * на странице update_article.jsp
-     */
-    @Override
-    public ArticleForm getNewArticleForm() {
-        ArticleForm af = new ArticleForm();
-        af.setPublishings(publishingService.getPublishingList());
-        return af;
+        return publishingDao.getPublishingById(publishingId);
     }
 
     /**
@@ -140,18 +134,18 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
      */
     @Override
     public Employee getAuthorById(final int id) {
-        return employeeService.getEmployeeById(id);
+        return employeeDao.getEmployeeById(id);
     }
 
     /**
      * Получение множества ФИО соавторов.
      *
      * @param coauthors множество соавторов
-     *                  ({@link Set}&lt;{@link Employee}&gt;)
-     * @return множество ФИО соавторов ({@link Set}&lt;{@link String}&gt;)
+     *                  ({@link List}&lt;{@link Employee}&gt;)
+     * @return множество ФИО соавторов ({@link List}&lt;{@link String}&gt;)
      */
-    private Set<String> getCoauthorsShortNames(final Set<Employee> coauthors) {
-        Set<String> result = new HashSet<>();
+    private List<String> getCoauthorsShortNames(final List<Employee> coauthors) {
+        List<String> result = new ArrayList<>(coauthors.size());
 
         if (coauthors != null) {
             for (Employee e : coauthors) {
@@ -184,16 +178,6 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
         return bldr.toString();
     }
 
-
-    private List<Employee> getArticleCoauthorsByArticleId(final int articleId) {
-        List<ArticleCoauthor> list = articleDao.getArticleCoauthorsByArticleId(articleId);
-        List<Employee> employees = new ArrayList<>();
-        for (ArticleCoauthor ac : list) {
-            employees.add(employeeService.getEmployeeById(ac.getEmployeeId()));
-        }
-        return employees;
-    }
-
     /**
      * Создание объекта {@link ArticleForm} и заполнение его данными. которые потом будут редактироваться.
      *
@@ -203,37 +187,50 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     @Override
     public ArticleForm getUpdateArticleFormByArticleId(final int articleId) {
         ArticleForm form = new ArticleForm();
+
         Article article = articleDao.getArticleByArticleId(articleId);
 
+        Publishing publishing = publishingDao.getPublishingById(article.getPublishingId());
         List<Publishing> publishings = new ArrayList<>();
-        publishings.add(article.getPublishing());
+        publishings.add(publishing);
 
-        List<Topic> topics = new ArrayList<>();
-        topics.add(article.getTopic());
+        List<Topic> topics = topicDao.getTopicsByPublishingId(article.getPublishingId());
 
-        Set<Employee> publishingEmployees = employeeService.getEmployeesByPublishingId(article.getPublishing().getId());
-        Set<Employee> coauthors = article.getCoauthors();
-        publishingEmployees.remove(article.getAuthor());
+        List<Integer> coauthorsIdList = coauthorsDao.getCoauthorsIdByArticleId(articleId);
+        List<Employee> coauthors = new ArrayList<>(coauthorsIdList.size());
+        for (Integer id : coauthorsIdList) {
+            coauthors.add(employeeDao.getEmployeeById(id));
+        }
+
+        Employee author = employeeDao.getEmployeeById(article.getAuthorId());
+
+        List<Employee> publishingEmployees = employeeDao.getEmployeesByPublishingId(article.getPublishingId());
+
+        publishingEmployees.remove(author);
+
+        List<Employee> employees = new ArrayList<>(publishingEmployees.size());
+
         for (Employee e : publishingEmployees) {
-            if (coauthors.contains(e)) {
-                publishingEmployees.remove(e);
+            if (!coauthors.contains(e)) {
+                employees.add(e);
             }
         }
+
         List<Review> reviews = articleDao.getReviewsByArticleId(articleId);
 
-        form.setPublishings(publishings);
+        form.setPublishing(publishings);
         form.setContent(article.getContent());
         form.setTopics(topics);
         form.setTitle(article.getTitle());
-        form.setCurrentCoauthors(article.getCoauthors());
-        form.setAvailableCoauthors(publishingEmployees);
+        form.setCurrentCoauthors(coauthors);
+        form.setAvailableCoauthors(employees);
         form.setReviews(reviews);
 
         return form;
     }
 
     @Override
-    public Article getArticleById(int articleId) {
+    public Article getArticleById(final int articleId) {
         return articleDao.getArticleByArticleId(articleId);
     }
 }

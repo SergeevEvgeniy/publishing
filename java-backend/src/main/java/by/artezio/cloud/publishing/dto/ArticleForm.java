@@ -6,7 +6,6 @@ import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Класс, содержащий детальную информацию о статье.
@@ -21,8 +20,8 @@ public class ArticleForm {
     private List<Topic> topics;
     private String title;
     private String content;
-    private Set<Employee> currentCoauthors;
-    private Set<Employee> availableCoauthors;
+    private List<Employee> currentCoauthors;
+    private List<Employee> availableCoauthors;
     private List<Review> reviews;
 
     /**
@@ -37,10 +36,10 @@ public class ArticleForm {
     /**
      * Устанавливает список журналов/газет.
      *
-     * @param publishings List<Publishing>
+     * @param newPublishings List<Publishing>
      */
-    public void setPublishings(final List<Publishing> publishings) {
-        this.publishings = publishings;
+    public void setPublishing(final List<Publishing> newPublishings) {
+        this.publishings = newPublishings;
     }
 
     /**
@@ -102,7 +101,7 @@ public class ArticleForm {
      *
      * @return List<Employee>
      */
-    public Set<Employee> getCurrentCoauthors() {
+    public List<Employee> getCurrentCoauthors() {
         return currentCoauthors;
     }
 
@@ -111,7 +110,7 @@ public class ArticleForm {
      *
      * @param currentCoauthors List<Employee>
      */
-    public void setCurrentCoauthors(final Set<Employee> currentCoauthors) {
+    public void setCurrentCoauthors(final List<Employee> currentCoauthors) {
         this.currentCoauthors = currentCoauthors;
     }
 
@@ -120,7 +119,7 @@ public class ArticleForm {
      *
      * @return List<Employee>
      */
-    public Set<Employee> getAvailableCoauthors() {
+    public List<Employee> getAvailableCoauthors() {
         return availableCoauthors;
     }
 
@@ -129,7 +128,7 @@ public class ArticleForm {
      *
      * @param availableCoauthors List<Employee>
      */
-    public void setAvailableCoauthors(final Set<Employee> availableCoauthors) {
+    public void setAvailableCoauthors(final List<Employee> availableCoauthors) {
         this.availableCoauthors = availableCoauthors;
     }
 

@@ -128,6 +128,6 @@ public class MailingInfo {
      *         <code>false</code>, иначе.
      */
     public boolean isSuccess() {
-        return MailingResultType.SUCCESS.toString().compareTo(this.result.trim()) == 0;
+        return MailingResultType.SUCCESS.getMessage().equals(this.result);
     }
 }

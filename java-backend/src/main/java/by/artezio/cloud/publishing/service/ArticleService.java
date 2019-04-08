@@ -5,8 +5,8 @@ import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
+import by.artezio.cloud.publishing.dto.User;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -20,11 +20,11 @@ public interface ArticleService {
      * Используется для получения данных в контроллере
      * {@link by.artezio.cloud.publishing.web.controllers.ArticleController}</p>
      *
-     * @param request запрос пользователя, объект класса
-     *                {@link HttpServletRequest}
+     * @param user {@link User}
+     *
      * @return список объектов класса {@link ArticleInfo}
      */
-    List<ArticleInfo> getArticleInfoList(HttpServletRequest request);
+    List<ArticleInfo> getArticleInfoList(User user);
 
     /**
      * Получение журнала/газеты из сервиса Publishing.
@@ -33,18 +33,6 @@ public interface ArticleService {
      * @return объект класса {@link Publishing}
      */
     Publishing getPublishingById(int publishingId);
-
-    /**
-     * Получение объекта с данными.
-     *
-     * <p>
-     * Используется для заполнения формы и для хранения данных при создании
-     * новой статьи.
-     *
-     * @return объект класса {@link ArticleForm} с данными для заполнения формы
-     * на странице update_article.jsp
-     */
-    ArticleForm getNewArticleForm();
 
     /**
      * Получение сотрудника из сервиса Employee по его идентификатору.
@@ -62,5 +50,11 @@ public interface ArticleService {
      */
     ArticleForm getUpdateArticleFormByArticleId(int articleId);
 
+    /**
+     * Получение статьи по ее идентификатору.
+     *
+     * @param articleId - id статьи
+     * @return {@link Article}
+     */
     Article getArticleById(int articleId);
 }

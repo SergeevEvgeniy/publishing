@@ -1,7 +1,5 @@
 package by.artezio.cloud.publishing.domain;
 
-import java.util.Set;
-
 /**
  * Класс-сущность, представляет строку из таблицы "Articles".
  *
@@ -10,12 +8,11 @@ import java.util.Set;
 public class Article {
 
     private Integer id;
-    private Publishing publishing;
-    private Topic topic;
+    private Integer publishingId;
+    private Integer topicId;
     private String title;
     private String content;
-    private Employee author;
-    private Set<Employee> coauthors;
+    private Integer authorId;
 
     /**
      * Конструктор, создаёт класс со стандартными значениями полей.
@@ -26,24 +23,21 @@ public class Article {
     /**
      * Конструктор для создания объекта с указанными значениями полей.
      *
-     * @param id         идентификатор статьи
-     * @param publishing {@link Publishing} журнал/газета, в котором печатается эта статья
-     * @param topic      {@link Topic} рубрика статьи
-     * @param title      название статьи
-     * @param content    текст статьи
-     * @param author     {@link Employee} автор статьи
-     * @param coauthors  множество соавторов {@link Employee} статьи
+     * @param id           идентификатор статьи
+     * @param publishingId {@link Publishing} журнал/газета, в котором печатается эта статья
+     * @param topicId      {@link Topic} рубрика статьи
+     * @param title        название статьи
+     * @param content      текст статьи
+     * @param authorId     {@link Employee} автор статьи
      */
-    public Article(final Integer id, final Publishing publishing, final Topic topic,
-                   final String title, final String content, final Employee author,
-                   final Set<Employee> coauthors) {
+    public Article(final Integer id, final Integer publishingId, final Integer topicId,
+                   final String title, final String content, final Integer authorId) {
         this.id = id;
-        this.publishing = publishing;
-        this.topic = topic;
+        this.publishingId = publishingId;
+        this.topicId = topicId;
         this.title = title;
         this.content = content;
-        this.author = author;
-        this.coauthors = coauthors;
+        this.authorId = authorId;
     }
 
     /**
@@ -106,17 +100,17 @@ public class Article {
      *
      * @return объект класса {@link Publishing}
      */
-    public Publishing getPublishing() {
-        return publishing;
+    public int getPublishingId() {
+        return publishingId;
     }
 
     /**
      * Устанавливает журнал/газету статьи.
      *
-     * @param publishing объект класса {@link Publishing}
+     * @param publishingId объект класса {@link Publishing}
      */
-    public void setPublishing(final Publishing publishing) {
-        this.publishing = publishing;
+    public void setPublishingId(final Integer publishingId) {
+        this.publishingId = publishingId;
     }
 
     /**
@@ -124,17 +118,17 @@ public class Article {
      *
      * @return объект класса {@link Topic}
      */
-    public Topic getTopic() {
-        return topic;
+    public Integer getTopicId() {
+        return topicId;
     }
 
     /**
      * Устанавливает рубрику статьи.
      *
-     * @param topic объект класса {@link Topic}
+     * @param topicId объект класса {@link Topic}
      */
-    public void setTopic(final Topic topic) {
-        this.topic = topic;
+    public void setTopicId(final Integer topicId) {
+        this.topicId = topicId;
     }
 
     /**
@@ -142,34 +136,16 @@ public class Article {
      *
      * @return объект класса {@link Employee}
      */
-    public Employee getAuthor() {
-        return author;
+    public Integer getAuthorId() {
+        return authorId;
     }
 
     /**
      * Устанавливает автора статьи.
      *
-     * @param author объект класса {@link Employee}
+     * @param authorId объект класса {@link Employee}
      */
-    public void setAuthor(final Employee author) {
-        this.author = author;
-    }
-
-    /**
-     * Возвращает множество соавторов статьи.
-     *
-     * @return {@link Set} объектов {@link Employee}
-     */
-    public Set<Employee> getCoauthors() {
-        return coauthors;
-    }
-
-    /**
-     * Устанавливает множество соавторов статьи.
-     *
-     * @param coauthors {@link Set} объектов {@link Employee}
-     */
-    public void setCoauthors(final Set<Employee> coauthors) {
-        this.coauthors = coauthors;
+    public void setAuthorId(final Integer authorId) {
+        this.authorId = authorId;
     }
 }

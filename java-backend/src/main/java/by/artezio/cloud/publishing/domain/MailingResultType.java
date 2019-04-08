@@ -16,4 +16,13 @@ public enum MailingResultType {
     MailingResultType(final String message) {
         this.message = message;
     }
+
+    /**
+     * Возвращает текстовое сообщение каждого отдельного сообщения.
+     *      Например, "Успешно"
+     * @return текстовое значение результата
+     */
+    public String getMessage() {
+        return this.message;
+    }
 }

@@ -1,6 +1,6 @@
 package by.artezio.cloud.publishing.dto;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Класс, содержащий краткую информацию о статье.
@@ -15,7 +15,8 @@ public class ArticleInfo {
     private String publishing;
     private String topic;
     private String authorFullName;
-    private Set<String> coauthors;
+    private List<String> coauthors;
+    private boolean isPublished;
 
     /**
      * Возвращает идентификатор статьи.
@@ -28,6 +29,7 @@ public class ArticleInfo {
 
     /**
      * Устанавливает идентификатор статьи.
+     *
      * @param articleId идентификатор статьи
      */
     public void setArticleId(final int articleId) {
@@ -64,10 +66,10 @@ public class ArticleInfo {
     /**
      * Устанавливает название журнала/газеты.
      *
-     * @param publishing String
+     * @param newPublishing String
      */
-    public void setPublishing(final String publishing) {
-        this.publishing = publishing;
+    public void setPublishingName(final String newPublishing) {
+        this.publishing = newPublishing;
     }
 
     /**
@@ -111,7 +113,7 @@ public class ArticleInfo {
      *
      * @return Set<String>
      */
-    public Set<String> getCoauthors() {
+    public List<String> getCoauthors() {
         return coauthors;
     }
 
@@ -120,7 +122,31 @@ public class ArticleInfo {
      *
      * @param coauthors Set<String>
      */
-    public void setCoauthors(final Set<String> coauthors) {
+    public void setCoauthors(final List<String> coauthors) {
         this.coauthors = coauthors;
+    }
+
+    /**
+     *
+     * @param newPublishing {@link String} название журнала\газеты
+     */
+    public void setPublishing(final String newPublishing) {
+        this.publishing = newPublishing;
+    }
+
+    /**
+     *
+     * @return {@code true}, если статья опубликована, иначе {@code false}
+     */
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    /**
+     *
+     * @param published признак того, опубликована ли статья
+     */
+    public void setPublished(final boolean published) {
+        isPublished = published;
     }
 }
