@@ -34,6 +34,14 @@ public interface PublishingService {
     List<Topic> getTopicsByPublishingId(Integer id);
 
     /**
+     * Возвращает название издательства по его id.
+     *
+     * @param publishingId Id издательства
+     * @return Название издательства, если издательство с таким id существует, иначе null
+     */
+    String getPublishingTitle(int publishingId);
+
+    /**
      * Метод получения списка журналов/газет по id сотрудника данных журналов/газет.
      * @param employeeId - id {@link by.artezio.cloud.publishing.domain.Employee}
      * @return список {@link Publishing} - все журналы/газуты в которых задействован сотрудник

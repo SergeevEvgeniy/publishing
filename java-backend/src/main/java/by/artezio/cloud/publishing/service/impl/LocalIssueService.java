@@ -8,6 +8,7 @@ import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.service.PublishingService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,5 +83,10 @@ public class LocalIssueService implements IssueService {
     public List<IssueInfo> getIssueInfoListByPublishingId(final int publishingId) {
         List<Issue> issueList = issueDao.getIssueListByPublishingId(publishingId);
         return mapIssueListToIssueInfoList(issueList);
+    }
+
+    @Override
+    public List<Issue> getIssuesByDate(final LocalDate date) {
+        return issueDao.getIssueByDate(date);
     }
 }
