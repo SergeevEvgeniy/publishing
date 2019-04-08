@@ -30,6 +30,7 @@ public class ArticleController {
 
     /**
      * @param articleFacade {@link ArticleWebFacade}
+     * @param securityService {@link SecurityService}
      */
     public ArticleController(final ArticleWebFacade articleFacade,
                              final SecurityService securityService) {

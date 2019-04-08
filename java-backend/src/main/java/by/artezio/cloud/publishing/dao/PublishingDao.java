@@ -85,6 +85,19 @@ public class PublishingDao {
     }
 
     /**
+     * Возвращает название издательства по его id.
+     * @param publishingId Id издательства
+     * @return Название издательства, если издательство с таким id существует, иначе null
+     */
+    public String getPublishingTitle(final int publishingId) {
+        return this.jdbcTemplate.queryForObject(
+            "select p.title from publishing p where p.id = :id",
+            Collections.singletonMap("id", publishingId),
+            (rs, rowNum) -> rs.getString("title")
+        );
+    }
+
+    /**
      * Превращение списка рубрик в строку вида "id1,id2,id3,...".
      *
      * @param topicsId список рубрик

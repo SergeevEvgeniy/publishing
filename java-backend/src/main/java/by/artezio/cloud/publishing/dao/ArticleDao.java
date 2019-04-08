@@ -108,12 +108,16 @@ public class ArticleDao {
             reviewRowMapper);
     }
 
+    /**
+     * @param articleId id статьи
+     * @return {@code true}, если статья опубликована, иначе - {@code false}
+     */
     public boolean isPublished(final Integer articleId) {
-        Integer id = jdbcTemplate.queryForObject("SELECT COUNT(*) " +
-                "FROM article a " +
-                "INNER JOIN issue_article ia " +
-                "ON ia.article_id = a.id " +
-                "WHERE a.id = :articleId",
+        Integer id = jdbcTemplate.queryForObject("SELECT COUNT(*) "
+                + "FROM article a "
+                + "INNER JOIN issue_article ia "
+                + "ON ia.article_id = a.id "
+                + "WHERE a.id = :articleId",
             Collections.singletonMap("articleId", articleId),
             Integer.class);
         return id > 0;

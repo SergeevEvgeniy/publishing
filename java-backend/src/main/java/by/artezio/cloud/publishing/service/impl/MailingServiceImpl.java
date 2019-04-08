@@ -1,14 +1,16 @@
 package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.dao.MailingDao;
+import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.dto.MailingInfo;
+import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
+import by.artezio.cloud.publishing.service.PublishingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,13 +23,21 @@ public class MailingServiceImpl implements MailingService {
 
     private MailingDao mailingDao;
     private MailSender mailSender;
+    private IssueService issueService;
+    private PublishingService publishingService;
 
     /**
      * Конструктор с параметрами.
      * @param mailingDao dao для взаимодействия с БД.
+     * @param issueService сервис для работы с номерами.
+     * @param publishingService сервис для работы с издательствами.
      */
-    public MailingServiceImpl(final MailingDao mailingDao) {
+    public MailingServiceImpl(final MailingDao mailingDao,
+                              final IssueService issueService,
+                              final PublishingService publishingService) {
         this.mailingDao = mailingDao;
+        this.issueService = issueService;
+        this.publishingService = publishingService;
     }
 
     /**
@@ -71,7 +81,24 @@ public class MailingServiceImpl implements MailingService {
 
     @Override
     public void sendMail(final LocalDateTime dateTime) {
-        mailSender.sendMail(Arrays.asList("team00_10@mail.ru"), "AutoMailing", dateTime.toString() + " Hi. This is AutoMailing");
-        //TODO: add mailing_result
+        List<Issue> issues = issueService.getIssuesByDate(dateTime.toLocalDate());
+        for (Issue issue : issues) {
+            int publishingId = issue.getPublishingId();
+            int mailingId = this.mailingDao.getMailingIdByPublishingId(publishingId);
+            String publishingTitle = this.publishingService.getPublishingTitle(publishingId);
+            List<String> subscribers = this.getEmailList(publishingId);
+            List<String> results = this.mailSender.sendMail(
+                subscribers,
+                "!!! Свежий выпуск \"" + issue.getNumber() + "\"!!!",
+                "Вышел свежий номер мздательства \"" + publishingTitle + "\""
+            );
+
+            this.mailingDao.addMailingResult(
+                mailingId,
+                issue.getId(),
+                dateTime,
+                String.join("\n", results)
+            );
+        }
     }
 }

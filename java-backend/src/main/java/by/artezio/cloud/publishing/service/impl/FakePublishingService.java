@@ -38,4 +38,8 @@ public class FakePublishingService implements PublishingService {
         return publishingDao.getPublishingListByEmployeeId(employeeId);
     }
 
+    @Override
+    public String getPublishingTitle(final int publishingId) {
+        return this.publishingDao.getPublishingTitle(publishingId);
+    }
 }

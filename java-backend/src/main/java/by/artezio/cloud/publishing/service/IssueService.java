@@ -3,6 +3,7 @@ package by.artezio.cloud.publishing.service;
 import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.domain.IssueArticle;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -17,10 +18,11 @@ public interface IssueService {
      * */
     List<Issue> getListOfAllIssues();
 
+
     /**
      * Удаление номера по идентификатору.
      * @param id - идентификатор {@link Issue}
-     * */
+     */
     void deleteIssueById(final int id);
 
     /**
@@ -29,6 +31,7 @@ public interface IssueService {
      * @param issueId идентификатор {@link Issue}
      * @return {@link by.artezio.cloud.publishing.dto.IssueForm}
      */
+
     Issue getIssueById(final int issueId);
 
     /**
@@ -46,5 +49,14 @@ public interface IssueService {
      * @return список {@link IssueArticle}.
      * */
     List<IssueArticle> getIssueArticleListByIssueId(final int issueId);
+
+
+    /**
+     * Возвращает все номера, дата публикации которых равна date.
+     * @param date Дата выпуска номером
+     * @return Список номеров
+     */
+    List<Issue> getIssuesByDate(LocalDate date);
+
 
 }

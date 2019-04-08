@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,6 +61,20 @@ public class IssueDao {
     public Issue getIssueById(final int id) {
         return jdbcTemplate.queryForObject("select * from issue where id = :id",
             Collections.singletonMap("id", id), issueRowMapper);
+    }
+
+    /**
+     * Возвращает списоок всех номеров, дата выпуска которых равна date.
+     * @param date Дата выпуска.
+     * @return Список номеров.
+     */
+    public List<Issue> getIssueByDate(final LocalDate date) {
+        return jdbcTemplate.query(
+            "select * from issue i where i.date = :date",
+            Collections.singletonMap("date",
+                date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth()),
+            issueRowMapper
+        );
     }
 
     /**

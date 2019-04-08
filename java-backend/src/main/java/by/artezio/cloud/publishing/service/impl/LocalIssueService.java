@@ -6,6 +6,7 @@ import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.domain.IssueArticle;
 import by.artezio.cloud.publishing.service.IssueService;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -53,6 +54,12 @@ public class LocalIssueService implements IssueService {
     @Override
     public List<IssueArticle> getIssueArticleListByIssueId(final int issueId) {
         return issueArticleDao.getIssueArticleListByIssueId(issueId);
+    }
+
+
+    @Override
+    public List<Issue> getIssuesByDate(final LocalDate date) {
+        return issueDao.getIssueByDate(date);
     }
 
 }

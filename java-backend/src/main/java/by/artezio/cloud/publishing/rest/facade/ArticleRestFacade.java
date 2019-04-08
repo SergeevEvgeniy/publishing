@@ -16,6 +16,11 @@ public class ArticleRestFacade {
     private EmployeeService employeeService;
     private ArticleService articleService;
 
+    /**
+     * @param topicDao        {@link TopicDao}
+     * @param employeeService {@link by.artezio.cloud.publishing.dao.EmployeeDao}
+     * @param articleService  {@link ArticleService}
+     */
     public ArticleRestFacade(final TopicDao topicDao,
                              final EmployeeService employeeService,
                              final ArticleService articleService) {
