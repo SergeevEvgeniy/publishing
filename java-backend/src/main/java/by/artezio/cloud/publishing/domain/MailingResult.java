@@ -14,6 +14,20 @@ public class MailingResult {
     private String result;
 
     /**
+     * Конструктор с параметрами.
+     * @param mailingId id рассылки
+     * @param issueId id номера для рассылки
+     * @param date дата рассылки
+     * @param result результат рассылки
+     */
+    public MailingResult(Integer mailingId, Integer issueId, LocalDateTime date, String result) {
+        this.mailingId = mailingId;
+        this.issueId = issueId;
+        this.date = date;
+        this.result = result;
+    }
+
+    /**
      * Возвращает id рассылки.
      * @return id рассылки
      */
