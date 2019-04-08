@@ -65,7 +65,7 @@ public class IssueWebFacade {
      * */
     private IssueForm mapIssueToIssueForm(final Issue issue) {
         IssueForm issueForm = new IssueForm();
-        Publishing publishing = publishingService.getPublishingById(issue.getId());
+        Publishing publishing = publishingService.getPublishingById(issue.getPublishingId());
         issueForm.setPublishingTitle(publishing.getTitle());
         issueForm.setPublishingId(issue.getPublishingId());
         issueForm.setNumber(issue.getNumber());
