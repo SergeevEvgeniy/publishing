@@ -20,7 +20,7 @@ public class MailingResult {
      * @param date дата рассылки
      * @param result результат рассылки
      */
-    public MailingResult(Integer mailingId, Integer issueId, LocalDateTime date, String result) {
+    public MailingResult(final Integer mailingId, final Integer issueId, final LocalDateTime date, final String result) {
         this.mailingId = mailingId;
         this.issueId = issueId;
         this.date = date;
