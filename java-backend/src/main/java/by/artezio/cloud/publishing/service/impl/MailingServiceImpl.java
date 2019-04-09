@@ -98,7 +98,7 @@ public class MailingServiceImpl implements MailingService {
             List<String> results = this.mailSender.sendMail(
                 subscribers,
                 "!!! Свежий выпуск \"" + issue.getNumber() + "\"!!!",
-                "Вышел свежий номер мздательства \"" + publishingTitle + "\""
+                "Вышел свежий номер издательства \"" + publishingTitle + "\""
             );
 
             this.addMailingResult(

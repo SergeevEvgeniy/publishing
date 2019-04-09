@@ -166,7 +166,7 @@ public class MailingDao {
         int affectedRows;
         try {
             affectedRows = this.jdbcTemplate.update(
-                "insert into `mailing_result` values (:mailingId, :issueId, \":dateTime\", \":result\")",
+                "insert into `mailing_result` values (:mailingId, :issueId, :dateTime, :result)",
                 map
             );
         } catch (DataAccessException ex) {
