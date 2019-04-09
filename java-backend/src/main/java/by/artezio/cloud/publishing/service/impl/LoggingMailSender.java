@@ -4,7 +4,6 @@ import by.artezio.cloud.publishing.domain.MailingResultType;
 import by.artezio.cloud.publishing.service.MailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
