@@ -5,7 +5,6 @@
 <tag:layout>
 
     <h3 class="page-header">Номера</h3>
-    <form>
         <div class="text-right form-group">
             <a href="<c:url value="?mode=create"/>" class="btn btn-success">
                 <span class="glyphicon glyphicon-plus"></span>Добавить
@@ -22,31 +21,31 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="issueForm" items="${issueFormList}">
+                <c:forEach var="issueInfo" items="${issueInfoList}">
                     <tr>
-                        <td>${issueForm.publishingTitle}</td>
-                        <td>${issueForm.number}</td>
+                        <td>${issueInfo.publishingTitle}</td>
+                        <td>${issueInfo.number}</td>
                         <td>
-                            <fmt:parseDate var="date" value="${issueForm.localDate}" type="date" pattern="yyyy-MM-dd"/>
-                            <time datetime="${issueForm.localDate}">
+                            <fmt:parseDate var="date" value="${issueInfo.localDate}" type="date" pattern="yyyy-MM-dd"/>
+                            <time datetime="${issueInfo.localDate}">
                                 <fmt:formatDate value="${date}" pattern="dd MMMM yyyy" type="date"/>
                             </time>
                         </td>
-                        <td>Будущее описание</td>
+                        <td>Статей: ${issueInfo.numberOfArticle}</td>
                         <td>
-                            <c:if test="${!issueForm.published}">
+                            <c:if test="${!issueInfo.published}">
                                 <a class="btn btn-default btn-sm"
-                                   href="${pageContext.request.contextPath}/issues?mode=edit&id=${issueForm.issueId}">
+                                   href="${pageContext.request.contextPath}/issues?mode=edit&id=${issueInfo.issueId}">
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </a>
                                 <button type="button" class="btn btn-default btn-sm delete-button">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
-                                <input type="hidden" value="${issueForm.issueId}">
+                                <input type="hidden" value="${issueInfo.issueId}">
                             </c:if>
-                            <c:if test="${issueForm.published}">
+                            <c:if test="${issueInfo.published}">
                                 <a class="btn btn-default btn-sm"
-                                   href="${pageContext.request.contextPath}/issues?mode=view&id=${issueForm.issueId}">
+                                   href="${pageContext.request.contextPath}/issues?mode=view&id=${issueInfo.issueId}">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </a>
                             </c:if>
@@ -55,6 +54,5 @@
                 </c:forEach>
             </tbody>
         </table>
-    </form>
     <script src="${pageContext.request.contextPath}/resources/js/issues.js"></script>
 </tag:layout>

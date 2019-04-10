@@ -1,17 +1,18 @@
 package by.artezio.cloud.publishing.web.facade;
 
-
+import by.artezio.cloud.publishing.domain.Topic;
+import by.artezio.cloud.publishing.domain.Advertising;
+import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.domain.Publishing;
-import by.artezio.cloud.publishing.domain.Article;
-import by.artezio.cloud.publishing.domain.IssueArticle;
-import by.artezio.cloud.publishing.domain.Advertising;
 import by.artezio.cloud.publishing.dto.IssueForm;
+import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.dto.User;
-import by.artezio.cloud.publishing.service.AdvertisingService;
-import by.artezio.cloud.publishing.service.ArticleService;
 import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.service.PublishingService;
+import by.artezio.cloud.publishing.service.ArticleService;
+import by.artezio.cloud.publishing.service.AdvertisingService;
+import by.artezio.cloud.publishing.service.ReviewService;
 import by.artezio.cloud.publishing.web.security.SecurityService;
 import org.springframework.stereotype.Component;
 
@@ -37,24 +38,29 @@ public class IssueWebFacade {
 
     private AdvertisingService advertisingService;
 
+    private ReviewService reviewService;
+
     /**
      * @param issueService - {@link IssueService}
      * @param publishingService - {@link PublishingService}
      * @param securityService - {@link SecurityService}
      * @param articleService - {@link AdvertisingService}
      * @param advertisingService - {@link AdvertisingService}
+     * @param reviewService - {@link ReviewService}
      * */
     public IssueWebFacade(final IssueService issueService,
                           final PublishingService publishingService,
                           final SecurityService securityService,
                           final ArticleService articleService,
-                          final AdvertisingService advertisingService) {
+                          final AdvertisingService advertisingService,
+                          final ReviewService reviewService) {
 
         this.issueService = issueService;
         this.publishingService = publishingService;
         this.securityService = securityService;
         this.articleService = articleService;
         this.advertisingService = advertisingService;
+        this.reviewService = reviewService;
     }
 
     /**
@@ -65,8 +71,6 @@ public class IssueWebFacade {
      * */
     private IssueForm mapIssueToIssueForm(final Issue issue) {
         IssueForm issueForm = new IssueForm();
-        Publishing publishing = publishingService.getPublishingById(issue.getPublishingId());
-        issueForm.setPublishingTitle(publishing.getTitle());
         issueForm.setPublishingId(issue.getPublishingId());
         issueForm.setNumber(issue.getNumber());
         issueForm.setLocalDate(issue.getDate());
@@ -76,25 +80,47 @@ public class IssueWebFacade {
     }
 
     /**
+     * Функция преобразования сущности {@link Issue}
+     * в объект dto {@link IssueInfo}.
+     * @param issue сущность {@link Issue}
+     * @return {@link IssueInfo}
+     * */
+    private IssueInfo mapIssueToIssueInfo(final Issue issue) {
+        IssueInfo issueInfo = new IssueInfo();
+        Publishing publishing =
+            publishingService.getPublishingById(issue.getPublishingId());
+        issueInfo.setPublishingTitle(publishing.getTitle());
+        List<Integer> articleIdList =
+            issueService.getArticleIdListByIssueId(issue.getId());
+        issueInfo.setNumberOfArticle(articleIdList.size());
+        issueInfo.setPublished(issue.isPublished());
+        issueInfo.setNumber(issue.getNumber());
+        issueInfo.setLocalDate(issue.getDate());
+        issueInfo.setIssueId(issue.getId());
+        return issueInfo;
+    }
+
+    /**
      * Функция преобразования списка {@link Issue}
      * в список {@link IssueForm}.
      * @param issueList список {@link Issue}
      * @return список {@link IssueForm}
      * */
-    private List<IssueForm> mapIssueListToIssueFormList(final List<Issue> issueList) {
-        List<IssueForm> issueInfoList = new ArrayList<>();
+    private List<IssueInfo> mapIssueListToIssueInfoList(final List<Issue> issueList) {
+        List<IssueInfo> issueInfoList = new ArrayList<>();
         for (Issue issue : issueList) {
-            issueInfoList.add(mapIssueToIssueForm(issue));
+            IssueInfo issueInfo = mapIssueToIssueInfo(issue);
+            issueInfoList.add(issueInfo);
         }
         return issueInfoList;
     }
 
     /**
-     * Метод для получения списка {@link IssueForm} который содержит
+     * Метод для получения списка {@link IssueInfo} который содержит
      * информацию о номерах доступные текущему пользователю.
-     * @return список {@link IssueForm}
+     * @return список {@link IssueInfo}
      * */
-    public List<IssueForm> getIssueFormList() {
+    public List<IssueInfo> getIssueInfoList() {
         securityService.checkIsEditor();
         User user = securityService.getCurrentUser();
         List<Issue> issues = new ArrayList<>();
@@ -106,10 +132,10 @@ public class IssueWebFacade {
             for (Publishing p : publishingList) {
                 List<Issue> publishingIssues =
                     issueService.getIssueListByPublishingId(p.getId());
-                issues.addAll(issues);
+                issues.addAll(publishingIssues);
             }
         }
-        return mapIssueListToIssueFormList(issues);
+        return mapIssueListToIssueInfoList(issues);
     }
 
     /**
@@ -118,7 +144,8 @@ public class IssueWebFacade {
      * доступные текущему пользователю. Предназначена лля
      * выпадающего списка на форме добавления/редактирования
      * номеров.
-     * @return список {@link Publishing}
+     * @return {@link Map}, где ключом является
+     * id {@link Publishing} значением является название {@link Publishing}
      * */
     public Map<Integer, String> getPublishingMap() {
         securityService.checkIsEditor();
@@ -143,11 +170,11 @@ public class IssueWebFacade {
      * @return список {@link Article}
      * */
     public List<Article> getArticleListByIssueId(final int issueId) {
-        List<IssueArticle> issueArticleList =
-            issueService.getIssueArticleListByIssueId(issueId);
         List<Article> articleList = new ArrayList<>();
-        for (IssueArticle ia : issueArticleList) {
-            Article article = articleService.getArticleById(ia.getArticleId());
+        List<Integer> articleIdList =
+            issueService.getArticleIdListByIssueId(issueId);
+        for (Integer id : articleIdList) {
+            Article article = articleService.getArticleById(id);
             articleList.add(article);
         }
         return articleList;
@@ -166,12 +193,43 @@ public class IssueWebFacade {
     }
 
     /**
+     * Метод для получения dto {@link IssueInfo}
+     * по id {@link by.artezio.cloud.publishing.domain.Issue}.
+     * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
+     * @return {@link IssueInfo}
+     * */
+    public IssueInfo getIssueInfoByIssueId(final int issueId) {
+        Issue issue = issueService.getIssueById(issueId);
+        return mapIssueToIssueInfo(issue);
+    }
+
+    /**
      * Получение списка реклам по id номера.
      * @param issueId - id {@link Issue}
      * @return список {@link Advertising}
      * */
     public List<Advertising> getAdvertisingListByIssueId(final int issueId) {
         return advertisingService.getAdvertisingListByIssueId(issueId);
+    }
+
+    /**
+     * Метод для получения  {@link Map} которая содержит
+     * информацию о тематиках {@link Topic}
+     * для данного {@link Publishing}. Предназначена лля
+     * выпадающего списка на форме добавления/редактирования
+     * номеров.
+     * @param publishingId - id {@link Publishing}
+     * @return {@link Map}, где ключом является
+     * id {@link Topic} значением является название {@link Topic}
+     * */
+    public Map<Integer, String> getTopicMapByPublishingId(final int publishingId) {
+        List<Topic> topicList =
+            publishingService.getTopicsByPublishingId(publishingId);
+        Map<Integer, String> topicMap = new HashMap<>();
+        for (Topic topic : topicList) {
+            topicMap.put(topic.getId(), topic.getName());
+        }
+        return topicMap;
     }
 
 }

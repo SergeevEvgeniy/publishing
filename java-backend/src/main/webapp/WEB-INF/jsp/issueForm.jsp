@@ -41,7 +41,7 @@
                     <div class="col-sm-offset-1 col-sm-10">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueForm.publishingTitle}
+                                    ${issueInfo.publishingTitle}
                             </p>
                         </c:if>
                         <c:if test="${mode != 'view'}">
@@ -62,7 +62,7 @@
                     <div class="col-sm-offset-1 col-sm-3">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueForm.number}
+                                    ${issueInfo.number}
                             </p>
                         </c:if>
                         <c:if test="${mode != 'view'}">
@@ -75,7 +75,7 @@
                     <div class="col-sm-3">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueForm.localDate}
+                                    ${issueInfo.localDate}
                             </p>
                         </c:if>
                         <c:if test="${mode != 'view'}">
@@ -93,21 +93,33 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="topics">Рубрика</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="topics" name="topicId" disabled></select>
+                                    <select class="form-control" id="topics" name="topicId" disabled>
+                                        <option value="">
+                                            >--Выберете рубрику--<
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="authors">Автор</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="authors" name="authorId" disabled></select>
+                                    <select class="form-control" id="authors" name="authorId" disabled>
+                                        <option value="">
+                                            >--Выберете автора--<
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="articles">Статья</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="articles" disabled></select>
+                                    <select class="form-control" id="articles" disabled>
+                                        <option value="">
+                                            >--Выберете статью--<
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -195,5 +207,7 @@
         </div>
 
     </div>
+
+    <script src="${pageContext.request.contextPath}/resources/js/create-issue.js"></script>
 
 </tag:layout>

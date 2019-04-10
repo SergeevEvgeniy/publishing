@@ -1,63 +1,45 @@
 $(function () {
 
-    onChangeSelectListener($("#publishing"), function (topics) {
-        var $topics = $("#topics");
-        $topics.html($("<option>Выберете рубрику</option>").val(""));
-        var $options = $.map(topics, function (topic) {
-            var $option = $("<option></option>").val(topic.id);
-            return $option.text(topic.name);
-        });
-        $topics.append($options);
-    });
-
-    onChangeSelectListener($("#topics"), function (authors) {
-        var $authors = $("#authors");
-        $authors.html($("<option>Выберете автора</option>").val("empty"));
-        var $options = $.map(authors, function (author) {
-            var $option = $("<option></option>").val(author.id);
-            return $option.text(author.lastName + " " + author.firstName + " " + author.middleName);
-        });
-        $authors.append($options);
-    });
-
-    onChangeSelectListener($("#authors"), function (articles) {
-        var $articles = $("#articles");
-        $articles.html($("<option>Выберете статью</option>").val("empty"));
-        var $options = $.map(articles, function (article) {
-            var $option = $("<option></option>").val(article.id);
-            return $option.text(article.title);
-        });
-        $articles.append($options);
-    });
-
-    function onChangeSelectListener($select, handler) {
-        $select.on("change", function () {
-            var $formSelects = $("form select");
-            var selectIndex = $formSelects.index($select);
-            var nextSelectIndex = selectIndex + 1;
-            $formSelects.slice(nextSelectIndex).each(function () {
-                $(this).empty();
-                this.disabled = true;
-            });
-            if (!$(this).val()) {
-                return;
-            }
-            var nextSelect = $formSelects.get(nextSelectIndex);
-            var requestParams = $formSelects.serializeArray();
-            nextSelect.disabled = false;
-            $.getJSON(createUrl(requestParams), handler);
-        });
-
-        function createUrl(requestParams) {
-            var url = location.href.split("?")[0];
-            for (var i = 0; i < requestParams.length; i++) {
-                var param = requestParams[i];
-                url += "/" + param.name + "/" + param.value;
-            }
-            return url;
+    var $formSelects = $("form select");
+    $formSelects.on("change", function() {
+        var $currentSelect = $(this);
+        var currentSelectIndex = $formSelects.index($currentSelect);
+        var nextIndex = currentSelectIndex + 1;
+        if (nextIndex === $formSelects.length) {
+            return;
         }
+        for (var i = nextIndex; i < $formSelects.length; i++) {
+            var select = $formSelects[i];
+            select.disabled = true;
+            $(select).find("option")
+                .not(":first")
+                .remove();
+        }
+        if (!$currentSelect.val()) {
+            return;
+        }
+        var nextSelect = $formSelects[nextIndex];
+        $.getJSON(getRestUrl(), function (data) {
+            $.each(data, function (key, val) {
+                var option = $("<option></option>")
+                    .val(key)
+                    .text(val);
+                $(nextSelect).append(option);
+            });
+        });
+        nextSelect.disabled = false;
+    });
 
+    function getRestUrl() {
+        var url = location.href.split("?")[0];
+        var params = $formSelects.serializeArray();
+        return params.reduce(function (accumulator, currentItem) {
+            accumulator += '/' + currentItem.name + '/' + currentItem.value;
+            return accumulator;
+        }, url);
     }
+
+
 
 });
 

@@ -12,8 +12,6 @@ public class IssueForm {
 
     private Integer publishingId;
 
-    private String publishingTitle;
-
     private List<Integer> deletedArticlesId;
 
     private List<Integer> addedArticlesId;
@@ -136,20 +134,6 @@ public class IssueForm {
      */
     public void setLocalDate(final LocalDate localDate) {
         this.localDate = localDate;
-    }
-
-    /**
-     * @param publishingTitle установка заголовка издания
-     * */
-    public void setPublishingTitle(final String publishingTitle) {
-        this.publishingTitle = publishingTitle;
-    }
-
-    /**
-     * @return  publishingTitle получение заголовка издания
-     * */
-    public String getPublishingTitle() {
-        return publishingTitle;
     }
 
     /**

@@ -3,11 +3,14 @@ package by.artezio.cloud.publishing.web.controllers;
 import by.artezio.cloud.publishing.domain.Advertising;
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.dto.IssueForm;
+import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.web.facade.IssueWebFacade;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +40,9 @@ public class IssueController {
      * */
     @GetMapping
     public ModelAndView getIssuesPage() {
-        List<IssueForm> issueFormList = issueFacade.getIssueFormList();
+        List<IssueInfo> issueInfoList = issueFacade.getIssueInfoList();
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("issueFormList", issueFormList);
+        modelAndView.addObject("issueInfoList", issueInfoList);
         modelAndView.setViewName("issues");
         return modelAndView;
     }
@@ -91,16 +94,47 @@ public class IssueController {
     @GetMapping(params = "mode=view")
     public ModelAndView openFormInViewingMode(@RequestParam("id") final int issueId) {
         ModelAndView modelAndView = new ModelAndView();
-        IssueForm issueForm = issueFacade.getIssueFormByIssueId(issueId);
+        IssueInfo issueInfo = issueFacade.getIssueInfoByIssueId(issueId);
         List<Article> articles =
             issueFacade.getArticleListByIssueId(issueId);
         List<Advertising> advertising =
             issueFacade.getAdvertisingListByIssueId(issueId);
-        modelAndView.addObject(issueForm);
+        modelAndView.addObject(issueInfo);
         modelAndView.addObject("articles", articles);
         modelAndView.addObject("advertising", advertising);
         modelAndView.setViewName("issueForm");
         return modelAndView;
+    }
+
+    /**
+     * Получение {@link Map} журналов/газет для выподающего списка
+     * на форме добавления.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}.
+     * @return {@link Map}, где ключом является
+     * id {@link by.artezio.cloud.publishing.domain.Publishing}
+     * значением является название {@link by.artezio.cloud.publishing.domain.Publishing}
+     * */
+    @GetMapping(value = "/publishingId/{id}", headers = {"Accept=application/json"})
+    @ResponseBody
+    public Map<Integer, String> getTopicMap(@PathVariable("id") final int publishingId) {
+        return issueFacade.getTopicMapByPublishingId(publishingId);
+    }
+
+    /**
+     * Получение {@link Map} тематикт выбранного журнала/газеты
+     * для выподающего списка на форме добавления.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}.
+     * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
+     * @return {@link Map}, где ключом является
+     * id {@link by.artezio.cloud.publishing.domain.Topic}
+     * значением является название {@link by.artezio.cloud.publishing.domain.Topic}
+     * */
+    @GetMapping(value = "/publishingId/{pid}/topicId/{tid}", headers = {"Accept=application/json"})
+    @ResponseBody
+    public Map<Integer, String> getAuthorMap(@PathVariable("pid") final int publishingId,
+                                      @PathVariable("tid") final int topicId) {
+        /*Заглушка*/
+        return null;
     }
 
 }

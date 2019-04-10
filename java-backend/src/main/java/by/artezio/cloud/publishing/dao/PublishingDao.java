@@ -1,6 +1,7 @@
 package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.domain.PublishingEmployee;
 import by.artezio.cloud.publishing.domain.Topic;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -30,6 +31,12 @@ public class PublishingDao {
     private RowMapper<Topic> topicRowMapper = (rs, i) -> new Topic(
             rs.getInt("id"),
             rs.getString("name")
+    );
+
+    private RowMapper<PublishingEmployee> publishingEmployeeRowMapper =
+        (rs, i) -> new PublishingEmployee(
+            rs.getInt("publishing_id"),
+            rs.getInt("employee_id")
     );
 
     /**
@@ -126,6 +133,18 @@ public class PublishingDao {
                 + "join publishing_employee pe on p.id = pe.publishing_id "
                 + "where pe.employee_id = :employeeId",
             Collections.singletonMap("employeeId", employeeId), publishingRowMapper);
+    }
+
+    /**
+     * Получения списка {@link PublishingEmployee} по id {@link Publishing}.
+     * @param publishingId - id {@link Publishing}.
+     * @return - список {@link PublishingEmployee}.
+     * */
+    public List<PublishingEmployee> getPublishingEmployeeList(final int publishingId) {
+        return jdbcTemplate.query("select * from publishing_employee "
+                + "where publishing_id = :publishingId",
+            Collections.singletonMap("publishingId", publishingId),
+            publishingEmployeeRowMapper);
     }
 
 }

@@ -1,5 +1,6 @@
 package by.artezio.cloud.publishing.service;
 
+import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Topic;
 
@@ -47,4 +48,11 @@ public interface PublishingService {
      * @return список {@link Publishing} - все журналы/газуты в которых задействован сотрудник
      * */
     List<Publishing> getPublishingListByEmployeeId(final int employeeId);
+
+    /**
+     * Метод получения журналистов журнала/газуты.
+     * @param publishingId - id {@link Publishing}
+     * @return - список всех {@link Employee}
+     * */
+    List<Employee> getPublishingJournalistByPublishingId(final int publishingId);
 }
