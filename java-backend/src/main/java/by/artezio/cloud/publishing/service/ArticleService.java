@@ -21,7 +21,6 @@ public interface ArticleService {
      * {@link by.artezio.cloud.publishing.web.controllers.ArticleController}</p>
      *
      * @param user {@link User}
-     *
      * @return список объектов класса {@link ArticleInfo}
      */
     List<ArticleInfo> getArticleInfoList(User user);
@@ -58,9 +57,29 @@ public interface ArticleService {
      */
     Article getArticleById(int articleId);
 
+    /**
+     * Метод для удаления статьи.
+     *
+     * @param article {@link Article} статья, которую нужно удалить
+     */
     void deleteArticle(Article article);
 
+    /**
+     * Получение статей по id рубрики и журнала.
+     *
+     * @param topicId      id рубрики
+     * @param publishingId id журнала
+     * @return {@link List} of {@link Article}
+     */
     List<Article> getArticleByTopicAndPublishingId(int topicId, int publishingId);
 
+    /**
+     * Получение статей по id рубрики, журнала и автора.
+     *
+     * @param topicId      id рубрики
+     * @param publishingId id журнала
+     * @param authorId     id автора
+     * @return {@link List} of {@link Article}
+     */
     List<Article> getArticlesBytopicAndPublishingAndAuthorId(int topicId, int publishingId, int authorId);
 }
