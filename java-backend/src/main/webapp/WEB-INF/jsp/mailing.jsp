@@ -30,12 +30,10 @@
             <c:forEach var="mailingInfo" items="${mailingInfoList}">
                 <tr>
                     <td>
-                        <%--TODO исправить на 'mailing.publishingTitle'--%>
-                        <c:out value="${mailingInfo.publishingId}"/>
+                        <c:out value="${mailingInfo.publishingTitle}"/>
                     </td>
                     <td>
-                        <%--TODO исправить на 'mailing.issueNumber'--%>
-                        <c:out value="${mailingInfo.issueId}"/>
+                        <c:out value="${mailingInfo.issueNumber}"/>
                     </td>
                     <td>
                         <fmt:formatDate value="${mailingInfo.date}" dateStyle="long" pattern="d MMMM YYYY"/>

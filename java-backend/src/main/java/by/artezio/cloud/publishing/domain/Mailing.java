@@ -16,6 +16,16 @@ public class Mailing {
     }
 
     /**
+     * Конструктор с параметрами.
+     * @param id id рассылки.
+     * @param publishingId id издания, на которую эта рассылка привязана.
+     */
+    public Mailing(final Integer id, final Integer publishingId) {
+        this.id = id;
+        this.publishingId = publishingId;
+    }
+
+    /**
      * Возвращает id рассылки.
      * @return id рассылки
      */
@@ -32,16 +42,16 @@ public class Mailing {
     }
 
     /**
-     * Возвращает id публикации {@link Publishing}, на которую была сделана данная рассылка.
-     * @return id публикации {@link Publishing}
+     * Возвращает id публикации, на которую была сделана данная рассылка.
+     * @return id публикации
      */
     public Integer getPublishingId() {
         return publishingId;
     }
 
     /**
-     * Устанавливает id публикации {@link Publishing}, на которую была сделана данная рассылка.
-     * @param publishingId id публикации {@link Publishing}
+     * Устанавливает id публикации, на которую была сделана данная рассылка.
+     * @param publishingId id публикации
      */
     public void setPublishingId(final Integer publishingId) {
         this.publishingId = publishingId;

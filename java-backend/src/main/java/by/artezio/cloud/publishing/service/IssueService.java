@@ -1,7 +1,7 @@
 package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.domain.Issue;
-import by.artezio.cloud.publishing.dto.IssueInfo;
+import by.artezio.cloud.publishing.domain.IssueArticle;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,11 +18,6 @@ public interface IssueService {
      * */
     List<Issue> getListOfAllIssues();
 
-    /**
-     * Получение списка dto для раздела "номера".
-     * @return {@link List} {@link IssueInfo}
-     */
-    List<IssueInfo> getListOfAllIssueInfo();
 
     /**
      * Удаление номера по идентификатору.
@@ -31,19 +26,30 @@ public interface IssueService {
     void deleteIssueById(final int id);
 
     /**
-     * Получение {@link IssueInfo} по идентификатору {@link Issue}.
+     * Получение {@link by.artezio.cloud.publishing.dto.IssueForm}
+     * по идентификатору {@link Issue}.
      * @param issueId идентификатор {@link Issue}
-     * @return {@link IssueInfo}
+     * @return {@link by.artezio.cloud.publishing.dto.IssueForm}
      */
-    IssueInfo getIssueInfoByIssueId(final int issueId);
+
+    Issue getIssueById(final int issueId);
 
     /**
-     * Функция преобразования сущности {@link Issue}
-     * в объект dto {@link IssueInfo}.
-     * @param issue сущность {@link Issue}
-     * @return {@link IssueInfo}
-     */
-    IssueInfo mapIssueToIssueInfo(final Issue issue);
+     * Метод получения списка {@link by.artezio.cloud.publishing.dto.IssueForm}
+     * по id журнала/газеты.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}
+     * @return список {@link by.artezio.cloud.publishing.dto.IssueForm}
+     * */
+    List<Issue> getIssueListByPublishingId(final int publishingId);
+
+    /**
+     * Получение списка сущностей {@link IssueArticle}
+     * по id {@link Issue}.
+     * @param issueId - id {@link Issue}.
+     * @return список {@link IssueArticle}.
+     * */
+    List<IssueArticle> getIssueArticleListByIssueId(final int issueId);
+
 
     /**
      * Возвращает все номера, дата публикации которых равна date.
@@ -52,19 +58,5 @@ public interface IssueService {
      */
     List<Issue> getIssuesByDate(LocalDate date);
 
-    /**
-     * Функция преобразования списка {@link Issue}
-     * в список {@link IssueInfo}.
-     * @param issueList список {@link Issue}
-     * @return список {@link IssueInfo}
-     */
-    List<IssueInfo> mapIssueListToIssueInfoList(final List<Issue> issueList);
-
-    /**
-     * Метод получения списка {@link IssueInfo} по id журнала/газеты.
-     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}
-     * @return список {@link IssueInfo}
-     */
-    List<IssueInfo> getIssueInfoListByPublishingId(final int publishingId);
 
 }

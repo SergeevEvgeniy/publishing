@@ -30,28 +30,27 @@
     <div class="row">
 
         <div class="col-sm-offset-2 col-sm-8">
-            <%--@elvariable id="issueInfo" type="by.artezio.cloud.publishing.dto.IssueInfo"--%>
+
             <form:form class="form-horizontal" method="${mode != 'view' ? 'POST' : 'GET'}"
-                       action="${actionFromURL}" modelAttribute="issueInfo">
+                       action="${actionFromURL}" modelAttribute="issueForm">
 
                 <div class="form-group">
-                    <label class="control-label col-sm-1" for="publishing">
+                    <label class="control-label col-sm-1" for="publishingId">
                         Журналы
                     </label>
                     <div class="col-sm-offset-1 col-sm-10">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueInfo.publishingTitle}
+                                    ${issueForm.publishingTitle}
                             </p>
                         </c:if>
                         <c:if test="${mode != 'view'}">
-                            <select class="form-control" id="publishing" name="publishingId">
-                                <c:forEach var="pub" items="${publishing}">
-                                    <option value="${pub.id}">
-                                            ${pub.title}
-                                    </option>
-                                </c:forEach>
-                            </select>
+                            <form:select cssClass="form-control" path="publishingId">
+                                <c:if test="${mode == 'create'}">
+                                    <form:option value="" label=">--Выберете журнал--<" />
+                                </c:if>
+                                <form:options items="${publishing}"/>
+                            </form:select>
                         </c:if>
                     </div>
                 </div>
@@ -63,26 +62,24 @@
                     <div class="col-sm-offset-1 col-sm-3">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueInfo.number}
+                                    ${issueForm.number}
                             </p>
                         </c:if>
                         <c:if test="${mode != 'view'}">
-                            <input type="text" class="form-control" id="number" name="number"
-                                   value="${issueInfo.number}"/>
+                            <form:input type="text" class="form-control" path="number"/>
                         </c:if>
                     </div>
-                    <label class="control-label col-sm-offset-2 col-sm-2" for="date">
+                    <label class="control-label col-sm-offset-2 col-sm-2" for="localDate">
                         Дата
                     </label>
                     <div class="col-sm-3">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueInfo.localDate}
+                                    ${issueForm.localDate}
                             </p>
                         </c:if>
                         <c:if test="${mode != 'view'}">
-                            <input type="date" class="form-control" id="date" name="localDate"
-                                   value="${issueInfo.localDate}"/>
+                            <form:input type="date" class="form-control" path="localDate"/>
                         </c:if>
                     </div>
                 </div>
@@ -90,41 +87,51 @@
                 <h4>Содержание</h4>
                 <div class="panel panel-default">
 
-                    <div class="panel-heading"
-                        <c:if test="${mode == 'view'}">
-                            hidden
-                        </c:if>
-                    >
+                    <c:if test="${mode != 'view'}">
+                        <div class="panel-heading">
 
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="topics">Рубрика</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="topics" name="topicId" disabled></select>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="topics">Рубрика</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="topics" name="topicId" disabled></select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="authors">Автор</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="authors" name="authorId" disabled></select>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="authors">Автор</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="authors" name="authorId" disabled></select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="articles">Статья</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="articles" disabled></select>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="articles">Статья</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="articles" disabled></select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="text-right">
-                            <input type="button" class="btn btn-success" value="Добавить">
-                        </div>
+                            <div class="text-right">
+                                <input type="button" class="btn btn-success" value="Добавить" disabled>
+                            </div>
 
-                    </div>
+                        </div>
+                    </c:if>
 
                     <ul class="list-group">
-
+                        <c:forEach var="article" items="${articles}">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-xs-10">
+                                        <span>${article.title}</span>
+                                    </div>
+                                    <c:if test="${mode != 'view'}">
+                                        <div class="col-xs-2 text-right">
+                                            <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
+                                        </div>
+                                    </c:if>
+                                </div>
+                        </c:forEach>
                     </ul>
 
                 </div>
@@ -132,35 +139,56 @@
                 <h4>Реклама</h4>
                 <div class="panel panel-default">
 
-                    <div class="panel-heading">
+                    <c:if test="${mode != 'view'}">
+                        <div class="panel-heading">
 
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control">
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="button" class="btn btn-success form-control" value="Добавить">
+                                </div>
                             </div>
-                            <div class="col-sm-3">
-                                <input type="button" class="btn btn-success form-control" value="Добавить">
-                            </div>
+
                         </div>
-
-                    </div>
+                    </c:if>
 
                     <ul class="list-group">
-
+                        <c:forEach var="advertising" items="${advertising}">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-xs-10">
+                                        <a href="${advertising.filePath}">
+                                                ${advertising.filePath}
+                                        </a>
+                                    </div>
+                                    <c:if test="${mode != 'view'}">
+                                        <div class="col-xs-2 text-right">
+                                            <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
+                                        </div>
+                                    </c:if>
+                                </div>
+                            </li>
+                        </c:forEach>
                     </ul>
 
                 </div>
 
-                <div class="form-group">
-                    <div class="col-sm-offset-8 col-lg-offset-9 col-sm-4 col-lg-3">
-                        <input type="button" class="btn btn-info form-control" value="Опубликовать">
+                <c:if test="${mode == 'edit'}">
+                    <div class="form-group">
+                        <div class="col-sm-offset-8 col-lg-offset-9 col-sm-4 col-lg-3">
+                            <input type="button" class="btn btn-info form-control" value="Опубликовать">
+                        </div>
                     </div>
-                </div>
+                </c:if>
 
-                <div class="text-right">
-                    <input type="button" class="btn btn-secondary" value="Отменить">
-                    <input type="button" class="btn btn-primary" value="Сохранить">
-                </div>
+                <c:if test="${mode != 'view'}">
+                    <div class="text-right">
+                        <input type="button" class="btn btn-secondary" value="Отменить">
+                        <input type="button" class="btn btn-primary" value="Сохранить">
+                    </div>
+                </c:if>
 
             </form:form>
 

@@ -2,12 +2,12 @@ package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.dao.MailingDao;
 import by.artezio.cloud.publishing.domain.Issue;
-import by.artezio.cloud.publishing.dto.MailingInfo;
+import by.artezio.cloud.publishing.domain.Mailing;
+import by.artezio.cloud.publishing.domain.MailingResult;
 import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
 import by.artezio.cloud.publishing.service.PublishingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,29 +29,18 @@ public class MailingServiceImpl implements MailingService {
     /**
      * Конструктор с параметрами.
      * @param mailingDao dao для взаимодействия с БД.
-     * @param issueService сервис для работы с номерами.
-     * @param publishingService сервис для работы с издательствами.
+     * @param mailSender рассыльщик писем.
+     * @param issueService сервис для номеров.
+     * @param publishingService сервис для изданий.
      */
     public MailingServiceImpl(final MailingDao mailingDao,
+                              final MailSender mailSender,
                               final IssueService issueService,
                               final PublishingService publishingService) {
         this.mailingDao = mailingDao;
+        this.mailSender = mailSender;
         this.issueService = issueService;
         this.publishingService = publishingService;
-    }
-
-    /**
-     * Устанавливает отправителя писем.
-     * @param mailSender отправитель писем.
-     */
-    @Autowired
-    public void setMailSender(final MailSender mailSender) {
-        this.mailSender = mailSender;
-    }
-
-    @Override
-    public List<MailingInfo> getAllMailingInfo() {
-        return mailingDao.getAllMailingInfo();
     }
 
     @Override
@@ -60,16 +49,10 @@ public class MailingServiceImpl implements MailingService {
     }
 
     @Override
-    public boolean updateEmailList(final int publishingId, final List<String> emails) {
-        boolean wasSuccessUpdated = true;
-
-        Integer mailingId = mailingDao.getMailingIdByPublishingId(publishingId);
-        if (mailingId == null) {
-            mailingId = mailingDao.createMailingRecord(publishingId);
-        }
-
+    public boolean updateEmailList(final int mailingId, final List<String> emails) {
         mailingDao.clearMailingSubscribersByMailingId(mailingId);
 
+        boolean wasSuccessUpdated = true;
         if (emails != null) {
             for (String email : emails) {
                 wasSuccessUpdated &= mailingDao.addEmailByMailingId(mailingId, email);
@@ -80,23 +63,48 @@ public class MailingServiceImpl implements MailingService {
     }
 
     @Override
-    public void sendMail(final LocalDateTime dateTime) {
-        List<Issue> issues = issueService.getIssuesByDate(dateTime.toLocalDate());
+    public Integer getMailingIdByPublishingId(final int publishingId) {
+        return mailingDao.getMailingIdByPublishingId(publishingId);
+    }
+
+    @Override
+    public Integer createMailingRecord(final int publishingId) {
+        return mailingDao.createMailingRecord(publishingId);
+    }
+
+    @Override
+    public void addMailingResult(final int mailingId, final int issueId, final LocalDateTime localDateTime, final String result) {
+        mailingDao.addMailingResult(mailingId, issueId, localDateTime, result);
+    }
+
+    @Override
+    public List<Mailing> getAllMailing() {
+        return mailingDao.getAllMailing();
+    }
+
+    @Override
+    public List<MailingResult> getAllMailingResult() {
+        return mailingDao.getAllMailingResult();
+    }
+
+    @Override
+    public void sendMail(final LocalDateTime localDateTime) {
+        List<Issue> issues = this.issueService.getIssuesByDate(localDateTime.toLocalDate());
         for (Issue issue : issues) {
             int publishingId = issue.getPublishingId();
-            int mailingId = this.mailingDao.getMailingIdByPublishingId(publishingId);
+            int mailingId = this.getMailingIdByPublishingId(publishingId);
             String publishingTitle = this.publishingService.getPublishingTitle(publishingId);
             List<String> subscribers = this.getEmailList(publishingId);
             List<String> results = this.mailSender.sendMail(
                 subscribers,
                 "!!! Свежий выпуск \"" + issue.getNumber() + "\"!!!",
-                "Вышел свежий номер мздательства \"" + publishingTitle + "\""
+                "Вышел свежий номер издательства \"" + publishingTitle + "\""
             );
 
-            this.mailingDao.addMailingResult(
+            this.addMailingResult(
                 mailingId,
                 issue.getId(),
-                dateTime,
+                localDateTime,
                 String.join("\n", results)
             );
         }

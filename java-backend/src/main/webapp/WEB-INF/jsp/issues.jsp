@@ -3,7 +3,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <tag:layout>
-    <fmt:setLocale value="ru-RU"/>
+
     <h3 class="page-header">Номера</h3>
     <form>
         <div class="text-right form-group">
@@ -22,31 +22,31 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="issueInfo" items="${issueInfoList}">
+                <c:forEach var="issueForm" items="${issueFormList}">
                     <tr>
-                        <td>${issueInfo.publishingTitle}</td>
-                        <td>${issueInfo.number}</td>
+                        <td>${issueForm.publishingTitle}</td>
+                        <td>${issueForm.number}</td>
                         <td>
-                            <fmt:parseDate var="date" value="${issueInfo.localDate}" type="date" pattern="yyyy-MM-dd"/>
-                            <time datetime="${issueInfo.localDate}">
+                            <fmt:parseDate var="date" value="${issueForm.localDate}" type="date" pattern="yyyy-MM-dd"/>
+                            <time datetime="${issueForm.localDate}">
                                 <fmt:formatDate value="${date}" pattern="dd MMMM yyyy" type="date"/>
                             </time>
                         </td>
                         <td>Будущее описание</td>
                         <td>
-                            <c:if test="${!issueInfo.published}">
+                            <c:if test="${!issueForm.published}">
                                 <a class="btn btn-default btn-sm"
-                                   href="${pageContext.request.contextPath}/issues?mode=edit&id=${issueInfo.issueId}">
+                                   href="${pageContext.request.contextPath}/issues?mode=edit&id=${issueForm.issueId}">
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </a>
                                 <button type="button" class="btn btn-default btn-sm delete-button">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
-                                <input type="hidden" value="${issueInfo.issueId}">
+                                <input type="hidden" value="${issueForm.issueId}">
                             </c:if>
-                            <c:if test="${issueInfo.published}">
+                            <c:if test="${issueForm.published}">
                                 <a class="btn btn-default btn-sm"
-                                   href="${pageContext.request.contextPath}/issues?mode=view&id=${issueInfo.issueId}">
+                                   href="${pageContext.request.contextPath}/issues?mode=view&id=${issueForm.issueId}">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </a>
                             </c:if>

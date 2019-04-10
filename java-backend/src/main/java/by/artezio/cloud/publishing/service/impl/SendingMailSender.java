@@ -2,7 +2,6 @@ package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.domain.MailingResultType;
 import by.artezio.cloud.publishing.service.MailSender;
-import by.artezio.cloud.publishing.service.MailingService;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 //import org.springframework.stereotype.Service;
@@ -23,17 +22,14 @@ import java.util.List;
 public class SendingMailSender implements MailSender {
 
     private JavaMailSenderImpl javaMailSender;
-    private MailingService mailingService;
 
     /**
      * Конструктор с параметром.
      *
      * @param javaMailSender javaMailSender
-     * @param mailingService mailingService
      */
-    public SendingMailSender(final JavaMailSenderImpl javaMailSender, final MailingService mailingService) {
+    public SendingMailSender(final JavaMailSenderImpl javaMailSender) {
         this.javaMailSender = javaMailSender;
-        this.mailingService = mailingService;
     }
 
     @Override
@@ -49,12 +45,12 @@ public class SendingMailSender implements MailSender {
                 javaMailSender.send(mimeMessage);
             } catch (MailException | MessagingException e) {
                 System.out.println(e.getMessage());
-                results.add(MailingResultType.BAD_SUBSCRIBER + " " + address);
+                results.add(MailingResultType.BAD_SUBSCRIBER.getMessage() + " " + address);
             }
         }
 
         if (results.size() == 0) {
-            results.add(MailingResultType.SUCCESS.toString());
+            results.add(MailingResultType.SUCCESS.getMessage());
         }
 
         return results;

@@ -1,10 +1,9 @@
 package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.dto.Subscribers;
-import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
 import by.artezio.cloud.publishing.service.PublishingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import by.artezio.cloud.publishing.web.facade.MailingFacade;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
 
 /**
  * Контроллер для страницы рассылки.
@@ -23,20 +22,22 @@ import java.util.Arrays;
 @RequestMapping("/mailing")
 public class MailingController {
 
-    private MailingService mailingService;
+    private MailingFacade mailingFacade;
     private PublishingService publishingService;
-
-    @Autowired
-    private MailSender mailSender;
+    private MailingService mailingService;
 
     /**
      * Конструктор с параметрами.
-     * @param mailingService mailingService
-     * @param publishingService publishingService
+     * @param mailingFacade фасад для рассылок
+     * @param publishingService сервис изданий
+     * @param mailingService сервис рассылок
      */
-    public MailingController(final MailingService mailingService, final PublishingService publishingService) {
-        this.mailingService = mailingService;
+    public MailingController(final MailingFacade mailingFacade,
+                             final PublishingService publishingService,
+                             final MailingService mailingService) {
+        this.mailingFacade = mailingFacade;
         this.publishingService = publishingService;
+        this.mailingService = mailingService;
     }
 
     /**
@@ -46,7 +47,7 @@ public class MailingController {
      */
     @GetMapping
     public String initMailingInfo(final Model model) {
-        model.addAttribute("mailingInfoList", mailingService.getAllMailingInfo());
+        model.addAttribute("mailingInfoList", mailingFacade.getAllMailingInfo());
         return "mailing";
     }
 
@@ -63,22 +64,22 @@ public class MailingController {
         model.addAttribute("publishingList", publishingService.getPublishingList());
         if (publishingId != null) {
             model.addAttribute("id", publishingId);
-            model.addAttribute("emailList", mailingService.getEmailList(publishingId));
+            model.addAttribute("emailList", mailingFacade.getEmailList(publishingId));
         }
         return "mailingSettings";
     }
 
     /**
-     * Изменяет список подписчиков, подписанных на издание с <code>id == subscribers.getPublishingId()</code>.
+     * Изменяет список подписчиков, подписанных на издание с <code>id == subscribers.getPublishingTitle()</code>.
      *
-     * @param subscribers Объект подписчиков рассылки издания с <code>id == subscribers.getPublishingId()</code>,
+     * @param subscribers Объект подписчиков рассылки издания с <code>id == subscribers.getPublishingTitle()</code>,
      *                    в котором хранятся email-адреса, на которые произойдет рассылка в следующий раз.
      * @return страница настроек.
      */
     @PostMapping("/settings")
     public String addNewSubscribers(@ModelAttribute final Subscribers subscribers) {
         System.out.println(subscribers);
-        boolean isSuccessUpdated = mailingService.updateEmailList(subscribers.getPublishingId(), subscribers.getEmails());
+        boolean isSuccessUpdated = mailingFacade.updateEmailList(subscribers.getPublishingId(), subscribers.getEmails());
 
         System.out.print("Email-subscribers was success updated? --> ");
         System.out.println(isSuccessUpdated ? "YES" : "NO");
@@ -87,16 +88,21 @@ public class MailingController {
     }
 
     /**
+     * Временное решение для инициализации рассылок.
+     * Будет в будущем УДАЛЕНО.
+     * Кнопочки на странице Рассылок также не будет.
+     *
      * Инициирует рассылку.
-     * @return mailing.jsp
+     * @return вьюха рассылок.
      */
     @GetMapping("/do_it")
     public String doIt() {
-        mailSender.sendMail(
-            Arrays.asList("team00_10@mail.ru", "team00_11@mail.ru"),
-            "Рассылка на русском",
-            "Это тело письма. Оно на руском языке. Пробуем кодировки на вкус..."
-        );
+        this.mailingService.sendMail(LocalDateTime.now());
+//        mailSender.sendMail(
+//            Arrays.asList("team00_10@mail.ru", "team00_11@mail.ru"),
+//            "Рассылка на русском",
+//            "Это тело письма. Оно на руском языке. Пробуем кодировки на вкус..."
+//        );
         return "redirect:/mailing";
     }
 }
