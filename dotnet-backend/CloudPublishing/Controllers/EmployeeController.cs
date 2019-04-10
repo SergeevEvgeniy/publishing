@@ -104,14 +104,6 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            if (model == null)
-            {
-                ModelState.AddModelError("", Error.NoDataAqueiredEmployee);
-                model.TypeList = GetEmployeeTypeList();
-                model.EducationList = GetEmployeeEducationList();
-                return View(model);
-            }
-
             service.CreateEmployee(mapper.Map<EmployeeCreateModel, EmployeeDTO>(model));
 
             TempData["Message"] = string.Format(Success.AddedEmployee, model.Email);
@@ -136,7 +128,8 @@ namespace CloudPublishing.Controllers
             var employee = service.GetEmployeeById(id.Value);
             if (employee == null)
             {
-                return null;
+                TempData["Message"] = Error.NotFoundEmployee;
+                return RedirectToAction("List");
             }
 
             var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(employee);
@@ -166,15 +159,6 @@ namespace CloudPublishing.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.TypeList = GetEmployeeTypeList();
-                model.EducationList = GetEmployeeEducationList();
-                return View(model);
-            }
-            
-            if (model == null)
-            {
-                model = new EmployeeEditModel();
-                ModelState.AddModelError("", Error.NoDataAqueiredEmployee);
                 model.TypeList = GetEmployeeTypeList();
                 model.EducationList = GetEmployeeEducationList();
                 return View(model);
