@@ -86,7 +86,7 @@ namespace CloudPublishing.Business.Services
 
                 var author = employeeService.GetEmployeeById(article.AuthorId);
                 var publishing = publishingService.GetPublishing(article.Id);
-                var topic = publishingService.GetTopics().FirstOrDefault(t => t.Id == article.TopicId);
+                var topic = publishingService.GetTopic(article.TopicId);
 
                 return new DetailedReviewDTO
                 {
