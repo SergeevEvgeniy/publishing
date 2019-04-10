@@ -27,45 +27,44 @@ namespace CloudPublishing.Controllers.RestApi
         [Route("employees")]
         public IHttpActionResult GetEmployeeData()
         {
-            var result = service.GetEmployees().ToList();
-
-            return !result.Any()
-                ? (IHttpActionResult) ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent))
-                : Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeItemModel>>(result));
+            return ProduceHttpResult<EmployeeData>(service.GetEmployees());
         }
 
         [HttpGet]
         [Route("employees/{id}")]
         public IHttpActionResult GetEmployeeData(int? id)
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-
-            var result = service.GetEmployeeById(id.Value);
-
-            return result == null
-                ? (IHttpActionResult) ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent))
-                : Ok(mapper.Map<EmployeeDTO, EmployeeData>(result));
+            return id == null 
+                ? BadRequest() : ProduceHttpResult<EmployeeData>(service.GetEmployeeById(id.Value));
         }
 
         [HttpPost]
         [Route("employees")]
         public IHttpActionResult GetEmployeeData(EmployeeFilter filter)
         {
-            var list = service.GetEmployeesFromList(filter.IdList, filter.LastName).ToList();
-            return !list.Any()
-                ? (IHttpActionResult) ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent))
-                : Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<EmployeeData>>(list));
+            return ProduceHttpResult<EmployeeData>(service.GetEmployeesFromList(filter.IdList, filter.LastName));
         }
 
         [HttpGet]
         [Route("journalists/{id}")]
         [HttpRequestException]
-        public IHttpActionResult GetEmployeeStatistics(int? id)
+        public IHttpActionResult GetJournalistStatistics(int? id)
         {
             return id == null ? (IHttpActionResult) BadRequest() : Ok(service.GetJournalistStatistics(id.Value));
+        }
+
+        private IHttpActionResult ProduceHttpResult<T>(IEnumerable<EmployeeDTO> collection)
+        {
+            return collection.Any()
+                ? Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<T>>(collection))
+                : (IHttpActionResult)ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+
+        private IHttpActionResult ProduceHttpResult<T>(EmployeeDTO employee)
+        {
+            return employee != null
+                ? Ok(mapper.Map<EmployeeDTO, T>(employee))
+                : (IHttpActionResult)ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
     }
 }

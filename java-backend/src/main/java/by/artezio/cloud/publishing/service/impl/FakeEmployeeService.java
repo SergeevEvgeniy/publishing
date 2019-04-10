@@ -7,7 +7,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Имплементация сервиса, реализующий бизнес-логику по обработке сущности
@@ -27,7 +27,7 @@ public class FakeEmployeeService implements EmployeeService {
     }
 
     @Override
-    public Set<Employee> getEmployeesByPublishingId(final Integer publishingId) {
+    public List<Employee> getEmployeesByPublishingId(final Integer publishingId) {
         return employeeDao.getJournalistsByPublishingId(publishingId);
     }
 

@@ -10,8 +10,22 @@ public class MailingResult {
 
     private Integer mailingId;
     private Integer issueId;
-    private LocalDateTime date;
+    private LocalDateTime dateTime;
     private String result;
+
+    /**
+     * Конструктор с параметрами.
+     * @param mailingId id рассылки
+     * @param issueId id номера для рассылки
+     * @param dateTime дата рассылки
+     * @param result результат рассылки
+     */
+    public MailingResult(final Integer mailingId, final Integer issueId, final LocalDateTime dateTime, final String result) {
+        this.mailingId = mailingId;
+        this.issueId = issueId;
+        this.dateTime = dateTime;
+        this.result = result;
+    }
 
     /**
      * Возвращает id рассылки.
@@ -49,16 +63,16 @@ public class MailingResult {
      * Возвращает дату совершения рассылки.
      * @return дата рассылки
      */
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     /**
      * Устанавливает дату совершения рассылки.
-     * @param date дата рассылки
+     * @param dateTime дата рассылки
      */
-    public void setDate(final LocalDateTime date) {
-        this.date = date;
+    public void setDateTime(final LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     /**

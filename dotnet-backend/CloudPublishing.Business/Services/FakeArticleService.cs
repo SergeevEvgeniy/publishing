@@ -11,16 +11,16 @@ namespace CloudPublishing.Business.Services
         public JournalistStatisticsDTO GetJournalistStatistics(int id)
         {
 
-            var result = JObject.Parse(
+            var jObject = JObject.Parse(
                 @"{'id':1,'firstName':'Дарья','lastName':'Донцова','middleName':'Аркадьевна','email':'ddontsova@publishing.cloud','sex':'F','birthYear':1952,'articleCount':77,'articleCountByPublishing':{'рога и копыта':77},'articleCountByTopics':{'садоводство':34,'скотоводство':43}}");
 
             return new JournalistStatisticsDTO
             {
-                ArticleCount = (int) result["articleCount"],
-                ArticleCountByTopics = ((JObject) result["articleCountByTopics"])
+                ArticleCount = (int) jObject["articleCount"],
+                ArticleCountByTopics = ((JObject) jObject["articleCountByTopics"])
                     .Select<KeyValuePair<string, JToken>, KeyValuePair<string, int>>(x =>
                         new KeyValuePair<string, int>(x.Key, (int) x.Value)).ToDictionary(x => x.Key, x => x.Value),
-                ArticleCountByPublishing = ((JObject) result["articleCountByPublishing"])
+                ArticleCountByPublishing = ((JObject) jObject["articleCountByPublishing"])
                     .Select<KeyValuePair<string, JToken>, KeyValuePair<string, int>>(x =>
                         new KeyValuePair<string, int>(x.Key, (int) x.Value)).ToDictionary(x => x.Key, x => x.Value)
             };

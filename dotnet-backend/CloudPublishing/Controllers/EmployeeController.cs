@@ -104,17 +104,7 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            var user = mapper.Map<EmployeeCreateModel, EmployeeDTO>(model);
-
-            if (user == null)
-            {
-                ModelState.AddModelError("", Error.NoDataAqueiredEmployee);
-                model.TypeList = GetEmployeeTypeList();
-                model.EducationList = GetEmployeeEducationList();
-                return View(model);
-            }
-
-            service.CreateEmployee(user);
+            service.CreateEmployee(mapper.Map<EmployeeCreateModel, EmployeeDTO>(model));
 
             TempData["Message"] = string.Format(Success.AddedEmployee, model.Email);
 
@@ -135,13 +125,14 @@ namespace CloudPublishing.Controllers
                 return null;
             }
 
-            var result = service.GetEmployeeById(id.Value);
-            if (result == null)
+            var employee = service.GetEmployeeById(id.Value);
+            if (employee == null)
             {
-                return null;
+                TempData["Message"] = Error.NotFoundEmployee;
+                return RedirectToAction("List");
             }
 
-            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(result);
+            var model = mapper.Map<EmployeeDTO, EmployeeEditModel>(employee);
             model.TypeList = GetEmployeeTypeList();
             model.EducationList = GetEmployeeEducationList();
 
@@ -173,18 +164,9 @@ namespace CloudPublishing.Controllers
                 return View(model);
             }
 
-            var user = mapper.Map<EmployeeEditModel, EmployeeDTO>(model);
-            if (user == null)
-            {
-                ModelState.AddModelError("", Error.NoDataAqueiredEmployee);
-                model.TypeList = GetEmployeeTypeList();
-                model.EducationList = GetEmployeeEducationList();
-                return View(model);
-            }
-
             try
             {
-                service.EditEmployee(user);
+                service.EditEmployee(mapper.Map<EmployeeEditModel, EmployeeDTO>(model));
 
                 TempData["Message"] = string.Format(Success.UpdatedEmployee, model.Email);
             }

@@ -23,8 +23,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class SessionSecurityService implements SecurityService {
 
     private static final String CURRENT_USER = "currentUser";
-    private static final String EDITOR = "E";
-    private static final String JOURNALIST = "J";
+    private static final Character EDITOR = 'E';
+    private static final Character JOURNALIST = 'J';
     private static final int UNAUTHORIZED = 401;
     private static final int OK = 200;
 

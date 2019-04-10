@@ -9,10 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Класс для обращения к таблице Employee.
@@ -43,8 +42,7 @@ public class EmployeeDao {
     };
 
     /**
-     *
-     * @param email значение почты
+     * @param email      значение почты
      * @param encodePass хэш пароля
      * @return Null если нет такого пользователя, либо Employee полученного по
      * совпадению пары логин/пароль
@@ -55,9 +53,9 @@ public class EmployeeDao {
         map.put("password", encodePass);
         try {
             return this.jdbcTemplate.queryForObject(
-                    "SELECT * FROM employee where email = :email and password = :password",
-                    map,
-                    mapper
+                "SELECT * FROM employee where email = :email and password = :password",
+                map,
+                mapper
             );
         } catch (EmptyResultDataAccessException ex) {
             return null;
@@ -72,26 +70,40 @@ public class EmployeeDao {
      */
     public Employee getEmployeeById(final int id) {
         return jdbcTemplate.queryForObject("SELECT * FROM employee WHERE id = :id",
-                Collections.singletonMap("id", id), mapper);
+            Collections.singletonMap("id", id), mapper);
     }
 
     /**
      * Получение множества сотрудников по идентификатору журнала/газеты.
      *
      * @param id идентификатор журнала/газеты
-     * @return {@link Set}&lt;{@link Employee}&gt; множество сотрудников,
+     * @return {@link List}&lt;{@link Employee}&gt; множество сотрудников,
      * которые работают в указанном журнале/газете
      */
-    public Set<Employee> getJournalistsByPublishingId(final Integer id) {
+    public List<Employee> getJournalistsByPublishingId(final Integer id) {
         String sql = "SELECT id,"
-                + " first_name, last_name, middle_name,"
-                + " email, password, sex, birth_year,"
-                + " address, type, education_id, chief_editor"
-                + " FROM employee e"
-                + " INNER JOIN publishing_employee pe ON pe.employee_id = e.id"
-                + " WHERE pe.publishing_id = :publishingId"
-                + " AND e.type = 'J'";
-        return new HashSet<>(jdbcTemplate.query(sql, Collections.singletonMap("publishingId", id),
-                mapper));
+            + " first_name, last_name, middle_name,"
+            + " email, password, sex, birth_year,"
+            + " address, type, education_id, chief_editor"
+            + " FROM employee e"
+            + " INNER JOIN publishing_employee pe ON pe.employee_id = e.id"
+            + " WHERE pe.publishing_id = :publishingId"
+            + " AND e.type = 'J'";
+        return jdbcTemplate.query(sql, Collections.singletonMap("publishingId", id),
+            mapper);
+    }
+
+    /**
+     * @param publishingId id журнала\газеты
+     * @return список сотрудников, работающих в этом журнале
+     */
+    public List<Employee> getEmployeesByPublishingId(final int publishingId) {
+        return jdbcTemplate.query("SELECT e.* "
+                + "FROM employee e "
+                + "INNER JOIN publishing_employee pe "
+                + "ON pe.employee_id = e.id "
+                + "WHERE pe.publishing_id = :publishingId",
+            Collections.singletonMap("publishingId", publishingId),
+            mapper);
     }
 }
