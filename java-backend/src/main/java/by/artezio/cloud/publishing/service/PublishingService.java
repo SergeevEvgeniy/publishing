@@ -7,7 +7,7 @@ import by.artezio.cloud.publishing.dto.PublishingDTO;
 import java.util.List;
 
 /**
- * Сервис, содержащий бизнес-логику по обработке журналов/газет.
+ * Сервис для получения сведений об изданиях, издаваемых в издательстве.
  */
 public interface PublishingService {
 

@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Сервис для получения сведений об изданиях, издаваемых в издательстве.
- * Он непосредственно посылает HTTP-запросы на сервер и получает данные в ответах.
+ * Реализация интерфейса PublishingService.
+ * Получение и передача данных происходит посредством отправки HTTP-запросов.
  */
 public class RemotePublishingService implements PublishingService {
 
