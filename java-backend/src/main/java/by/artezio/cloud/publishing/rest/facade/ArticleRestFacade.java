@@ -6,6 +6,8 @@ import by.artezio.cloud.publishing.service.ArticleService;
 import by.artezio.cloud.publishing.service.EmployeeService;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @author Denis Shubin
  */
@@ -35,5 +37,14 @@ public class ArticleRestFacade {
      */
     public Article getArticleById(final int articleId) {
         return articleService.getArticleById(articleId);
+    }
+
+    /**
+     * @param topicId      id рубрики
+     * @param publishingId id журнала
+     * @return {@link List} of {@link Article}
+     */
+    public List<Article> getArticleByTopicAndPublishingId(final int topicId, final int publishingId) {
+        return articleService.getArticleByTopicAndPublishingId(topicId, publishingId);
     }
 }
