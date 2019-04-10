@@ -87,7 +87,7 @@ public class IssueWebFacade {
      * */
     private IssueInfo mapIssueToIssueInfo(final Issue issue) {
         IssueInfo issueInfo = new IssueInfo();
-        Publishing publishing =
+        PublishingDTO publishing =
             publishingService.getPublishingById(issue.getPublishingId());
         issueInfo.setPublishingTitle(publishing.getTitle());
         List<Integer> articleIdList =
@@ -215,10 +215,10 @@ public class IssueWebFacade {
     /**
      * Метод для получения  {@link Map} которая содержит
      * информацию о тематиках {@link Topic}
-     * для данного {@link Publishing}. Предназначена лля
+     * для данного {@link PublishingDTO}. Предназначена лля
      * выпадающего списка на форме добавления/редактирования
      * номеров.
-     * @param publishingId - id {@link Publishing}
+     * @param publishingId - id {@link PublishingDTO}
      * @return {@link Map}, где ключом является
      * id {@link Topic} значением является название {@link Topic}
      * */

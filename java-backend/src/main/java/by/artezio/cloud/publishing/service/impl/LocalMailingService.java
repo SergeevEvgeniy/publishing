@@ -20,7 +20,7 @@ import java.util.List;
  * @author vgamezo
  */
 @Service
-public class MailingServiceImpl implements MailingService {
+public class LocalMailingService implements MailingService {
 
     private MailingDao mailingDao;
     private MailSender mailSender;
@@ -34,10 +34,10 @@ public class MailingServiceImpl implements MailingService {
      * @param issueService сервис для номеров.
      * @param publishingService сервис для изданий.
      */
-    public MailingServiceImpl(final MailingDao mailingDao,
-                              final MailSender mailSender,
-                              final IssueService issueService,
-                              final PublishingService publishingService) {
+    public LocalMailingService(final MailingDao mailingDao,
+                               final MailSender mailSender,
+                               final IssueService issueService,
+                               final PublishingService publishingService) {
         this.mailingDao = mailingDao;
         this.mailSender = mailSender;
         this.issueService = issueService;

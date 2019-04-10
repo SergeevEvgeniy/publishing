@@ -1,12 +1,13 @@
 package by.artezio.cloud.publishing.service.impl;
 
+import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.service.PublishingService;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public class RemotePublishingService implements PublishingService {
     @Override
     public List<Topic> getTopicsByPublishingId(final Integer id) {
         // todo add implementation
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
@@ -51,6 +52,12 @@ public class RemotePublishingService implements PublishingService {
     @Override
     public List<PublishingDTO> getPublishingListByEmployeeId(final int employeeId) {
         // todo add implementation
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<Employee> getPublishingJournalistByPublishingId(final int publishingId) {
+        // todo add implementation
+        return Collections.EMPTY_LIST;
     }
 }
