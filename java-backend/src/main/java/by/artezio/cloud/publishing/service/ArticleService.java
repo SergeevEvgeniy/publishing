@@ -57,4 +57,10 @@ public interface ArticleService {
      * @return {@link Article}
      */
     Article getArticleById(int articleId);
+
+    void deleteArticle(Article article);
+
+    List<Article> getArticleByTopicAndPublishingId(int topicId, int publishingId);
+
+    List<Article> getArticlesBytopicAndPublishingAndAuthorId(int topicId, int publishingId, int authorId);
 }
