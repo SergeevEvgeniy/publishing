@@ -4,7 +4,7 @@ import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.domain.Advertising;
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Issue;
-import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.dto.IssueForm;
 import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.dto.User;
@@ -127,9 +127,9 @@ public class IssueWebFacade {
         if (user.isChiefEditor()) {
             issues = issueService.getListOfAllIssues();
         } else {
-            List<Publishing> publishingList =
+            List<PublishingDTO> publishingList =
                 publishingService.getPublishingListByEmployeeId(user.getId());
-            for (Publishing p : publishingList) {
+            for (PublishingDTO p : publishingList) {
                 List<Issue> publishingIssues =
                     issueService.getIssueListByPublishingId(p.getId());
                 issues.addAll(publishingIssues);
@@ -140,25 +140,25 @@ public class IssueWebFacade {
 
     /**
      * Метод для получения  {@link Map} которая содержит
-     * информацию о журналах/газетах {@link Publishing}
+     * информацию о журналах/газетах {@link PublishingDTO}
      * доступные текущему пользователю. Предназначена лля
      * выпадающего списка на форме добавления/редактирования
      * номеров.
      * @return {@link Map}, где ключом является
-     * id {@link Publishing} значением является название {@link Publishing}
+     * id {@link PublishingDTO} значением является название {@link PublishingDTO}
      * */
     public Map<Integer, String> getPublishingMap() {
         securityService.checkIsEditor();
         User user = securityService.getCurrentUser();
         Map<Integer, String> publishingMap = new HashMap<>();
-        List<Publishing> publishingList;
+        List<PublishingDTO> publishingList;
         if (user.isChiefEditor()) {
             publishingList = publishingService.getPublishingList();
         } else {
             publishingList =
                 publishingService.getPublishingListByEmployeeId(user.getId());
         }
-        for (Publishing p : publishingList) {
+        for (PublishingDTO p : publishingList) {
             publishingMap.put(p.getId(), p.getTitle());
         }
         return publishingMap;

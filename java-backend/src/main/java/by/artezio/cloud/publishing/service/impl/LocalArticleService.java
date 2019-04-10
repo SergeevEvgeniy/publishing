@@ -7,11 +7,11 @@ import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.dao.TopicDao;
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,7 +86,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
             articleInfo.setTitle(a.getTitle());
 
             Integer publishingId = a.getPublishingId();
-            Publishing publishing = publishingDao.getPublishingById(publishingId);
+            PublishingDTO publishing = publishingDao.getPublishingById(publishingId);
 
             articleInfo.setPublishingName(publishing.getTitle());
 
@@ -118,13 +118,13 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     }
 
     /**
-     * Получение журнала/газеты из сервиса Publishing.
+     * Получение журнала/газеты из сервиса PublishingDTO.
      *
      * @param publishingId идентификатор журнала/газеты
-     * @return объект класса {@link Publishing}
+     * @return объект класса {@link PublishingDTO}
      */
     @Override
-    public Publishing getPublishingById(final int publishingId) {
+    public PublishingDTO getPublishingById(final int publishingId) {
         return publishingDao.getPublishingById(publishingId);
     }
 
@@ -192,8 +192,8 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
 
         Article article = articleDao.getArticleByArticleId(articleId);
 
-        Publishing publishing = publishingDao.getPublishingById(article.getPublishingId());
-        List<Publishing> publishings = new ArrayList<>();
+        PublishingDTO publishing = publishingDao.getPublishingById(article.getPublishingId());
+        List<PublishingDTO> publishings = new ArrayList<>();
         publishings.add(publishing);
 
         List<Topic> topics = topicDao.getTopicsByPublishingId(article.getPublishingId());

@@ -1,7 +1,6 @@
 package by.artezio.cloud.publishing.dto;
 
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 
@@ -17,7 +16,7 @@ import java.util.Map;
  */
 public class ArticleForm {
 
-    private List<Publishing> publishings;
+    private List<PublishingDTO> publishings;
     private List<Topic> topics;
     private String title;
     private String content;
@@ -28,18 +27,18 @@ public class ArticleForm {
     /**
      * Возвращает список журналов/газет.
      *
-     * @return List<Publishing>
+     * @return List<PublishingDTO>
      */
-    public List<Publishing> getPublishings() {
+    public List<PublishingDTO> getPublishings() {
         return publishings;
     }
 
     /**
      * Устанавливает список журналов/газет.
      *
-     * @param newPublishings List<Publishing>
+     * @param newPublishings List<PublishingDTO>
      */
-    public void setPublishing(final List<Publishing> newPublishings) {
+    public void setPublishing(final List<PublishingDTO> newPublishings) {
         this.publishings = newPublishings;
     }
 

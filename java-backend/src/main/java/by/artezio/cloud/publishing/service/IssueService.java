@@ -35,7 +35,7 @@ public interface IssueService {
     /**
      * Метод получения списка {@link by.artezio.cloud.publishing.dto.IssueForm}
      * по id журнала/газеты.
-     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}
+     * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}
      * @return список {@link by.artezio.cloud.publishing.dto.IssueForm}
      * */
     List<Issue> getIssueListByPublishingId(final int publishingId);

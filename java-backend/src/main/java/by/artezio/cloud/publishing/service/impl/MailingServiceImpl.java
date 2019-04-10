@@ -4,6 +4,7 @@ import by.artezio.cloud.publishing.dao.MailingDao;
 import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.domain.Mailing;
 import by.artezio.cloud.publishing.domain.MailingResult;
+import by.artezio.cloud.publishing.domain.MailingSubscriber;
 import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
@@ -55,7 +56,10 @@ public class MailingServiceImpl implements MailingService {
         boolean wasSuccessUpdated = true;
         if (emails != null) {
             for (String email : emails) {
-                wasSuccessUpdated &= mailingDao.addEmailByMailingId(mailingId, email);
+                MailingSubscriber subscriber = new MailingSubscriber();
+                subscriber.setMailingId(mailingId);
+                subscriber.setEmail(email);
+                wasSuccessUpdated = mailingDao.addMailingSubscriber(subscriber) & wasSuccessUpdated;
             }
         }
 
@@ -73,8 +77,8 @@ public class MailingServiceImpl implements MailingService {
     }
 
     @Override
-    public void addMailingResult(final int mailingId, final int issueId, final LocalDateTime localDateTime, final String result) {
-        mailingDao.addMailingResult(mailingId, issueId, localDateTime, result);
+    public boolean addMailingResult(final MailingResult mailingResult) {
+        return mailingDao.addMailingResult(mailingResult);
     }
 
     @Override
@@ -102,10 +106,12 @@ public class MailingServiceImpl implements MailingService {
             );
 
             this.addMailingResult(
-                mailingId,
-                issue.getId(),
-                localDateTime,
-                String.join("\n", results)
+                new MailingResult(
+                    mailingId,
+                    issue.getId(),
+                    localDateTime,
+                    String.join("\n", results)
+                )
             );
         }
     }
