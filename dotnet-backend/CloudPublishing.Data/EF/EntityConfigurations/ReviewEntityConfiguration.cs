@@ -27,6 +27,8 @@ namespace CloudPublishing.Data.EF.EntityConfigurations
 
             Property(r => r.Approved)
                 .HasColumnName("approved");
+
+            Ignore(c => c.Employee);
         }
     }
 }

@@ -242,7 +242,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     }
 
     @Override
-    public void deleteArticle(Article article) {
+    public void deleteArticle(final Article article) {
         articleDao.deleteArticleById(article.getId());
     }
 

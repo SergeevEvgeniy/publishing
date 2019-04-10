@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * REST-controller для обработки запросов, связанных со статьями.
  * Основное предназначение - обработка запросов updateArticle.jsp.
@@ -32,5 +34,17 @@ public class ArticleRestController {
     @GetMapping(value = "/articleById/{articleId}")
     public Article getArticleById(@PathVariable("articleId") final int articleId) {
         return articleFacade.getArticleById(articleId);
+    }
+
+    /**
+     *
+     * @param topicId id рубрики
+     * @param publishingId id журнала
+     * @return список статей с указаной рубрикой в указаннном журнале
+     */
+    @GetMapping(value = "/articleByTopicAndPublishingId/{topicId}/{publishingId}")
+    public List<Article> getArticleByTopicAndPublishingId(@PathVariable("topicId") final int topicId,
+                                                          @PathVariable("publishingId") final int publishingId) {
+        return articleFacade.getArticleByTopicAndPublishingId(topicId, publishingId);
     }
 }

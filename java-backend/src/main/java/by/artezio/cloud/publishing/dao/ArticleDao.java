@@ -130,7 +130,7 @@ public class ArticleDao {
      *
      * @param articleId id статьи, которую нужно удалить
      */
-    public void deleteArticleById(Integer articleId) {
+    public void deleteArticleById(final Integer articleId) {
         jdbcTemplate.update("DELETE FROM article WHERE id = :articleId",
             Collections.singletonMap("articleId", articleId));
     }
@@ -160,7 +160,9 @@ public class ArticleDao {
      * @param authorId     id автора
      * @return {@link List} of {@link Article}
      */
-    public List<Article> getArticleByTopicAndPublishingAndAuthorId(final int topicId, final int publishingId, final int authorId) {
+    public List<Article> getArticleByTopicAndPublishingAndAuthorId(final int topicId,
+                                                                   final int publishingId,
+                                                                   final int authorId) {
         Map<String, Integer> params = new HashMap<>();
         params.put("publishingId", publishingId);
         params.put("topicId", topicId);
