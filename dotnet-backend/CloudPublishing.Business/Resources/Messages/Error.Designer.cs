@@ -88,6 +88,15 @@ namespace CloudPublishing.Business.Resources.Messages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Данный сотрудник не найден.
+        /// </summary>
+        public static string NotFoundEmployee {
+            get {
+                return ResourceManager.GetString("NotFoundEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Журналист не найден.
         /// </summary>
         public static string NotFoundJournalist {

@@ -2,7 +2,6 @@ package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.domain.MailingResultType;
 import by.artezio.cloud.publishing.service.MailSender;
-import by.artezio.cloud.publishing.service.MailingService;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 //import org.springframework.stereotype.Service;
@@ -23,17 +22,14 @@ import java.util.List;
 public class SendingMailSender implements MailSender {
 
     private JavaMailSenderImpl javaMailSender;
-    private MailingService mailingService;
 
     /**
      * Конструктор с параметром.
      *
      * @param javaMailSender javaMailSender
-     * @param mailingService mailingService
      */
-    public SendingMailSender(final JavaMailSenderImpl javaMailSender, final MailingService mailingService) {
+    public SendingMailSender(final JavaMailSenderImpl javaMailSender) {
         this.javaMailSender = javaMailSender;
-        this.mailingService = mailingService;
     }
 
     @Override

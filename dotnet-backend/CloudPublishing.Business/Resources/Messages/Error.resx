@@ -126,6 +126,9 @@
   <data name="NoDataAquiredRemoteHost" xml:space="preserve">
     <value>Ошибка получения данных с удаленного хоста</value>
   </data>
+  <data name="NotFoundEmployee" xml:space="preserve">
+    <value>Данный сотрудник не найден</value>
+  </data>
   <data name="NotFoundJournalist" xml:space="preserve">
     <value>Журналист не найден</value>
   </data>
