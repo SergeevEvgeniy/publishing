@@ -80,7 +80,6 @@ public class ArticleWebFacade {
     }
 
     /**
-     *
      * @return {@code true}, если текущий пользователь является журналистом
      */
     public boolean isJournalist() {
@@ -89,7 +88,6 @@ public class ArticleWebFacade {
     }
 
     /**
-     *
      * @param publishingId id журнала/газеты
      * @return {@link List} of {@link Topic}
      */
@@ -98,7 +96,6 @@ public class ArticleWebFacade {
     }
 
     /**
-     *
      * @param publishingId id журнала/газеты
      * @return {@link List} of {@link Employee}
      */
@@ -107,11 +104,21 @@ public class ArticleWebFacade {
     }
 
     /**
-     *
      * @param employeeId id сотрудника
      * @return {@link Employee}
      */
     public Employee getEmployeeById(final int employeeId) {
         return employeeService.getEmployeeById(employeeId);
+    }
+
+    /**
+     * Удаление статьи ао её идентификатору.
+     * @param articleId id статьи
+     * @return удалённая статья
+     */
+    public Article deleteArticleById(final int articleId) {
+        Article article = articleService.getArticleById(articleId);
+        articleService.deleteArticle(article);
+        return article;
     }
 }

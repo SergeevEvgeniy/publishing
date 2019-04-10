@@ -43,8 +43,7 @@ namespace CloudPublishing.Controllers
             // Заглушка. Будет заменено на получение id текущего пользователя
             int userId = 1;
 
-            List<DetailedReviewModel> list = mapper.Map<IEnumerable<DetailedReviewDTO>, List<DetailedReviewModel>>
-                (reviewService.CreateDetailedReviewList(userId));
+            var list = mapper.Map<IEnumerable<DetailedReviewModel>>(reviewService.CreateDetailedReviewList(userId));
 
             return View(list);
         }
@@ -59,7 +58,7 @@ namespace CloudPublishing.Controllers
             var pl = publishingService.GetPublishings();
             var model = new CreateReviewModel()
             {
-                PublishingList = mapper.Map<IEnumerable<PublishingDTO>, List<PublishingModel>>(pl)
+                PublishingList = mapper.Map<IEnumerable<PublishingModel>>(pl)
             };
             return View(model);
         }
@@ -77,7 +76,7 @@ namespace CloudPublishing.Controllers
 
             if (ModelState.IsValid)
             {
-                reviewService.CreateReview(mapper.Map<ReviewModel, ReviewDTO>(review));
+                reviewService.CreateReview(mapper.Map<ReviewDTO>(review));
             }
 
             return Redirect("/Review/Index");
@@ -149,7 +148,7 @@ namespace CloudPublishing.Controllers
             // Будет заменено на получение id пользователя
             int userId = 1;
 
-            var review = mapper.Map<ReviewDTO, ReviewModel>(reviewService.GetReview(articleId, userId));
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(articleId, userId));
             return View(review);
         }
 
@@ -164,7 +163,7 @@ namespace CloudPublishing.Controllers
             // Будет заменено на получение id пользователя
             int userId = 1;
 
-            var review = mapper.Map<ReviewDTO, ReviewModel>(reviewService.GetReview(id, userId));
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, userId));
 
             return View(review);
         }
@@ -191,7 +190,7 @@ namespace CloudPublishing.Controllers
         /// <summary>
         /// Метод обработки запроса удаления рецензий
         /// </summary>
-        /// <param name="id">Id рецензии</param>
+        /// <param name="id">Id статьи, на которую написана рецензия</param>
         [HttpPost]
         public void Delete(int id)
         {

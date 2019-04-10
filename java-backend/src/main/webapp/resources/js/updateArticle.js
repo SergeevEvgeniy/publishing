@@ -3,7 +3,7 @@ $(function () {
         var selectedValue = event.target.value;
         $.ajax({
             method: "GET",
-            url: "topicsByPublishing/" + selectedValue,
+            url: APP_CONTEXT_PATH + "/article/topicsByPublishing/" + selectedValue,
             success: function (response) {
                 var topicSelector = $("#topicSelector");
                 topicSelector.empty();
@@ -18,9 +18,10 @@ $(function () {
                 console.log(response);
             }
         });
+
         $.ajax({
             method: "GET",
-            url: "employeesByPublishing/" + selectedValue,
+            url: APP_CONTEXT_PATH + "/article/employeesByPublishing/" + selectedValue,
             success: function (response) {
                 var coauthorSelector = $("#availableCoauthors");
                 coauthorSelector.empty();
@@ -41,5 +42,36 @@ $(function () {
                 console.log(response);
             }
         });
+    });
+
+    var currentCoauthors = $("#currentCoauthors")[0];
+    var availableCoauthors = $("#availableCoauthors")[0];
+    $("#addCoauthor").on("click", function () {
+        var selected = availableCoauthors[availableCoauthors.selectedIndex];
+
+        var li = document.createElement("li");
+        li.classList.add("list-group-item");
+
+        var div0 = document.createElement("div");
+        div0.classList.add("row");
+        li.appendChild(div0);
+
+        var div1 = document.createElement("div");
+        div1.classList.add("col-xs-10");
+        div1.textContent = selected.textContent;
+        div0.appendChild(div1);
+
+        var div2 = document.createElement("div");
+        div2.classList.add("col-xs-2", "text-right");
+        div0.appendChild(div2);
+
+        var span = document.createElement("span");
+        span.classList.add("glyphicon", "glyphicon-trash");
+        span.style.cursor = "pointer";
+        div2.appendChild(span);
+
+
+        currentCoauthors.append(li);
+        availableCoauthors.options.remove(selected);
     });
 });

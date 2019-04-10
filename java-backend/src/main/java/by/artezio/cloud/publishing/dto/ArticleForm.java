@@ -6,6 +6,7 @@ import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс, содержащий детальную информацию о статье.
@@ -22,7 +23,7 @@ public class ArticleForm {
     private String content;
     private List<Employee> currentCoauthors;
     private List<Employee> availableCoauthors;
-    private List<Review> reviews;
+    private Map<Employee, Review> reviews;
 
     /**
      * Возвращает список журналов/газет.
@@ -137,7 +138,7 @@ public class ArticleForm {
      *
      * @return List<String>
      */
-    public List<Review> getReviews() {
+    public Map<Employee, Review> getReviews() {
         return reviews;
     }
 
@@ -146,7 +147,7 @@ public class ArticleForm {
      *
      * @param reviews List<Review>
      */
-    public void setReviews(final List<Review> reviews) {
+    public void setReviews(final Map<Employee, Review> reviews) {
         this.reviews = reviews;
     }
 }

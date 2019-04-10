@@ -12,7 +12,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <tag:layout>
     <script type="text/javascript" src="<c:url value="/resources/js/updateArticle.js"/>"></script>
-    <form class="form-horizontal center-block">
+    <form:form class="form-horizontal center-block" method="post" action="/article/new" modelAttribute="articleForm">
 
         <div class="form-group">
             <label for="publishingSelector" class="col-sm-4 h4">Журнал</label>
@@ -69,14 +69,14 @@
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <button id="addCoauthor" class="btn btn-block btn-success">
+                                <span id="addCoauthor" class="btn btn-block btn-success">
                                     Добавить
-                                </button>
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <ul id="currentCoauthors" class="list-group">
+                    <ul id="currentCoauthors" class="list-group list-unstyled">
                         <c:forEach var="currentCoauthor" items="${model.currentCoauthors}">
                             <li class="list-group-item" data-coauthor-id="${currentCoauthor.id}">
                                 <div class="row">
@@ -94,32 +94,40 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-4 h4">Рецензия</label>
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <Label class="h4 col-sm-4">Рецензент</Label>
-                                <div class="col-sm-8">
-                                    <select id="reviewerSelector" class="form-control">
-                                    </select>
+
+        <c:if test="${(isEditMode or isViewMode)and model.reviews.size() != 0}">
+            <div class="form-group">
+                <label class="col-sm-4 h4">Рецензия</label>
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <Label class="h4 col-sm-4">Рецензент</Label>
+                                    <div class="col-sm-8">
+                                        <select id="reviewerSelector" class="form-control">
+                                            <c:forEach var="element" items="${model.reviews}">
+                                                <option value="${element.key.id}">
+                                                        ${element.key.lastName} ${element.key.firstName}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <textarea id="reviewContent" class="form-control no-resize"></textarea>
+                            <div class="col-sm-12">
+                                <textarea id="reviewContent" class="form-control no-resize"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </c:if>
         <div class="text-right">
-            <a href="/" class="btn btn-default">
+            <a href=".." class="btn btn-default">
                 Отменить
             </a>
             <input type="submit" class="btn btn-success" value="Сохранить">
         </div>
-    </form>
+    </form:form>
 </tag:layout>

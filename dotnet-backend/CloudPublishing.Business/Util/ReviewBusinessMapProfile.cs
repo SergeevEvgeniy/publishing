@@ -8,8 +8,7 @@ namespace CloudPublishing.Business.Util
     {
         public ReviewBusinessMapProfile()
         {
-            CreateMap<Review, ReviewDTO>();
-            CreateMap<ReviewDTO, Review>();
+            CreateMap<Review, ReviewDTO>().ReverseMap();
         }
     }
 }
