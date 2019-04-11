@@ -14,6 +14,7 @@ namespace CloudPublishing.Controllers
     /// </summary>
     [HandleException]
     [RoutePrefix("Review")]
+    [Authorize(Roles = "Editor")]
     public class ReviewController : Controller
     {
         private IReviewService reviewService;
