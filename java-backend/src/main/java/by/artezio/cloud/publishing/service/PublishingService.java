@@ -1,35 +1,37 @@
 package by.artezio.cloud.publishing.service;
 
-import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Topic;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 
 import java.util.List;
 
 /**
- * Сервис, содержащий бизнес-логику по обработке журналов/газет.
+ * Сервис для получения сведений об изданиях, издаваемых в издательстве.
  */
 public interface PublishingService {
 
     /**
      * Получение списка всех журналов/газет.
      *
-     * @return {@link List}&lt;{@link Publishing}&gt;
+     * @return Список всех публикаций, имеющихся в издательстве.
      */
-    List<Publishing> getPublishingList();
+    List<PublishingDTO> getPublishingList();
 
     /**
      * Получение журнала/газеты по его идентификатору.
      *
      * @param publishingId идентификатор журнала/газеты
-     * @return {@link Publishing}
+     * @return Объект издания, у которого <code>id == publishingId</code>.
+     *         Если такого объекта не существует, возвращается <code>null</code>.
      */
-    Publishing getPublishingById(Integer publishingId);
+    PublishingDTO getPublishingById(Integer publishingId);
 
     /**
      * Получение списка рубрик по идентификатору журнала/газеты.
      *
      * @param id идентификатор журнала/газеты
-     * @return {@link List}&lt;{@link Topic}&gt;
+     * @return Список рубрик, которые имеет издание
      */
     List<Topic> getTopicsByPublishingId(Integer id);
 
@@ -42,9 +44,17 @@ public interface PublishingService {
     String getPublishingTitle(int publishingId);
 
     /**
-     * Метод получения списка журналов/газет по id сотрудника данных журналов/газет.
-     * @param employeeId - id {@link by.artezio.cloud.publishing.domain.Employee}
-     * @return список {@link Publishing} - все журналы/газуты в которых задействован сотрудник
+     * Возвращает список журналов/газет, к которым сотрудник с <code>id == employeeId</code> имеет доступ.
+     *
+     * @param employeeId id сотрудника.
+     * @return список изданий, в которых задействован данный сотрудник
      * */
-    List<Publishing> getPublishingListByEmployeeId(final int employeeId);
+    List<PublishingDTO> getPublishingListByEmployeeId(final int employeeId);
+
+    /**
+     * Метод получения журналистов журнала/газуты.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}
+     * @return - список всех {@link Employee}
+     * */
+    List<Employee> getPublishingJournalistByPublishingId(final int publishingId);
 }

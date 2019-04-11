@@ -2,6 +2,7 @@ package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.Mailing;
 import by.artezio.cloud.publishing.domain.MailingResult;
+import by.artezio.cloud.publishing.domain.MailingSubscriber;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -9,7 +10,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -96,16 +96,15 @@ public class MailingDao {
     }
 
     /**
-     * Добавляет email-адрес подписчика к уже добавленным на рассылку с <code>id == mailingId</code>.
+     * Добавляет подписчика к уже добавленным на рассылку с <code>id == mailingId</code>.
      *
-     * @param mailingId id рассылки, которая прикреплена к изданию.
-     * @param email email-адрес нового подписчика.
+     * @param mailingSubscriber новый подписчик на рассылку.
      * @return <code>true</code>, если подписчик был успешно добавлен, иначе <code>false</code>.
      */
-    public boolean addEmailByMailingId(final int mailingId, final String email) {
+    public boolean addMailingSubscriber(final MailingSubscriber mailingSubscriber) {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("mailingId", mailingId);
-        map.put("email", email);
+        map.put("mailingId", mailingSubscriber.getMailingId());
+        map.put("email", mailingSubscriber.getEmail());
         int countAffectedRows;
         try {
             countAffectedRows = this.jdbcTemplate.update(
@@ -147,22 +146,20 @@ public class MailingDao {
     }
 
     /**
-     * Добавляет результат рассылки в базу данных. При удачном добавлении вызвращает <code>true</code>,
+     * Добавляет результат рассылки в базу данных.
+     * При удачном добавлении вызвращает <code>true</code>,
      * в случае возникновения какой-либо ошибки возвращает <code>false</code>.
      *
-     * @param mailingId идентификатор рассылки.
-     * @param issueId идентификатор номера, по которому происходила рассылка.
-     * @param dateTime день, на момент которого произошла рассылка.
-     * @param result результат рассылки.
+     * @param mailingResult результат рассылки, который необходимо добавить в базу данных
      * @return <code>true</code>, если добавление результата рассылки произошла успешно, иначе <code>false</code>.
      */
-    public boolean addMailingResult(final int mailingId, final int issueId, final LocalDateTime dateTime, final String result) {
+    public boolean addMailingResult(final MailingResult mailingResult) {
         Map<String, Object> map = new LinkedHashMap<>();
 
-        map.put("mailingId", mailingId);
-        map.put("issueId", issueId);
-        map.put("dateTime", Timestamp.valueOf(dateTime));
-        map.put("result", result);
+        map.put("mailingId", mailingResult.getMailingId());
+        map.put("issueId", mailingResult.getIssueId());
+        map.put("dateTime", Timestamp.valueOf(mailingResult.getDateTime()));
+        map.put("result", mailingResult.getResult());
         int affectedRows;
         try {
             affectedRows = this.jdbcTemplate.update(

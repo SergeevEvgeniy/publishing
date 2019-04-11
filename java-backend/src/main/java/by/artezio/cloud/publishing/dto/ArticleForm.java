@@ -1,11 +1,11 @@
 package by.artezio.cloud.publishing.dto;
 
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс, содержащий детальную информацию о статье.
@@ -16,29 +16,29 @@ import java.util.List;
  */
 public class ArticleForm {
 
-    private List<Publishing> publishings;
+    private List<PublishingDTO> publishings;
     private List<Topic> topics;
     private String title;
     private String content;
     private List<Employee> currentCoauthors;
     private List<Employee> availableCoauthors;
-    private List<Review> reviews;
+    private Map<Employee, Review> reviews;
 
     /**
      * Возвращает список журналов/газет.
      *
-     * @return List<Publishing>
+     * @return List<PublishingDTO>
      */
-    public List<Publishing> getPublishings() {
+    public List<PublishingDTO> getPublishings() {
         return publishings;
     }
 
     /**
      * Устанавливает список журналов/газет.
      *
-     * @param newPublishings List<Publishing>
+     * @param newPublishings List<PublishingDTO>
      */
-    public void setPublishing(final List<Publishing> newPublishings) {
+    public void setPublishing(final List<PublishingDTO> newPublishings) {
         this.publishings = newPublishings;
     }
 
@@ -137,7 +137,7 @@ public class ArticleForm {
      *
      * @return List<String>
      */
-    public List<Review> getReviews() {
+    public Map<Employee, Review> getReviews() {
         return reviews;
     }
 
@@ -146,7 +146,7 @@ public class ArticleForm {
      *
      * @param reviews List<Review>
      */
-    public void setReviews(final List<Review> reviews) {
+    public void setReviews(final Map<Employee, Review> reviews) {
         this.reviews = reviews;
     }
 }

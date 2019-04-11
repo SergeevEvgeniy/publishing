@@ -33,11 +33,22 @@ namespace CloudPublishing.Business.Services
         {
             var publishing = unitOfWork.Publishings.Get(id);
             var publishingDTO = mapper.Map<PublishingDTO>(publishing);
-            publishingDTO.Editors = employeeService
-                .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type == EmployeeType.Editor);
-            publishingDTO.Journalists = employeeService
-                 .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type == EmployeeType.Journalist);
+            if (publishingDTO != null)
+            {
+
+                publishingDTO.Editors = employeeService
+                    .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type == EmployeeType.Editor);
+                publishingDTO.Journalists = employeeService
+                     .GetEmployeesFromList(publishing.PublishingEmployees.Select(p => p.EmployeeId)).Where(e => e.Type == EmployeeType.Journalist);
+            }
             return publishingDTO;
+        }
+
+        public TopicDTO GetTopic(int id)
+        {
+            var topic = unitOfWork.Topics.GetTopic(id);
+            return mapper.Map<TopicDTO>(topic);
+            
         }
 
         public void CreatePublishing(PublishingDTO publishing)

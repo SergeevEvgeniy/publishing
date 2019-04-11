@@ -8,6 +8,7 @@ namespace CloudPublishing.Business.Services.Interfaces
         IEnumerable<PublishingDTO> GetPublishings();
         IEnumerable<TopicDTO> GetTopics();
         PublishingDTO GetPublishing(int id);
+        TopicDTO GetTopic(int id);
         IEnumerable<PublishingDTO> GetPublishingsByType(string type);
         void CreatePublishing(PublishingDTO publishing);
         void UpdatePublishing(PublishingDTO publishing);

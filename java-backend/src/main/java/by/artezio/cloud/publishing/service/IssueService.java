@@ -1,8 +1,6 @@
 package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.domain.Issue;
-import by.artezio.cloud.publishing.domain.IssueArticle;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,18 +35,18 @@ public interface IssueService {
     /**
      * Метод получения списка {@link by.artezio.cloud.publishing.dto.IssueForm}
      * по id журнала/газеты.
-     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}
+     * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}
      * @return список {@link by.artezio.cloud.publishing.dto.IssueForm}
      * */
     List<Issue> getIssueListByPublishingId(final int publishingId);
 
     /**
-     * Получение списка сущностей {@link IssueArticle}
+     * Получение списка сущностей {@link by.artezio.cloud.publishing.domain.IssueArticle}
      * по id {@link Issue}.
      * @param issueId - id {@link Issue}.
-     * @return список {@link IssueArticle}.
+     * @return список {@link by.artezio.cloud.publishing.domain.IssueArticle}.
      * */
-    List<IssueArticle> getIssueArticleListByIssueId(final int issueId);
+    List<Integer> getArticleIdListByIssueId(final int issueId);
 
 
     /**

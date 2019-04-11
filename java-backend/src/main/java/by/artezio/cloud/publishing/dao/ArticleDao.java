@@ -9,7 +9,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс, использующийся для взаимодействия с базой данных.
@@ -121,5 +123,54 @@ public class ArticleDao {
             Collections.singletonMap("articleId", articleId),
             Integer.class);
         return id > 0;
+    }
+
+    /**
+     * Метод для удаления статьи.
+     *
+     * @param articleId id статьи, которую нужно удалить
+     */
+    public void deleteArticleById(final Integer articleId) {
+        jdbcTemplate.update("DELETE FROM article WHERE id = :articleId",
+            Collections.singletonMap("articleId", articleId));
+    }
+
+    /**
+     * Получение статей по id рубрики и журнала.
+     *
+     * @param topicId      id рубрики
+     * @param publishingId id журнала
+     * @return {@link List} of {@link Article}
+     */
+    public List<Article> getArticleByTopicAndPublishingId(final int topicId, final int publishingId) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("publishingId", publishingId);
+        params.put("topicId", topicId);
+        return jdbcTemplate.query("SELECT * FROM article "
+                + "WHERE topic_id = :topicId "
+                + "AND publishing_id = :publishingId",
+            params, articleRowMapper);
+    }
+
+    /**
+     * Получение статей по id рубрики, журнала и автора.
+     *
+     * @param topicId      id рубрики
+     * @param publishingId id журнала
+     * @param authorId     id автора
+     * @return {@link List} of {@link Article}
+     */
+    public List<Article> getArticleByTopicAndPublishingAndAuthorId(final int topicId,
+                                                                   final int publishingId,
+                                                                   final int authorId) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("publishingId", publishingId);
+        params.put("topicId", topicId);
+        params.put("authorId", authorId);
+        return jdbcTemplate.query("SELECT * FROM article "
+                + "WHERE topic_id = :topicId "
+                + "AND publishing_id = :publishingId "
+                + "AND author_id = :authorId",
+            params, articleRowMapper);
     }
 }

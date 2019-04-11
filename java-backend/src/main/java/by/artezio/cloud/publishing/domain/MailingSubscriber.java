@@ -10,12 +10,6 @@ public class MailingSubscriber {
     private String email;
 
     /**
-     * Конструктор по умолчанию.
-     */
-    public MailingSubscriber() {
-    }
-
-    /**
      * Возвращает id рассылки {@link Mailing}.
      * @return id рассылки
      */

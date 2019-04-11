@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CloudPublishing.Business.Services.Interfaces;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace CloudPublishing.Controllers.RestApi
@@ -25,7 +27,14 @@ namespace CloudPublishing.Controllers.RestApi
         public IHttpActionResult GetPublishings(int id)
         {
             var publishing = publishingService.GetPublishing(id);
-            return Ok(new { publishing.Id, publishing.Title });
+            if (publishing != null)
+            {
+               return Ok(new { publishing.Id, publishing.Title });
+            }
+            else
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
         }
 
         public IHttpActionResult GetPublishings(string type)

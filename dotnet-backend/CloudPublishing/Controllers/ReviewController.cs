@@ -13,6 +13,8 @@ namespace CloudPublishing.Controllers
     /// Контроллер рецензий
     /// </summary>
     [HandleException]
+    [RoutePrefix("Review")]
+    [Authorize(Roles = "Editor")]
     public class ReviewController : Controller
     {
         private IReviewService reviewService;
@@ -43,8 +45,7 @@ namespace CloudPublishing.Controllers
             // Заглушка. Будет заменено на получение id текущего пользователя
             int userId = 1;
 
-            List<DetailedReviewModel> list = mapper.Map<IEnumerable<DetailedReviewDTO>, List<DetailedReviewModel>>
-                (reviewService.CreateDetailedReviewList(userId));
+            var list = mapper.Map<IEnumerable<DetailedReviewModel>>(reviewService.CreateDetailedReviewList(userId));
 
             return View(list);
         }
@@ -59,7 +60,7 @@ namespace CloudPublishing.Controllers
             var pl = publishingService.GetPublishings();
             var model = new CreateReviewModel()
             {
-                PublishingList = mapper.Map<IEnumerable<PublishingDTO>, List<PublishingModel>>(pl)
+                PublishingList = mapper.Map<IEnumerable<PublishingModel>>(pl)
             };
             return View(model);
         }
@@ -77,7 +78,7 @@ namespace CloudPublishing.Controllers
 
             if (ModelState.IsValid)
             {
-                reviewService.CreateReview(mapper.Map<ReviewModel, ReviewDTO>(review));
+                reviewService.CreateReview(mapper.Map<ReviewDTO>(review));
             }
 
             return Redirect("/Review/Index");
@@ -89,14 +90,11 @@ namespace CloudPublishing.Controllers
         /// <param name="id">Id журнала, рубрики которого требуется получить</param>
         /// <returns>Частичное представление, содержащее option-ы, ключом которых является id рубрики, значением - наименование</returns>
         [HttpGet]
-        public ActionResult GetTopicList(int? id)
+        [Route("GetTopicList/{id:int}")]
+        public ActionResult GetTopicList(int id)
         {
-            if (id != null)
-            {
-                var topicList = mapper.Map<IEnumerable<TopicModel>>(publishingService.GetPublishingTopics((int)id));
-                return PartialView(topicList);
-            }
-            return null;
+            var topicList = mapper.Map<IEnumerable<TopicModel>>(publishingService.GetPublishingTopics(id));
+            return PartialView(topicList);
         }
 
         /// <summary>
@@ -106,7 +104,8 @@ namespace CloudPublishing.Controllers
         /// <param name="topicId">Id рубрики</param>
         /// <returns>Частичное представление, содержащее option-ы, ключом которых является id сотрудника, значением - полное имя</returns>
         [HttpGet]
-        public ActionResult GetAuthorList(int? publishingId, int? topicId)
+        [Route("GetAuthorList/{publishingId:int}/{topicId:int}")]
+        public ActionResult GetAuthorList(int publishingId, int topicId)
         {
             var authorList = mapper.Map<IEnumerable<AuthorModel>>(reviewService.GetAuthorList(publishingId, topicId));
             return PartialView(authorList);
@@ -120,36 +119,39 @@ namespace CloudPublishing.Controllers
         /// <param name="authorId">Id автора</param>
         /// <returns>Частичное представление, содержащее option-ы, ключом которых является id статьи, значением - наименование</returns>
         [HttpGet]
-        public ActionResult GetArticleList(int? publishingId, int? topicId, int? authorId)
+        [Route("GetArticleList/{publishingId:int}/{topicId:int}/{authorId:int}")]
+        public ActionResult GetArticleList(int publishingId, int topicId, int authorId)
         {
-             var articleList = mapper.Map<IEnumerable<ArticleModel>>
-                (reviewService.GetArticleList(publishingId, topicId, authorId));
+            var articleList = mapper.Map<IEnumerable<ArticleModel>>
+               (reviewService.GetArticleList(publishingId, topicId, authorId));
             return PartialView(articleList);
         }
 
         /// <summary>
         /// Метод обработки запроса на получение текста статьи
         /// </summary>
-        /// <param name="articleId">Id статьи</param>
+        /// <param name="id">Id статьи</param>
         /// <returns>Текст статьи в формате Json</returns>
         [HttpGet]
-        public ActionResult GetArticleContent(int? articleId)
+        [Route("GetArticleContent/{id:int}")]
+        public ActionResult GetArticleContent(int id)
         {
-            // Заглушка для тестирования
-            return Json("Content", JsonRequestBehavior.AllowGet);
+            return Json(reviewService.GetArticleContent(id), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
         /// Метод обработки запроса на просмотр рецензии
         /// </summary>
-        /// <param name="articleId">Id статьи, на которую написана рецензия</param>
+        /// <param name="id">Id статьи, на которую написана рецензия</param>
         /// <returns>Представление просмотра, содержащее текст рецензии</returns>
-        public ActionResult Details(int articleId)
+        [HttpGet]
+        [Route("Details/{id:int}")]
+        public ActionResult Details(int id)
         {
             // Будет заменено на получение id пользователя
             int userId = 1;
 
-            var review = mapper.Map<ReviewDTO, ReviewModel>(reviewService.GetReview(articleId, userId));
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, userId));
             return View(review);
         }
 
@@ -159,12 +161,13 @@ namespace CloudPublishing.Controllers
         /// <param name="id">Id статьи, на которую написана рецензия</param>
         /// <returns>Представление редактирования</returns>
         [HttpGet]
+        [Route("Edit/{id:int}")]
         public ActionResult Edit(int id)
         {
             // Будет заменено на получение id пользователя
             int userId = 1;
 
-            var review = mapper.Map<ReviewDTO, ReviewModel>(reviewService.GetReview(id, userId));
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, userId));
 
             return View(review);
         }
@@ -191,8 +194,9 @@ namespace CloudPublishing.Controllers
         /// <summary>
         /// Метод обработки запроса удаления рецензий
         /// </summary>
-        /// <param name="id">Id рецензии</param>
+        /// <param name="id">Id статьи, на которую написана рецензия</param>
         [HttpPost]
+        [Route("Delete/{id:int}")]
         public void Delete(int id)
         {
             // Будет заменено на получение id пользователя

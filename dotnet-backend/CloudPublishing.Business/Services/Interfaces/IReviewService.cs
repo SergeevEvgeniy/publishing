@@ -5,10 +5,6 @@ namespace CloudPublishing.Business.Services.Interfaces
 {
     public interface IReviewService
     {
-        IEnumerable<PublishingDTO> GetPublishingList();
-
-        IEnumerable<TopicDTO> GetTopicList(int? publishingId);
-
         IEnumerable<EmployeeDTO> GetAuthorList(int? publishingId, int? topicId);
 
         IEnumerable<ArticleDTO> GetArticleList(int? publishingId, int? topicId, int? authorId);
@@ -22,5 +18,7 @@ namespace CloudPublishing.Business.Services.Interfaces
         void UpdateReview(ReviewDTO review);
 
         void DeleteReview(int articleId, int authorId);
+
+        string GetArticleContent(int id);
     }
 }

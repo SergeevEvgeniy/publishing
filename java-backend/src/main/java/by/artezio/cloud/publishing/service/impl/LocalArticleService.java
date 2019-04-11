@@ -7,17 +7,19 @@ import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.dao.TopicDao;
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Сервис, содержащий бизнес-логику по обработке статей.
@@ -84,7 +86,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
             articleInfo.setTitle(a.getTitle());
 
             Integer publishingId = a.getPublishingId();
-            Publishing publishing = publishingDao.getPublishingById(publishingId);
+            PublishingDTO publishing = publishingDao.getPublishingById(publishingId);
 
             articleInfo.setPublishingName(publishing.getTitle());
 
@@ -116,13 +118,13 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     }
 
     /**
-     * Получение журнала/газеты из сервиса Publishing.
+     * Получение журнала/газеты из сервиса PublishingDTO.
      *
      * @param publishingId идентификатор журнала/газеты
-     * @return объект класса {@link Publishing}
+     * @return объект класса {@link PublishingDTO}
      */
     @Override
-    public Publishing getPublishingById(final int publishingId) {
+    public PublishingDTO getPublishingById(final int publishingId) {
         return publishingDao.getPublishingById(publishingId);
     }
 
@@ -190,8 +192,8 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
 
         Article article = articleDao.getArticleByArticleId(articleId);
 
-        Publishing publishing = publishingDao.getPublishingById(article.getPublishingId());
-        List<Publishing> publishings = new ArrayList<>();
+        PublishingDTO publishing = publishingDao.getPublishingById(article.getPublishingId());
+        List<PublishingDTO> publishings = new ArrayList<>();
         publishings.add(publishing);
 
         List<Topic> topics = topicDao.getTopicsByPublishingId(article.getPublishingId());
@@ -217,6 +219,11 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
         }
 
         List<Review> reviews = articleDao.getReviewsByArticleId(articleId);
+        Map<Employee, Review> reviewMap = new HashMap<>(reviews.size());
+        for (Review r : reviews) {
+            Employee e = employeeDao.getEmployeeById(r.getReviewerId());
+            reviewMap.put(e, r);
+        }
 
         form.setPublishing(publishings);
         form.setContent(article.getContent());
@@ -224,7 +231,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
         form.setTitle(article.getTitle());
         form.setCurrentCoauthors(coauthors);
         form.setAvailableCoauthors(employees);
-        form.setReviews(reviews);
+        form.setReviews(reviewMap);
 
         return form;
     }
@@ -232,5 +239,22 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     @Override
     public Article getArticleById(final int articleId) {
         return articleDao.getArticleByArticleId(articleId);
+    }
+
+    @Override
+    public void deleteArticle(final Article article) {
+        articleDao.deleteArticleById(article.getId());
+    }
+
+    @Override
+    public List<Article> getArticleByTopicAndPublishingId(final int topicId, final int publishingId) {
+        return articleDao.getArticleByTopicAndPublishingId(topicId, publishingId);
+    }
+
+    @Override
+    public List<Article> getArticlesBytopicAndPublishingAndAuthorId(final int topicId,
+                                                                    final int publishingId,
+                                                                    final int authorId) {
+        return articleDao.getArticleByTopicAndPublishingAndAuthorId(topicId, publishingId, authorId);
     }
 }

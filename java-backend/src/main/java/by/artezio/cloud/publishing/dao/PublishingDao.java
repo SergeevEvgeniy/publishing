@@ -1,7 +1,8 @@
 package by.artezio.cloud.publishing.dao;
 
-import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.domain.PublishingEmployee;
 import by.artezio.cloud.publishing.domain.Topic;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -10,26 +11,29 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Publishing DAO, который дает возможность получать данные, связанные с
- * публикациями {@link Publishing}.
- *
- * @author vgamezo
+ * PublishingDAO, который дает возможность получать данные, связанные c публикациями {@link PublishingDTO}.
  */
 @Component
 public class PublishingDao {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    private RowMapper<Publishing> publishingRowMapper = (rs, i) -> new Publishing(
-            rs.getInt("id"),
-            rs.getString("title"),
-            rs.getString("type").charAt(0),
-            rs.getString("subjects")
-    );
+    private RowMapper<PublishingDTO> publishingRowMapper = (rs, i) -> {
+        PublishingDTO publishingDTO = new PublishingDTO();
+        publishingDTO.setTitle(rs.getString("title"));
+        publishingDTO.setId(rs.getInt("id"));
+        return publishingDTO;
+    };
 
     private RowMapper<Topic> topicRowMapper = (rs, i) -> new Topic(
             rs.getInt("id"),
             rs.getString("name")
+    );
+
+    private RowMapper<PublishingEmployee> publishingEmployeeRowMapper =
+        (rs, i) -> new PublishingEmployee(
+            rs.getInt("publishing_id"),
+            rs.getInt("employee_id")
     );
 
     /**
@@ -42,29 +46,28 @@ public class PublishingDao {
     }
 
     /**
-     * Возвращает список Publishing {@link Publishing} объектов, которые имеются
+     * Возвращает список PublishingDTO {@link PublishingDTO} объектов, которые имеются
      * в издательстве.
      *
-     * @return список всех Publishing {@link Publishing} объектов
+     * @return список всех PublishingDTO {@link PublishingDTO} объектов
      */
-    public List<Publishing> getPublishingList() {
+    public List<PublishingDTO> getPublishingList() {
         return jdbcTemplate.query(
-                "select * from publishing", publishingRowMapper);
+                "select id, title from publishing", publishingRowMapper);
     }
 
     /**
-     * Возвращает объект публикации {@link Publishing} по идентификатору.
+     * Возвращает объект публикации {@link PublishingDTO} по идентификатору.
      *
-     * @param id - publishing id
-     * @return Publishing объект, если он существует, иначе <code>null</code>.
+     * @param id publishing id
+     * @return PublishingDTO объект, если он существует, иначе <code>null</code>.
      */
-    public Publishing getPublishingById(final int id) {
+    public PublishingDTO getPublishingById(final int id) {
         return jdbcTemplate.queryForObject(
-                "select * from publishing where id = :id",
+                "select id, title from publishing where id = :id",
                 Collections.singletonMap("id", id),
                 publishingRowMapper
         );
-
     }
 
     /**
@@ -76,9 +79,9 @@ public class PublishingDao {
      */
     public List<Topic> getTopicsByPublishingId(final int publishingId) {
         return jdbcTemplate.query("select id, name from topic "
-                + "join publishing_topic pt "
-                + "on topic.id = pt.topic_id "
-                + "where pt.publishing_id = :publishingId",
+                    + "join publishing_topic pt "
+                    + "on topic.id = pt.topic_id "
+                    + "where pt.publishing_id = :publishingId",
                 Collections.singletonMap("publishingId", publishingId),
                 topicRowMapper
         );
@@ -117,15 +120,28 @@ public class PublishingDao {
     }
 
     /**
-     * Метод получения списка журналов/газет по id сотрудника данных журналов/газет.
-     * @param employeeId - id {@link by.artezio.cloud.publishing.domain.Employee}
-     * @return список {@link Publishing} - все журналы/газуты в которых задействован сотрудник
+     * Возвращает список журналов/газет, к которым сотрудник с <code>id == employeeId</code> имеет доступ.
+     *
+     * @param employeeId id сотрудника.
+     * @return список изданий, в которых задействован данный сотрудник
      * */
-    public List<Publishing> getPublishingListByEmployeeId(final int employeeId) {
+    public List<PublishingDTO> getPublishingListByEmployeeId(final int employeeId) {
         return jdbcTemplate.query("select * from publishing p "
                 + "join publishing_employee pe on p.id = pe.publishing_id "
                 + "where pe.employee_id = :employeeId",
             Collections.singletonMap("employeeId", employeeId), publishingRowMapper);
+    }
+
+    /**
+     * Получения списка {@link PublishingEmployee} по id {@link PublishingDTO}.
+     * @param publishingId - id {@link PublishingDTO}.
+     * @return - список {@link PublishingEmployee}.
+     * */
+    public List<PublishingEmployee> getPublishingEmployeeList(final int publishingId) {
+        return jdbcTemplate.query("select * from publishing_employee "
+                + "where publishing_id = :publishingId",
+            Collections.singletonMap("publishingId", publishingId),
+            publishingEmployeeRowMapper);
     }
 
 }

@@ -24,9 +24,6 @@ namespace CloudPublishing.Data.EF.EntityConfigurations
                 .HasMaxLength(65535)
                 .HasColumnType("text")
                 .HasColumnName("content");
-
-            Property(r => r.Approved)
-                .HasColumnName("approved");
         }
     }
 }

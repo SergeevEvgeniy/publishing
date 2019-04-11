@@ -17,29 +17,6 @@ public class MailingInfo {
     private String result;
 
     /**
-     * Конструктор по умолчанию.
-     */
-    public MailingInfo() {
-    }
-
-    /**
-     * Конструктор с параметрами.
-     * @param mailingId -- id рассылки.
-     * @param publishingTitle -- id издания, по которому была сделана рассылка.
-     * @param issueNumber -- id номера, который пошел в рассылку.
-     * @param date -- Время, когда была сделана рассылка.
-     * @param result -- Результат рассылки.
-     */
-    public MailingInfo(final int mailingId, final String publishingTitle, final String issueNumber,
-                       final Date date, final String result) {
-        this.mailingId = mailingId;
-        this.publishingTitle = publishingTitle;
-        this.issueNumber = issueNumber;
-        this.date = date;
-        this.result = result;
-    }
-
-    /**
      * Возвращает id рассылки.
      * @return id рассылки.
      */

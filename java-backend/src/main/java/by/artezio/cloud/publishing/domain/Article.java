@@ -24,11 +24,11 @@ public class Article {
      * Конструктор для создания объекта с указанными значениями полей.
      *
      * @param id           идентификатор статьи
-     * @param publishingId {@link Publishing} журнал/газета, в котором печатается эта статья
-     * @param topicId      {@link Topic} рубрика статьи
+     * @param publishingId id журнала/газеты, в котором печатается эта статья
+     * @param topicId      id рубрики статьи
      * @param title        название статьи
      * @param content      текст статьи
-     * @param authorId     {@link Employee} автор статьи
+     * @param authorId     id автора статьи
      */
     public Article(final Integer id, final Integer publishingId, final Integer topicId,
                    final String title, final String content, final Integer authorId) {
@@ -98,7 +98,7 @@ public class Article {
     /**
      * Возвращает журнал/газету статьи.
      *
-     * @return объект класса {@link Publishing}
+     * @return объект класса {@link by.artezio.cloud.publishing.dto.PublishingDTO}
      */
     public int getPublishingId() {
         return publishingId;
@@ -107,7 +107,7 @@ public class Article {
     /**
      * Устанавливает журнал/газету статьи.
      *
-     * @param publishingId объект класса {@link Publishing}
+     * @param publishingId объект класса {@link by.artezio.cloud.publishing.dto.PublishingDTO}
      */
     public void setPublishingId(final Integer publishingId) {
         this.publishingId = publishingId;
