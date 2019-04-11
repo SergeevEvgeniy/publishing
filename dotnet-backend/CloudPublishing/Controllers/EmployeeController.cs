@@ -183,9 +183,8 @@ namespace CloudPublishing.Controllers
         ///     Если пользователя можно удалить, возвращается JSON-объект с сообщением об успешном удалении и соответствующим
         ///     флагом, иначе JSON-объект с флагом об ошибке удаления и сообщением о причине ошибки
         /// </returns>
-        [AjaxOnly]
+        [HttpPost]
         [Authorize(Roles = EmployeeRole.ChiefEditor)]
-        [Route("Delete/{id:int}")]
         public ActionResult Delete(int id)
         {
             try
