@@ -189,5 +189,12 @@ namespace CloudPublishing.Business.Services
             var employee = unit.Employees.Find(x => x.Password == hashedPassword && x.Email == email).FirstOrDefault();
             return mapper.Map<Employee, EmployeeDTO>(employee);
         }
+
+        /// <inheritdoc />
+        public int GetEmployeeId(string email)
+        {
+            var employee = unit.Employees.Find(x => x.Email == email).FirstOrDefault();
+            return employee?.Id ?? -1;
+        }
     }
 }

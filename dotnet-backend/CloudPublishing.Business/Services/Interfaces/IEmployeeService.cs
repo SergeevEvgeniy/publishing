@@ -94,5 +94,13 @@ namespace CloudPublishing.Business.Services.Interfaces
         /// <returns>Сущность пользователя или null, если такого пользователя нет</returns>
         /// <exception cref="InvalidOperationException">Возникает при ошибке в работе с базой данных</exception>
         EmployeeDTO AuthenticateEmployee(string email, string password);
+
+        /// <summary>
+        ///     Получить идентификатор пользователя по его почтовому адресу (логину)
+        /// </summary>
+        /// <param name="email">Почтовый адрес сотрудника</param>
+        /// <returns>Идентификатор пользователя или -1, если такого пользователя нет</returns>
+        /// <exception cref="InvalidOperationException">Возникает при ошибке в работе с базой данных</exception>
+        int GetEmployeeId(string email);
     }
 }
