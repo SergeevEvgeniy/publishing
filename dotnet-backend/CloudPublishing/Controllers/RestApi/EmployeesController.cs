@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using AutoMapper;
 using CloudPublishing.Business.DTO;
@@ -56,14 +55,14 @@ namespace CloudPublishing.Controllers.RestApi
         {
             return collection.Any()
                 ? Ok(mapper.Map<IEnumerable<EmployeeDTO>, List<T>>(collection))
-                : (IHttpActionResult)ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+                : (IHttpActionResult) StatusCode(HttpStatusCode.NoContent);
         }
 
         private IHttpActionResult ProduceHttpResult<T>(EmployeeDTO employee)
         {
             return employee != null
                 ? Ok(mapper.Map<EmployeeDTO, T>(employee))
-                : (IHttpActionResult)ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+                : (IHttpActionResult) StatusCode(HttpStatusCode.NoContent);
         }
     }
 }
