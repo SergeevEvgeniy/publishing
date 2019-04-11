@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
+using CloudPublishing.Business.Constants;
 using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Infrastructure;
 using CloudPublishing.Business.Resources.Messages;
@@ -68,7 +69,7 @@ namespace CloudPublishing.Controllers
         /// </summary>
         /// <returns>Представление с формой создания</returns>
         [HttpGet]
-        [Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = EmployeeRole.ChiefEditor)]
         public ActionResult Create()
         {
             var model = new EmployeeCreateModel
@@ -94,7 +95,7 @@ namespace CloudPublishing.Controllers
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = EmployeeRole.ChiefEditor)]
         public ActionResult Create(EmployeeCreateModel model)
         {
             if (!ModelState.IsValid)
@@ -117,7 +118,7 @@ namespace CloudPublishing.Controllers
         /// <param name="id">Идентификатор пользователя</param>
         /// <returns>Представление с формой редактирования</returns>
         [HttpGet]
-        [Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = EmployeeRole.ChiefEditor)]
         [Route("Edit/{id:int}")]
         public ActionResult Edit(int id)
         {
@@ -150,7 +151,7 @@ namespace CloudPublishing.Controllers
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = EmployeeRole.ChiefEditor)]
         public ActionResult Edit(EmployeeEditModel model)
         {
             if (!ModelState.IsValid)
@@ -183,7 +184,7 @@ namespace CloudPublishing.Controllers
         ///     флагом, иначе JSON-объект с флагом об ошибке удаления и сообщением о причине ошибки
         /// </returns>
         [AjaxOnly]
-        [Authorize(Roles = "ChiefEditor")]
+        [Authorize(Roles = EmployeeRole.ChiefEditor)]
         [Route("Delete/{id:int}")]
         public ActionResult Delete(int id)
         {

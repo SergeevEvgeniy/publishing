@@ -4,6 +4,7 @@ using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Reviews.ViewModels;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using CloudPublishing.Business.Constants;
 using CloudPublishing.Util.Profiles;
 using CloudPublishing.Util.Attributes;
 
@@ -14,7 +15,7 @@ namespace CloudPublishing.Controllers
     /// </summary>
     [HandleException]
     [RoutePrefix("Review")]
-    [Authorize(Roles = "Editor")]
+    [Authorize(Roles = EmployeeRole.Editor)]
     public class ReviewController : Controller
     {
         private IReviewService reviewService;
