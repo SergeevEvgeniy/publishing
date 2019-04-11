@@ -47,7 +47,7 @@
                         @if (item.Approved)
                         {
                             <button class="btn btn-sm border border-secondary"
-                                    onclick="location.href='@Url.Action("Details", "Review", new { articleId = @item.ArticleId })'">
+                                    onclick="location.href='@Url.Action("Details", "Review", new { id = @item.ArticleId })'">
                                 <i class="far fa-eye text-secondary"></i>
                             </button>
                         }

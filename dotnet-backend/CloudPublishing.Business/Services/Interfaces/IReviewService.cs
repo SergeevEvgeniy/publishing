@@ -18,5 +18,7 @@ namespace CloudPublishing.Business.Services.Interfaces
         void UpdateReview(ReviewDTO review);
 
         void DeleteReview(int articleId, int authorId);
+
+        string GetArticleContent(int id);
     }
 }

@@ -143,6 +143,18 @@ namespace CloudPublishing.Business.Services
             db.Save();
         }
 
+        /// <summary>
+        /// Метод получения контента статьи по ее Id. Создан для тестирования
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Возвращает строку, содержащую контент статьи</returns>
+        public string GetArticleContent(int id)
+        {
+
+            var article = JsonConvert.DeserializeObject<ArticleDTO>(ExecuteRequest($"{ArticleServiceURI}/articleById/{id}"));
+            return article.Content;
+        }
+
         private string ExecuteRequest(string uri)
         {
             var webRequest = WebRequest.Create(uri) as HttpWebRequest;

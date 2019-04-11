@@ -63,7 +63,6 @@
         $(function () {
             $("#publishing").change(function () {
                 var publishingId = $(this).val();
-                Handle("url", event.target.id);
                 $.ajax({
                     type: "GET",
                     url: "@Url.Action("GetTopicList")/" + publishingId,
@@ -78,7 +77,6 @@
             $("#topic").change(function () {
                 var publishingId = $("#publishing").val();
                 var topicId = $(this).val();
-                Handle("url", event.target.id);
                 $.ajax({
                     type: "GET",
                     url: "@Url.Action("GetAuthorList")/" + publishingId + "/" + topicId,
@@ -94,7 +92,6 @@
                 var publishingId = $("#publishing").val();
                 var topicId = $("#topic").val();
                 var authorId = $(this).val();
-                Handle("url", event.target.id);
                 $.ajax({
                     type: "GET",
                     url: "@Url.Action("GetArticleList")/" + publishingId + "/" + topicId + "/" + authorId,
@@ -108,7 +105,7 @@
 
             $("#article").change(function () {
                 var articleId = $(this).val();
-                Handle("url", event.target.id);
+                console.log(articleId);
                 $.ajax({
                     type: "GET",
                     url: "@Url.Action("GetArticleContent")/" + articleId,
@@ -126,25 +123,6 @@
                     $(lists[i]).empty().prop("disabled", true);
                 }
             });
-
-            function Handle(url, currentListId, targetId) {
-                var lists = $("select");
-                var lastListId = lists[lists.length - 1].id;
-                var currentListIndex = lists.index(document.getElementById(currentListId));
-                var target = document.getElementById(targetId);
-                
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    success: function (data) {
-                        target.empty();
-                        target.append(data);
-                        if (currentListId !== lastListId) {
-                            target.prop("disabled", false);
-                        }
-                    }
-                });
-            }
         });
     </script>
 }
