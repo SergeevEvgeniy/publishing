@@ -118,14 +118,10 @@ namespace CloudPublishing.Controllers
         /// <returns>Представление с формой редактирования</returns>
         [HttpGet]
         [Authorize(Roles = "ChiefEditor")]
-        public ActionResult Edit(int? id)
+        [Route("Edit/{id:int}")]
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return null;
-            }
-
-            var employee = service.GetEmployeeById(id.Value);
+            var employee = service.GetEmployeeById(id);
             if (employee == null)
             {
                 TempData["Message"] = Error.NotFoundEmployee;
@@ -188,20 +184,12 @@ namespace CloudPublishing.Controllers
         /// </returns>
         [AjaxOnly]
         [Authorize(Roles = "ChiefEditor")]
-        public ActionResult Delete(int? id)
+        [Route("Delete/{id:int}")]
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return Json(new
-                {
-                    isSuccessful = false,
-                    message = Error.InvalidIdentifierEmployee
-                }, JsonRequestBehavior.AllowGet);
-            }
-
             try
             {
-                service.DeleteEmployee(id.Value);
+                service.DeleteEmployee(id);
             }
             catch (ChiefEditorRoleChangeException e)
             {

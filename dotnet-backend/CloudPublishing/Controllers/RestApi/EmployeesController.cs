@@ -31,11 +31,10 @@ namespace CloudPublishing.Controllers.RestApi
         }
 
         [HttpGet]
-        [Route("employees/{id}")]
-        public IHttpActionResult GetEmployeeData(int? id)
+        [Route("employees/{id:int}")]
+        public IHttpActionResult GetEmployeeData(int id)
         {
-            return id == null 
-                ? BadRequest() : ProduceHttpResult<EmployeeData>(service.GetEmployeeById(id.Value));
+            return ProduceHttpResult<EmployeeData>(service.GetEmployeeById(id));
         }
 
         [HttpPost]
@@ -46,11 +45,11 @@ namespace CloudPublishing.Controllers.RestApi
         }
 
         [HttpGet]
-        [Route("journalists/{id}")]
+        [Route("journalists/{id:int}")]
         [HttpRequestException]
-        public IHttpActionResult GetJournalistStatistics(int? id)
+        public IHttpActionResult GetJournalistStatistics(int id)
         {
-            return id == null ? (IHttpActionResult) BadRequest() : Ok(service.GetJournalistStatistics(id.Value));
+            return Ok(service.GetJournalistStatistics(id));
         }
 
         private IHttpActionResult ProduceHttpResult<T>(IEnumerable<EmployeeDTO> collection)
