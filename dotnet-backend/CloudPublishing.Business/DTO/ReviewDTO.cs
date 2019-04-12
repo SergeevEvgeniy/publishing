@@ -24,10 +24,5 @@
         ///     Возвращает или задает одобрение статьи редактором
         /// </summary>
         public bool Approved { get; set; }
-
-        /// <summary>
-        ///     Возвращает или задает редактора
-        /// </summary>
-        public EmployeeDTO EmployeeDTO { get; set; }
     }
 }

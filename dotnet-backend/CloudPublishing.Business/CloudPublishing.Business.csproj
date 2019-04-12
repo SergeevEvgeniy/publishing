@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AutofacConfig\BusinessModule.cs" />
     <Compile Include="Constants\DataCorrelation.cs" />
+    <Compile Include="Constants\EmployeeRole.cs" />
     <Compile Include="Constants\EmployeeSex.cs" />
     <Compile Include="Constants\EmployeeType.cs" />
     <Compile Include="Constants\PublishingType.cs" />

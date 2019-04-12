@@ -31,7 +31,7 @@
 })();
 
 window.AjaxTableComponent = (function() {
-    function AjaxTableComponent(table, removeButtonClassName, deleteResultUrl) {
+    function AjaxTableComponent(table, removeButtonClassName, deleteUrl) {
         var elementRemoveListener = null;
 
         this.onElementRemove = function(listener) {
@@ -43,11 +43,11 @@ window.AjaxTableComponent = (function() {
             var target = event.target;
             while (target !== this) {
                 if (target.classList.contains(removeButtonClassName)) {
-                    var id = target.parentNode.parentNode.parentNode.id;
                     $.ajax({
-                        type: "GET",
-                        url: deleteResultUrl + id,
-                        contentType: "application/json",
+                        type: "POST",
+                        url: deleteUrl,
+                        data: { id: target.parentNode.parentNode.parentNode.id},
+                        //contentType: "application/json; charset=utf-8",
                         success: function (result) {
                             if (result.isSuccessful) {
                                 removeRow(tbody, id);

@@ -46,16 +46,16 @@ public class Issue {
     }
 
     /**
-     * Возвращает внутренний номер выпуска для Публикации {@link Publishing}.
-     * @return внутренний номер выпуска для Публикации {@link Publishing}
+     * Возвращает внутренний номер выпуска для Публикации {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
+     * @return внутренний номер выпуска для Публикации {@link by.artezio.cloud.publishing.dto.PublishingDTO}
      */
     public String getNumber() {
         return number;
     }
 
     /**
-     * Устанавливает внутренний номер выпуска для Публикации {@link Publishing}.
-     * @param number внутренний номер выпуска для Публикации {@link Publishing}
+     * Устанавливает внутренний номер выпуска для Публикации {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
+     * @param number внутренний номер выпуска для Публикации {@link by.artezio.cloud.publishing.dto.PublishingDTO}
      */
     public void setNumber(final String number) {
         this.number = number;

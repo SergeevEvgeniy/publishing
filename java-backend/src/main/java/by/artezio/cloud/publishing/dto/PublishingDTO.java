@@ -1,34 +1,28 @@
-package by.artezio.cloud.publishing.domain;
+package by.artezio.cloud.publishing.dto;
 
 /**
  * Класс-сущность для Публикаций (газеты/журналы).
  * @author vgamezo
  */
-public class Publishing {
+public class PublishingDTO {
 
     private Integer id;
     private String title;
-    private Character type;
-    private String subjects;
 
     /**
      * Конструктор по умолчанию.
      */
-    public Publishing() {
+    public PublishingDTO() {
     }
 
     /**
      * Конструктор с полным набором параметров для создания сущности Публикация.
      * @param id id публикации
      * @param title название
-     * @param type тип публикации. Газета или Журнал.
-     * @param subjects тематика публикации
      */
-    public Publishing(final Integer id, final String title, final Character type, final String subjects) {
+    public PublishingDTO(final Integer id, final String title) {
         this.id = id;
         this.title = title;
-        this.type = type;
-        this.subjects = subjects;
     }
 
     /**
@@ -63,35 +57,11 @@ public class Publishing {
         this.title = title;
     }
 
-    /**
-     * Возвращает тип публикации.
-     * @return тип публикации
-     */
-    public Character getType() {
-        return type;
-    }
-
-    /**
-     * Устанавливает тип публикации.
-     * @param type тип публикации
-     */
-    public void setType(final Character type) {
-        this.type = type;
-    }
-
-    /**
-     * Возвращает тематики публикации.
-     * @return тематики публикации
-     */
-    public String getSubjects() {
-        return subjects;
-    }
-
-    /**
-     * Устанавливает тематики публикации.
-     * @param subjects тематики публикации
-     */
-    public void setSubjects(final String subjects) {
-        this.subjects = subjects;
+    @Override
+    public String toString() {
+        return "PublishingDTO{"
+                    + "id=" + id
+                    + ", title='" + title + '\''
+            + '}';
     }
 }

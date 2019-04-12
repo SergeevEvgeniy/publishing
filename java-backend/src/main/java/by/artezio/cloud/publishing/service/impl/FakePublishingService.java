@@ -2,7 +2,7 @@ package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.dao.PublishingDao;
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.domain.PublishingEmployee;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.service.EmployeeService;
@@ -26,7 +26,7 @@ public class FakePublishingService implements PublishingService {
     private EmployeeService employeeService;
 
     @Override
-    public List<Publishing> getPublishingList() {
+    public List<PublishingDTO> getPublishingList() {
         return publishingDao.getPublishingList();
     }
 
@@ -36,12 +36,12 @@ public class FakePublishingService implements PublishingService {
     }
 
     @Override
-    public Publishing getPublishingById(final Integer publishingId) {
+    public PublishingDTO getPublishingById(final Integer publishingId) {
         return publishingDao.getPublishingById(publishingId);
     }
 
     @Override
-    public List<Publishing> getPublishingListByEmployeeId(final int employeeId) {
+    public List<PublishingDTO> getPublishingListByEmployeeId(final int employeeId) {
         return publishingDao.getPublishingListByEmployeeId(employeeId);
     }
 

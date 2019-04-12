@@ -109,7 +109,7 @@ public class IssueController {
     /**
      * Получение {@link Map} тематикт выбранного журнала/газеты
      * для выподающего списка на форме добавления.
-     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
      * @return {@link Map}, где ключом является
      * id {@link by.artezio.cloud.publishing.domain.Topic}
      * значением является название {@link by.artezio.cloud.publishing.domain.Topic}
@@ -123,7 +123,7 @@ public class IssueController {
     /**
      * Получение {@link Map} допущенных в публикацию авторов
      * для выподающего списка на форме добавления.
-     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
      * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
      * @return {@link Map}, где ключом является
      * id {@link by.artezio.cloud.publishing.domain.Employee}
@@ -140,7 +140,7 @@ public class IssueController {
      * Получение {@link Map} статей выбранного журнала/газеты,
      * для выбранной рубрики, выбранного автора,
      * предназначенная для выподающего списка на форме добавления.
-     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
      * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
      * @param authorId - id {@link by.artezio.cloud.publishing.domain.Employee}.
      * @return {@link Map}, где ключом является

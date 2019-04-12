@@ -46,18 +46,16 @@ public interface MailingService {
     Integer createMailingRecord(int publishingId);
 
     /**
-     * Добавляет результат рассылки в базу данных. При удачном добавлении вызвращает <code>true</code>,
-     * в случае возникновения какой-либо ошибки возвращает <code>false</code>.
+     * Добавяет результат рассылки в базу данных.
+     * В случае успешного добавления возвращает <code>true</code>,
+     *      иначе возвращает <code>false</code>.
      *
-     * @param mailingId идентификатор рассылки.
-     * @param issueId идентификатор номера, по которому происходила рассылка.
-     * @param localDateTime день, на момент которого произошла рассылка.
-     * @param result результат рассылки.
+     * @param mailingResult Результат рассылки, который необходимо добаввить.
+     * @return <code>true</code> в случае успешного добавления, иначе <code>false</code>.
      */
-    void addMailingResult(int mailingId, int issueId, LocalDateTime localDateTime, String result);
+    boolean addMailingResult(MailingResult mailingResult);
 
     /**
-
      * Возвращает список рассылок (будущих или уже произошедших).
      * @return список рассылок.
      */

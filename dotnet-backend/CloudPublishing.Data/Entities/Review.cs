@@ -24,10 +24,5 @@
         ///     Возвращает или задает флаг одобрения статьи редактором
         /// </summary>
         public bool Approved { get; set; }
-
-        /// <summary>
-        ///     Возвращает или задает редактора
-        /// </summary>
-        public Employee Employee { get; set; }
     }
 }

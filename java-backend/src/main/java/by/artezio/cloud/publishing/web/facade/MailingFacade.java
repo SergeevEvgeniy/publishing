@@ -4,12 +4,11 @@ import by.artezio.cloud.publishing.domain.Mailing;
 import by.artezio.cloud.publishing.domain.MailingResult;
 import by.artezio.cloud.publishing.dto.MailingInfo;
 import by.artezio.cloud.publishing.service.IssueService;
-import by.artezio.cloud.publishing.service.MailSender;
 import by.artezio.cloud.publishing.service.MailingService;
 import by.artezio.cloud.publishing.service.PublishingService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,23 +23,24 @@ public class MailingFacade {
     private IssueService issueService;
     private MailingService mailingService;
     private PublishingService publishingService;
-    private MailSender mailSender;
+
+    private Converter<MailingResult, MailingInfo> mailingInfoConverter;
 
     /**
      * Конструктор с параметрами. Нужен для инъекции зависимостей.
      * @param issueService сервис для связи с нмоерами.
      * @param mailingService сервис для связи с рассылками.
      * @param publishingService сервис для связи с изданиями.
-     * @param mailSender рассыльщик писем.
+     * @param mailingInfoConverter конвертер из MailingResult в MailingInfo.
      */
     public MailingFacade(final IssueService issueService,
                          final MailingService mailingService,
                          final PublishingService publishingService,
-                         final MailSender mailSender) {
+                         final Converter<MailingResult, MailingInfo> mailingInfoConverter) {
         this.issueService = issueService;
         this.mailingService = mailingService;
         this.publishingService = publishingService;
-        this.mailSender = mailSender;
+        this.mailingInfoConverter = mailingInfoConverter;
     }
 
     /**
@@ -49,25 +49,26 @@ public class MailingFacade {
      * @return список рассылок
      */
     public List<MailingInfo> getAllMailingInfo() {
-        Map<Integer, Integer> mailingMap = new LinkedHashMap<>();
-        List<Mailing> mailingList = mailingService.getAllMailing();
+        List<Mailing> mailingList = this.mailingService.getAllMailing();
+        List<MailingResult> mailingResults = this.mailingService.getAllMailingResult();
+
+        Map<Integer, Integer> mailingMap = new LinkedHashMap<>(mailingList.size());
         for (Mailing mailing : mailingList) {
             mailingMap.put(mailing.getId(), mailing.getPublishingId());
         }
 
-        List<MailingResult> mailingResults = mailingService.getAllMailingResult();
-        List<MailingInfo> mailingInfos = new ArrayList<>();
+        List<MailingInfo> mailingInfos = new ArrayList<>(mailingResults.size());
 
         for (MailingResult mailingResult : mailingResults) {
-            Integer mailingId = mailingResult.getMailingId();
-            String publishingTitle = this.publishingService.getPublishingTitle(mailingMap.get(mailingId));
-            mailingInfos.add(new MailingInfo(
-                mailingId,
-                publishingTitle,
-                issueService.getIssueById(mailingResult.getIssueId()).getNumber(),
-                Timestamp.valueOf(mailingResult.getDateTime()),
-                mailingResult.getResult())
-            );
+            String publishingTitle = this.publishingService.getPublishingTitle(mailingMap.get(mailingResult.getMailingId()));
+            String issueNumber = issueService.getIssueById(mailingResult.getIssueId()).getNumber();
+
+            MailingInfo info = this.mailingInfoConverter.convert(mailingResult);
+
+            info.setPublishingTitle(publishingTitle);
+            info.setIssueNumber(issueNumber);
+
+            mailingInfos.add(info);
         }
         return mailingInfos;
     }
@@ -92,11 +93,11 @@ public class MailingFacade {
      * @return <code>true</code>, если обновление прошло успешно, иначе <code>false</code>.
      */
     public boolean updateEmailList(final int publishingId, final List<String> emails) {
-        Integer mailingId = mailingService.getMailingIdByPublishingId(publishingId);
+        Integer mailingId = this.mailingService.getMailingIdByPublishingId(publishingId);
         if (mailingId == null) {
-            mailingId = mailingService.createMailingRecord(publishingId);
+            mailingId = this.mailingService.createMailingRecord(publishingId);
         }
 
-        return mailingService.updateEmailList(mailingId, emails);
+        return this.mailingService.updateEmailList(mailingId, emails);
     }
 }

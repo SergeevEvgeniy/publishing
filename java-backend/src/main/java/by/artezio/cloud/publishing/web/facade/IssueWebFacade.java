@@ -1,12 +1,12 @@
 package by.artezio.cloud.publishing.web.facade;
 
 import by.artezio.cloud.publishing.domain.Issue;
-import by.artezio.cloud.publishing.domain.Publishing;
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Advertising;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Employee;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.dto.IssueForm;
 import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.dto.User;
@@ -88,7 +88,7 @@ public class IssueWebFacade {
      * */
     private IssueInfo mapIssueToIssueInfo(final Issue issue) {
         IssueInfo issueInfo = new IssueInfo();
-        Publishing publishing =
+        PublishingDTO publishing =
             publishingService.getPublishingById(issue.getPublishingId());
         issueInfo.setPublishingTitle(publishing.getTitle());
         List<Integer> articleIdList =
@@ -137,7 +137,7 @@ public class IssueWebFacade {
 
     /**
      * Проверка содержит ли автор статьи допущенные в публикакию.
-     * @param publishingId - id {@link Publishing}.
+     * @param publishingId - id {@link PublishingDTO}.
      * @param topicId - id {@link Topic}.
      * @param authorId - id {@link by.artezio.cloud.publishing.domain.Employee}.
      * */
@@ -167,9 +167,9 @@ public class IssueWebFacade {
         if (user.isChiefEditor()) {
             issues = issueService.getListOfAllIssues();
         } else {
-            List<Publishing> publishingList =
+            List<PublishingDTO> publishingList =
                 publishingService.getPublishingListByEmployeeId(user.getId());
-            for (Publishing p : publishingList) {
+            for (PublishingDTO p : publishingList) {
                 List<Issue> publishingIssues =
                     issueService.getIssueListByPublishingId(p.getId());
                 issues.addAll(publishingIssues);
@@ -180,25 +180,25 @@ public class IssueWebFacade {
 
     /**
      * Метод для получения  {@link Map} которая содержит
-     * информацию о журналах/газетах {@link Publishing}
+     * информацию о журналах/газетах {@link PublishingDTO}
      * доступные текущему пользователю. Предназначена лля
      * выпадающего списка на форме добавления/редактирования
      * номеров.
      * @return {@link Map}, где ключом является
-     * id {@link Publishing} значением является название {@link Publishing}
+     * id {@link PublishingDTO} значением является название {@link PublishingDTO}
      * */
     public Map<Integer, String> getPublishingMap() {
         securityService.checkIsEditor();
         User user = securityService.getCurrentUser();
         Map<Integer, String> publishingMap = new HashMap<>();
-        List<Publishing> publishingList;
+        List<PublishingDTO> publishingList;
         if (user.isChiefEditor()) {
             publishingList = publishingService.getPublishingList();
         } else {
             publishingList =
                 publishingService.getPublishingListByEmployeeId(user.getId());
         }
-        for (Publishing p : publishingList) {
+        for (PublishingDTO p : publishingList) {
             publishingMap.put(p.getId(), p.getTitle());
         }
         return publishingMap;
@@ -255,10 +255,10 @@ public class IssueWebFacade {
     /**
      * Метод для получения  {@link Map} которая содержит
      * информацию о тематиках {@link Topic}
-     * для данного {@link Publishing}. Предназначена лля
+     * для данного {@link PublishingDTO}. Предназначена лля
      * выпадающего списка на форме добавления/редактирования
      * номеров.
-     * @param publishingId - id {@link Publishing}
+     * @param publishingId - id {@link PublishingDTO}
      * @return {@link Map}, где ключом является
      * id {@link Topic} значением является название {@link Topic}
      * */
@@ -274,7 +274,7 @@ public class IssueWebFacade {
 
     /**
      * Получение {@link Map} допущенных в публикацию авторов.
-     * @param publishingId - id {@link Publishing}.
+     * @param publishingId - id {@link PublishingDTO}.
      * @param topicId - id {@link Topic}.
      * @return {@link Map}, где ключом является
      * id {@link Employee} значением является имя {@link Employee}
@@ -294,7 +294,7 @@ public class IssueWebFacade {
 
     /**
      * Получение {@link Map} допущенных в публикацию статей.
-     * @param publishingId - id {@link Publishing}.
+     * @param publishingId - id {@link PublishingDTO}.
      * @param topicId - id {@link Topic}.
      * @param authorId - id {@link Employee}
      * @return {@link Map}, где ключом является

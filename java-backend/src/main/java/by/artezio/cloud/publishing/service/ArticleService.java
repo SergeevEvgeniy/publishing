@@ -2,7 +2,7 @@ package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
 import by.artezio.cloud.publishing.dto.User;
@@ -26,12 +26,12 @@ public interface ArticleService {
     List<ArticleInfo> getArticleInfoList(User user);
 
     /**
-     * Получение журнала/газеты из сервиса Publishing.
+     * Получение журнала/газеты из сервиса PublishingDTO.
      *
      * @param publishingId идентификатор журнала/газеты
-     * @return объект класса {@link Publishing}
+     * @return объект класса {@link PublishingDTO}
      */
-    Publishing getPublishingById(int publishingId);
+    PublishingDTO getPublishingById(int publishingId);
 
     /**
      * Получение сотрудника из сервиса Employee по его идентификатору.
