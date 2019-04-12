@@ -124,25 +124,29 @@
                             </div>
 
                             <div class="text-right">
-                                <input type="button" class="btn btn-success" value="Добавить" disabled>
+                                <input type="button" class="btn btn-success" value="Добавить"
+                                       id="articleButton" disabled>
                             </div>
 
                         </div>
                     </c:if>
 
-                    <ul class="list-group">
+                    <ul class="list-group article-list-element">
                         <c:forEach var="article" items="${articles}">
                             <li class="list-group-item">
+                                <input type="hidden" name="articlesId" class="input-article"/>
                                 <div class="row">
                                     <div class="col-xs-10">
-                                        <span>${article.title}</span>
+                                        ${article.title}
                                     </div>
                                     <c:if test="${mode != 'view'}">
                                         <div class="col-xs-2 text-right">
-                                            <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
+                                            <span class="glyphicon glyphicon-trash delete-article"
+                                                  style="cursor: pointer"></span>
                                         </div>
                                     </c:if>
                                 </div>
+                            </li>
                         </c:forEach>
                     </ul>
 
@@ -159,7 +163,8 @@
                                     <input type="text" class="form-control">
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="button" class="btn btn-success form-control" value="Добавить">
+                                    <input type="button" class="btn btn-success form-control"
+                                           value="Добавить" id="advertisingButton">
                                 </div>
                             </div>
 
@@ -206,6 +211,18 @@
 
         </div>
 
+    </div>
+
+    <div id="articleElementTemplate" class="hidden">
+        <li class="list-group-item new-article-element">
+            <input type="hidden" name="articleList" class="input-article">
+            <div class="row">
+                <div class="col-xs-10 added-article"></div>
+                <div class="col-xs-2 text-right">
+                    <span class="glyphicon glyphicon-trash delete-article" style="cursor: pointer"></span>
+                </div>
+            </div>
+        </li>
     </div>
 
     <script src="${pageContext.request.contextPath}/resources/js/create-issue.js"></script>

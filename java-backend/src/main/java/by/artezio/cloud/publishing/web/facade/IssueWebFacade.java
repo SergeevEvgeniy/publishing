@@ -1,10 +1,12 @@
 package by.artezio.cloud.publishing.web.facade;
 
-import by.artezio.cloud.publishing.domain.Topic;
-import by.artezio.cloud.publishing.domain.Advertising;
-import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.domain.Publishing;
+import by.artezio.cloud.publishing.domain.Article;
+import by.artezio.cloud.publishing.domain.Advertising;
+import by.artezio.cloud.publishing.domain.Topic;
+import by.artezio.cloud.publishing.domain.Review;
+import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.dto.IssueForm;
 import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.dto.User;
@@ -15,11 +17,10 @@ import by.artezio.cloud.publishing.service.AdvertisingService;
 import by.artezio.cloud.publishing.service.ReviewService;
 import by.artezio.cloud.publishing.web.security.SecurityService;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Класс IssueWebFacade в котором размещена основная логика работы.
@@ -113,6 +114,45 @@ public class IssueWebFacade {
             issueInfoList.add(issueInfo);
         }
         return issueInfoList;
+    }
+
+    /**
+     * Проверка статьи на допуск в публикацию.
+     * @param article - {@link Article}
+     * @return - флаг допуска статьи.
+     * */
+    private boolean articleIsApproved(final Article article) {
+        List<Review> reviews =
+            reviewService.getReviewsByArticleId(article.getId());
+        if (reviews.size() == 0) {
+            return false;
+        }
+        for (Review r : reviews) {
+            if (!r.isApproved()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Проверка содержит ли автор статьи допущенные в публикакию.
+     * @param publishingId - id {@link Publishing}.
+     * @param topicId - id {@link Topic}.
+     * @param authorId - id {@link by.artezio.cloud.publishing.domain.Employee}.
+     * */
+    private boolean authorIsApproved(final int publishingId,
+                                     final int topicId,
+                                     final int authorId) {
+        List<Article> articles =
+            articleService.getArticlesBytopicAndPublishingAndAuthorId(topicId,
+            publishingId, authorId);
+        for (Article a : articles) {
+            if (articleIsApproved(a)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -230,6 +270,49 @@ public class IssueWebFacade {
             topicMap.put(topic.getId(), topic.getName());
         }
         return topicMap;
+    }
+
+    /**
+     * Получение {@link Map} допущенных в публикацию авторов.
+     * @param publishingId - id {@link Publishing}.
+     * @param topicId - id {@link Topic}.
+     * @return {@link Map}, где ключом является
+     * id {@link Employee} значением является имя {@link Employee}
+     * */
+    public Map<Integer, String> getApprovedAuthor(final int publishingId,
+                                                  final int topicId) {
+        List<Employee> journalists =
+            publishingService.getPublishingJournalist(publishingId);
+        Map<Integer, String> authorMap = new HashMap<>();
+        for (Employee e : journalists) {
+            if (authorIsApproved(publishingId, topicId, e.getId())) {
+                authorMap.put(e.getId(), e.getLastName());
+            }
+        }
+        return authorMap;
+    }
+
+    /**
+     * Получение {@link Map} допущенных в публикацию статей.
+     * @param publishingId - id {@link Publishing}.
+     * @param topicId - id {@link Topic}.
+     * @param authorId - id {@link Employee}
+     * @return {@link Map}, где ключом является
+     * id {@link Article} значением является название {@link Article}
+     * */
+    public Map<Integer, String> getApprovedArticles(final int publishingId,
+                                                    final int topicId,
+                                                    final int authorId) {
+        List<Article> articles =
+            articleService.getArticlesBytopicAndPublishingAndAuthorId(topicId,
+                publishingId, authorId);
+        Map<Integer, String> articlesMap = new HashMap<>();
+        for (Article a : articles) {
+            if (articleIsApproved(a)) {
+                articlesMap.put(a.getId(), a.getTitle());
+            }
+        }
+        return articlesMap;
     }
 
 }

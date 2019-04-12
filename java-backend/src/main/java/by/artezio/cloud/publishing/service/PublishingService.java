@@ -54,5 +54,5 @@ public interface PublishingService {
      * @param publishingId - id {@link Publishing}
      * @return - список всех {@link Employee}
      * */
-    List<Employee> getPublishingJournalistByPublishingId(final int publishingId);
+    List<Employee> getPublishingJournalist(final int publishingId);
 }

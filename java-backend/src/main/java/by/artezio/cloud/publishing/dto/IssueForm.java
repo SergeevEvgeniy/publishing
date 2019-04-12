@@ -12,9 +12,7 @@ public class IssueForm {
 
     private Integer publishingId;
 
-    private List<Integer> deletedArticlesId;
-
-    private List<Integer> addedArticlesId;
+    private List<Integer> articlesId;
 
     private List<String> addedAdvertisingFilePath;
 
@@ -75,37 +73,19 @@ public class IssueForm {
     }
 
     /**
-     * Получение id статей, которые были добавлены в номер из формы.
-     * @return - список статей добавленные в номер.
+     * Установка списка id статей добавленных в номер.
+     * @param articlesId - список статей добавленных в номер.
      * */
-    public List<Integer> getAddedArticlesId() {
-        return addedArticlesId;
+    public void setArticlesId(final List<Integer> articlesId) {
+        this.articlesId = articlesId;
     }
 
     /**
-     * Установка id статей которые необходимо добавить в номер.
-     * @param addedArticlesId - список id статей которые будут
-     * добавлены в номер.
+     * Получение списка id статей добавленных в номер.
+     * @return - список статей добавленных в номер.
      * */
-    public void setAddedArticlesId(final List<Integer> addedArticlesId) {
-        this.addedArticlesId = addedArticlesId;
-    }
-
-    /**
-     * Установка списка id статей которые будут удалены из номера.
-     * @param deletedArticlesId - список id статей которые будут удалены
-     * из номера.
-     * */
-    public void setDeletedArticlesId(final List<Integer> deletedArticlesId) {
-        this.deletedArticlesId = deletedArticlesId;
-    }
-
-    /**
-     * Получение списка id статей которые необходимо удалить из номера.
-     * @return - список id статей которые необходимо удалитьиз номера.
-     * */
-    public List<Integer> getDeletedArticlesId() {
-        return deletedArticlesId;
+    public List<Integer> getArticlesId() {
+        return articlesId;
     }
 
     /**

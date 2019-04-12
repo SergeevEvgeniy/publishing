@@ -107,12 +107,12 @@ public class IssueController {
     }
 
     /**
-     * Получение {@link Map} журналов/газет для выподающего списка
-     * на форме добавления.
+     * Получение {@link Map} тематикт выбранного журнала/газеты
+     * для выподающего списка на форме добавления.
      * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}.
      * @return {@link Map}, где ключом является
-     * id {@link by.artezio.cloud.publishing.domain.Publishing}
-     * значением является название {@link by.artezio.cloud.publishing.domain.Publishing}
+     * id {@link by.artezio.cloud.publishing.domain.Topic}
+     * значением является название {@link by.artezio.cloud.publishing.domain.Topic}
      * */
     @GetMapping(value = "/publishingId/{id}", headers = {"Accept=application/json"})
     @ResponseBody
@@ -121,20 +121,39 @@ public class IssueController {
     }
 
     /**
-     * Получение {@link Map} тематикт выбранного журнала/газеты
+     * Получение {@link Map} допущенных в публикацию авторов
      * для выподающего списка на форме добавления.
      * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}.
      * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
      * @return {@link Map}, где ключом является
-     * id {@link by.artezio.cloud.publishing.domain.Topic}
-     * значением является название {@link by.artezio.cloud.publishing.domain.Topic}
+     * id {@link by.artezio.cloud.publishing.domain.Employee}
+     * значением является имя {@link by.artezio.cloud.publishing.domain.Employee}
      * */
     @GetMapping(value = "/publishingId/{pid}/topicId/{tid}", headers = {"Accept=application/json"})
     @ResponseBody
     public Map<Integer, String> getAuthorMap(@PathVariable("pid") final int publishingId,
                                       @PathVariable("tid") final int topicId) {
-        /*Заглушка*/
-        return null;
+        return issueFacade.getApprovedAuthor(publishingId, topicId);
+    }
+
+    /**
+     * Получение {@link Map} статей выбранного журнала/газеты,
+     * для выбранной рубрики, выбранного автора,
+     * предназначенная для выподающего списка на форме добавления.
+     * @param publishingId - id {@link by.artezio.cloud.publishing.domain.Publishing}.
+     * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
+     * @param authorId - id {@link by.artezio.cloud.publishing.domain.Employee}.
+     * @return {@link Map}, где ключом является
+     * id {@link by.artezio.cloud.publishing.domain.Article}
+     * значением является название {@link by.artezio.cloud.publishing.domain.Article}
+     * */
+    @GetMapping(value = "/publishingId/{pid}/topicId/{tid}/authorId/{aid}",
+        headers = {"Accept=application/json"})
+    @ResponseBody
+    public Map<Integer, String> getArticleMap(@PathVariable("pid") final int publishingId,
+                                             @PathVariable("tid") final int topicId,
+                                             @PathVariable("aid") final int authorId) {
+        return issueFacade.getApprovedArticles(publishingId, topicId, authorId);
     }
 
 }

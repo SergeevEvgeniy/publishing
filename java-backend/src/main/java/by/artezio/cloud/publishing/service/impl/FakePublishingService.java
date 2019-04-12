@@ -46,13 +46,13 @@ public class FakePublishingService implements PublishingService {
     }
 
     @Override
-    public List<Employee> getPublishingJournalistByPublishingId(final int publishingId) {
+    public List<Employee> getPublishingJournalist(final int publishingId) {
         List<Employee> publishingJournalist = new ArrayList<>();
         List<PublishingEmployee> publishingEmployees =
             publishingDao.getPublishingEmployeeList(publishingId);
         for (PublishingEmployee pe : publishingEmployees) {
             Employee employee = employeeService.getEmployeeById(pe.getEmployeeId());
-            if (employee.getType() == 'J') {
+            if (employee.getType().equals('J')) {
                 publishingJournalist.add(employee);
             }
         }
