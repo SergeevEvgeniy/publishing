@@ -15,11 +15,12 @@ namespace CloudPublishing.Controllers
     /// </summary>
     [HandleException]
     [RoutePrefix("Review")]
-    [Authorize(Roles = EmployeeRole.Editor)]
+    [Authorize(Roles = EmployeeRole.Editor + "," + EmployeeRole.ChiefEditor)]
     public class ReviewController : Controller
     {
         private IReviewService reviewService;
         private IPublishingService publishingService;
+        private IEmployeeService employeeService;
         private IMapper mapper;
 
         /// <summary>
@@ -27,10 +28,11 @@ namespace CloudPublishing.Controllers
         /// </summary>
         /// <param name="reviewService">Сервис работы с рецензиями</param>
         /// <param name="publishingService">Сервис работы с публикациями</param>
-        public ReviewController(IReviewService reviewService, IPublishingService publishingService)
+        public ReviewController(IReviewService reviewService, IPublishingService publishingService, IEmployeeService employeeService)
         {
             this.reviewService = reviewService;
             this.publishingService = publishingService;
+            this.employeeService = employeeService;
 
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ReviewMapProfile())).CreateMapper();
         }
@@ -43,8 +45,7 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            // Заглушка. Будет заменено на получение id текущего пользователя
-            int userId = 1;
+            var userId = GetUserId();
 
             var list = mapper.Map<IEnumerable<DetailedReviewModel>>(reviewService.CreateDetailedReviewList(userId));
 
@@ -74,8 +75,7 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         public ActionResult Create(ReviewModel review)
         {
-            // Будет заменено на получение текущего пользователя
-            review.ReviwerId = 1;
+            review.ReviwerId = GetUserId();
 
             if (ModelState.IsValid)
             {
@@ -149,10 +149,7 @@ namespace CloudPublishing.Controllers
         [Route("Details/{id:int}")]
         public ActionResult Details(int id)
         {
-            // Будет заменено на получение id пользователя
-            int userId = 1;
-
-            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, userId));
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, GetUserId()));
             return View(review);
         }
 
@@ -165,10 +162,7 @@ namespace CloudPublishing.Controllers
         [Route("Edit/{id:int}")]
         public ActionResult Edit(int id)
         {
-            // Будет заменено на получение id пользователя
-            int userId = 1;
-
-            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, userId));
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, GetUserId()));
 
             return View(review);
         }
@@ -181,8 +175,7 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         public ActionResult Edit(ReviewModel review)
         {
-            // Будет заменено на получение id пользователя
-            review.ReviwerId = 1;
+            review.ReviwerId = GetUserId();
 
             if (ModelState.IsValid)
             {
@@ -200,10 +193,13 @@ namespace CloudPublishing.Controllers
         [Route("Delete/{id:int}")]
         public void Delete(int id)
         {
-            // Будет заменено на получение id пользователя
-            int userId = 1;
+            reviewService.DeleteReview(id, GetUserId());
+        }
 
-            reviewService.DeleteReview(id, userId);
+        [NonAction]
+        private int GetUserId()
+        {
+            return employeeService.GetEmployeeId(User.Identity.Name);
         }
     }
 }
