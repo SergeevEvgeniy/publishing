@@ -3,70 +3,76 @@
     ViewBag.Title = "Рецензии";
 }
 
-<div class="row mb-2">
-    <div class="col-12 text-right pr-0">
-        <button class="btn btn-success" onclick="location.href='@Url.Action("Create", "Review")'"><i class="fas fa-plus"></i> Добавить</button>
-    </div>
-</div>
-
 <div class="row">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Журнал/Газета</th>
-                <th>Рубрика</th>
-                <th>Автор</th>
-                <th>Статья</th>
-                <th>В публикацию</th>
-                <th>@*Кнопки*@</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Publishing)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Topic)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Author)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Article)
-                    </td>
-                    <td class="text-center">
-                        @if (item.Approved)
+    <div class="col-12">
+        <div class="text-right mb-2">
+            <a class="btn btn-success" href="@Url.Action("Create", "Review")">
+                <i class="fas fa-plus"></i> Добавить
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Журнал/Газета</th>
+                            <th>Рубрика</th>
+                            <th>Автор</th>
+                            <th>Статья</th>
+                            <th>В публикацию</th>
+                            <th>@*Кнопки*@</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
                         {
-                            <i class="fas fa-check text-success"></i>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Publishing)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Topic)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Author)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Article)
+                                </td>
+                                <td class="text-center">
+                                    @if (item.Approved)
+                                    {
+                                        <i class="fas fa-check text-success"></i>
+                                    }
+                                </td>
+                                <td class="text-left">
+                                    @if (item.Approved)
+                                    {
+                                        <a class="btn btn-sm border border-secondary" 
+                                           href="@Url.Action("Details", "Review", new { id = @item.ArticleId })">
+                                            <i class="far fa-eye text-secondary"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-sm border border-secondary" 
+                                           href="@Url.Action("Edit", "Review", new { id = @item.ArticleId })">
+                                            <i class="far fa-edit text-secondary"></i>
+                                        </a>
+                                        <button class="btn btn-sm border border-danger delete-button"
+                                                value="@item.ArticleId">
+                                            <i class="fas fa-trash-alt text-danger"></i>
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
                         }
-                    </td>
-                    <td class="text-left">
-                        @if (item.Approved)
-                        {
-                            <button class="btn btn-sm border border-secondary"
-                                    onclick="location.href='@Url.Action("Details", "Review", new { id = @item.ArticleId })'">
-                                <i class="far fa-eye text-secondary"></i>
-                            </button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-sm border border-secondary"
-                                    onclick="location.href='@Url.Action("Edit", "Review", new { id = @item.ArticleId })'">
-                                <i class="far fa-edit text-secondary"></i>
-                            </button>
-                            <button class="btn btn-sm border border-danger delete-button"
-                                    value="@item.ArticleId">
-                                <i class="fas fa-trash-alt text-danger"></i>
-                            </button>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

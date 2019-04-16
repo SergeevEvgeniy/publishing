@@ -11,7 +11,6 @@
             <div class="row form-group">
                 <label class="col-sm-4 col-form-label">Журнал/газета</label>
                 <div class="col-sm-8">
-                    @*ajax-запрос по загрузке страницы и заполнение option-ов по аналогии с остальными select?*@
                     @Html.DropDownList(
                         "PublishingList",
                         Model.PublishingList.Select(item => new SelectListItem
@@ -54,8 +53,8 @@
             </div>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="Approved" value="true" checked="checked" id="publishedCheckbox">
-                    <label class="form-check-label" for="publishedCheckbox">
+                    <input class="form-check-input" type="checkbox" name="Approved" value="true" id="published_сheckbox">
+                    <label class="form-check-label" for="published_сheckbox">
                         В публикацию
                     </label>
                 </div>
@@ -81,6 +80,10 @@
                         $("#topic").empty();
                         $("#topic").append(data);
                         $("#topic").prop("disabled", false);
+
+                        $("#author").empty();
+                        $("#article").empty();
+                        $("#article_content").empty();
                     }
                 })
             });
@@ -93,7 +96,11 @@
                     url: "@Url.Action("GetAuthorList")/" + publishingId + "/" + topicId,
                     success: function (data) {
                         $("#author").empty();
+                        $("#author").append(data);
                         $("#author").prop("disabled", false);
+
+                        $("#article").empty();
+                        $("#article_content").empty();
                     }
                 })
             });
@@ -109,13 +116,14 @@
                         $("#article").empty();
                         $("#article").append(data);
                         $("#article").prop("disabled", false);
+
+                        $("#article_content").empty();
                     }
                 })
             });
 
             $("#article").change(function () {
                 var articleId = $(this).val();
-                console.log(articleId);
                 $.ajax({
                     type: "GET",
                     url: "@Url.Action("GetArticleContent")/" + articleId,
@@ -124,14 +132,6 @@
                         $("#article_content").append(data);
                     }
                 })
-            });
-
-            $("#cancel_button").click(function () {
-                var lists = $("select");
-
-                for (var i = 1; i < lists.length; i++) {
-                    $(lists[i]).empty().prop("disabled", true);
-                }
             });
         });
     </script>

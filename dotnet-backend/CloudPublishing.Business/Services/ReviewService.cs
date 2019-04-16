@@ -21,7 +21,7 @@ namespace CloudPublishing.Business.Services
         private IMapper mapper;
         private IEmployeeService employeeService;
         private IPublishingService publishingService;
-        private const string ArticleServiceURI = "http://10.99.33.221:8080/cloud_publishing_war/article";
+        private const string ArticleServiceURI = "http://10.99.33.221:8080/publishing/article";
 
         /// <summary>
         /// Конструктор сервиса
@@ -44,7 +44,7 @@ namespace CloudPublishing.Business.Services
         /// <param name="publishingId">Id издания</param>
         /// <param name="topicId">Id рубрики</param>
         /// <returns>Список авторов</returns>
-        public IEnumerable<EmployeeDTO> GetAuthorList(int? publishingId, int? topicId)
+        public IEnumerable<EmployeeDTO> GetAuthorList(int publishingId, int topicId)
         {
             var articleList = JsonConvert.DeserializeObject<IEnumerable<ArticleDTO>>(
                 ExecuteRequest($"{ArticleServiceURI}/articleByTopicAndPublishingId/{topicId}/{publishingId}"));
@@ -62,10 +62,10 @@ namespace CloudPublishing.Business.Services
         /// <param name="topicId">Id рубрики</param>
         /// <param name="authorId">Id автора</param>
         /// <returns>Список статей</returns>
-        public IEnumerable<ArticleDTO> GetArticleList(int? publishingId, int? topicId, int? authorId)
+        public IEnumerable<ArticleDTO> GetArticleList(int publishingId, int topicId, int authorId)
         {
             var articleList = JsonConvert.DeserializeObject<IEnumerable<ArticleDTO>>(
-                ExecuteRequest($"{ArticleServiceURI}/articleByTopicAndPublishingId/{topicId}/{publishingId}"));
+                ExecuteRequest($"{ArticleServiceURI}/unpublished/{publishingId}/{topicId}/{authorId}"));
 
             return articleList.Where(x => x.AuthorId == authorId);
         }
@@ -85,7 +85,7 @@ namespace CloudPublishing.Business.Services
                 var article = JsonConvert.DeserializeObject<ArticleDTO>(ExecuteRequest($"{ArticleServiceURI}/articleById/{x.ArticleId}"));
 
                 var author = employeeService.GetEmployeeById(article.AuthorId);
-                var publishing = publishingService.GetPublishing(article.Id);
+                var publishing = publishingService.GetPublishing(article.PublishingId);
                 var topic = publishingService.GetTopic(article.TopicId);
 
                 return new DetailedReviewDTO
