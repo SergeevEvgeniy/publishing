@@ -44,7 +44,7 @@ namespace CloudPublishing.Business.Services
         /// <param name="publishingId">Id издания</param>
         /// <param name="topicId">Id рубрики</param>
         /// <returns>Список авторов</returns>
-        public IEnumerable<EmployeeDTO> GetAuthorList(int? publishingId, int? topicId)
+        public IEnumerable<EmployeeDTO> GetAuthorList(int publishingId, int topicId)
         {
             var articleList = JsonConvert.DeserializeObject<IEnumerable<ArticleDTO>>(
                 ExecuteRequest($"{ArticleServiceURI}/articleByTopicAndPublishingId/{topicId}/{publishingId}"));
@@ -62,7 +62,7 @@ namespace CloudPublishing.Business.Services
         /// <param name="topicId">Id рубрики</param>
         /// <param name="authorId">Id автора</param>
         /// <returns>Список статей</returns>
-        public IEnumerable<ArticleDTO> GetArticleList(int? publishingId, int? topicId, int? authorId)
+        public IEnumerable<ArticleDTO> GetArticleList(int publishingId, int topicId, int authorId)
         {
             var articleList = JsonConvert.DeserializeObject<IEnumerable<ArticleDTO>>(
                 ExecuteRequest($"{ArticleServiceURI}/articleByTopicAndPublishingId/{topicId}/{publishingId}"));
