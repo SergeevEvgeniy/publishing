@@ -21,7 +21,7 @@ namespace CloudPublishing.Business.Services
         private IMapper mapper;
         private IEmployeeService employeeService;
         private IPublishingService publishingService;
-        private const string ArticleServiceURI = "http://10.99.33.221:8080/cloud_publishing_war/article";
+        private const string ArticleServiceURI = "http://10.99.33.221:8080/publishing/article";
 
         /// <summary>
         /// Конструктор сервиса
@@ -85,7 +85,7 @@ namespace CloudPublishing.Business.Services
                 var article = JsonConvert.DeserializeObject<ArticleDTO>(ExecuteRequest($"{ArticleServiceURI}/articleById/{x.ArticleId}"));
 
                 var author = employeeService.GetEmployeeById(article.AuthorId);
-                var publishing = publishingService.GetPublishing(article.Id);
+                var publishing = publishingService.GetPublishing(article.PublishingId);
                 var topic = publishingService.GetTopic(article.TopicId);
 
                 return new DetailedReviewDTO
