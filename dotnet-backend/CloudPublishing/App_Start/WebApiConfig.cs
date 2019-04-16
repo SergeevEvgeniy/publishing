@@ -13,12 +13,18 @@ namespace CloudPublishing
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-
+            config.Routes.MapHttpRoute(
+                name: "PublishingsByType",
+                routeTemplate: "api/publishings/{publishingType}",
+                defaults: new { controller = "publishings", publishingType = RouteParameter.Optional}
+            );
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+
         }
     }
 }
