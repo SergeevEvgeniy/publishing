@@ -65,7 +65,7 @@ namespace CloudPublishing.Business.Services
         public IEnumerable<ArticleDTO> GetArticleList(int publishingId, int topicId, int authorId)
         {
             var articleList = JsonConvert.DeserializeObject<IEnumerable<ArticleDTO>>(
-                ExecuteRequest($"{ArticleServiceURI}/articleByTopicAndPublishingId/{topicId}/{publishingId}"));
+                ExecuteRequest($"{ArticleServiceURI}/unpublished/{publishingId}/{topicId}/{authorId}"));
 
             return articleList.Where(x => x.AuthorId == authorId);
         }
