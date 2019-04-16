@@ -38,7 +38,7 @@ public class IssueDao {
 
     /**
      * Получение списка всех номеров.
-     * @return {@link List} всех {@link Issue}
+     * @return {@link List} всех {@link Issue}.
      * */
     public List<Issue> getListOfAllIssues() {
         return jdbcTemplate.query("select * from issue", issueRowMapper);
@@ -55,8 +55,8 @@ public class IssueDao {
 
     /**
      * Получение номера по id.
-     * @param id - идентификатор {@link Issue}
-     * @return {@link Issue}
+     * @param id - идентификатор {@link Issue}.
+     * @return {@link Issue}.
      * */
     public Issue getIssueById(final int id) {
         return jdbcTemplate.queryForObject("select * from issue where id = :id",
@@ -79,8 +79,8 @@ public class IssueDao {
 
     /**
      * Метод получения всех номеров определенного журнала/газеты.
-     * @param publishingId - идентификатор журнала/газеты
-     * @return список {@link Issue} журнала/газеты
+     * @param publishingId - идентификатор журнала/газеты.
+     * @return список {@link Issue} журнала/газеты.
      * */
     public List<Issue> getIssueListByPublishingId(final int publishingId) {
         return jdbcTemplate.query("select * from issue "

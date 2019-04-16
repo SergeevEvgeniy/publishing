@@ -1,32 +1,31 @@
 $(function () {
 
     var $formSelects = $("form select");
-    var $articleButton = $("#articleButton");
-    var $articleElementTemplate = $("#articleElementTemplate .new-article-element");
-    var $articleListElement = $(".article-list-element");
+    var $articleAddBtn = $("#articleAddBtn");
+    var $advertisingAddBtn = $("#advertisingAddBtn");
+    var $template = $("#elementTemplate .new-element");
+    var $articleList = $(".article-list");
+    var $advertisingList = $(".advertising-list");
 
     $formSelects.on("change", function() {
         var $currentSelect = $(this);
-        var currentSelectIndex = $formSelects
-            .index($currentSelect);
-        var nextSelectIndex = currentSelectIndex + 1;
+        var nextSelectIndex = $formSelects
+            .index($currentSelect) + 1;
 
-        if (nextSelectIndex === $formSelects.length) {
-            if ($currentSelect.val()) {
-                $articleButton.prop("disabled", false);
-            } else {
-                $articleButton.prop("disabled", true);
-            }
+        if (nextSelectIndex === $formSelects.length && $currentSelect.val()) {
+            $articleAddBtn.prop("disabled", false);
             return;
         }
+        $articleAddBtn.prop("disabled", true);
 
-        var nextSelect = $formSelects[nextSelectIndex];
+        var $nextSelect = $formSelects.eq(nextSelectIndex);
 
-        $formSelects.slice(nextSelectIndex)
-            .prop("disabled", true)
-            .find("option")
-            .not(":first-child")
-            .remove();
+        $formSelects.slice(nextSelectIndex).each(function () {
+            $(this).prop("disabled", true)
+                .find("option")
+                .not(":first-child")
+                .remove();
+        });
 
         if (!$currentSelect.val()) {
             return;
@@ -37,46 +36,113 @@ $(function () {
                 var $option = $("<option></option>")
                     .val(key)
                     .text(val);
-                $(nextSelect).append($option);
-                var nextSelectId = $(nextSelect).attr("id");
+                $nextSelect.append($option);
+                var nextSelectId = $nextSelect.attr("id");
                 if (nextSelectId === "articles" && !isAvailableArticle(key)) {
                     $option.prop("hidden", true);
                 }
             });
         });
-        nextSelect.disabled = false;
+        $nextSelect.prop("disabled", false);
     });
 
-    $articleButton.on("click", function () {
+    $articleAddBtn.on("click", function () {
         var $articleSelect = $("#articles");
         var $articleOptions = $articleSelect.find("option");
-        var $authorOptions= $("#authors option");
         var $selectedOption = $articleOptions
-            .filter(":selected");
+            .filter(":selected")
+            .prop("hidden", true);
         var articleId = $selectedOption.val();
         var articleTitle = $selectedOption.text();
-        $selectedOption.prop("hidden", true);
         $articleOptions.first().prop("selected", true);
         if ($articleOptions.not("[hidden]").length === 1) {
-            $authorOptions.first().prop("selected", true);
+            $("#authors option").first()
+                .prop("selected", true);
             $articleSelect.prop("disabled", true);
         }
-        $articleElementTemplate
+        $template
             .clone()
-            .find(".input-article")
+            .find("input")
             .val(articleId)
+            .attr("name", "articlesId")
             .end()
-            .find('.added-article')
+            .find('.element-title')
             .text(articleTitle)
             .end()
-            .appendTo($articleListElement);
+            .find("span")
+            .addClass("delete-article")
+            .on("click", deleteArticle)
+            .end()
+            .appendTo($articleList)
+            .slideDown("fast");
         $(this).prop("disabled", true);
-        $("#publishingId")
+        $("#publishing")
             .find("option")
-            .not("selected")
+            .not(":selected")
             .prop("hidden", true);
     });
 
+    $advertisingAddBtn.on("click", function () {
+        var path = $("#advertisingPath").val();
+        var $link = $("<a></a>").attr("href", path)
+            .text(path);
+        $template
+            .clone()
+            .find("input")
+            .val(path)
+            .attr("name", "advertisingPath")
+            .end()
+            .find('.element-title')
+            .append($link)
+            .end()
+            .find("span")
+            .addClass("delete-advertising")
+            .on("click", deleteAdvertising)
+            .end()
+            .appendTo($advertisingList)
+            .slideDown("fast");
+        $(this).prop("disabled", true);
+        $("#advertisingPath").val("");
+    });
+
+    $(".delete-article").on("click", deleteArticle);
+
+    $(".delete-advertising").on("click", deleteAdvertising);
+
+    $("#advertisingPath").on("input", function () {
+        if ($(this).val()) {
+            $advertisingAddBtn.prop("disabled", false);
+        } else {
+            $advertisingAddBtn.prop("disabled", true);
+        }
+    });
+
+    function deleteArticle() {
+        var $listItem = $(this)
+            .closest(".new-element");
+        var articleId = $listItem
+            .find("input")
+            .val();
+        $("#articles option")
+            .filter("[value=" + articleId + "]")
+            .prop("hidden", false);
+        $listItem.slideUp("fast", function () {
+            $listItem.remove();
+        });
+        if (!$articleList.has("li").length) {
+            $("#publishing")
+                .find("option")
+                .not(":selected")
+                .prop("hidden", false);
+        }
+    }
+
+    function deleteAdvertising() {
+        $(this).closest(".new-element")
+            .slideUp("fast", function () {
+                $(this).remove();
+            });
+    }
 
     function getRestUrl() {
         var url = APP_CONTEXT_PATH + "/issues";
@@ -88,7 +154,7 @@ $(function () {
     }
 
     function isAvailableArticle(articleId) {
-        var $articleInput = $articleListElement.
+        var $articleInput = $articleList.
             find("input[value=" + articleId + "]");
         return $articleInput.length === 0;
     }

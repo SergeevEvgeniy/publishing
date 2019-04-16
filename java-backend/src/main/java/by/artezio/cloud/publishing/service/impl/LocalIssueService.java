@@ -44,6 +44,7 @@ public class LocalIssueService implements IssueService {
 
     @Override
     public void deleteIssueById(final int id) {
+        issueArticleDao.deleteIssueArticleByIssueId(id);
         issueDao.deleteIssueById(id);
     }
 
@@ -53,7 +54,7 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
-    public List<Integer> getArticleIdListByIssueId(final int issueId) {
+    public List<Integer> getArticleIdList(final int issueId) {
         List<IssueArticle> issueArticleList =
             issueArticleDao.getIssueArticleListByIssueId(issueId);
         List<Integer> articleIdList = new ArrayList<>();

@@ -24,8 +24,14 @@ public class LocalAdvertisingService implements AdvertisingService {
     }
 
     @Override
-    public List<Advertising> getAdvertisingListByIssueId(final int issueId) {
+    public List<Advertising> getAdvertising(final int issueId) {
         return advertisingDao.getAdvertisingListByIssueId(issueId);
     }
+
+    @Override
+    public void deleteAdvertisingByIssueId(final int issueId) {
+        advertisingDao.deleteAdvertisingByIssueId(issueId);
+    }
+
 
 }

@@ -6,8 +6,8 @@ import by.artezio.cloud.publishing.domain.Advertising;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.dto.IssueForm;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.dto.User;
 import by.artezio.cloud.publishing.service.IssueService;
@@ -72,7 +72,19 @@ public class IssueWebFacade {
      * */
     private IssueForm mapIssueToIssueForm(final Issue issue) {
         IssueForm issueForm = new IssueForm();
-        issueForm.setPublishingId(issue.getPublishingId());
+        PublishingDTO publishing = publishingService
+            .getPublishingById(issue.getId());
+        issueForm.setPublishingId(publishing.getId());
+        issueForm.setPublishingTitle(publishing.getTitle());
+        List<Integer> articleIdList = issueService.getArticleIdList(issue.getId());
+        issueForm.setArticlesId(articleIdList);
+        List<Advertising> advertising =
+            advertisingService.getAdvertising(issue.getId());
+        List<String> advertisingPath = new ArrayList<>();
+        for (Advertising a : advertising) {
+            advertisingPath.add(a.getFilePath());
+        }
+        issueForm.setAdvertisingPath(advertisingPath);
         issueForm.setNumber(issue.getNumber());
         issueForm.setLocalDate(issue.getDate());
         issueForm.setPublished(issue.isPublished());
@@ -92,7 +104,7 @@ public class IssueWebFacade {
             publishingService.getPublishingById(issue.getPublishingId());
         issueInfo.setPublishingTitle(publishing.getTitle());
         List<Integer> articleIdList =
-            issueService.getArticleIdListByIssueId(issue.getId());
+            issueService.getArticleIdList(issue.getId());
         issueInfo.setNumberOfArticle(articleIdList.size());
         issueInfo.setPublished(issue.isPublished());
         issueInfo.setNumber(issue.getNumber());
@@ -205,22 +217,6 @@ public class IssueWebFacade {
     }
 
     /**
-     * Получение списка статей по id номера.
-     * @param issueId - id {@link Issue}
-     * @return список {@link Article}
-     * */
-    public List<Article> getArticleListByIssueId(final int issueId) {
-        List<Article> articleList = new ArrayList<>();
-        List<Integer> articleIdList =
-            issueService.getArticleIdListByIssueId(issueId);
-        for (Integer id : articleIdList) {
-            Article article = articleService.getArticleById(id);
-            articleList.add(article);
-        }
-        return articleList;
-    }
-
-    /**
      * Метод для получения dto {@link IssueForm}
      * по id {@link by.artezio.cloud.publishing.domain.Issue}.
      * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
@@ -232,25 +228,6 @@ public class IssueWebFacade {
         return mapIssueToIssueForm(issue);
     }
 
-    /**
-     * Метод для получения dto {@link IssueInfo}
-     * по id {@link by.artezio.cloud.publishing.domain.Issue}.
-     * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
-     * @return {@link IssueInfo}
-     * */
-    public IssueInfo getIssueInfoByIssueId(final int issueId) {
-        Issue issue = issueService.getIssueById(issueId);
-        return mapIssueToIssueInfo(issue);
-    }
-
-    /**
-     * Получение списка реклам по id номера.
-     * @param issueId - id {@link Issue}
-     * @return список {@link Advertising}
-     * */
-    public List<Advertising> getAdvertisingListByIssueId(final int issueId) {
-        return advertisingService.getAdvertisingListByIssueId(issueId);
-    }
 
     /**
      * Метод для получения  {@link Map} которая содержит
@@ -313,6 +290,28 @@ public class IssueWebFacade {
             }
         }
         return articlesMap;
+    }
+
+    /**
+     * Удаление номра по id, а также всех статей номера и рекламы.
+     * @param issueId - id {@link Issue}
+     * */
+    public void deleteIssueById(final int issueId) {
+        advertisingService.deleteAdvertisingByIssueId(issueId);
+        issueService.deleteIssueById(issueId);
+    }
+
+    /**
+     * Получение списка статей по списку id.
+     * @param articleIdList - список id статей.
+     * @return список {@link Article}.
+     * */
+    public List<Article> getArticlesForIssue(final List<Integer> articleIdList) {
+        List<Article> articles = new ArrayList<>();
+        for (Integer id : articleIdList) {
+            articles.add(articleService.getArticleById(id));
+        }
+        return articles;
     }
 
 }

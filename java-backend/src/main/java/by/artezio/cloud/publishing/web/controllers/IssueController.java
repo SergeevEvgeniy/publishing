@@ -1,6 +1,5 @@
 package by.artezio.cloud.publishing.web.controllers;
 
-import by.artezio.cloud.publishing.domain.Advertising;
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.dto.IssueForm;
 import by.artezio.cloud.publishing.dto.IssueInfo;
@@ -9,8 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
@@ -71,16 +74,13 @@ public class IssueController {
     @GetMapping(params = "mode=edit")
     public ModelAndView openFormInEditingMode(@RequestParam("id") final int issueId) {
         IssueForm issueForm = issueFacade.getIssueFormByIssueId(issueId);
-        Map<Integer, String> publishingMap = issueFacade.getPublishingMap();
+        Map<Integer, String> topics = issueFacade.getTopicMapByPublishingId(issueId);
         List<Article> articles =
-            issueFacade.getArticleListByIssueId(issueId);
-        List<Advertising> advertising =
-            issueFacade.getAdvertisingListByIssueId(issueId);
+            issueFacade.getArticlesForIssue(issueForm.getArticlesId());
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("publishing", publishingMap);
-        modelAndView.addObject("articles", articles);
-        modelAndView.addObject("advertising", advertising);
         modelAndView.addObject(issueForm);
+        modelAndView.addObject("topics", topics);
+        modelAndView.addObject("articles", articles);
         modelAndView.setViewName("issueForm");
         return modelAndView;
     }
@@ -94,16 +94,44 @@ public class IssueController {
     @GetMapping(params = "mode=view")
     public ModelAndView openFormInViewingMode(@RequestParam("id") final int issueId) {
         ModelAndView modelAndView = new ModelAndView();
-        IssueInfo issueInfo = issueFacade.getIssueInfoByIssueId(issueId);
+        IssueForm issueForm = issueFacade.getIssueFormByIssueId(issueId);
         List<Article> articles =
-            issueFacade.getArticleListByIssueId(issueId);
-        List<Advertising> advertising =
-            issueFacade.getAdvertisingListByIssueId(issueId);
-        modelAndView.addObject(issueInfo);
+            issueFacade.getArticlesForIssue(issueForm.getArticlesId());
+        modelAndView.addObject(issueForm);
         modelAndView.addObject("articles", articles);
-        modelAndView.addObject("advertising", advertising);
         modelAndView.setViewName("issueForm");
         return modelAndView;
+    }
+
+    /**
+     * Метод обработки запроса на удаление номера, рекламы и статей в номере.
+     * @param issueId - id номера.
+     * */
+    @DeleteMapping("/issue/{issueId}")
+    public void deleteIssue(@PathVariable("issueId") final int issueId) {
+        issueFacade.deleteIssueById(issueId);
+    }
+
+    /**
+     * Метод для обработки запроса на создание нового номера.
+     * @param issueForm - dto для формы создания и редактирования,
+     * данный объект привязан к полям формы.
+     * */
+    @PostMapping("/issue")
+    public void createIssue(@ModelAttribute final IssueForm issueForm) {
+        System.out.println(issueForm);
+        /*Заглушка*/
+    }
+
+    /**
+     * Метод для обработки запроса на редактирования номера.
+     * @param issueForm - dto для формы создания и редактирования,
+     * данный объект привязан к полям формы.
+     * */
+    @PutMapping("/issue/{issueId}")
+    public void updateIssue(@ModelAttribute final IssueForm issueForm) {
+        System.out.println(issueForm);
+        /*Заглушка*/
     }
 
     /**

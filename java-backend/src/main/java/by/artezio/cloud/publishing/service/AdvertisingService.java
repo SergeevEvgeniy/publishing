@@ -14,6 +14,12 @@ public interface AdvertisingService {
      * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
      * @return список {@link Advertising}
      * */
-    List<Advertising> getAdvertisingListByIssueId(final int issueId);
+    List<Advertising> getAdvertising(final int issueId);
 
+
+    /**
+     * Метод удаления {@link Advertising} по id номера.
+     * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
+     * */
+    void deleteAdvertisingByIssueId(final int issueId);
 }
