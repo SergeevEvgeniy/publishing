@@ -19,8 +19,7 @@ import by.artezio.cloud.publishing.web.security.SecurityService;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+
 
 /**
  * Класс IssueWebFacade в котором размещена основная логика работы.
@@ -153,7 +152,7 @@ public class IssueWebFacade {
      * @param topicId - id {@link Topic}.
      * @param authorId - id {@link by.artezio.cloud.publishing.domain.Employee}.
      * */
-    private boolean authorIsApproved(final int publishingId,
+    private boolean journalistIsApproved(final int publishingId,
                                      final int topicId,
                                      final int authorId) {
         List<Article> articles =
@@ -191,29 +190,20 @@ public class IssueWebFacade {
     }
 
     /**
-     * Метод для получения  {@link Map} которая содержит
+     * Метод для получения списка который содержит
      * информацию о журналах/газетах {@link PublishingDTO}
      * доступные текущему пользователю. Предназначена лля
      * выпадающего списка на форме добавления/редактирования
      * номеров.
-     * @return {@link Map}, где ключом является
-     * id {@link PublishingDTO} значением является название {@link PublishingDTO}
+     * @return список {@link PublishingDTO}
      * */
-    public Map<Integer, String> getPublishingMap() {
+    public List<PublishingDTO> getPublishingList() {
         securityService.checkIsEditor();
         User user = securityService.getCurrentUser();
-        Map<Integer, String> publishingMap = new HashMap<>();
-        List<PublishingDTO> publishingList;
         if (user.isChiefEditor()) {
-            publishingList = publishingService.getPublishingList();
-        } else {
-            publishingList =
-                publishingService.getPublishingListByEmployeeId(user.getId());
+            return publishingService.getPublishingList();
         }
-        for (PublishingDTO p : publishingList) {
-            publishingMap.put(p.getId(), p.getTitle());
-        }
-        return publishingMap;
+        return publishingService.getPublishingListByEmployeeId(user.getId());
     }
 
     /**
@@ -230,66 +220,57 @@ public class IssueWebFacade {
 
 
     /**
-     * Метод для получения  {@link Map} которая содержит
+     * Метод для получения списка который содержит
      * информацию о тематиках {@link Topic}
      * для данного {@link PublishingDTO}. Предназначена лля
      * выпадающего списка на форме добавления/редактирования
      * номеров.
      * @param publishingId - id {@link PublishingDTO}
-     * @return {@link Map}, где ключом является
-     * id {@link Topic} значением является название {@link Topic}
+     * @return список {@link Topic}
      * */
-    public Map<Integer, String> getTopicMapByPublishingId(final int publishingId) {
-        List<Topic> topicList =
-            publishingService.getTopicsByPublishingId(publishingId);
-        Map<Integer, String> topicMap = new HashMap<>();
-        for (Topic topic : topicList) {
-            topicMap.put(topic.getId(), topic.getName());
-        }
-        return topicMap;
+    public List<Topic> getTopicListByPublishingId(final int publishingId) {
+        return publishingService.getTopicsByPublishingId(publishingId);
     }
 
     /**
-     * Получение {@link Map} допущенных в публикацию авторов.
+     * Получение списка допущенных в публикацию авторов.
      * @param publishingId - id {@link PublishingDTO}.
      * @param topicId - id {@link Topic}.
-     * @return {@link Map}, где ключом является
-     * id {@link Employee} значением является имя {@link Employee}
+     * @return список {@link Employee}.
      * */
-    public Map<Integer, String> getApprovedAuthor(final int publishingId,
-                                                  final int topicId) {
+    public List<Employee> getApprovedJournalist(final int publishingId,
+                                            final int topicId) {
         List<Employee> journalists =
             publishingService.getPublishingJournalist(publishingId);
-        Map<Integer, String> authorMap = new HashMap<>();
-        for (Employee e : journalists) {
-            if (authorIsApproved(publishingId, topicId, e.getId())) {
-                authorMap.put(e.getId(), e.getLastName());
+        List<Employee> approvedJournalist = new ArrayList<>();
+        for (Employee j : journalists) {
+            if (journalistIsApproved(publishingId, topicId, j.getId())) {
+                approvedJournalist.add(j);
             }
         }
-        return authorMap;
+        return approvedJournalist;
     }
 
     /**
-     * Получение {@link Map} допущенных в публикацию статей.
+     * Получение списка допущенных в публикацию статей {@link Article}.
      * @param publishingId - id {@link PublishingDTO}.
      * @param topicId - id {@link Topic}.
      * @param authorId - id {@link Employee}
-     * @return {@link Map}, где ключом является
-     * id {@link Article} значением является название {@link Article}
+     * @return список {@link Article}.
      * */
-    public Map<Integer, String> getApprovedArticles(final int publishingId,
-                                                    final int topicId,
-                                                    final int authorId) {
+    public List<Article> getApprovedArticles(final int publishingId,
+                                             final int topicId,
+                                             final int authorId) {
         List<Article> articles =
             articleService.getArticlesBytopicAndPublishingAndAuthorId(topicId,
                 publishingId, authorId);
-        Map<Integer, String> articlesMap = new HashMap<>();
+        List<Article> approvedArticles = new ArrayList<>();
         for (Article a : articles) {
             if (articleIsApproved(a)) {
-                articlesMap.put(a.getId(), a.getTitle());
+                approvedArticles.add(a);
             }
         }
-        return articlesMap;
+        return approvedArticles;
     }
 
     /**

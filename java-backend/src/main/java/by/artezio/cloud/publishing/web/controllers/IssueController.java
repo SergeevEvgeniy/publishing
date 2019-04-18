@@ -1,23 +1,25 @@
 package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.domain.Article;
+import by.artezio.cloud.publishing.domain.Employee;
+import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.IssueForm;
 import by.artezio.cloud.publishing.dto.IssueInfo;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.web.facade.IssueWebFacade;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
-
 
 /**
  * Контроллер для страницы номеров.
@@ -57,9 +59,9 @@ public class IssueController {
      */
     @GetMapping(params = "mode=create")
     public ModelAndView openFormInCreationMode() {
-        Map<Integer, String> publishingMap = issueFacade.getPublishingMap();
+        List<PublishingDTO> publishingList = issueFacade.getPublishingList();
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("publishing", publishingMap);
+        modelAndView.addObject("publishing", publishingList);
         modelAndView.addObject(new IssueForm());
         modelAndView.setViewName("issueForm");
         return modelAndView;
@@ -74,7 +76,7 @@ public class IssueController {
     @GetMapping(params = "mode=edit")
     public ModelAndView openFormInEditingMode(@RequestParam("id") final int issueId) {
         IssueForm issueForm = issueFacade.getIssueFormByIssueId(issueId);
-        Map<Integer, String> topics = issueFacade.getTopicMapByPublishingId(issueId);
+        List<Topic> topics = issueFacade.getTopicListByPublishingId(issueId);
         List<Article> articles =
             issueFacade.getArticlesForIssue(issueForm.getArticlesId());
         ModelAndView modelAndView = new ModelAndView();
@@ -116,69 +118,75 @@ public class IssueController {
      * Метод для обработки запроса на создание нового номера.
      * @param issueForm - dto для формы создания и редактирования,
      * данный объект привязан к полям формы.
+     * @param result - {@link BindingResult}.
+     * @return - логическое имя представления.
      * */
     @PostMapping("/issue")
-    public void createIssue(@ModelAttribute final IssueForm issueForm) {
-        System.out.println(issueForm);
-        /*Заглушка*/
+    public String createIssue(@Valid @ModelAttribute final IssueForm issueForm,
+                              final BindingResult result) {
+        if (result.hasErrors()) {
+            return "issueForm";
+        }
+        return "redirect:/issues";
     }
 
     /**
      * Метод для обработки запроса на редактирования номера.
      * @param issueForm - dto для формы создания и редактирования,
      * данный объект привязан к полям формы.
+     * @param result - {@link BindingResult}.
+     * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}.
+     * @return - логическое имя представления.
      * */
-    @PutMapping("/issue/{issueId}")
-    public void updateIssue(@ModelAttribute final IssueForm issueForm) {
-        System.out.println(issueForm);
-        /*Заглушка*/
+    @PostMapping("/issue/{issueId}")
+    public String updateIssue(@PathVariable("issueId") final int issueId,
+                                    @Valid @ModelAttribute final IssueForm issueForm,
+                                    final BindingResult result) {
+        if (result.hasErrors()) {
+            return "issueForm";
+        }
+        return "redirect:/issues";
     }
 
     /**
-     * Получение {@link Map} тематикт выбранного журнала/газеты
+     * Получение списка тематикт {@link Topic} выбранного журнала/газеты
      * для выподающего списка на форме добавления.
      * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
-     * @return {@link Map}, где ключом является
-     * id {@link by.artezio.cloud.publishing.domain.Topic}
-     * значением является название {@link by.artezio.cloud.publishing.domain.Topic}
+     * @return список {@link Topic}.
      * */
     @GetMapping(value = "/publishingId/{id}", headers = {"Accept=application/json"})
     @ResponseBody
-    public Map<Integer, String> getTopicMap(@PathVariable("id") final int publishingId) {
-        return issueFacade.getTopicMapByPublishingId(publishingId);
+    public List<Topic> getTopicList(@PathVariable("id") final int publishingId) {
+        return issueFacade.getTopicListByPublishingId(publishingId);
     }
 
     /**
-     * Получение {@link Map} допущенных в публикацию авторов
+     * Получение списка допущенных в публикацию авторов
      * для выподающего списка на форме добавления.
      * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
      * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
-     * @return {@link Map}, где ключом является
-     * id {@link by.artezio.cloud.publishing.domain.Employee}
-     * значением является имя {@link by.artezio.cloud.publishing.domain.Employee}
+     * @return список {@link Employee}.
      * */
     @GetMapping(value = "/publishingId/{pid}/topicId/{tid}", headers = {"Accept=application/json"})
     @ResponseBody
-    public Map<Integer, String> getAuthorMap(@PathVariable("pid") final int publishingId,
-                                      @PathVariable("tid") final int topicId) {
-        return issueFacade.getApprovedAuthor(publishingId, topicId);
+    public List<Employee> getApprovedJournalist(@PathVariable("pid") final int publishingId,
+                                                @PathVariable("tid") final int topicId) {
+        return issueFacade.getApprovedJournalist(publishingId, topicId);
     }
 
     /**
-     * Получение {@link Map} статей выбранного журнала/газеты,
+     * Получение списка статей выбранного журнала/газеты,
      * для выбранной рубрики, выбранного автора,
      * предназначенная для выподающего списка на форме добавления.
      * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
      * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
      * @param authorId - id {@link by.artezio.cloud.publishing.domain.Employee}.
-     * @return {@link Map}, где ключом является
-     * id {@link by.artezio.cloud.publishing.domain.Article}
-     * значением является название {@link by.artezio.cloud.publishing.domain.Article}
+     * @return список {@link Article}.
      * */
     @GetMapping(value = "/publishingId/{pid}/topicId/{tid}/authorId/{aid}",
         headers = {"Accept=application/json"})
     @ResponseBody
-    public Map<Integer, String> getArticleMap(@PathVariable("pid") final int publishingId,
+    public List<Article> getApprovedArticles(@PathVariable("pid") final int publishingId,
                                              @PathVariable("tid") final int topicId,
                                              @PathVariable("aid") final int authorId) {
         return issueFacade.getApprovedArticles(publishingId, topicId, authorId);

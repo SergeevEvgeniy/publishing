@@ -31,9 +31,8 @@
 
         <div class="col-sm-offset-2 col-sm-8">
 
-            <form:form class="form-horizontal" method="${mode == 'edit' ? 'PUT' : 'POST'}"
+            <form:form class="form-horizontal" method="POST"
                        action="${actionFromURL}" modelAttribute="issueForm">
-
                 <div class="form-group">
                     <label class="control-label col-sm-1" for="publishing">
                         Журналы
@@ -44,16 +43,20 @@
                                 ${issueForm.publishingTitle}
                             </p>
                         </c:if>
+                        <form:errors path="publishingId"/>
                         <c:if test="${mode != 'view'}">
                             <form:select class="form-control" path="publishingId" id="publishing">
                                 <c:if test="${mode == 'create'}">
-                                    <form:option value="" label=">--Выберете журнал--<" />
-                                    <form:options items="${publishing}"/>
+                                    <option value="">>--Выберете журнал--<</option>
                                 </c:if>
                                 <c:if test="${mode == 'edit'}">
-                                    <form:option value="${issueForm.publishingId}"
-                                                 label="${issueForm.publishingTitle}"/>
+                                    <option value="${issueForm.publishingId}">
+                                            ${issueForm.publishingTitle}
+                                    </option>
                                 </c:if>
+                                <c:forEach var="p" items="${publishing}">
+                                    <option value="${p.id}">${p.title}</option>
+                                </c:forEach>
                             </form:select>
                         </c:if>
                     </div>
@@ -104,8 +107,8 @@
                                         </option>
                                         <c:if test="${mode == 'edit'}">
                                             <c:forEach var="topic" items="${topics}">
-                                                <option value="${topic.key}">
-                                                    ${topic.value}
+                                                <option value="${topic.id}">
+                                                    ${topic.name}
                                                 </option>
                                             </c:forEach>
                                          </c:if>
