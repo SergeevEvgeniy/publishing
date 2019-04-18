@@ -259,7 +259,7 @@ public class IssueWebFacade {
     public Map<Integer, String> getApprovedAuthor(final int publishingId,
                                                   final int topicId) {
         List<Employee> journalists =
-            publishingService.getPublishingJournalist(publishingId);
+            publishingService.getPublishingJournalistByPublishingId(publishingId);
         Map<Integer, String> authorMap = new HashMap<>();
         for (Employee e : journalists) {
             if (authorIsApproved(publishingId, topicId, e.getId())) {

@@ -1,10 +1,14 @@
 package by.artezio.cloud.publishing.web.controllers;
 
-import by.artezio.cloud.publishing.domain.Article;
-import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
+import by.artezio.cloud.publishing.dto.ArticleView;
+import by.artezio.cloud.publishing.dto.EmployeeShortInfo;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
+import by.artezio.cloud.publishing.dto.ReviewShortInfo;
+import by.artezio.cloud.publishing.dto.TopicShortInfo;
+import by.artezio.cloud.publishing.dto.User;
 import by.artezio.cloud.publishing.web.facade.ArticleWebFacade;
 import by.artezio.cloud.publishing.web.security.SecurityService;
 import org.springframework.stereotype.Controller;
@@ -15,9 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -59,30 +65,26 @@ public class ArticleController {
     }
 
     /**
-     * Возвращает пользователю страницу для создания/редактирования статьи.
+     * Возвращает пользователю страницу для создания статьи.
      *
      * @param model Model
      * @return String название jsp страницы
      */
     @GetMapping(path = "/new")
     public final String createArticle(final Model model) {
-        ArticleForm data = articleFacade.getNewArticleForm();
-        model.addAttribute("model", data);
-        return "updateArticle";
-    }
+        articleFacade.isJournalist();
+        ArticleForm articleForm = new ArticleForm();
+        model.addAttribute("articleForm", articleForm);
+        List<PublishingDTO> publishingDtoList = articleFacade.getPublishingDtoList();
 
-    /**
-     * Получение формы для редактирования статьи.
-     *
-     * @param articleId идентификатор статьи (берётся из URI)
-     * @param model     модель, в которую будет положена форма.
-     * @return имя представления
-     */
-    @GetMapping(path = "/update/{articleId}")
-    public final String updateArticle(@PathVariable("articleId") final int articleId, final Model model) {
-        ArticleForm form = articleFacade.getUpdateArticleFormByArticleId(articleId);
-        model.addAttribute("articleForm", form);
-        model.addAttribute("isEditMode", true);
+        model.addAttribute("publishingDtoList", publishingDtoList);
+        model.addAttribute("isEditMode", false);
+        model.addAttribute("availableCoauthors", null);
+        model.addAttribute("topicShortInfos", null);
+        model.addAttribute("currentCoauthors", null);
+        model.addAttribute("reviewShortInfos", null);
+        model.addAttribute("formMethod", "POST");
+
         return "updateArticle";
     }
 
@@ -94,28 +96,86 @@ public class ArticleController {
      * @return страница со списком статей
      */
     @PostMapping(path = "/new")
-    public final String saveArticle(@ModelAttribute("articleForm") final ArticleForm articleForm,
+    public final String saveArticle(@ModelAttribute("articleForm") @Valid final ArticleForm articleForm,
                                     final BindingResult bindingResult) {
-        if (!bindingResult.hasErrors()) {
-            System.out.println(articleForm);
+        if (bindingResult.hasErrors()) {
+            System.out.println("Ошибка привязки ArticleForm в методе ArticleController.saveArticle()");
+        } else {
+            articleFacade.save(articleForm);
         }
-        return "articleList";
+        return "redirect: ../article";
 
+    }
+
+    /**
+     * Получение формы для редактирования статьи.
+     *
+     * @param articleId идентификатор статьи (берётся из URI)
+     * @param model     модель, в которую будет положена форма.
+     * @return имя представления
+     */
+    @GetMapping(path = "/update/{articleId}")
+    public final String updateArticle(@PathVariable("articleId") final int articleId, final Model model) {
+        articleFacade.isAuthorized();
+        ArticleForm form = articleFacade.getUpdateArticleFormByArticleId(articleId);
+        List<PublishingDTO> publishingDtoList = articleFacade.getPublishingDtoList();
+        List<TopicShortInfo> topicShortInfos = articleFacade.getTopicsShortInfoList(form.getPublishingId());
+        List<EmployeeShortInfo> availableCoauthors = articleFacade.getAvailableCoauthors(form.getPublishingId());
+        List<EmployeeShortInfo> currentCoauthors = articleFacade.getCurrentCoauthors(articleId);
+        List<ReviewShortInfo> reviewShortInfos = articleFacade.getReviewShortInfos(articleId);
+
+        availableCoauthors.removeAll(currentCoauthors);
+        User current = securityService.getCurrentUser();
+        availableCoauthors.remove(articleFacade.getShortEmployeeById(current.getId()));
+
+        model.addAttribute("articleForm", form);
+        model.addAttribute("isEditMode", true);
+        model.addAttribute("publishingDtoList", publishingDtoList);
+        model.addAttribute("topicShortInfos", topicShortInfos);
+        model.addAttribute("availableCoauthors", availableCoauthors);
+        model.addAttribute("currentCoauthors", currentCoauthors);
+        model.addAttribute("reviewShortInfos", reviewShortInfos);
+        model.addAttribute("formMethod", "PUT");
+        return "updateArticle";
+    }
+
+    /**
+     * @param articleId   id статьи
+     * @param articleForm {@link ArticleForm}
+     * @return страница со списком статей
+     */
+    @PutMapping(path = "/update/{articleId}")
+    public final String updateArticle(@PathVariable("articleId") final Integer articleId,
+                                      @Valid final ArticleForm articleForm) {
+        articleFacade.update(articleForm, articleId);
+        return "redirect: ../../article";
+    }
+
+    /**
+     * Вернёт страницу со статьёй в режиме просмотра.
+     *
+     * @param articleId id статьи
+     * @param model     {@link Model}
+     * @return имя представления
+     */
+    @GetMapping(path = "/get/{articleId}")
+    public final String getArticleView(@PathVariable("articleId") final int articleId,
+                                       final Model model) {
+        ArticleView articleView = articleFacade.getArticleViewById(articleId);
+        model.addAttribute("model", articleView);
+        return "articleView";
     }
 
     /**
      * Удаление статьи по её идентификатору.
      *
      * @param articleId id статьи
-     * @param model     {@link Model}
-     * @return страница со списком статей
      */
     @DeleteMapping(path = "/delete/{articleId}")
-    public final String deleteArticle(@PathVariable("articleId") final int articleId, final Model model) {
-        Article deleted = articleFacade.deleteArticleById(articleId);
-        model.addAttribute("article", deleted);
-        return "articleList";
+    public final void deleteArticle(@PathVariable("articleId") final int articleId) {
+        articleFacade.deleteArticleById(articleId);
     }
+
 
     /**
      * @param publishingId id журнала
@@ -133,17 +193,21 @@ public class ArticleController {
      */
     @GetMapping(value = "/employeesByPublishing/{publishingId}")
     @ResponseBody
-    public List<Employee> getEmployeeByPublishing(@PathVariable("publishingId") final int publishingId) {
-        List<Employee> employees = articleFacade.getEmployeesByPublishingId(publishingId);
-        for (int i = 0; i < employees.size(); i++) {
-            Employee empl = employees.get(i);
-            if (!empl.getType().equals('J')) {
-                employees.remove(empl);
-                i--;
-            }
-        }
-        Employee current = articleFacade.getEmployeeById(securityService.getCurrentUser().getId());
-        employees.remove(current);
-        return employees;
+    public List<EmployeeShortInfo> getEmployeeByPublishing(@PathVariable("publishingId") final int publishingId) {
+        return articleFacade.getAvailableCoauthors(publishingId);
     }
+
+    /**
+     * @param articleId  id статьи
+     * @param reviewerId id рецензента
+     * @return json рецензия {@link ReviewShortInfo}
+     */
+    @GetMapping(value = "/review/{articleId}/{reviewerId}")
+    @ResponseBody
+    public ReviewShortInfo getReview(@PathVariable("articleId") final int articleId,
+                                     @PathVariable("reviewerId") final int reviewerId) {
+        return articleFacade.getReviewShortInfo(articleId, reviewerId);
+    }
+
+
 }

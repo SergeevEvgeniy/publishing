@@ -55,8 +55,15 @@ public class RemotePublishingService implements PublishingService {
         return Collections.EMPTY_LIST;
     }
 
+
     @Override
-    public List<Employee> getPublishingJournalist(final int publishingId) {
+    public List<Integer> getPublishingIdList() {
+        // todo add implementation
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<Employee> getPublishingJournalistByPublishingId(final int publishingId) {
         // todo add implementation
         return Collections.EMPTY_LIST;
     }

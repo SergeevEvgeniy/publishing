@@ -1,11 +1,8 @@
 package by.artezio.cloud.publishing.dto;
 
-import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Review;
-import by.artezio.cloud.publishing.domain.Topic;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Класс, содержащий детальную информацию о статье.
@@ -16,137 +13,98 @@ import java.util.Map;
  */
 public class ArticleForm {
 
-    private List<PublishingDTO> publishings;
-    private List<Topic> topics;
+    private Integer authorId;
+    private Integer publishingId;
+    private Integer topicId;
+
+    @NotNull
     private String title;
+
+    @Size(min = 50)
     private String content;
-    private List<Employee> currentCoauthors;
-    private List<Employee> availableCoauthors;
-    private Map<Employee, Review> reviews;
+    private List<Integer> coauthors;
 
     /**
-     * Возвращает список журналов/газет.
-     *
-     * @return List<PublishingDTO>
+     * @return id автора статьи
      */
-    public List<PublishingDTO> getPublishings() {
-        return publishings;
+    public Integer getAuthorId() {
+        return authorId;
     }
 
     /**
-     * Устанавливает список журналов/газет.
-     *
-     * @param newPublishings List<PublishingDTO>
+     * @param authorId id автора статьи
      */
-    public void setPublishing(final List<PublishingDTO> newPublishings) {
-        this.publishings = newPublishings;
+    public void setAuthorId(final Integer authorId) {
+        this.authorId = authorId;
     }
 
     /**
-     * Возвращает список рубрик.
-     *
-     * @return List<Topic>
+     * @return id журнала
      */
-    public List<Topic> getTopics() {
-        return topics;
+    public Integer getPublishingId() {
+        return publishingId;
     }
 
     /**
-     * Устанавливает список рубрик.
-     *
-     * @param topics List<Topic>
+     * @param publishingId id журнала
      */
-    public void setTopics(final List<Topic> topics) {
-        this.topics = topics;
+    public void setPublishingId(final Integer publishingId) {
+        this.publishingId = publishingId;
     }
 
     /**
-     * Возвращает название статьи.
-     *
-     * @return String
+     * @return id рубрики
+     */
+    public Integer getTopicId() {
+        return topicId;
+    }
+
+    /**
+     * @param topicId id рубрики
+     */
+    public void setTopicId(final Integer topicId) {
+        this.topicId = topicId;
+    }
+
+    /**
+     * @return название статьи
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * Устанавливает название статьи.
-     *
-     * @param title String
+     * @param title название статьи
      */
     public void setTitle(final String title) {
         this.title = title;
     }
 
     /**
-     * Возвращает текст статьи.
-     *
-     * @return String
+     * @return содержание статьи
      */
     public String getContent() {
         return content;
     }
 
     /**
-     * Устанавливает текст статьи.
-     *
-     * @param content String
+     * @param content содержание статьи
      */
     public void setContent(final String content) {
         this.content = content;
     }
 
     /**
-     * Возвращает список утверждённых соавторов.
-     *
-     * @return List<Employee>
+     * @return список id соавторов
      */
-    public List<Employee> getCurrentCoauthors() {
-        return currentCoauthors;
+    public List<Integer> getCoauthors() {
+        return coauthors;
     }
 
     /**
-     * Устанавливает список утверждённых соавторов.
-     *
-     * @param currentCoauthors List<Employee>
+     * @param coauthors список id соавторов
      */
-    public void setCurrentCoauthors(final List<Employee> currentCoauthors) {
-        this.currentCoauthors = currentCoauthors;
-    }
-
-    /**
-     * Возвращает список возможных соавторов.
-     *
-     * @return List<Employee>
-     */
-    public List<Employee> getAvailableCoauthors() {
-        return availableCoauthors;
-    }
-
-    /**
-     * Устанавливает список возможных соавторов.
-     *
-     * @param availableCoauthors List<Employee>
-     */
-    public void setAvailableCoauthors(final List<Employee> availableCoauthors) {
-        this.availableCoauthors = availableCoauthors;
-    }
-
-    /**
-     * Возвращает список рецензий.
-     *
-     * @return List<String>
-     */
-    public Map<Employee, Review> getReviews() {
-        return reviews;
-    }
-
-    /**
-     * Устанавливает список рецензий.
-     *
-     * @param reviews List<Review>
-     */
-    public void setReviews(final Map<Employee, Review> reviews) {
-        this.reviews = reviews;
+    public void setCoauthors(final List<Integer> coauthors) {
+        this.coauthors = coauthors;
     }
 }
