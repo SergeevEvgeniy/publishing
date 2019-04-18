@@ -1,10 +1,13 @@
 package by.artezio.cloud.publishing.rest.controllers;
 
 import by.artezio.cloud.publishing.domain.Article;
+import by.artezio.cloud.publishing.dto.ArticleDto;
+import by.artezio.cloud.publishing.dto.ArticleStatistics;
 import by.artezio.cloud.publishing.rest.facade.ArticleRestFacade;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,5 +49,33 @@ public class ArticleRestController {
     public List<Article> getArticleByTopicAndPublishingId(@PathVariable("topicId") final int topicId,
                                                           @PathVariable("publishingId") final int publishingId) {
         return articleFacade.getArticleByTopicAndPublishingId(topicId, publishingId);
+    }
+
+    /**
+     * Получение неопубликованных статей, отфильтрованных по указанным полям.
+     *
+     * @param publishingId id журнала
+     * @param topicId      id рубрики
+     * @param authorId     id автора
+     * @return {@link List} of {@link ArticleDto}
+     */
+    @GetMapping(value = "/unpublished/{publishingId}/{topicId}/{authorId}")
+    @ResponseBody
+    public List<ArticleDto> getUnpublishedArticles(@PathVariable final int publishingId,
+                                                   @PathVariable final int topicId,
+                                                   @PathVariable final int authorId) {
+        return articleFacade.getUnpublishedArticles(publishingId, topicId, authorId);
+    }
+
+    /**
+     * Получение статистики по id автора.
+     *
+     * @param authorId id автора
+     * @return {@link ArticleStatistics}
+     */
+    @GetMapping(value = "/statistics/{authorId}")
+    @ResponseBody
+    public ArticleStatistics getArticleStatistics(@PathVariable final int authorId) {
+        return articleFacade.getArticleStatistics(authorId);
     }
 }

@@ -241,11 +241,12 @@ public class IssueWebFacade {
     public List<Employee> getApprovedJournalist(final int publishingId,
                                             final int topicId) {
         List<Employee> journalists =
-            publishingService.getPublishingJournalist(publishingId);
+            publishingService.getPublishingJournalistByPublishingId(publishingId);
         List<Employee> approvedJournalist = new ArrayList<>();
         for (Employee j : journalists) {
             if (journalistIsApproved(publishingId, topicId, j.getId())) {
                 approvedJournalist.add(j);
+
             }
         }
         return approvedJournalist;

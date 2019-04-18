@@ -1,17 +1,42 @@
 $(function () {
-    $("#publishingSelector").on("change", function (event) {
+
+    var $currentCoauthorTemplate = $("#currentCoauthorTemplate li");
+    var $availableCoauthors = $("#availableCoauthors");
+    var $hiddenPublishingId = $("#hiddenPublishingId");
+    var $hiddenTopicId = $("#hiddenTopicId");
+    var $currentCoauthors = $("#currentCoauthors");
+    var $addedCurrentCoauthors = $("#addedCurrentCoauthors");
+    var $topicSelector = $("#topicSelector");
+    var $publishingSelector = $("#publishingSelector");
+
+    $publishingSelector.on("change", function (event) {
         var selectedValue = event.target.value;
+
+        $availableCoauthors.empty();
+        $topicSelector.empty();
+        $currentCoauthors.empty();
+        $addedCurrentCoauthors.empty();
+
+        if (selectedValue === "none") {
+            $topicSelector.attr("disabled", "disabled");
+            return;
+        }
+        $topicSelector.removeAttr("disabled");
+        $hiddenPublishingId.val(selectedValue);
         $.ajax({
             method: "GET",
             url: APP_CONTEXT_PATH + "/article/topicsByPublishing/" + selectedValue,
             success: function (response) {
-                var topicSelector = $("#topicSelector");
-                topicSelector.empty();
+                $("<option>")
+                    .val("none")
+                    .text("---Выберите рубрику---")
+                    .appendTo($topicSelector);
+
                 response.forEach(function (obj) {
-                    var option = document.createElement("option");
-                    option.value = obj.id;
-                    option.textContent = obj.name;
-                    topicSelector.append(option);
+                    $("<option>")
+                        .val(obj.id)
+                        .text(obj.name)
+                        .appendTo($topicSelector);
                 });
             },
             error: function (response) {
@@ -23,20 +48,13 @@ $(function () {
             method: "GET",
             url: APP_CONTEXT_PATH + "/article/employeesByPublishing/" + selectedValue,
             success: function (response) {
-                var coauthorSelector = $("#availableCoauthors");
-                coauthorSelector.empty();
+                $availableCoauthors.empty();
                 response.forEach(function (elem) {
-                    var option = document.createElement("option");
-                    option.value = elem.id;
-                    option.textContent = getShortName(elem);
-                    coauthorSelector.append(option);
+                    $('<option>')
+                        .val(elem.id)
+                        .text(elem.shortFullName)
+                        .appendTo($availableCoauthors);
                 });
-
-                function getShortName(elem) {
-                    return elem.lastName + " "
-                        + elem.firstName.charAt(0) + "."
-                        + elem.middleName.charAt(0) + ".";
-                }
             },
             error: function (response) {
                 console.log(response);
@@ -44,34 +62,60 @@ $(function () {
         });
     });
 
-    var currentCoauthors = $("#currentCoauthors")[0];
-    var availableCoauthors = $("#availableCoauthors")[0];
-    $("#addCoauthor").on("click", function () {
-        var selected = availableCoauthors[availableCoauthors.selectedIndex];
-
-        var li = document.createElement("li");
-        li.classList.add("list-group-item");
-
-        var div0 = document.createElement("div");
-        div0.classList.add("row");
-        li.appendChild(div0);
-
-        var div1 = document.createElement("div");
-        div1.classList.add("col-xs-10");
-        div1.textContent = selected.textContent;
-        div0.appendChild(div1);
-
-        var div2 = document.createElement("div");
-        div2.classList.add("col-xs-2", "text-right");
-        div0.appendChild(div2);
-
-        var span = document.createElement("span");
-        span.classList.add("glyphicon", "glyphicon-trash");
-        span.style.cursor = "pointer";
-        div2.appendChild(span);
-
-
-        currentCoauthors.append(li);
-        availableCoauthors.options.remove(selected);
+    $topicSelector.on("change", function (event) {
+        var $selected = $topicSelector.find("option:selected");
+        $hiddenTopicId.val($selected.val());
     });
+
+    $("#addCoauthor").on("click", function () {
+        var $selected = $availableCoauthors.find("option:selected");
+        if ($selected.length === 0) {
+            return;
+        }
+
+        $currentCoauthorTemplate
+            .clone()
+            .data('employeeId', $selected.val())
+            .data('employeeName', $selected.text())
+            .find("input")
+            .val($selected.val())
+            .end()
+            .find(".new-full-name")
+            .text($selected.text())
+            .end()
+            .appendTo($currentCoauthors);
+
+        $selected.remove();
+    });
+
+    $currentCoauthors.on("click", '.delete-coauthor', function () {
+        var $deleteButton = $(this);
+        var $li = $deleteButton.closest("li");
+
+        $('<option>')
+            .val($li.data('employeeId'))
+            .text($li.data('employeeName'))
+            .appendTo($availableCoauthors);
+        $li.remove();
+    });
+
+    var $reviewContent = $("#reviewContent");
+    var articleId = $("#articleId").text();
+    $("#reviewerSelector").on("click", function (event) {
+        var selectedValue = event.target.value;
+
+        if (!selectedValue) {
+            $reviewContent.empty();
+            return;
+        }
+
+        $.ajax({
+            method: "GET",
+            url: APP_CONTEXT_PATH + "/article/review/" + articleId + "/" + selectedValue,
+            success: function (response) {
+                $reviewContent.text(response.content);
+            }
+        });
+    });
+
 });
