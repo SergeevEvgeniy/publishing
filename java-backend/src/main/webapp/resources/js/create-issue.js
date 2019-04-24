@@ -1,97 +1,185 @@
 $(function () {
 
+    var $articleAddBtn = $("#articleAddBtn");
+    var $advertisingAddBtn = $("#advertisingAddBtn");
+
+    var $template = $("#elementTemplate .new-element");
+
+    var $articleList = $(".article-list");
+    var $advertisingList = $(".advertising-list");
+
+    var $advertisingInput = $("#advertisingPath") ;
+
     var $formSelects = $("form select");
-    var $articleButton = $("#articleButton");
-    var $articleElementTemplate = $("#articleElementTemplate .new-article-element");
-    var $articleListElement = $(".article-list-element");
+    var $publishing = $formSelects.eq(0);
+    var $topics = $formSelects.eq(1);
+    var $authors = $formSelects.eq(2);
+    var $articles = $formSelects.eq(3);
 
-    $formSelects.on("change", function() {
-        var $currentSelect = $(this);
-        var currentSelectIndex = $formSelects
-            .index($currentSelect);
-        var nextSelectIndex = currentSelectIndex + 1;
+    $publishing.on("change", function () {
+        onChangeSelect($publishing, function (topics) {
+            $.each(topics, function (i, topic) {
+                $("<option></option>")
+                    .val(topic.id)
+                    .text(topic.name)
+                    .appendTo($topics);
+            });
+        });
+    });
 
-        if (nextSelectIndex === $formSelects.length) {
-            if ($currentSelect.val()) {
-                $articleButton.prop("disabled", false);
-            } else {
-                $articleButton.prop("disabled", true);
-            }
-            return;
-        }
+    $topics.on("change", function () {
+        onChangeSelect($topics, function (authors) {
+            $.each(authors, function (i, author) {
+                $("<option></option>")
+                    .val(author.id)
+                    .text(author.lastName)
+                    .appendTo($authors);
+            });
+        });
+    });
 
-        var nextSelect = $formSelects[nextSelectIndex];
-
-        $formSelects.slice(nextSelectIndex)
-            .prop("disabled", true)
-            .find("option")
-            .not(":first-child")
-            .remove();
-
-        if (!$currentSelect.val()) {
-            return;
-        }
-
-        $.getJSON(getRestUrl(), function (data) {
-            $.each(data, function (key, val) {
+    $authors.on("change", function () {
+        onChangeSelect($authors, function (articles) {
+            $.each(articles, function (i, article) {
                 var $option = $("<option></option>")
-                    .val(key)
-                    .text(val);
-                $(nextSelect).append($option);
-                var nextSelectId = $(nextSelect).attr("id");
-                if (nextSelectId === "articles" && !isAvailableArticle(key)) {
+                    .val(article.id)
+                    .text(article.title)
+                    .appendTo($articles);
+                var $articleInput = $articleList
+                    .find("input[value=" + article.id + "]");
+                if ($articleInput.length) {
                     $option.prop("hidden", true);
                 }
             });
         });
-        nextSelect.disabled = false;
     });
 
-    $articleButton.on("click", function () {
-        var $articleSelect = $("#articles");
-        var $articleOptions = $articleSelect.find("option");
-        var $authorOptions= $("#authors option");
-        var $selectedOption = $articleOptions
-            .filter(":selected");
+    $articles.on("change", function () {
+        if ($articles.val()) {
+            $articleAddBtn.prop("disabled", false);
+        } else {
+            $articleAddBtn.prop("disabled", true);
+        }
+    });
+
+    function onChangeSelect($select, getJSONHandler) {
+
+        var nextIndex = $formSelects.index($select) + 1;
+
+        if (!$articleAddBtn.prop("disabled")) {
+            $articleAddBtn.prop("disabled", true);
+        }
+
+        $formSelects.slice(nextIndex).each(function () {
+            $(this).prop("disabled", true)
+                .find("option")
+                .not(":first-child")
+                .remove();
+        });
+        if (!$select.val()) {
+            return;
+        }
+
+        var url = APP_CONTEXT_PATH + "/issues";
+        var params = $formSelects.serializeArray();
+        params.forEach(function (item) {
+            url += "/" + item.name + "/" + item.value;
+        });
+
+        $.getJSON(url, getJSONHandler);
+
+        $formSelects.eq(nextIndex)
+            .prop("disabled", false);
+    }
+
+    $articleAddBtn.on("click", function () {
+        var $options = $articles.find("option");
+        var $selectedOption = $options
+            .filter(":selected")
+            .prop("hidden", true);
         var articleId = $selectedOption.val();
         var articleTitle = $selectedOption.text();
-        $selectedOption.prop("hidden", true);
-        $articleOptions.first().prop("selected", true);
-        if ($articleOptions.not("[hidden]").length === 1) {
-            $authorOptions.first().prop("selected", true);
-            $articleSelect.prop("disabled", true);
+        $options.first().prop("selected", true);
+        if ($options.not("[hidden]").length === 1) {
+            $authors.children().first()
+                .prop("selected", true);
+            $articles.prop("disabled", true);
         }
-        $articleElementTemplate
+        $template
             .clone()
-            .find(".input-article")
+            .find("input")
             .val(articleId)
+            .attr("name", "articlesId")
             .end()
-            .find('.added-article')
+            .find('.element-title')
             .text(articleTitle)
             .end()
-            .appendTo($articleListElement);
-        $(this).prop("disabled", true);
-        $("#publishingId")
+            .find("span")
+            .addClass("delete-article")
+            .end()
+            .appendTo($articleList)
+            .slideDown("fast");
+        $articleAddBtn.prop("disabled", true);
+        $publishing
             .find("option")
-            .not("selected")
+            .not(":selected")
             .prop("hidden", true);
     });
 
+    $advertisingAddBtn.on("click", function () {
+        var path = $advertisingInput.val();
+        var $link = $("<a></a>").attr("href", path)
+            .text(path);
+        $template
+            .clone()
+            .find("input")
+            .val(path)
+            .attr("name", "advertisingPath")
+            .end()
+            .find('.element-title')
+            .append($link)
+            .end()
+            .find("span")
+            .addClass("delete-advertising")
+            .end()
+            .appendTo($advertisingList)
+            .slideDown("fast");
+        $advertisingAddBtn.prop("disabled", true);
+        $advertisingInput.val("");
+    });
 
-    function getRestUrl() {
-        var url = APP_CONTEXT_PATH + "/issues";
-        var params = $formSelects.serializeArray();
-        return params.reduce(function (accumulator, currentItem) {
-            accumulator += '/' + currentItem.name + '/' + currentItem.value;
-            return accumulator;
-        }, url);
-    }
+    $articleList.on("click", ".delete-article", function () {
+        var $listItem = $(this)
+            .closest(".new-element");
+        var articleId = $listItem
+            .find("input")
+            .val();
+        $articles.find("option[value=" + articleId + "]")
+            .prop("hidden, false");
+        $listItem.slideUp("fast", function () {
+            $listItem.remove();
+            if (!$articleList.children().length) {
+                $publishing
+                    .find("option")
+                    .prop("hidden", false);
+            }
+        });
+    });
 
-    function isAvailableArticle(articleId) {
-        var $articleInput = $articleListElement.
-            find("input[value=" + articleId + "]");
-        return $articleInput.length === 0;
-    }
+    $advertisingList.on("click", ".delete-advertising", function () {
+        $(this).closest(".new-element")
+            .slideUp("fast", function () {
+                $(this).remove();
+            });
+    });
+
+    $advertisingInput.on("input", function () {
+        if ($advertisingInput.val()) {
+            $advertisingAddBtn.prop("disabled", false);
+        } else {
+            $advertisingAddBtn.prop("disabled", true);
+        }
+    });
 
 });
 

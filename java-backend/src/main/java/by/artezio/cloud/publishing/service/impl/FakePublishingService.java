@@ -46,7 +46,7 @@ public class FakePublishingService implements PublishingService {
     }
 
     @Override
-    public List<Employee> getPublishingJournalist(final int publishingId) {
+    public List<Employee> getPublishingJournalistByPublishingId(final int publishingId) {
         List<Employee> publishingJournalist = new ArrayList<>();
         List<PublishingEmployee> publishingEmployees =
             publishingDao.getPublishingEmployeeList(publishingId);
@@ -62,5 +62,15 @@ public class FakePublishingService implements PublishingService {
     @Override
     public String getPublishingTitle(final int publishingId) {
         return this.publishingDao.getPublishingTitle(publishingId);
+    }
+
+    @Override
+    public List<Integer> getPublishingIdList() {
+        List<PublishingDTO> list = getPublishingList();
+        List<Integer> idList = new ArrayList<>(list.size());
+        for (PublishingDTO publishing : list) {
+            idList.add(publishing.getId());
+        }
+        return idList;
     }
 }

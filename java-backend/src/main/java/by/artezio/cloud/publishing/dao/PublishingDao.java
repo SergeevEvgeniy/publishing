@@ -26,15 +26,15 @@ public class PublishingDao {
     };
 
     private RowMapper<Topic> topicRowMapper = (rs, i) -> new Topic(
-            rs.getInt("id"),
-            rs.getString("name")
+        rs.getInt("id"),
+        rs.getString("name")
     );
 
     private RowMapper<PublishingEmployee> publishingEmployeeRowMapper =
         (rs, i) -> new PublishingEmployee(
             rs.getInt("publishing_id"),
             rs.getInt("employee_id")
-    );
+        );
 
     /**
      * Конструктор с параметром.
@@ -53,7 +53,7 @@ public class PublishingDao {
      */
     public List<PublishingDTO> getPublishingList() {
         return jdbcTemplate.query(
-                "select id, title from publishing", publishingRowMapper);
+            "select id, title from publishing", publishingRowMapper);
     }
 
     /**
@@ -64,9 +64,9 @@ public class PublishingDao {
      */
     public PublishingDTO getPublishingById(final int id) {
         return jdbcTemplate.queryForObject(
-                "select id, title from publishing where id = :id",
-                Collections.singletonMap("id", id),
-                publishingRowMapper
+            "select id, title from publishing where id = :id",
+            Collections.singletonMap("id", id),
+            publishingRowMapper
         );
     }
 
@@ -79,16 +79,17 @@ public class PublishingDao {
      */
     public List<Topic> getTopicsByPublishingId(final int publishingId) {
         return jdbcTemplate.query("select id, name from topic "
-                    + "join publishing_topic pt "
-                    + "on topic.id = pt.topic_id "
-                    + "where pt.publishing_id = :publishingId",
-                Collections.singletonMap("publishingId", publishingId),
-                topicRowMapper
+                + "join publishing_topic pt "
+                + "on topic.id = pt.topic_id "
+                + "where pt.publishing_id = :publishingId",
+            Collections.singletonMap("publishingId", publishingId),
+            topicRowMapper
         );
     }
 
     /**
      * Возвращает название издательства по его id.
+     *
      * @param publishingId Id издательства
      * @return Название издательства, если издательство с таким id существует, иначе null
      */
@@ -124,7 +125,7 @@ public class PublishingDao {
      *
      * @param employeeId id сотрудника.
      * @return список изданий, в которых задействован данный сотрудник
-     * */
+     */
     public List<PublishingDTO> getPublishingListByEmployeeId(final int employeeId) {
         return jdbcTemplate.query("select * from publishing p "
                 + "join publishing_employee pe on p.id = pe.publishing_id "
@@ -134,14 +135,14 @@ public class PublishingDao {
 
     /**
      * Получения списка {@link PublishingEmployee} по id {@link PublishingDTO}.
+     *
      * @param publishingId - id {@link PublishingDTO}.
      * @return - список {@link PublishingEmployee}.
-     * */
+     */
     public List<PublishingEmployee> getPublishingEmployeeList(final int publishingId) {
         return jdbcTemplate.query("select * from publishing_employee "
                 + "where publishing_id = :publishingId",
             Collections.singletonMap("publishingId", publishingId),
             publishingEmployeeRowMapper);
     }
-
 }

@@ -34,12 +34,21 @@ public class IssueArticleDao {
 
     /**
      * Получение списка {@link IssueArticle} по id номера.
-     * @param issueId - id номера {@link by.artezio.cloud.publishing.domain.Issue}
-     * @return список {@link IssueArticle}
+     * @param issueId - id номера {@link by.artezio.cloud.publishing.domain.Issue}.
+     * @return список {@link IssueArticle}.
      * */
     public List<IssueArticle> getIssueArticleListByIssueId(final int issueId) {
         return jdbcTemplate.query("select * from issue_article where issue_id = :issueId",
             Collections.singletonMap("issueId", issueId), issueArticleRowMapper);
+    }
+
+    /**
+     * Удаление {@link IssueArticle} по id {@link by.artezio.cloud.publishing.domain.Issue}.
+     * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}.
+     * */
+    public void deleteIssueArticleByIssueId(final int issueId) {
+        jdbcTemplate.update("delete from issue_article where issud_id = :id",
+            Collections.singletonMap("id", issueId));
     }
 
 }

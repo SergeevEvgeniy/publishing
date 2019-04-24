@@ -4,7 +4,7 @@ $(function () {
         var $currentTableRow = $(this).closest("tr");
         var $inputForId = $(this).next("input");
         var issueId = $inputForId.val();
-        $.ajax(location.href + "/issue/" + issueId, {
+        $.ajax(APP_CONTEXT_PATH + "/issue/" + issueId, {
             type : "delete",
             success : function () {
                 $currentTableRow.remove();

@@ -49,15 +49,15 @@
                 </td>
                 <td>
                     <a href="article/get/${element.articleId}" type="submit"
-                       class="glyphicon glyphicon-eye-open btn btn-lg btn-success"></a>
+                       class="glyphicon glyphicon-eye-open btn btn-sm btn-success"></a>
 
                     <c:if test="${isJournalist and not element.published}">
                         <a href="article/update/${element.articleId}"
-                           class="glyphicon glyphicon-edit btn btn-lg btn-success"></a>
+                           class="glyphicon glyphicon-edit btn btn-sm btn-success"></a>
                     </c:if>
 
-                    <button value="{element.articleId}" name="deleteArticle"
-                            class="glyphicon glyphicon-trash btn btn-lg btn-danger"></button>
+                    <button value="${element.articleId}" name="deleteArticle"
+                            class="glyphicon glyphicon-trash btn btn-sm btn-danger"></button>
                 </td>
             </tr>
         </c:forEach>

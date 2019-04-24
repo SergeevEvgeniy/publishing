@@ -5,8 +5,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * Объект DTO для главной страницы, а также для режима
- * просмотра номера на форме.
+ * Объект DTO для страницы списка номеров.
  * @author Igor Kuzmin
  */
 public class IssueInfo {
@@ -26,32 +25,32 @@ public class IssueInfo {
     private boolean published;
 
     /**
-     * Получение названия издания номера.
-     * @return - название издания.
+     * Получение названия журнала/газеты.
+     * @return - название журнала/газеты.
      * */
     public String getPublishingTitle() {
         return publishingTitle;
     }
 
     /**
-     * Установка названия издания номера.
-     * @param publishingTitle - название издания.
+     * Установка названия журнала/газеты.
+     * @param publishingTitle - название журнала/газеты.
      * */
     public void setPublishingTitle(final String publishingTitle) {
         this.publishingTitle = publishingTitle;
     }
 
     /**
-     * Установка номера издания.
-     * @param number - номер издания.
+     * Установка номера журнала/газуты.
+     * @param number - номер журнала/газеты.
      * */
     public void setNumber(final String number) {
         this.number = number;
     }
 
     /**
-     * Получение номера издания.
-     * @return - номер издания.
+     * Получение номера журнала/газеты.
+     * @return - номер журнала/газеты.
      * */
     public String getNumber() {
         return number;

@@ -12,7 +12,7 @@
             <c:when test="${mode == 'create'}">
                 Форма создания
                 <c:set var="actionFromURL"
-                       value="${pageContext.request.contextPath}/issues/issue/${param.id}"/>
+                       value="${pageContext.request.contextPath}/issues/issue"/>
             </c:when>
             <c:when test="${mode == 'edit'}">
                 Форма редактирования
@@ -31,25 +31,32 @@
 
         <div class="col-sm-offset-2 col-sm-8">
 
-            <form:form class="form-horizontal" method="${mode != 'view' ? 'POST' : 'GET'}"
+            <form:form class="form-horizontal" method="POST"
                        action="${actionFromURL}" modelAttribute="issueForm">
-
                 <div class="form-group">
-                    <label class="control-label col-sm-1" for="publishingId">
+                    <label class="control-label col-sm-1" for="publishing">
                         Журналы
                     </label>
                     <div class="col-sm-offset-1 col-sm-10">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueInfo.publishingTitle}
+                                ${issueForm.publishingTitle}
                             </p>
                         </c:if>
+                        <form:errors path="publishingId"/>
                         <c:if test="${mode != 'view'}">
-                            <form:select cssClass="form-control" path="publishingId">
+                            <form:select class="form-control" path="publishingId" id="publishing">
                                 <c:if test="${mode == 'create'}">
-                                    <form:option value="" label=">--Выберете журнал--<" />
+                                    <option value="">>--Выберете журнал--<</option>
                                 </c:if>
-                                <form:options items="${publishing}"/>
+                                <c:if test="${mode == 'edit'}">
+                                    <option value="${issueForm.publishingId}">
+                                            ${issueForm.publishingTitle}
+                                    </option>
+                                </c:if>
+                                <c:forEach var="p" items="${publishing}">
+                                    <option value="${p.id}">${p.title}</option>
+                                </c:forEach>
                             </form:select>
                         </c:if>
                     </div>
@@ -62,7 +69,7 @@
                     <div class="col-sm-offset-1 col-sm-3">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueInfo.number}
+                                    ${issueForm.number}
                             </p>
                         </c:if>
                         <c:if test="${mode != 'view'}">
@@ -75,7 +82,7 @@
                     <div class="col-sm-3">
                         <c:if test="${mode == 'view'}">
                             <p class="form-control-static">
-                                    ${issueInfo.localDate}
+                                    ${issueForm.localDate}
                             </p>
                         </c:if>
                         <c:if test="${mode != 'view'}">
@@ -93,11 +100,20 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="topics">Рубрика</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="topics" name="topicId" disabled>
+                                    <select class="form-control" id="topics" name="topicId"
+                                        <c:if test="${mode == 'create'}">disabled</c:if> >
                                         <option value="">
                                             >--Выберете рубрику--<
                                         </option>
+                                        <c:if test="${mode == 'edit'}">
+                                            <c:forEach var="topic" items="${topics}">
+                                                <option value="${topic.id}">
+                                                    ${topic.name}
+                                                </option>
+                                            </c:forEach>
+                                         </c:if>
                                     </select>
+
                                 </div>
                             </div>
 
@@ -125,18 +141,19 @@
 
                             <div class="text-right">
                                 <input type="button" class="btn btn-success" value="Добавить"
-                                       id="articleButton" disabled>
+                                       id="articleAddBtn" disabled>
                             </div>
 
                         </div>
                     </c:if>
 
-                    <ul class="list-group article-list-element">
+                    <ul class="list-group article-list">
                         <c:forEach var="article" items="${articles}">
-                            <li class="list-group-item">
-                                <input type="hidden" name="articlesId" class="input-article"/>
+                            <li class="list-group-item new-element">
+                                <input type="hidden" name="articlesId"
+                                       class="input-article" value="${article.id}"/>
                                 <div class="row">
-                                    <div class="col-xs-10">
+                                    <div class="col-xs-10 element-title">
                                         ${article.title}
                                     </div>
                                     <c:if test="${mode != 'view'}">
@@ -160,29 +177,30 @@
 
                             <div class="row">
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" id="advertisingPath">
                                 </div>
                                 <div class="col-sm-3">
                                     <input type="button" class="btn btn-success form-control"
-                                           value="Добавить" id="advertisingButton">
+                                           value="Добавить" id="advertisingAddBtn" disabled>
                                 </div>
                             </div>
 
                         </div>
                     </c:if>
 
-                    <ul class="list-group">
-                        <c:forEach var="advertising" items="${advertising}">
-                            <li class="list-group-item">
+                    <ul class="list-group advertising-list">
+                        <c:forEach var="advertising" items="${issueForm.advertisingPath}">
+                            <li class="list-group-item new-element">
+                                <input type="hidden" name="advertisingPath" value="${advertising}"/>
                                 <div class="row">
-                                    <div class="col-xs-10">
-                                        <a href="${advertising.filePath}">
-                                                ${advertising.filePath}
+                                    <div class="col-xs-10 element-title">
+                                        <a href="${advertising}">
+                                                ${advertising}
                                         </a>
                                     </div>
                                     <c:if test="${mode != 'view'}">
                                         <div class="col-xs-2 text-right">
-                                            <span class="glyphicon glyphicon-trash" style="cursor: pointer"></span>
+                                            <span class="glyphicon glyphicon-trash delete-advertising" style="cursor: pointer"></span>
                                         </div>
                                     </c:if>
                                 </div>
@@ -202,8 +220,10 @@
 
                 <c:if test="${mode != 'view'}">
                     <div class="text-right">
-                        <input type="button" class="btn btn-secondary" value="Отменить">
-                        <input type="button" class="btn btn-primary" value="Сохранить">
+                        <a id="cancel" class="btn btn-default" href="${pageContext.request.contextPath}/issues">
+                            Отменить
+                        </a>
+                        <input type="submit" class="btn btn-primary" value="Сохранить">
                     </div>
                 </c:if>
 
@@ -213,13 +233,14 @@
 
     </div>
 
-    <div id="articleElementTemplate" class="hidden">
-        <li class="list-group-item new-article-element">
-            <input type="hidden" name="articleList" class="input-article">
+    <div id="elementTemplate" class="hidden">
+        <li class="list-group-item new-element" style="display: none">
+            <input type="hidden">
             <div class="row">
-                <div class="col-xs-10 added-article"></div>
+                <div class="col-xs-10 element-title"></div>
                 <div class="col-xs-2 text-right">
-                    <span class="glyphicon glyphicon-trash delete-article" style="cursor: pointer"></span>
+                    <span class="glyphicon glyphicon-trash"
+                          style="cursor: pointer"></span>
                 </div>
             </div>
         </li>

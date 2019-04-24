@@ -46,7 +46,7 @@ public interface IssueService {
      * @param issueId - id {@link Issue}.
      * @return список {@link by.artezio.cloud.publishing.domain.IssueArticle}.
      * */
-    List<Integer> getArticleIdListByIssueId(final int issueId);
+    List<Integer> getArticleIdList(final int issueId);
 
 
     /**

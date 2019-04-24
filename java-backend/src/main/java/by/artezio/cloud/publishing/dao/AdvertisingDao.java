@@ -34,13 +34,22 @@ public class AdvertisingDao {
     }
 
     /**
-     * Метод получения списк {@link Advertising} по id журнала.
+     * Метод получения списк {@link Advertising} по id номера.
      * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
      * @return список {@link Advertising}
      * */
     public List<Advertising> getAdvertisingListByIssueId(final int issueId) {
         return jdbcTemplate.query("select * from advertising where issue_id = :issueId",
             Collections.singletonMap("issueId", issueId), advertisingRowMapper);
+    }
+
+    /**
+     * Метод удаления {@link Advertising} по id номера.
+     * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
+     * */
+    public void deleteAdvertisingByIssueId(final int issueId) {
+        jdbcTemplate.update("delete from advertising where issue_id = :id",
+            Collections.singletonMap("id", issueId));
     }
 
 }

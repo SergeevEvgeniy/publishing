@@ -1,6 +1,7 @@
 package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.domain.Employee;
+import by.artezio.cloud.publishing.dto.EmployeeShortInfo;
 
 import java.util.List;
 
@@ -44,4 +45,16 @@ public interface EmployeeService {
      * @return Employee
      */
     Employee getEmployeeByLoginPass(String email, String encodePassword);
+
+    /**
+     * @param publishingId id журнала
+     * @return {@link List} of {@link EmployeeShortInfo}
+     */
+    List<EmployeeShortInfo> getShortEmployeeList(Integer publishingId);
+
+    /**
+     * @param employeeId id сотрудника
+     * @return {@link EmployeeShortInfo}
+     */
+    EmployeeShortInfo getShortEmployee(Integer employeeId);
 }

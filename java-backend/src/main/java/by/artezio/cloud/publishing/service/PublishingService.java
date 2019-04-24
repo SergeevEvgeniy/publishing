@@ -23,7 +23,7 @@ public interface PublishingService {
      *
      * @param publishingId идентификатор журнала/газеты
      * @return Объект издания, у которого <code>id == publishingId</code>.
-     *         Если такого объекта не существует, возвращается <code>null</code>.
+     * Если такого объекта не существует, возвращается <code>null</code>.
      */
     PublishingDTO getPublishingById(Integer publishingId);
 
@@ -48,13 +48,19 @@ public interface PublishingService {
      *
      * @param employeeId id сотрудника.
      * @return список изданий, в которых задействован данный сотрудник
-     * */
+     */
     List<PublishingDTO> getPublishingListByEmployeeId(final int employeeId);
 
     /**
      * Метод получения журналистов журнала/газуты.
+     *
      * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}
      * @return - список всех {@link Employee}
-     * */
-    List<Employee> getPublishingJournalist(final int publishingId);
+     */
+    List<Employee> getPublishingJournalistByPublishingId(final int publishingId);
+
+    /**
+     * @return {@link List} of {@link Integer}
+     */
+    List<Integer> getPublishingIdList();
 }
