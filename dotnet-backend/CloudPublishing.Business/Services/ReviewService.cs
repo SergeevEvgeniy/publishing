@@ -4,11 +4,8 @@ using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Business.Util;
 using CloudPublishing.Data.Entities;
 using CloudPublishing.Data.Interfaces;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
 
 namespace CloudPublishing.Business.Services
 {
@@ -21,7 +18,7 @@ namespace CloudPublishing.Business.Services
         private IMapper mapper;
         private IEmployeeService employeeService;
         private IPublishingService publishingService;
-        private const string ArticleServiceURI = "http://10.99.33.221:8080/publishing/article";
+        private IArticleService articleService;
 
         /// <summary>
         /// Конструктор сервиса
@@ -29,61 +26,30 @@ namespace CloudPublishing.Business.Services
         /// <param name="db">Класс репозиториев, созданный в соответствии с паттерном Unit of Work</param>
         /// <param name="employeeService">Сервис сотрудников издательства</param>
         /// <param name="publishingService">Сервис изданий</param>
-        public ReviewService(IUnitOfWork db, IEmployeeService employeeService, IPublishingService publishingService)
+        /// <param name="articleService">Сервис статей</param>
+        public ReviewService(IUnitOfWork db, IEmployeeService employeeService, IPublishingService publishingService, IArticleService articleService)
         {
             this.db = db;
             this.employeeService = employeeService;
             this.publishingService = publishingService;
+            this.articleService = articleService;
 
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ReviewBusinessMapProfile())).CreateMapper();
         }
 
         /// <summary>
-        /// Метод получения списка авторов публиковавшихся в выбранной рубрике определенного журнала
-        /// </summary>
-        /// <param name="publishingId">Id издания</param>
-        /// <param name="topicId">Id рубрики</param>
-        /// <returns>Список авторов</returns>
-        public IEnumerable<EmployeeDTO> GetAuthorList(int publishingId, int topicId)
-        {
-            var articleList = JsonConvert.DeserializeObject<IEnumerable<ArticleDTO>>(
-                ExecuteRequest($"{ArticleServiceURI}/articleByTopicAndPublishingId/{topicId}/{publishingId}"));
-
-            return articleList.Select(x =>
-            {
-                return employeeService.GetEmployeeById(x.AuthorId);
-            });
-        }
-
-        /// <summary>
-        /// Метод получения списка статей автора, опубликованных в выбранной рубрике выбранного журнала
-        /// </summary>
-        /// <param name="publishingId">Id издания</param>
-        /// <param name="topicId">Id рубрики</param>
-        /// <param name="authorId">Id автора</param>
-        /// <returns>Список статей</returns>
-        public IEnumerable<ArticleDTO> GetArticleList(int publishingId, int topicId, int authorId)
-        {
-            var articleList = JsonConvert.DeserializeObject<IEnumerable<ArticleDTO>>(
-                ExecuteRequest($"{ArticleServiceURI}/unpublished/{publishingId}/{topicId}/{authorId}"));
-
-            return articleList.Where(x => x.AuthorId == authorId);
-        }
-
-        /// <summary>
         /// Метод создания списка рецензий
         /// </summary>
-        /// <param name="reviewerId">Id редактора</param>
+        /// <param name="reviwerId">Id редактора</param>
         /// <returns>Список рецензий. Каждая рецензия содержит наименование издания, рубрики, имя автора,
         /// наименование статьи, id статьи и флаг одобрения рецензии</returns>
-        public IEnumerable<DetailedReviewDTO> CreateDetailedReviewList(int reviewerId)
+        public IEnumerable<DetailedReviewDTO> CreateDetailedReviewList(int reviwerId)
         {
-            var reviews = db.Reviews.GetUserReviews(reviewerId);
+            var reviews = db.Reviews.GetUserReviews(reviwerId);
 
             return reviews.Select(x =>
             {
-                var article = JsonConvert.DeserializeObject<ArticleDTO>(ExecuteRequest($"{ArticleServiceURI}/articleById/{x.ArticleId}"));
-
+                var article = articleService.GetArticleById(x.ArticleId);
                 var author = employeeService.GetEmployeeById(article.AuthorId);
                 var publishing = publishingService.GetPublishing(article.PublishingId);
                 var topic = publishingService.GetTopic(article.TopicId);
@@ -92,6 +58,7 @@ namespace CloudPublishing.Business.Services
                 {
                     // Заполняем поля модели рецензии из ответа сервиса статей и объекта рецензии
                     ArticleId = article.Id,
+                    ReviwerId = reviwerId,
                     Article = article.Title,
                     Approved = x.Approved,
                     Author = $"{author.FirstName} {author.MiddleName} {author.LastName}",
@@ -141,34 +108,6 @@ namespace CloudPublishing.Business.Services
         {
             db.Reviews.Delete(articleId, authorId);
             db.Save();
-        }
-
-        /// <summary>
-        /// Метод получения контента статьи по ее Id. Создан для тестирования
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Возвращает строку, содержащую контент статьи</returns>
-        public string GetArticleContent(int id)
-        {
-
-            var article = JsonConvert.DeserializeObject<ArticleDTO>(ExecuteRequest($"{ArticleServiceURI}/articleById/{id}"));
-            return article.Content;
-        }
-
-        private string ExecuteRequest(string uri)
-        {
-            var webRequest = WebRequest.Create(uri) as HttpWebRequest;
-
-            webRequest.ContentType = "application/json";
-            webRequest.UserAgent = "Nothing";
-
-            using (var stream = webRequest.GetResponse().GetResponseStream())
-            {
-                using (var reader = new StreamReader(stream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
         }
     }
 }

@@ -90,8 +90,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Success.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\ArticleService.cs" />
     <Compile Include="Services\FakeArticleService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\Interfaces\IArticleService.cs" />
     <Compile Include="Services\Interfaces\IJournalistStatisticsService.cs" />
     <Compile Include="Services\Interfaces\IEmployeeService.cs" />
     <Compile Include="Services\Interfaces\IPublishingService.cs" />

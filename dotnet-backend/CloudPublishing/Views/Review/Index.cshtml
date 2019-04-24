@@ -10,7 +10,6 @@
                 <i class="fas fa-plus"></i> Добавить
             </a>
         </div>
-
         <div class="row">
             <div class="col-12">
                 <table class="table table-bordered">
@@ -49,23 +48,23 @@
                                 <td class="text-left">
                                     @if (item.Approved)
                                     {
-                                        <a class="btn btn-sm border border-secondary" 
-                                           href="@Url.Action("Details", "Review", new { id = @item.ArticleId })">
+                                        <a class="btn btn-sm border border-secondary"
+                                           href="@Url.Action("Details", "Review", new { articleId = @item.ArticleId, reviwerId = item.ReviwerId })">
                                             <i class="far fa-eye text-secondary"></i>
                                         </a>
                                     }
                                     else
                                     {
-                                        <a class="btn btn-sm border border-secondary" 
-                                           href="@Url.Action("Edit", "Review", new { id = @item.ArticleId })">
+                                        <a class="btn btn-sm border border-secondary"
+                                           href="@Url.Action("Edit", "Review", new { articleId = @item.ArticleId, reviwerId = item.ReviwerId })">
                                             <i class="far fa-edit text-secondary"></i>
                                         </a>
-                                        <button class="btn btn-sm border border-danger delete-button"
-                                                value="@item.ArticleId">
+                                        <a class="btn btn-sm border border-danger"
+                                           href="@Url.Action("Delete", "Review", new { articleId = @item.ArticleId, reviwerId = item.ReviwerId })">
                                             <i class="fas fa-trash-alt text-danger"></i>
-                                        </button>
-                                    }
-                                </td>
+                                        </a>
+                                        }
+                                    </td>
                             </tr>
                         }
                     </tbody>
@@ -74,21 +73,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        $(function () {
-            $(".delete-button").click(function () {
-                var id = $(this).val();
-                var target = event.target;
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Delete", "Review")/' + id,
-                    success: function () {
-                        $(target.closest("tr")).detach();
-                    }
-                });
-            });
-        })
-    </script>
-}
