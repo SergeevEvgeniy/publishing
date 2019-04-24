@@ -143,14 +143,12 @@ namespace CloudPublishing.Controllers
         /// <summary>
         /// Метод обработки запроса на просмотр рецензии
         /// </summary>
-        /// <param name="articleId">Id статьи, на которую написана рецензия</param>
-        /// <param name="reviwerId">Id сотрудника, написавшего рецензию</param>
+        /// <param name="model">Модель, содержащая Id сотрудника, написавшего рецензию и Id статьи, на которую написана рецензия</param>
         /// <returns>Представление просмотра, содержащее текст рецензии</returns>
         [HttpGet]
-        [Route("Details/{articleId:int}/{reviwerId:int}")]
-        public ActionResult Details(int articleId, int reviwerId)
+        public ActionResult Details(ReviewKeyModel model)
         {
-            var review = mapper.Map<ReviewModel>(reviewService.GetReview(articleId, reviwerId));
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(model.ArticleId, model.ReviwerId));
             return View(review);
         }
 
