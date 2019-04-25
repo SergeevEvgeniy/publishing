@@ -5,8 +5,10 @@ import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.domain.PublishingEmployee;
 import by.artezio.cloud.publishing.domain.Topic;
+import by.artezio.cloud.publishing.dto.TopicShortInfo;
 import by.artezio.cloud.publishing.service.EmployeeService;
 import by.artezio.cloud.publishing.service.PublishingService;
+import by.artezio.cloud.publishing.service.converter.TopicToTopicShortInfoConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +27,22 @@ public class FakePublishingService implements PublishingService {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private TopicToTopicShortInfoConverter topicShortInfoConverter;
+
     @Override
     public List<PublishingDTO> getPublishingList() {
         return publishingDao.getPublishingList();
     }
 
     @Override
-    public List<Topic> getTopicsByPublishingId(final Integer id) {
-        return publishingDao.getTopicsByPublishingId(id);
+    public List<TopicShortInfo> getTopicsByPublishingId(final Integer id) {
+        List<Topic> topics = publishingDao.getTopicsByPublishingId(id);
+        List<TopicShortInfo> topicShortInfos = new ArrayList<>();
+        for (Topic t : topics) {
+            topicShortInfos.add(topicShortInfoConverter.convert(t));
+        }
+        return topicShortInfos;
     }
 
     @Override

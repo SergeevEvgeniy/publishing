@@ -8,13 +8,18 @@ $(function () {
     var $articleList = $(".article-list");
     var $advertisingList = $(".advertising-list");
 
-    var $advertisingInput = $("#advertisingPath") ;
+    var $advertisingInput = $("#advertisingPath");
 
     var $formSelects = $("form select");
     var $publishing = $formSelects.eq(0);
     var $topics = $formSelects.eq(1);
     var $authors = $formSelects.eq(2);
     var $articles = $formSelects.eq(3);
+
+    if ($articleList.has("li").length) {
+        $publishing.find(":not(:selected)")
+            .prop("hidden", true);
+    }
 
     $publishing.on("change", function () {
         onChangeSelect($publishing, function (topics) {
@@ -155,7 +160,7 @@ $(function () {
             .find("input")
             .val();
         $articles.find("option[value=" + articleId + "]")
-            .prop("hidden, false");
+            .prop("hidden", false);
         $listItem.slideUp("fast", function () {
             $listItem.remove();
             if (!$articleList.children().length) {
@@ -174,11 +179,11 @@ $(function () {
     });
 
     $advertisingInput.on("input", function () {
-        if ($advertisingInput.val()) {
-            $advertisingAddBtn.prop("disabled", false);
-        } else {
-            $advertisingAddBtn.prop("disabled", true);
-        }
+        $advertisingAddBtn.prop("disabled", !$advertisingInput.val());
+    });
+
+    $("#publishBtn").on("click", function () {
+        $("#published").val("true");
     });
 
 });

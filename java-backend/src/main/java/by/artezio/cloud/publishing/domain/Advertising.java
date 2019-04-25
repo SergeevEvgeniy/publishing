@@ -2,18 +2,36 @@ package by.artezio.cloud.publishing.domain;
 
 /**
  * Класс-сущность реклама.
+ * @author Igor Kuzmin.
  * */
 public class Advertising {
 
-    private int id;
-    private int issueId;
+    private Integer id;
+    private Integer issueId;
     private String filePath;
+
+    /**
+     * Конструктор с параметрами.
+     * @param issueId - id {@link Issue} для которого создается реклама.
+     * @param filePath - ссылочные пути для реклам.
+     * */
+    public Advertising(final Integer issueId, final String filePath) {
+        this.issueId = issueId;
+        this.filePath = filePath;
+    }
+
+    /**
+     * Конструктор без параметров.
+     * */
+    public Advertising() {
+
+    }
 
     /**
      * Метод для установки id рекламы.
      * @param id - идентификатор рекламы
      * */
-    public void setId(final int id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -29,7 +47,7 @@ public class Advertising {
      * Метод для установки id номера.
      * @param issueId - идентификатор номера
      * */
-    public void setIssueId(final int issueId) {
+    public void setIssueId(final Integer issueId) {
         this.issueId = issueId;
     }
 

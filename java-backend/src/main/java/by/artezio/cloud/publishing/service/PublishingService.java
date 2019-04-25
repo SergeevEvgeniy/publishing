@@ -1,8 +1,8 @@
 package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.PublishingDTO;
+import by.artezio.cloud.publishing.dto.TopicShortInfo;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public interface PublishingService {
      * @param id идентификатор журнала/газеты
      * @return Список рубрик, которые имеет издание
      */
-    List<Topic> getTopicsByPublishingId(Integer id);
+    List<TopicShortInfo> getTopicsByPublishingId(Integer id);
 
     /**
      * Возвращает название издательства по его id.

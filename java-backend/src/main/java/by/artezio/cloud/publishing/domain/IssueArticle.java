@@ -9,6 +9,23 @@ public class IssueArticle {
     private Integer issueId;
 
     /**
+     * Конструктор без параметров.
+     * */
+    public IssueArticle() {
+
+    }
+
+    /**
+     * Конструктор с параметрами.
+     * @param articleId - id {@link Article}.
+     * @param issueId - id {@link Issue}.
+     * */
+    public IssueArticle(final Integer articleId, final Integer issueId) {
+        this.articleId = articleId;
+        this.issueId = issueId;
+    }
+
+    /**
      * Получение идентификатора статьи.
      *
      * @return идентификатор статьи

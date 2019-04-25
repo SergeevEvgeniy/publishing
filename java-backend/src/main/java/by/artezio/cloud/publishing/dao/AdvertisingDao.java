@@ -3,7 +3,9 @@ package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.Advertising;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +52,16 @@ public class AdvertisingDao {
     public void deleteAdvertisingByIssueId(final int issueId) {
         jdbcTemplate.update("delete from advertising where issue_id = :id",
             Collections.singletonMap("id", issueId));
+    }
+
+    /**
+     * Метод для вставки рекламы в бд.
+     * @param advertising - {@link Advertising}.
+     * */
+    public void insertAdvertising(final Advertising advertising) {
+        SqlParameterSource params = new BeanPropertySqlParameterSource(advertising);
+        jdbcTemplate.update("insert into advertising(issue_id, file_path) "
+            + "values(:issueId, :filePath)", params);
     }
 
 }

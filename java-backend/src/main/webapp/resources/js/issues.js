@@ -2,12 +2,13 @@ $(function () {
 
     $(".delete-button").on("click", function () {
         var $currentTableRow = $(this).closest("tr");
-        var $inputForId = $(this).next("input");
-        var issueId = $inputForId.val();
-        $.ajax(APP_CONTEXT_PATH + "/issue/" + issueId, {
+        var issueId = $currentTableRow.find("input").val();
+        $.ajax(APP_CONTEXT_PATH + "/issues/issue/" + issueId, {
             type : "delete",
             success : function () {
-                $currentTableRow.remove();
+                $currentTableRow.hide("normal", function () {
+                    $currentTableRow.remove();
+                });
             }
         });
     });

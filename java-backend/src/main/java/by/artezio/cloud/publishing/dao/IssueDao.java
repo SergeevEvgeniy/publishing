@@ -2,7 +2,11 @@ package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.Issue;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -86,6 +90,29 @@ public class IssueDao {
         return jdbcTemplate.query("select * from issue "
                 + "where publishing_id = :publishingId",
             Collections.singletonMap("publishingId", publishingId), issueRowMapper);
+    }
+
+    /**
+     * Метод для вставки номера в бд.
+     * @param issue - {@link Issue}.
+     * @return - id номера, который сгенерирован в результате вставки.
+     * */
+    public Integer insertIssue(final Issue issue) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        SqlParameterSource params = new BeanPropertySqlParameterSource(issue);
+        jdbcTemplate.update("insert into issue(publishing_id, number, date, published) "
+            + "values(:publishingId, :number, :date, :published)", params, keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+
+    /**
+     * Метод для обновления номера в бд.
+     * @param newIssue - обновленная информация по {@link Issue}.
+     * */
+    public void updateIssue(final Issue newIssue) {
+        SqlParameterSource params = new BeanPropertySqlParameterSource(newIssue);
+        jdbcTemplate.update("update issue set number=:number, date=:date, published=:published where id=:id",
+            params);
     }
 
 }

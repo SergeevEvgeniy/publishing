@@ -1,8 +1,8 @@
 package by.artezio.cloud.publishing.service.impl;
 
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Topic;
 import by.artezio.cloud.publishing.dto.PublishingDTO;
+import by.artezio.cloud.publishing.dto.TopicShortInfo;
 import by.artezio.cloud.publishing.service.PublishingService;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +38,7 @@ public class RemotePublishingService implements PublishingService {
     }
 
     @Override
-    public List<Topic> getTopicsByPublishingId(final Integer id) {
+    public List<TopicShortInfo> getTopicsByPublishingId(final Integer id) {
         // todo add implementation
         return Collections.EMPTY_LIST;
     }

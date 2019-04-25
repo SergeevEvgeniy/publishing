@@ -1,6 +1,8 @@
 package by.artezio.cloud.publishing.dto;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,22 +12,22 @@ import java.util.List;
  */
 public class IssueForm {
 
+    @NotNull(message = "Поле не заполнено!")
     private Integer publishingId;
 
-    private String publishingTitle;
-
+    @NotNull(message = "В номере должна присутствовать хотя бы одна статья")
     private List<Integer> articlesId;
 
     private List<String> advertisingPath;
 
+    @NotBlank(message = "Поле не заполнено!")
     private String number;
 
+    @NotNull(message = "Поле не заполнено!")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate localDate;
 
     private boolean published;
-
-    private Integer issueId;
 
     /**
      * Установка id журнала/газеты.
@@ -122,38 +124,6 @@ public class IssueForm {
      * */
     public boolean isPublished() {
         return published;
-    }
-
-    /**
-     * Установка идентификатора номера.
-     * @param issueId - идентификатор номера.
-     * */
-    public void setIssueId(final Integer issueId) {
-        this.issueId = issueId;
-    }
-
-    /**
-     * Получение идентификатора номера.
-     * @return issueId - идентификатор номера.
-     * */
-    public Integer getIssueId() {
-        return issueId;
-    }
-
-    /**
-     * Получение названия жцрнала/газеты.
-     * @return - название журнала/газеты.
-     * */
-    public String getPublishingTitle() {
-        return publishingTitle;
-    }
-
-    /**
-     * Установка названия журнала/газеты для номера.
-     * @param publishingTitle - название журнала/газеты.
-     * */
-    public void setPublishingTitle(final String publishingTitle) {
-        this.publishingTitle = publishingTitle;
     }
 
 }

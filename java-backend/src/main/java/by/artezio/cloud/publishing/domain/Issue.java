@@ -7,8 +7,8 @@ import java.time.LocalDate;
  */
 public class Issue {
 
-    private int id;
-    private int publishingId;
+    private Integer id;
+    private Integer publishingId;
     private String number;
     private LocalDate date;
     private boolean published;
@@ -17,7 +17,7 @@ public class Issue {
      * Возвращает id номера.
      * @return id
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -25,7 +25,7 @@ public class Issue {
      * Устанавливает id номера.
      * @param id id Номера
      */
-    public void setId(final int id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -33,7 +33,7 @@ public class Issue {
      * Возвращает id публикации, связанной с номером.
      * @return id публикации, связанной с номером
      */
-    public int getPublishingId() {
+    public Integer getPublishingId() {
         return publishingId;
     }
 
@@ -41,7 +41,7 @@ public class Issue {
      * Устанавливает id публикации, связанной с номером {@link Issue}.
      * @param publishingId id Публикации
      */
-    public void setPublishingId(final int publishingId) {
+    public void setPublishingId(final Integer publishingId) {
         this.publishingId = publishingId;
     }
 

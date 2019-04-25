@@ -2,21 +2,24 @@ package by.artezio.cloud.publishing.web.controllers;
 
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Topic;
-import by.artezio.cloud.publishing.dto.IssueForm;
 import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.dto.PublishingDTO;
+import by.artezio.cloud.publishing.dto.IssueForm;
+import by.artezio.cloud.publishing.dto.TopicShortInfo;
+import by.artezio.cloud.publishing.dto.IssueView;
 import by.artezio.cloud.publishing.web.facade.IssueWebFacade;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.List;
@@ -57,13 +60,14 @@ public class IssueController {
      * в режиме создания номера, а также имя страницы jsp содержащая
      * форму для создания нового номера
      */
-    @GetMapping(params = "mode=create")
+    @GetMapping("creationForm")
     public ModelAndView openFormInCreationMode() {
         List<PublishingDTO> publishingList = issueFacade.getPublishingList();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("publishing", publishingList);
         modelAndView.addObject(new IssueForm());
         modelAndView.setViewName("issueForm");
+        modelAndView.addObject("mode", "create");
         return modelAndView;
     }
 
@@ -73,16 +77,17 @@ public class IssueController {
      * в режиме редактирования номера, а также имя страницы jsp содержащая
      * форму для редактирования номера
      */
-    @GetMapping(params = "mode=edit")
-    public ModelAndView openFormInEditingMode(@RequestParam("id") final int issueId) {
-        IssueForm issueForm = issueFacade.getIssueFormByIssueId(issueId);
-        List<Topic> topics = issueFacade.getTopicListByPublishingId(issueId);
-        List<Article> articles =
-            issueFacade.getArticlesForIssue(issueForm.getArticlesId());
+    @GetMapping("editionForm/issue/{id}")
+    public ModelAndView openFormInEditingMode(@PathVariable("id") final int issueId) {
+        IssueView issueView = issueFacade.getIssueViewByIssueId(issueId);
+        List<TopicShortInfo> topics =
+            issueFacade.getTopicListByPublishingId(issueView.getPublishingId());
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(issueForm);
+        modelAndView.addObject("issueId", issueId);
+        modelAndView.addObject(issueView);
         modelAndView.addObject("topics", topics);
-        modelAndView.addObject("articles", articles);
+        modelAndView.addObject(new IssueForm());
+        modelAndView.addObject("mode", "edit");
         modelAndView.setViewName("issueForm");
         return modelAndView;
     }
@@ -93,15 +98,12 @@ public class IssueController {
      * в режиме просмотра номера, а также имя страницы jsp содержащая
      * форму для просмотра номера
      */
-    @GetMapping(params = "mode=view")
-    public ModelAndView openFormInViewingMode(@RequestParam("id") final int issueId) {
+    @GetMapping("viewingForm/issue/{id}")
+    public ModelAndView openFormInViewingMode(@PathVariable("id") final int issueId) {
         ModelAndView modelAndView = new ModelAndView();
-        IssueForm issueForm = issueFacade.getIssueFormByIssueId(issueId);
-        List<Article> articles =
-            issueFacade.getArticlesForIssue(issueForm.getArticlesId());
-        modelAndView.addObject(issueForm);
-        modelAndView.addObject("articles", articles);
-        modelAndView.setViewName("issueForm");
+        IssueView issueView = issueFacade.getIssueViewByIssueId(issueId);
+        modelAndView.addObject(issueView);
+        modelAndView.setViewName("issueView");
         return modelAndView;
     }
 
@@ -109,8 +111,9 @@ public class IssueController {
      * Метод обработки запроса на удаление номера, рекламы и статей в номере.
      * @param issueId - id номера.
      * */
-    @DeleteMapping("/issue/{issueId}")
-    public void deleteIssue(@PathVariable("issueId") final int issueId) {
+    @DeleteMapping("/issue/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteIssue(@PathVariable("id") final int issueId) {
         issueFacade.deleteIssueById(issueId);
     }
 
@@ -119,15 +122,27 @@ public class IssueController {
      * @param issueForm - dto для формы создания и редактирования,
      * данный объект привязан к полям формы.
      * @param result - {@link BindingResult}.
+     * @param model - {@link Model}.
      * @return - логическое имя представления.
      * */
     @PostMapping("/issue")
     public String createIssue(@Valid @ModelAttribute final IssueForm issueForm,
-                              final BindingResult result) {
-        if (result.hasErrors()) {
-            return "issueForm";
+                              final BindingResult result,
+                              final Model model) {
+        if (!result.hasErrors()) {
+            issueFacade.createNewIssue(issueForm);
+            return "redirect:/issues";
         }
-        return "redirect:/issues";
+        Integer publishingId = issueForm.getPublishingId();
+        model.addAttribute("publishing", issueFacade.getPublishingList());
+        if (publishingId != null) {
+            model.addAttribute("topics", issueFacade.getTopicListByPublishingId(publishingId));
+        }
+        model.addAttribute(issueForm);
+        IssueView issueView = issueFacade.mapIssueFormToIssueView(issueForm);
+        model.addAttribute(issueView);
+        model.addAttribute("mode", "create");
+        return "issueForm";
     }
 
     /**
@@ -136,27 +151,38 @@ public class IssueController {
      * данный объект привязан к полям формы.
      * @param result - {@link BindingResult}.
      * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}.
+     * @param model - {@link Model}.
      * @return - логическое имя представления.
      * */
     @PostMapping("/issue/{issueId}")
     public String updateIssue(@PathVariable("issueId") final int issueId,
-                                    @Valid @ModelAttribute final IssueForm issueForm,
-                                    final BindingResult result) {
-        if (result.hasErrors()) {
-            return "issueForm";
+                              @Valid @ModelAttribute final IssueForm issueForm,
+                              final BindingResult result, final Model model) {
+        if (!result.hasErrors()) {
+            issueFacade.updateIssue(issueId, issueForm);
+            return "redirect:/issues";
         }
-        return "redirect:/issues";
+        IssueView issueView = issueFacade.mapIssueFormToIssueView(issueForm);
+        List<TopicShortInfo> topics =
+            issueFacade.getTopicListByPublishingId(issueView.getPublishingId());
+        model.addAttribute("topics", topics);
+        model.addAttribute("issueId", issueId);
+        model.addAttribute(issueForm);
+        model.addAttribute(issueView);
+        model.addAttribute("mode", "edit");
+        return "issueForm";
     }
 
     /**
-     * Получение списка тематикт {@link Topic} выбранного журнала/газеты
+     * Получение списка тематикт {@link by.artezio.cloud.publishing.domain.Topic}
+     * выбранного журнала/газеты.
      * для выподающего списка на форме добавления.
      * @param publishingId - id {@link by.artezio.cloud.publishing.dto.PublishingDTO}.
-     * @return список {@link Topic}.
+     * @return список {@link by.artezio.cloud.publishing.domain.Topic}.
      * */
     @GetMapping(value = "/publishingId/{id}", headers = {"Accept=application/json"})
     @ResponseBody
-    public List<Topic> getTopicList(@PathVariable("id") final int publishingId) {
+    public List<TopicShortInfo> getTopicList(@PathVariable("id") final int publishingId) {
         return issueFacade.getTopicListByPublishingId(publishingId);
     }
 

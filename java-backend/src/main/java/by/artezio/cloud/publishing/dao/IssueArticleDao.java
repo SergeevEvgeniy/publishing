@@ -2,7 +2,9 @@ package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.IssueArticle;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import java.util.Collections;
 import java.util.List;
@@ -47,8 +49,18 @@ public class IssueArticleDao {
      * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}.
      * */
     public void deleteIssueArticleByIssueId(final int issueId) {
-        jdbcTemplate.update("delete from issue_article where issud_id = :id",
+        jdbcTemplate.update("delete from issue_article where issue_id = :id",
             Collections.singletonMap("id", issueId));
+    }
+
+    /**
+     * Метод для вставки {@link IssueArticle} в бд.
+     * @param issueArticle - {@link IssueArticle}.
+     * */
+    public void insertIssueArticle(final IssueArticle issueArticle) {
+        SqlParameterSource params = new BeanPropertySqlParameterSource(issueArticle);
+        jdbcTemplate.update("insert into issue_article values(:articleId, :issueId)",
+            params);
     }
 
 }
