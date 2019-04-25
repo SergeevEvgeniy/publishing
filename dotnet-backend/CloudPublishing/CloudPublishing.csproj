@@ -189,7 +189,9 @@
     <Compile Include="Models\Reviews\ViewModels\AuthorModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\CreateReviewModel.cs" />
     <Compile Include="Models\Publishings\ViewModels\PublishingTableViewModel.cs" />
+    <Compile Include="Models\Reviews\ViewModels\DeleteReviewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\DetailedReviewModel.cs" />
+    <Compile Include="Models\Reviews\ViewModels\ReviewKeyModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\PublishingModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\ReviewModel.cs" />
     <Compile Include="Models\Reviews\ViewModels\TopicModel.cs" />
@@ -303,6 +305,7 @@
     <Content Include="Views\Publishing\Create.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\InternalServerError.cshtml" />
+    <Content Include="Views\Review\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

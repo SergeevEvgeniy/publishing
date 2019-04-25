@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace CloudPublishing.Business.DTO
 {
     public class ArticleDTO

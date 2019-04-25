@@ -21,18 +21,23 @@ namespace CloudPublishing.Controllers
         private IReviewService reviewService;
         private IPublishingService publishingService;
         private IEmployeeService employeeService;
+        private IArticleService articleService;
         private IMapper mapper;
 
         /// <summary>
         /// Конструктор контроллера
         /// </summary>
-        /// <param name="reviewService">Сервис работы с рецензиями</param>
-        /// <param name="publishingService">Сервис работы с публикациями</param>
-        public ReviewController(IReviewService reviewService, IPublishingService publishingService, IEmployeeService employeeService)
+        /// <param name="reviewService">Сервис рецензий</param>
+        /// <param name="publishingService">Сервис публикаций</param>
+        /// <param name="employeeService">Сервис сотрудников</param>
+        /// <param name="articleService">Сервис статей</param>
+        public ReviewController(IReviewService reviewService, IPublishingService publishingService,
+            IEmployeeService employeeService, IArticleService articleService)
         {
             this.reviewService = reviewService;
             this.publishingService = publishingService;
             this.employeeService = employeeService;
+            this.articleService = articleService;
 
             mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ReviewMapProfile())).CreateMapper();
         }
@@ -45,10 +50,7 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var userId = GetUserId();
-
-            var list = mapper.Map<IEnumerable<DetailedReviewModel>>(reviewService.CreateDetailedReviewList(userId));
-
+            var list = mapper.Map<IEnumerable<DetailedReviewModel>>(reviewService.CreateDetailedReviewList(GetUserId()));
             return View(list);
         }
 
@@ -62,7 +64,8 @@ namespace CloudPublishing.Controllers
             var pl = publishingService.GetPublishings();
             var model = new CreateReviewModel()
             {
-                PublishingList = mapper.Map<IEnumerable<PublishingModel>>(pl)
+                PublishingList = mapper.Map<IEnumerable<PublishingModel>>(pl),
+                ReviwerId = GetUserId()
             };
             return View(model);
         }
@@ -75,13 +78,10 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         public ActionResult Create(ReviewModel review)
         {
-            review.ReviwerId = GetUserId();
-
             if (ModelState.IsValid)
             {
                 reviewService.CreateReview(mapper.Map<ReviewDTO>(review));
             }
-
             return Redirect("/Review/Index");
         }
 
@@ -108,7 +108,7 @@ namespace CloudPublishing.Controllers
         [Route("GetAuthorList/{publishingId:int}/{topicId:int}")]
         public ActionResult GetAuthorList(int publishingId, int topicId)
         {
-            var authorList = mapper.Map<IEnumerable<AuthorModel>>(reviewService.GetAuthorList(publishingId, topicId));
+            var authorList = mapper.Map<IEnumerable<AuthorModel>>(articleService.GetAuthorList(publishingId, topicId));
             return PartialView(authorList);
         }
 
@@ -124,7 +124,7 @@ namespace CloudPublishing.Controllers
         public ActionResult GetArticleList(int publishingId, int topicId, int authorId)
         {
             var articleList = mapper.Map<IEnumerable<ArticleModel>>
-               (reviewService.GetArticleList(publishingId, topicId, authorId));
+               (articleService.GetUnpublishedArticles(publishingId, topicId, authorId));
             return PartialView(articleList);
         }
 
@@ -137,34 +137,35 @@ namespace CloudPublishing.Controllers
         [Route("GetArticleContent/{id:int}")]
         public ActionResult GetArticleContent(int id)
         {
-            return Json(reviewService.GetArticleContent(id), JsonRequestBehavior.AllowGet);
+            return Json(articleService.GetArticleById(id).Content, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
         /// Метод обработки запроса на просмотр рецензии
         /// </summary>
-        /// <param name="id">Id статьи, на которую написана рецензия</param>
+        /// <param name="model">Модель, содержащая Id сотрудника, написавшего рецензию и Id статьи, на которую написана рецензия</param>
         /// <returns>Представление просмотра, содержащее текст рецензии</returns>
         [HttpGet]
-        [Route("Details/{id:int}")]
-        public ActionResult Details(int id)
+        public ActionResult Details(ReviewKeyModel model)
         {
-            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, GetUserId()));
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(model.ArticleId, model.ReviwerId));
             return View(review);
         }
 
         /// <summary>
         /// Метод обработки запроса получения страницы редактирования рецензии
         /// </summary>
-        /// <param name="id">Id статьи, на которую написана рецензия</param>
+        /// <param name="model">Модель, содержащая Id сотрудника, написавшего рецензию и Id статьи, на которую написана рецензия</param>
         /// <returns>Представление редактирования</returns>
         [HttpGet]
-        [Route("Edit/{id:int}")]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(ReviewKeyModel model)
         {
-            var review = mapper.Map<ReviewModel>(reviewService.GetReview(id, GetUserId()));
-
-            return View(review);
+            if (ModelState.IsValid)
+            {
+                var review = mapper.Map<ReviewModel>(reviewService.GetReview(model.ArticleId, model.ReviwerId));
+                return View(review);
+            }
+            return Redirect("/Review/Index");
         }
 
         /// <summary>
@@ -175,25 +176,43 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         public ActionResult Edit(ReviewModel review)
         {
-            review.ReviwerId = GetUserId();
-
             if (ModelState.IsValid)
             {
                 reviewService.UpdateReview(mapper.Map<ReviewDTO>(review));
             }
-
             return Redirect("/Review/Index");
         }
 
         /// <summary>
-        /// Метод обработки запроса удаления рецензий
+        /// Метод обработки запроса на удаление рецензии
         /// </summary>
-        /// <param name="id">Id статьи, на которую написана рецензия</param>
-        [HttpPost]
-        [Route("Delete/{id:int}")]
-        public void Delete(int id)
+        /// <param name="model">Модель, содержащая Id сотрудника, написавшего рецензию и Id статьи, на которую написана рецензия</param>
+        /// <returns>Представление подтверждения удаления</returns>
+        [HttpGet]
+        public ActionResult Delete(ReviewKeyModel model)
         {
-            reviewService.DeleteReview(id, GetUserId());
+            var isPublished = articleService.CheckPublicationArticle(model.ArticleId);
+            var deleteModel = new DeleteReviewModel {
+                ArticleId = model.ArticleId,
+                ReviwerId = model.ReviwerId,
+                IsPublished = isPublished
+            };
+            return View(deleteModel);
+        }
+
+        /// <summary>
+        /// Метод обработки запроса на подтверждение удаления рецензии
+        /// </summary>
+        /// <param name="model">Модель, содержащая Id сотрудника, написавшего рецензию и Id статьи, на которую написана рецензия</param>
+        [HttpPost]
+        public ActionResult ConfirmDeletion(ReviewKeyModel model)
+        {
+            var isPublished = articleService.CheckPublicationArticle(model.ArticleId);
+            if (!isPublished)
+            {
+                reviewService.DeleteReview(model.ArticleId, model.ReviwerId);
+            }
+            return Redirect("/Review/Index");
         }
 
         [NonAction]

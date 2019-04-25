@@ -12,6 +12,8 @@
 
         public int ArticleId { get; set; }
 
+        public int ReviwerId { get; set; }
+
         public bool Approved { get; set; }
     }
 }

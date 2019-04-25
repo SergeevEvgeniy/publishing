@@ -1,0 +1,32 @@
+﻿@model CloudPublishing.Models.Reviews.ViewModels.DeleteReviewModel
+@{
+    ViewBag.Title = "Подтвердите удаление";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("ConfirmDeletion", "Review", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+            @if (Model.IsPublished)
+            {
+                <div class="row form-group lead">
+                    Статья уже опубликована, удаление невозможно
+                </div>
+            }
+            else
+            {
+                <div class="row form-group lead">
+                    Подтвердите удаление
+                </div>
+                <input type="hidden" value="@Model.ArticleId" name="articleId" />
+                <input type="hidden" value="@Model.ReviwerId" name="reviwerId" />
+                <div class="text-left">
+                    @Html.ActionLink("Отменить", "Index", null, new { @class = "btn btn-secondary mr-2" })
+                    <input type="submit" class="btn btn-primary" value="Удалить">
+                </div>
+            }
+        </div>
+    </div>
+}
+

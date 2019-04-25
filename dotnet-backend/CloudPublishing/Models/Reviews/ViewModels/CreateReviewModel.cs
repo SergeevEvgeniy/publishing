@@ -4,6 +4,7 @@ namespace CloudPublishing.Models.Reviews.ViewModels
 {
     public class CreateReviewModel
     {
-        public IEnumerable<PublishingModel> PublishingList { get; set; }        
+        public IEnumerable<PublishingModel> PublishingList { get; set; } 
+        public int ReviwerId { get; set; }
     }
 }
