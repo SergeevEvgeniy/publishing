@@ -11,6 +11,8 @@ namespace CloudPublishing.Business.Services.Interfaces
 
         IEnumerable<ReviewDTO> GetUnapprovedReviewsByArticleId(int id);
 
+        bool CheckExistenceArticleReviews(int id);
+
         void CreateReview(ReviewDTO review);
 
         void UpdateReview(ReviewDTO review);
