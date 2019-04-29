@@ -23,6 +23,7 @@ public interface ReviewService {
 
     /**
      * Возвращает список {@link ReviewShortInfo} для указанной статьи.
+     * <strong>Не заполняет поле ReviewShortInfo.reviewerShortName</strong>
      *
      * @param articleId id статьи
      * @return {@link List} of {@link ReviewShortInfo}

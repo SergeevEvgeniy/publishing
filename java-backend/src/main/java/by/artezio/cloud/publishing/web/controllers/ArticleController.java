@@ -14,12 +14,10 @@ import by.artezio.cloud.publishing.web.security.SecurityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -58,9 +56,11 @@ public class ArticleController {
     @GetMapping
     public final String articleList(final Model model) {
         boolean isJournalist = articleFacade.isJournalist();
+        boolean isChiefEditor = articleFacade.isChiefEditor();
         List<ArticleInfo> data = articleFacade.getArticleInfoList();
         model.addAttribute("data", data);
         model.addAttribute("isJournalist", isJournalist);
+        model.addAttribute("isChiefEditor", isChiefEditor);
         return "articleList";
     }
 
@@ -83,7 +83,6 @@ public class ArticleController {
         model.addAttribute("topicShortInfos", null);
         model.addAttribute("currentCoauthors", null);
         model.addAttribute("reviewShortInfos", null);
-        model.addAttribute("formMethod", "POST");
 
         return "updateArticle";
     }
@@ -135,18 +134,24 @@ public class ArticleController {
         model.addAttribute("availableCoauthors", availableCoauthors);
         model.addAttribute("currentCoauthors", currentCoauthors);
         model.addAttribute("reviewShortInfos", reviewShortInfos);
-        model.addAttribute("formMethod", "PUT");
         return "updateArticle";
     }
 
     /**
-     * @param articleId   id статьи
-     * @param articleForm {@link ArticleForm}
+     * @param articleId     id статьи
+     * @param articleForm   {@link ArticleForm}
+     * @param bindingResult {@link BindingResult}
+     * @param model         {@link Model}
      * @return страница со списком статей
      */
-    @PutMapping(path = "/update/{articleId}")
+    @PostMapping(path = "/update/{articleId}")
     public final String updateArticle(@PathVariable("articleId") final Integer articleId,
-                                      @Valid final ArticleForm articleForm) {
+                                      @Valid final ArticleForm articleForm,
+                                      final BindingResult bindingResult,
+                                      final Model model) {
+        if (bindingResult.hasErrors()) {
+//            model.addAttribute("")/
+        }
         articleFacade.update(articleForm, articleId);
         return "redirect: ../../article";
     }
@@ -166,14 +171,29 @@ public class ArticleController {
         return "articleView";
     }
 
+
+    @GetMapping(path = "/delete/{articleId}")
+    public final String getDeleteArticlePage(@PathVariable final int articleId,
+                                             final Model model) {
+        if (articleFacade.isArticleExists(articleId)) {
+            ArticleView view = articleFacade.getArticleViewById(articleId);
+            model.addAttribute("article", view);
+            model.addAttribute("articleExists", true);
+        } else {
+            model.addAttribute("articleExists", false);
+        }
+        return "deleteArticle";
+    }
+
     /**
      * Удаление статьи по её идентификатору.
      *
      * @param articleId id статьи
      */
-    @DeleteMapping(path = "/delete/{articleId}")
-    public final void deleteArticle(@PathVariable("articleId") final int articleId) {
+    @PostMapping(path = "/delete/{articleId}")
+    public final String deleteArticle(@PathVariable("articleId") final int articleId) {
         articleFacade.deleteArticleById(articleId);
+        return "articleList";
     }
 
 

@@ -22,4 +22,10 @@ public interface TopicService {
      * @return все рубрики указанного журнала
      */
     List<Topic> getTopicsByPublishingId(final int publishingId);
+
+    /**
+     * @param topicId id рубрики
+     * @return название рубрики
+     */
+    String getTopicName(Integer topicId);
 }

@@ -16,7 +16,6 @@
 
     <script src="${pageContext.request.contextPath}/resources/js/libs/jquery.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/mailing.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/articleList.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap.js"></script>
     <script>
         var APP_CONTEXT_PATH = '${pageContext.request.contextPath}';

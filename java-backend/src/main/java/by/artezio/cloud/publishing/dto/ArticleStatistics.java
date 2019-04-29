@@ -3,6 +3,8 @@ package by.artezio.cloud.publishing.dto;
 import java.util.Map;
 
 /**
+ * DTO для передачи данных через REST в сервис сотрудников.
+ *
  * @author Denis Shubin
  */
 public class ArticleStatistics {

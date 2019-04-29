@@ -32,4 +32,9 @@ LocalTopicService implements TopicService {
     public List<Topic> getTopicsByPublishingId(final int publishingId) {
         return topicDao.getTopicsByPublishingId(publishingId);
     }
+
+    @Override
+    public String getTopicName(final Integer topicId) {
+        return topicDao.getTopicById(topicId).getName();
+    }
 }

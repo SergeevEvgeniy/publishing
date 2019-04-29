@@ -2,6 +2,8 @@ package by.artezio.cloud.publishing.dao;
 
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.ArticleCoauthor;
+import by.artezio.cloud.publishing.dto.ArticleFilter;
+import by.artezio.cloud.publishing.dto.AuthorFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -214,10 +216,9 @@ public class ArticleDao {
             for (Integer id : coauthtors) {
                 params = new HashMap<>();
                 params.put("articleId", article.getId());
-                params.put("coauthor", id);
-                jdbcTemplate.update("UPDATE article_coauthors SET "
-                        + "employee_id = :coauthor "
-                        + "WHERE article_id = :articleId",
+                params.put("employeeId", id);
+                jdbcTemplate.update("INSERT INTO article_coauthors(article_id, employee_id) "
+                        + "VALUES(:articleId, :employeeId)",
                     params);
             }
         }
@@ -304,5 +305,81 @@ public class ArticleDao {
                 }
                 return map;
             });
+    }
+
+    public boolean isArticleExists(final int articleId) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM article WHERE id = :articleId",
+            Collections.singletonMap("articleId", articleId), Integer.class) == 1;
+    }
+
+    public List<Integer> getAuthorsIdList(final AuthorFilter filter) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("publishingId", filter.getPublishingId());
+        params.put("topicId", filter.getTopicId());
+        return jdbcTemplate.queryForList(generateQueryForFilter(filter), params, Integer.class);
+
+    }
+
+    private String generateQueryForFilter(final AuthorFilter filter) {
+        StringBuilder bldr = new StringBuilder("SELECT author_id FROM article");
+        boolean needsAnd = false;
+
+        if (filter.getTopicId() != null
+            || filter.getPublishingId() != null) {
+            bldr.append(" WHERE");
+        }
+        if (filter.getPublishingId() != null) {
+            bldr.append(" publishing_id = :publishingId");
+            needsAnd = true;
+        }
+        if (filter.getTopicId() != null) {
+            if (needsAnd) {
+                bldr.append(" AND");
+            }
+            bldr.append(" topic_id = :topicId");
+        }
+
+        return bldr.toString();
+    }
+
+    public List<Article> getArticlesByFilter(final ArticleFilter filter) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("authorId", filter.getAuthorId());
+        params.put("publishingId", filter.getPublishingId());
+        params.put("topicId", filter.getTopicId());
+        return jdbcTemplate.query(generateQueryForFilter(filter),
+            params, articleRowMapper);
+    }
+
+    private String generateQueryForFilter(final ArticleFilter filter) {
+        StringBuilder bldr = new StringBuilder("SELECT * FROM article");
+        boolean needsAnd = false;
+        if (filter.getTopicId() != null
+            || filter.getPublishingId() != null
+            || filter.getAuthorId() != null) {
+            bldr.append(" WHERE");
+        }
+
+        if (filter.getAuthorId() != null) {
+            bldr.append(" author_id = :authorId");
+            needsAnd = true;
+        }
+
+        if (filter.getPublishingId() != null) {
+            if (needsAnd) {
+                bldr.append(" AND");
+            }
+            bldr.append(" publishing_id = :publishingId");
+            needsAnd = true;
+        }
+
+        if (filter.getTopicId() != null) {
+            if (needsAnd) {
+                bldr.append(" AND");
+            }
+            bldr.append(" topic_id = :topicId");
+        }
+
+        return bldr.toString();
     }
 }

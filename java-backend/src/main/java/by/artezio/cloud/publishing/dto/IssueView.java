@@ -24,7 +24,7 @@ public class IssueView {
 
     private List<String> advertisingPath;
 
-    private List<Article> articles;
+    private List<ArticleDto> articles;
 
     /**
      * Метод для установки id журнала/гезеты.
@@ -110,7 +110,7 @@ public class IssueView {
      * Установка информации по статьям которые добавлены в номер.
      * @param articles - {@link Article}.
      * */
-    public void setArticles(final List<Article> articles) {
+    public void setArticles(final List<ArticleDto> articles) {
         this.articles = articles;
     }
 
@@ -118,7 +118,7 @@ public class IssueView {
      * Метод для получения списка статей.
      * @return - список статей.
      * */
-    public List<Article> getArticles() {
+    public List<ArticleDto> getArticles() {
         return articles;
     }
 

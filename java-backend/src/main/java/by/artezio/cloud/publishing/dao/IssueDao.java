@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Класс для обращения к таблице issue.
+ *
  * @author Igor Kuzmin
  */
 @Repository
@@ -34,6 +35,7 @@ public class IssueDao {
 
     /**
      * Конструктор с параметром.
+     *
      * @param jdbcTemplate jdbcTemplate, дает доступ к БД.
      */
     public IssueDao(final NamedParameterJdbcTemplate jdbcTemplate) {
@@ -42,16 +44,18 @@ public class IssueDao {
 
     /**
      * Получение списка всех номеров.
+     *
      * @return {@link List} всех {@link Issue}.
-     * */
+     */
     public List<Issue> getListOfAllIssues() {
         return jdbcTemplate.query("select * from issue", issueRowMapper);
     }
 
     /**
      * Удаление {@link Issue} из базы данных.
+     *
      * @param id - идентификатор номера.
-     * */
+     */
     public void deleteIssueById(final int id) {
         jdbcTemplate.update("delete from issue where id = :id",
             Collections.singletonMap("id", id));
@@ -59,9 +63,10 @@ public class IssueDao {
 
     /**
      * Получение номера по id.
+     *
      * @param id - идентификатор {@link Issue}.
      * @return {@link Issue}.
-     * */
+     */
     public Issue getIssueById(final int id) {
         return jdbcTemplate.queryForObject("select * from issue where id = :id",
             Collections.singletonMap("id", id), issueRowMapper);
@@ -69,6 +74,7 @@ public class IssueDao {
 
     /**
      * Возвращает списоок всех номеров, дата выпуска которых равна date.
+     *
      * @param date Дата выпуска.
      * @return Список номеров.
      */
@@ -83,9 +89,10 @@ public class IssueDao {
 
     /**
      * Метод получения всех номеров определенного журнала/газеты.
+     *
      * @param publishingId - идентификатор журнала/газеты.
      * @return список {@link Issue} журнала/газеты.
-     * */
+     */
     public List<Issue> getIssueListByPublishingId(final int publishingId) {
         return jdbcTemplate.query("select * from issue "
                 + "where publishing_id = :publishingId",
@@ -94,9 +101,10 @@ public class IssueDao {
 
     /**
      * Метод для вставки номера в бд.
+     *
      * @param issue - {@link Issue}.
      * @return - id номера, который сгенерирован в результате вставки.
-     * */
+     */
     public Integer insertIssue(final Issue issue) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource params = new BeanPropertySqlParameterSource(issue);
@@ -107,12 +115,17 @@ public class IssueDao {
 
     /**
      * Метод для обновления номера в бд.
+     *
      * @param newIssue - обновленная информация по {@link Issue}.
-     * */
+     */
     public void updateIssue(final Issue newIssue) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(newIssue);
         jdbcTemplate.update("update issue set number=:number, date=:date, published=:published where id=:id",
             params);
     }
 
+    public boolean isArticlePublished(final int articleId) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM issue_article WHERE article_id = :articleId",
+            Collections.singletonMap("articleId", articleId), Integer.class) >= 1;
+    }
 }

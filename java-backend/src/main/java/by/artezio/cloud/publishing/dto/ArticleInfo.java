@@ -17,6 +17,7 @@ public class ArticleInfo {
     private String authorFullName;
     private List<String> coauthors;
     private boolean isPublished;
+    private boolean reviewed;
 
     /**
      * Возвращает идентификатор статьи.
@@ -61,15 +62,6 @@ public class ArticleInfo {
      */
     public String getPublishing() {
         return publishing;
-    }
-
-    /**
-     * Устанавливает название журнала/газеты.
-     *
-     * @param newPublishing String
-     */
-    public void setPublishingName(final String newPublishing) {
-        this.publishing = newPublishing;
     }
 
     /**
@@ -127,7 +119,6 @@ public class ArticleInfo {
     }
 
     /**
-     *
      * @param newPublishing {@link String} название журнала\газеты
      */
     public void setPublishing(final String newPublishing) {
@@ -135,7 +126,6 @@ public class ArticleInfo {
     }
 
     /**
-     *
      * @return {@code true}, если статья опубликована, иначе {@code false}
      */
     public boolean isPublished() {
@@ -143,10 +133,23 @@ public class ArticleInfo {
     }
 
     /**
-     *
      * @param published признак того, опубликована ли статья
      */
     public void setPublished(final boolean published) {
         isPublished = published;
+    }
+
+    /**
+     * @return <code>true</code>, если у статьи есть хотя бы одна рецензия
+     */
+    public boolean isReviewed() {
+        return reviewed;
+    }
+
+    /**
+     * @param reviewed <code>true</code>, если у статьи есть хотя бы одна рецензия
+     */
+    public void setReviewed(final boolean reviewed) {
+        this.reviewed = reviewed;
     }
 }

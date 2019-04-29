@@ -2,12 +2,11 @@ package by.artezio.cloud.publishing.service;
 
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.ArticleCoauthor;
-import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.dto.ArticleDto;
+import by.artezio.cloud.publishing.dto.ArticleFilter;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
-import by.artezio.cloud.publishing.dto.PublishingDTO;
+import by.artezio.cloud.publishing.dto.AuthorFilter;
 import by.artezio.cloud.publishing.dto.User;
 
 import java.util.List;
@@ -31,22 +30,6 @@ public interface ArticleService {
     List<ArticleInfo> getArticleInfoList(User user);
 
     /**
-     * Получение журнала/газеты из сервиса PublishingDTO.
-     *
-     * @param publishingId идентификатор журнала/газеты
-     * @return объект класса {@link PublishingDTO}
-     */
-    PublishingDTO getPublishingById(int publishingId);
-
-    /**
-     * Получение сотрудника из сервиса Employee по его идентификатору.
-     *
-     * @param id идентификатор сотрудника
-     * @return сотрудник, объект класса {@link Employee}
-     */
-    Employee getAuthorById(int id);
-
-    /**
      * Создание объекта {@link ArticleForm} и заполнение его данными. которые потом будут редактироваться.
      *
      * @param articleId идентификатор статьи
@@ -60,7 +43,7 @@ public interface ArticleService {
      * @param articleId - id статьи
      * @return {@link Article}
      */
-    Article getArticleById(int articleId);
+    ArticleDto getArticleDtoById(int articleId);
 
     /**
      * Метод для удаления статьи.
@@ -76,7 +59,7 @@ public interface ArticleService {
      * @param publishingId id журнала
      * @return {@link List} of {@link Article}
      */
-    List<Article> getArticleByTopicAndPublishingId(int topicId, int publishingId);
+    List<ArticleDto> getArticleByTopicAndPublishingId(int topicId, int publishingId);
 
     /**
      * Получение статей по id рубрики, журнала и автора.
@@ -95,15 +78,6 @@ public interface ArticleService {
      * @return Список объектов {@link ArticleCoauthor}
      */
     List<ArticleCoauthor> getCoauthorsByArticleId(int articleId);
-
-    /**
-     * Получение списка рецензий {@link Review} по id статьи.
-     *
-     * @param articleId id статьи
-     * @return {@link List} of {@link Review}
-     */
-    List<Review> getReviewsByArticleId(int articleId);
-
 
     /**
      * Сохранение статьи, присланной со страницы /article/new.
@@ -146,4 +120,30 @@ public interface ArticleService {
      * @return Карта пар 'Название рубрики - количество статей' для указанного автора
      */
     Map<String, Integer> getArticleCountByTopicMap(int authorId);
+
+    /**
+     * @param filter объект, хранящий в своих полях параметры get запроса
+     * @return DTO для статьи
+     */
+    List<ArticleDto> getArticleDtoList(ArticleFilter filter);
+
+    /**
+     * @param articleId id статьи
+     * @return DTO для статьи
+     */
+    ArticleDto getArticleDto(int articleId);
+
+    /**
+     * @param articleId id статьи
+     * @return {@code true}, если статья с данным id существует
+     */
+    boolean isArticleExists(int articleId);
+
+    /**
+     * Получить список id авторов из указанного журнала, у которых есть статья с указанной рубрикой.
+     *
+     * @param filter объект, хранящий в себе параметры get запроса
+     * @return список id авторов, у которых есть статья, проходящая фильтр
+     */
+    List<Integer> getAuthorsIdList(AuthorFilter filter);
 }

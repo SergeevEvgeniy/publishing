@@ -26,18 +26,16 @@ public class EmployeeToEmployeeShortInfoConverter implements Converter<Employee,
      * @return Фамилия И.[О.]
      */
     private String getShortFullName(final Employee e) {
-        StringBuilder bldr = new StringBuilder();
-        bldr
-            .append(e.getLastName())
+        StringBuilder builder = new StringBuilder(e.getLastName())
             .append(" ")
             .append(e.getFirstName().charAt(0))
             .append(". ");
         String middle = e.getMiddleName();
         if (middle != null && !middle.isEmpty()) {
-            bldr
+            builder
                 .append(middle.charAt(0))
                 .append(".");
         }
-        return bldr.toString();
+        return builder.toString();
     }
 }

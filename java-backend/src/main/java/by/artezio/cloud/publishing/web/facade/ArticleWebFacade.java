@@ -1,10 +1,10 @@
 package by.artezio.cloud.publishing.web.facade;
 
-import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.ArticleCoauthor;
 import by.artezio.cloud.publishing.domain.Employee;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Topic;
+import by.artezio.cloud.publishing.dto.ArticleDto;
 import by.artezio.cloud.publishing.dto.ArticleForm;
 import by.artezio.cloud.publishing.dto.ArticleInfo;
 import by.artezio.cloud.publishing.dto.ArticleView;
@@ -22,7 +22,6 @@ import by.artezio.cloud.publishing.service.converter.EmployeeToEmployeeShortInfo
 import by.artezio.cloud.publishing.service.converter.TopicToTopicShortInfoConverter;
 import by.artezio.cloud.publishing.web.security.AccessDeniedException;
 import by.artezio.cloud.publishing.web.security.SecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -47,67 +46,30 @@ public class ArticleWebFacade {
     private EmployeeToEmployeeShortInfoConverter employeeConverter;
 
     /**
-     * @param securityService {@link SecurityService}
-     */
-    @Autowired
-    public void setSecurityService(final SecurityService securityService) {
-        this.securityService = securityService;
-    }
-
-    /**
-     * @param articleService {@link ArticleService}
-     */
-    @Autowired
-    public void setArticleService(final ArticleService articleService) {
-        this.articleService = articleService;
-    }
-
-    /**
-     * @param employeeService {@link EmployeeService}
-     */
-    @Autowired
-    public void setEmployeeService(final EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
-
-    /**
+     * @param securityService   {@link SecurityService}
+     * @param articleService    {@link ArticleService}
+     * @param employeeService   {@link EmployeeService}
      * @param publishingService {@link PublishingService}
-     */
-    @Autowired
-    public void setPublishingService(final PublishingService publishingService) {
-        this.publishingService = publishingService;
-    }
-
-    /**
-     * @param topicService {@link TopicService}
-     */
-    @Autowired
-    public void setTopicService(final TopicService topicService) {
-        this.topicService = topicService;
-    }
-
-    /**
-     * @param reviewService {@link ReviewService}
-     */
-
-    @Autowired
-    public void setReviewService(final ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
-
-    /**
-     * @param topicConverter {@link TopicToTopicShortInfoConverter}
-     */
-    @Autowired
-    public void setTopicConverter(final TopicToTopicShortInfoConverter topicConverter) {
-        this.topicConverter = topicConverter;
-    }
-
-    /**
+     * @param topicService      {@link TopicService}
+     * @param reviewService     {@link ReviewService}
+     * @param topicConverter    {@link TopicToTopicShortInfoConverter}
      * @param employeeConverter {@link EmployeeToEmployeeShortInfoConverter}
      */
-    @Autowired
-    public void setEmployeeConverter(final EmployeeToEmployeeShortInfoConverter employeeConverter) {
+    public ArticleWebFacade(final SecurityService securityService,
+                            final ArticleService articleService,
+                            final EmployeeService employeeService,
+                            final PublishingService publishingService,
+                            final TopicService topicService,
+                            final ReviewService reviewService,
+                            final TopicToTopicShortInfoConverter topicConverter,
+                            final EmployeeToEmployeeShortInfoConverter employeeConverter) {
+        this.securityService = securityService;
+        this.articleService = articleService;
+        this.employeeService = employeeService;
+        this.publishingService = publishingService;
+        this.topicService = topicService;
+        this.reviewService = reviewService;
+        this.topicConverter = topicConverter;
         this.employeeConverter = employeeConverter;
     }
 
@@ -116,7 +78,38 @@ public class ArticleWebFacade {
      */
     public List<ArticleInfo> getArticleInfoList() {
         User current = securityService.getCurrentUser();
-        return articleService.getArticleInfoList(current);
+
+        List<ArticleInfo> list = articleService.getArticleInfoList(current);
+        for (ArticleInfo info : list) {
+            ArticleDto article = articleService.getArticleDto(info.getArticleId());
+            info.setPublishing(
+                publishingService.getPublishingTitle(
+                    article.getPublishingId()
+                )
+            );
+            info.setTopic(
+                topicService.getTopicName(
+                    article.getTopicId()
+                )
+            );
+            info.setAuthorFullName(
+                employeeService.getShortEmployee(
+                    article.getAuthorId()
+                ).getShortFullName()
+            );
+
+            List<ArticleCoauthor> coauthors = articleService.getCoauthorsByArticleId(article.getId());
+            List<String> coauthorNames = new ArrayList<>(coauthors.size());
+            for (ArticleCoauthor coauthor : coauthors) {
+                coauthorNames.add(employeeService.getShortEmployee(
+                    coauthor.getEmployeeId()
+                ).getShortFullName());
+            }
+            info.setCoauthors(coauthorNames);
+
+            info.setReviewed(reviewService.getReviewsByArticleId(article.getId()).size() != 0);
+        }
+        return list;
     }
 
     /**
@@ -125,23 +118,16 @@ public class ArticleWebFacade {
      */
     public ArticleForm getUpdateArticleFormByArticleId(final int articleId) {
         User currentUser = securityService.getCurrentUser();
-        Article article = articleService.getArticleById(articleId);
-        ArticleForm form;
+        ArticleDto article = articleService.getArticleDtoById(articleId);
         if (article.getAuthorId() != currentUser.getId()) {
             throw new AccessDeniedException("Current user is not an author.");
         }
 
-        form = articleService.getUpdateArticleFormByArticleId(articleId);
-        return form;
+        ArticleForm articleForm = articleService.getUpdateArticleFormByArticleId(articleId);
+        articleForm.setShortInfos(getReviewShortInfos(articleId));
+        return articleForm;
     }
 
-    /**
-     * @return {@code true}, если текущий пользователь является журналистом
-     */
-    public boolean isJournalist() {
-        User current = securityService.getCurrentUser();
-        return current.getType().equals('J');
-    }
 
     /**
      * @param publishingId id журнала/газеты
@@ -149,22 +135,6 @@ public class ArticleWebFacade {
      */
     public List<Topic> getTopicsByPublishingId(final int publishingId) {
         return topicService.getTopicsByPublishingId(publishingId);
-    }
-
-    /**
-     * @param publishingId id журнала/газеты
-     * @return {@link List} of {@link Employee}
-     */
-    public List<Employee> getEmployeesByPublishingId(final int publishingId) {
-        return employeeService.getEmployeesByPublishingId(publishingId);
-    }
-
-    /**
-     * @param employeeId id сотрудника
-     * @return {@link Employee}
-     */
-    public Employee getEmployeeById(final int employeeId) {
-        return employeeService.getEmployeeById(employeeId);
     }
 
     /**
@@ -182,7 +152,7 @@ public class ArticleWebFacade {
      */
     public ArticleView getArticleViewById(final int articleId) {
         ArticleView view = new ArticleView();
-        Article article = articleService.getArticleById(articleId);
+        ArticleDto article = articleService.getArticleDtoById(articleId);
         Topic topic = topicService.getTopicById(article.getTopicId());
         PublishingDTO publishing = publishingService.getPublishingById(article.getPublishingId());
         List<ArticleCoauthor> articleCoauthors = articleService.getCoauthorsByArticleId(articleId);
@@ -190,7 +160,7 @@ public class ArticleWebFacade {
         for (ArticleCoauthor ac : articleCoauthors) {
             coauthors.add(employeeService.getEmployeeById(ac.getEmployeeId()));
         }
-        List<Review> reviewList = articleService.getReviewsByArticleId(articleId);
+        List<Review> reviewList = reviewService.getReviewsByArticleId(articleId);
         Map<Employee, Review> reviews = new HashMap<>(reviewList.size());
         for (Review r : reviewList) {
             reviews.put(employeeService.getEmployeeById(r.getReviewerId()), r);
@@ -269,7 +239,13 @@ public class ArticleWebFacade {
      * @return список {@link ReviewShortInfo}
      */
     public List<ReviewShortInfo> getReviewShortInfos(final int articleId) {
-        return reviewService.getReviewShortInfoList(articleId);
+        List<ReviewShortInfo> reviewShortInfoList = reviewService.getReviewShortInfoList(articleId);
+        for (ReviewShortInfo shortInfo : reviewShortInfoList) {
+            shortInfo.setReviewerShortName(
+                employeeService.getShortEmployee(shortInfo.getReviewerId()).getShortFullName()
+            );
+        }
+        return reviewShortInfoList;
     }
 
     /**
@@ -305,5 +281,27 @@ public class ArticleWebFacade {
         if (securityService.getCurrentUser() == null) {
             throw new AccessDeniedException("User is not authorized");
         }
+    }
+
+    /**
+     * @return {@code true}, если текущий пользователь является главным редактором
+     */
+    public boolean isChiefEditor() {
+        return securityService.getCurrentUser().isChiefEditor();
+    }
+
+    /**
+     * @return {@code true}, если текущий пользователь является журналистом
+     */
+    public boolean isJournalist() {
+
+        return securityService
+            .getCurrentUser()
+            .getType()
+            .equals('J');
+    }
+
+    public boolean isArticleExists(final int articleId) {
+        return articleService.isArticleExists(articleId);
     }
 }

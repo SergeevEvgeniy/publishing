@@ -154,4 +154,10 @@ public class LocalIssueService implements IssueService {
         return issueDao.getIssueById(issueId);
     }
 
+
+
+    @Override
+    public boolean isArticlePublished(final int articleId) {
+        return issueDao.isArticlePublished(articleId);
+    }
 }

@@ -28,13 +28,13 @@
                 <th>Автор</th>
             </c:if>
             <th>Соавторы</th>
-            <th></th>
+                <th></th>
         </tr>
         </thead>
         <tbody>
         <c:forEach var="element" items="${data}">
             <tr>
-                <td>${element.title}</td>
+                <td><c:out value="${element.title}" /></td>
                 <td>${element.publishing}</td>
                 <td>${element.topic}</td>
                 <c:if test="${not isJournalist}">
@@ -47,18 +47,21 @@
                         </c:forEach>
                     </ul>
                 </td>
-                <td>
-                    <a href="article/get/${element.articleId}" type="submit"
-                       class="glyphicon glyphicon-eye-open btn btn-sm btn-success"></a>
+                    <td>
+                        <c:if test="${(isJournalist and element.published) or isChiefEditor}">
+                            <a href="article/get/${element.articleId}" type="submit"
+                               class="glyphicon glyphicon-eye-open btn btn-sm btn-success"></a>
+                        </c:if>
 
-                    <c:if test="${isJournalist and not element.published}">
-                        <a href="article/update/${element.articleId}"
-                           class="glyphicon glyphicon-edit btn btn-sm btn-success"></a>
-                    </c:if>
+                        <c:if test="${isJournalist and not element.published}">
+                            <a href="article/update/${element.articleId}"
+                               class="glyphicon glyphicon-edit btn btn-sm btn-success"></a>
+                        </c:if>
 
-                    <button value="${element.articleId}" name="deleteArticle"
-                            class="glyphicon glyphicon-trash btn btn-sm btn-danger"></button>
-                </td>
+                        <c:if test="${isJournalist and not element.reviewed}">
+                            <a href="article/delete/${element.articleId}" class="glyphicon glyphicon-trash btn btn-sm btn-danger"></a>
+                        </c:if>
+                    </td>
             </tr>
         </c:forEach>
         </tbody>

@@ -1,7 +1,7 @@
 package by.artezio.cloud.publishing.dto;
 
 /**
- * DTO для передачи в REST.
+ * DTO для передачи через REST списка неопубликованных статей для сервиса с номерами.
  *
  * @author Denis Shubin
  */

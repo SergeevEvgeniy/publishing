@@ -12,30 +12,29 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <tag:layout>
     <script type="text/javascript" src="<c:url value="/resources/js/updateArticle.js"/>"></script>
-    <form:form class="form-horizontal center-block" method="${formMethod}" modelAttribute="articleForm">
+    <form:form class="form-horizontal center-block" method="post" modelAttribute="articleForm">
 
         <div class="form-group">
             <label for="publishingSelector" class="col-sm-4 h4">Журнал</label>
             <div class="col-sm-8">
-                <input type="hidden" id="hiddenPublishingId" name="publishingId" value="${articleForm.publishingId}">
-                <select id="publishingSelector" class="form-control">
-                    <option value="">---Выберите журнал---</option>
-                    <c:forEach items="${publishingDtoList}" var="publishing">
-                        <option value="${publishing.id}">${publishing.title}</option>
-                    </c:forEach>
-                </select>
+                    <%--                <input type="hidden" id="hiddenPublishingId" name="publishingId" value="${articleForm.publishingId}">--%>
+                <form:hidden path="publishingId" id="hiddenPublishingId"/>
+                <form:select path="publishingId" id="publishingSelector" cssClass="form-control">
+                    <form:option value="" label="---Выберите журнал---"/>
+                    <form:options items="${publishingDtoList}" itemValue="id" itemLabel="title"/>
+                </form:select>
             </div>
         </div>
 
         <div class="form-group">
             <label for="topicSelector" class="label-control col-sm-4 h4">Рубрика</label>
             <div class="col-sm-8">
-                <input type="hidden" id="hiddenTopicId" name="topicId" value="${articleForm.topicId}">
-                <select id="topicSelector" class="form-control" disabled="disabled">
-                    <option value="">---Выберите рубрику---</option>
-                    <c:forEach items="${topicShortInfos}" var="topic">
-                        <option value="${topic.id}">${topic.name}</option>
-                    </c:forEach>
+                    <%--                <input type="hidden" id="hiddenTopicId" name="topicId" value="${articleForm.topicId}">--%>
+                <form:hidden path="topicId" id="hiddenTopicId"/>
+                <form:select id="topicSelector" path="topicId" cssClass="form-control">
+                    <form:option value="" label="---Выберите журнал---"/>
+                    <form:options items="${topicShortInfos}" itemValue="id" itemLabel="name"/>
+                </form:select>
                 </select>
             </div>
         </div>
@@ -43,7 +42,8 @@
         <div class="form-group">
             <label for="title" class="label-control col-sm-4 h4">Название</label>
             <div class="col-sm-8">
-                <input type="text" id="title" value="${articleForm.title}" class="form-control" name="title"/>
+                <form:input htmlEscape="true" path="title" id="title" value="${articleForm.title}"
+                            cssClass="form-control" name="title"/>
             </div>
         </div>
 
@@ -52,7 +52,7 @@
                 <label for="content" class="h4">Содержание</label>
             </div>
             <div class="col-sm-12">
-                <textarea id="content" class="form-control no-resize" name="content">${articleForm.content}</textarea>
+                <form:textarea htmlEscape="true" path="content" cssClass="form-control no-resize"/>
             </div>
         </div>
 
@@ -64,12 +64,14 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-sm-8">
-                                <select id="availableCoauthors" class="form-control ">
-                                    <c:forEach var="availableCoauthor" items="${availableCoauthors}">
-                                        <option value="${availableCoauthor.id}">
-                                                ${availableCoauthor.shortFullName}
+                                <select id="availableCoauthors" class="form-control">
+
+                                    <c:forEach items="${availableCoauthors}" var="coauthor">
+                                        <option value="${coauthor.id}">
+                                            <c:out value="${coauthor.shortFullName}"/>
                                         </option>
                                     </c:forEach>
+
                                 </select>
                             </div>
                             <div class="col-sm-4">
@@ -110,21 +112,19 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <Label class="h4 col-sm-4">Рецензент</Label>
+                                    <Label for="reviewerSelector" class="h4 col-sm-4">Рецензент</Label>
                                     <div class="col-sm-8">
-                                        <select id="reviewerSelector" class="form-control">
-                                            <option value="">---Выберите рецензента---</option>
-                                            <c:forEach var="element" items="${reviewShortInfos}">
-                                                <option value="${element.reviewerId}">
-                                                        ${element.reviewerShortName}
-                                                </option>
-                                            </c:forEach>
-                                        </select>
+                                        <form:select multiple="false" path="shortInfos" id="reviewerSelector"
+                                                     class="form-control">
+                                            <form:option value="" label="---Выберите рецензента---"/>
+                                            <form:options items="${reviewShortInfos}" itemValue="reviewerId"
+                                                          itemLabel="reviewerShortName"/>
+                                        </form:select>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <textarea id="reviewContent" class="form-control no-resize"></textarea>
+                                <span id="reviewContent" class="form-control-static"></span>
                             </div>
                         </div>
                     </div>
@@ -132,9 +132,7 @@
             </div>
         </c:if>
         <div class="text-right">
-            <a
-                <c:if test="${isEditMode}">href="../../article"</c:if>
-                <c:if test="${not isEditMode}">href="../article"</c:if> class="btn btn-default">
+            <a href="${pageContext.request.contextPath}/article" class="btn btn-default">
                 Отменить
             </a>
             <input type="submit" class="btn btn-success" value="Сохранить">

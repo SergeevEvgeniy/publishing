@@ -12,36 +12,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <tag:layout>
     <script type="text/javascript" src="<c:url value="/resources/js/articleView.js"/>"></script>
-    <form class="form-horizontal center-block">
+    <div class="form-horizontal center-block">
         <input type="hidden" value="${model.articleId}" id="articleId">
 
         <div class="form-group">
-            <label for="publishingSelector" class="col-sm-4 h4">Журнал</label>
+            <label class="col-sm-4 h4">Журнал</label>
             <div class="col-sm-8">
-                <input type="text" id="publishingSelector" class="form-control" value="${model.publishingName}">
+                <span class="form-control-static"><c:out value="${model.publishingName}"/></span>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="topicSelector" class="label-control col-sm-4 h4">Рубрика</label>
+            <label class="label-control col-sm-4 h4">Рубрика</label>
             <div class="col-sm-8">
-                <input type="text" id="topicSelector" class="form-control" value="${model.topicName}">
+                <span class="form-control-static"><c:out value="${model.topicName}"/></span>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="title" class="label-control col-sm-4 h4">Название</label>
+            <label class="label-control col-sm-4 h4">Название</label>
             <div class="col-sm-8">
-                <input type="text" id="title" value="${model.articleName}" class="form-control"/>
+                <span class="form-control-static"><c:out value="${model.articleName}"/></span>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-sm-4">
-                <label for="content" class="h4">Содержание</label>
+                <label class="h4">Содержание</label>
             </div>
             <div class="col-sm-12">
-                <textarea id="content" class="form-control no-resize">${model.content}</textarea>
+                <span class="form-control-static"><c:out value="${model.content}"/></span>
             </div>
         </div>
 
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <textarea id="reviewContent" class="form-control no-resize"></textarea>
+                                <span id="reviewContent" class="form-control-static no-resize"></span>
                             </div>
                         </div>
                     </div>
@@ -97,9 +97,9 @@
         </c:if>
 
         <div class="text-right">
-            <a href="../../article" class="btn btn-default">
+            <a href="${pageContext.request.contextPath}/article" class="btn btn-default">
                 Назад
             </a>
         </div>
-    </form>
+    </div>
 </tag:layout>

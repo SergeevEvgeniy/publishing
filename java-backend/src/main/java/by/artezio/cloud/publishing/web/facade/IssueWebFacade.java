@@ -3,6 +3,7 @@ package by.artezio.cloud.publishing.web.facade;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Employee;
+import by.artezio.cloud.publishing.dto.ArticleDto;
 import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.dto.PublishingDTO;
 import by.artezio.cloud.publishing.dto.User;
@@ -153,9 +154,9 @@ public class IssueWebFacade {
         securityService.checkIsEditor();
         IssueView issueView = issueService.getIssueViewByIssueId(issueId);
         List<Integer> articleIdList = issueService.getArticleIdList(issueId);
-        List<Article> articles = new ArrayList<>();
+        List<ArticleDto> articles = new ArrayList<>();
         for (Integer id : articleIdList) {
-            articles.add(articleService.getArticleById(id));
+            articles.add(articleService.getArticleDtoById(id));
         }
         issueView.setArticles(articles);
         issueView.setAdvertisingPath(issueService.getAdvertisingFilePath(issueId));
@@ -256,10 +257,10 @@ public class IssueWebFacade {
      * */
     public IssueView mapIssueFormToIssueView(final IssueForm issueForm) {
         IssueView issueView = new IssueView();
-        List<Article> articles = new ArrayList<>();
+        List<ArticleDto> articles = new ArrayList<>();
         if (issueForm.getArticlesId() != null) {
             for (Integer id : issueForm.getArticlesId()) {
-                articles.add(articleService.getArticleById(id));
+                articles.add(articleService.getArticleDtoById(id));
             }
             issueView.setArticles(articles);
         }

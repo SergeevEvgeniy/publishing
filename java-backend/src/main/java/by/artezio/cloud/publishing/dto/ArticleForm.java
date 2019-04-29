@@ -7,11 +7,16 @@ import java.util.List;
 /**
  * Класс, содержащий детальную информацию о статье.
  *
- * <p>Используется для отображения статей на странице <code>updateArticle.jsp</code>.
+ * <p>
+ * Используется для передачи данных со страницы updateArticle.jsp на сервер.
+ * Используется для сохранения новой и редактирования уже существующей статьи
+ * </p>
  *
  * @author Denis Shubin
  */
 public class ArticleForm {
+
+    private static final int CONTENT_MIN_LENGTH = 50;
 
     private Integer authorId;
     private Integer publishingId;
@@ -20,9 +25,10 @@ public class ArticleForm {
     @NotNull
     private String title;
 
-    @Size(min = 50)
+    @Size(min = CONTENT_MIN_LENGTH)
     private String content;
     private List<Integer> coauthors;
+    private List<ReviewShortInfo> shortInfos;
 
     /**
      * @return id автора статьи
@@ -106,5 +112,19 @@ public class ArticleForm {
      */
     public void setCoauthors(final List<Integer> coauthors) {
         this.coauthors = coauthors;
+    }
+
+    /**
+     * @return список рецензий
+     */
+    public List<ReviewShortInfo> getShortInfos() {
+        return shortInfos;
+    }
+
+    /**
+     * @param shortInfos список рецензий
+     */
+    public void setShortInfos(List<ReviewShortInfo> shortInfos) {
+        this.shortInfos = shortInfos;
     }
 }
