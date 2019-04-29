@@ -43,10 +43,11 @@ window.AjaxTableComponent = (function() {
             var target = event.target;
             while (target !== this) {
                 if (target.classList.contains(removeButtonClassName)) {
+                    var id = target.parentNode.parentNode.parentNode.id;
                     $.ajax({
                         type: "POST",
                         url: deleteUrl,
-                        data: { id: target.parentNode.parentNode.parentNode.id},
+                        data: { id: id},
                         //contentType: "application/json; charset=utf-8",
                         success: function (result) {
                             if (result.isSuccessful) {
@@ -65,7 +66,6 @@ window.AjaxTableComponent = (function() {
 
     function removeRow(container, id) {
         var row = container.rows.namedItem(id);
-        console.log(row);
         container.removeChild(row);
     };
 
