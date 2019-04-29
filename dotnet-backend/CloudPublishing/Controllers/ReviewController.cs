@@ -148,6 +148,11 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult Details(ReviewKeyModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return Redirect("/Error/NotFound");
+            }
+
             var review = mapper.Map<ReviewModel>(reviewService.GetReview(model.ArticleId, model.ReviwerId));
             return View(review);
         }
@@ -160,12 +165,13 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult Edit(ReviewKeyModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var review = mapper.Map<ReviewModel>(reviewService.GetReview(model.ArticleId, model.ReviwerId));
-                return View(review);
+                return Redirect("/Error/NotFound");
             }
-            return Redirect("/Review/Index");
+
+            var review = mapper.Map<ReviewModel>(reviewService.GetReview(model.ArticleId, model.ReviwerId));
+            return View(review);
         }
 
         /// <summary>
@@ -191,8 +197,14 @@ namespace CloudPublishing.Controllers
         [HttpGet]
         public ActionResult Delete(ReviewKeyModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return Redirect("/Error/NotFound");
+            }
+
             var isPublished = articleService.CheckPublicationArticle(model.ArticleId);
-            var deleteModel = new DeleteReviewModel {
+            var deleteModel = new DeleteReviewModel
+            {
                 ArticleId = model.ArticleId,
                 ReviwerId = model.ReviwerId,
                 IsPublished = isPublished
@@ -207,6 +219,11 @@ namespace CloudPublishing.Controllers
         [HttpPost]
         public ActionResult ConfirmDeletion(ReviewKeyModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return Redirect("/Error/NotFound");
+            }
+
             var isPublished = articleService.CheckPublicationArticle(model.ArticleId);
             if (!isPublished)
             {
