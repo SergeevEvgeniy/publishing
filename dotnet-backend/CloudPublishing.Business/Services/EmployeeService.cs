@@ -18,7 +18,7 @@ namespace CloudPublishing.Business.Services
     {
         private readonly IPasswordHasher hasher;
         private readonly IMapper mapper;
-        private readonly IJournalistStatisticsService service;
+        private readonly IArticleService service;
         private readonly IUnitOfWork unit;
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace CloudPublishing.Business.Services
         /// <param name="hasher">Экземпляр класса для хэширования</param>
         /// <param name="service">Экземпляр класса для получения статистики журналистов</param>
         public EmployeeService(IUnitOfWork unit, IMapper mapper, IPasswordHasher hasher,
-            IJournalistStatisticsService service)
+            IArticleService service)
         {
             this.unit = unit;
             this.mapper = mapper;
