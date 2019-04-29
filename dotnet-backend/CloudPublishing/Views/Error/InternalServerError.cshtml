@@ -22,5 +22,14 @@
                 @Html.ActionLink("Добавить журнал", "Create", "Publishing")
             </li>
         }
+        @if (User.Identity.IsAuthenticated && (User.IsInRole("ChiefEditor") || User.IsInRole("Editor")))
+        {
+            <li class="list-item">
+                @Html.ActionLink("Список рецензий", "Index", "Review")
+            </li>
+            <li class="list-item">
+                @Html.ActionLink("Добавить рецензию", "Create", "Review")
+            </li>
+        }
     </ul>
 </div>

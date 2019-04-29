@@ -40,6 +40,18 @@
                         </div>
                     </li>
                 }
+                @if (User.Identity.IsAuthenticated && (User.IsInRole("ChiefEditor") || User.IsInRole("Editor")))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="employeeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                            Рецензии
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="employeeDropdown">
+                            @Html.ActionLink("Список рецензий", "Index", "Review", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Добавить рецензию", "Create", "Review", null, new { @class = "dropdown-item" })
+                        </div>
+                    </li>
+                }
             </ul>
             <ul class="navbar-nav my-lg-0">
                 @if (!User.Identity.IsAuthenticated)

@@ -42,6 +42,16 @@ namespace CloudPublishing.Data.Repositories
         }
 
         /// <summary>
+        /// Метод получения рецензий по Id статьи
+        /// </summary>
+        /// <param name="id">Id статьи</param>
+        /// <returns>Список рецензий</returns>
+        public IEnumerable<Review> GetByArticleId(int id)
+        {
+            return context.Review.Where(x => x.ArticleId == id);
+        }
+
+        /// <summary>
         ///     Метод получения рецензий конкретного редактора
         /// </summary>
         /// <param name="reviewerId">Id редактора</param>

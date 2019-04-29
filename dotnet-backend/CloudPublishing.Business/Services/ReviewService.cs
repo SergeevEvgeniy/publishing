@@ -80,6 +80,21 @@ namespace CloudPublishing.Business.Services
         }
 
         /// <summary>
+        /// Метод проверки допустимости публикации статьи
+        /// </summary>
+        /// <param name="id">Id статьи, которую требуется проверить</param>
+        /// <returns>true, если во всех рецензиях статья одобрена, false, если есть рецензии, в которых статья не одобрена</returns>
+        public IEnumerable<ReviewDTO> GetUnapprovedReviewsByArticleId(int id)
+        {
+            var reviews = db.Reviews.GetByArticleId(id);
+            if(reviews.Count() == 0)
+            {
+                return null;
+            }
+            return mapper.Map<IEnumerable<ReviewDTO>>(reviews.Where(x => x.Approved == false));
+        }
+
+        /// <summary>
         /// Метод создания рецензии
         /// </summary>
         /// <param name="review">Объект рецензии</param>

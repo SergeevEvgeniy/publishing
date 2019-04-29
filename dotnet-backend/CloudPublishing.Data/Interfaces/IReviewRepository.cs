@@ -9,6 +9,8 @@ namespace CloudPublishing.Data.Interfaces
 
         IEnumerable<Review> GetAll();
 
+        IEnumerable<Review> GetByArticleId(int id);
+
         IEnumerable<Review> GetUserReviews(int reviewerId);
 
         Review Get(int articleId, int reviewerId);
