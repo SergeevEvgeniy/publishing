@@ -3,6 +3,7 @@ using CloudPublishing.Business.DTO;
 using CloudPublishing.Business.Services.Interfaces;
 using CloudPublishing.Models.Reviews.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using CloudPublishing.Business.Constants;
 using CloudPublishing.Util.Profiles;
@@ -108,7 +109,8 @@ namespace CloudPublishing.Controllers
         [Route("GetAuthorList/{publishingId:int}/{topicId:int}")]
         public ActionResult GetAuthorList(int publishingId, int topicId)
         {
-            var authorList = mapper.Map<IEnumerable<AuthorModel>>(articleService.GetAuthorList(publishingId, topicId));
+            var authorList = mapper.Map<IEnumerable<AuthorModel>>(articleService.GetAuthorList(publishingId, topicId)
+                .Select(x => employeeService.GetEmployeeById(x)));
             return PartialView(authorList);
         }
 

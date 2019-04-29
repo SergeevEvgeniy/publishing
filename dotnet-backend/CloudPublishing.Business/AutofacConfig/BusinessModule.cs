@@ -12,7 +12,6 @@ namespace CloudPublishing.Business.AutofacConfig
             builder.RegisterType<ReviewService>().As<IReviewService>();
             builder.RegisterType<PublishingService>().As<IPublishingService>();
             builder.RegisterType<ArticleService>().As<IArticleService>();
-            builder.RegisterType<FakeArticleService>().AsImplementedInterfaces();
         }
     }
 }
