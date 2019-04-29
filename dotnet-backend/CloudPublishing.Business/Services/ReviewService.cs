@@ -95,6 +95,16 @@ namespace CloudPublishing.Business.Services
         }
 
         /// <summary>
+        /// Метод проверки наличия рецензий на статью
+        /// </summary>
+        /// <param name="id">Id статьи</param>
+        /// <returns>true, если рецензии есть и false, если рецензий нет</returns>
+        public bool CheckExistenceArticleReviews(int id)
+        {
+            return mapper.Map<IEnumerable<ReviewDTO>>(db.Reviews.GetByArticleId(id)).Count() > 0 ? true : false;
+        }
+
+        /// <summary>
         /// Метод создания рецензии
         /// </summary>
         /// <param name="review">Объект рецензии</param>
