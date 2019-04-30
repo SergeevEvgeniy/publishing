@@ -17,7 +17,6 @@
         <div class="form-group">
             <label for="publishingSelector" class="col-sm-4 h4">Журнал</label>
             <div class="col-sm-8">
-                    <%--                <input type="hidden" id="hiddenPublishingId" name="publishingId" value="${articleForm.publishingId}">--%>
                 <form:hidden path="publishingId" id="hiddenPublishingId"/>
                 <form:select path="publishingId" id="publishingSelector" cssClass="form-control">
                     <form:option value="" label="---Выберите журнал---"/>
@@ -29,7 +28,6 @@
         <div class="form-group">
             <label for="topicSelector" class="label-control col-sm-4 h4">Рубрика</label>
             <div class="col-sm-8">
-                    <%--                <input type="hidden" id="hiddenTopicId" name="topicId" value="${articleForm.topicId}">--%>
                 <form:hidden path="topicId" id="hiddenTopicId"/>
                 <form:select id="topicSelector" path="topicId" cssClass="form-control">
                     <form:option value="" label="---Выберите журнал---"/>

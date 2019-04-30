@@ -123,7 +123,14 @@ public class ArticleController {
         List<EmployeeShortInfo> currentCoauthors = articleFacade.getCurrentCoauthors(articleId);
         List<ReviewShortInfo> reviewShortInfos = articleFacade.getReviewShortInfos(articleId);
 
-        availableCoauthors.removeAll(currentCoauthors);
+
+        for (int i = 0; i < availableCoauthors.size(); i++) {
+            for (EmployeeShortInfo currentCoauthor : currentCoauthors) {
+                if (availableCoauthors.get(i).getId() == currentCoauthor.getId()) {
+                    availableCoauthors.remove(i);
+                }
+            }
+        }
         User current = securityService.getCurrentUser();
         availableCoauthors.remove(articleFacade.getShortEmployeeById(current.getId()));
 
