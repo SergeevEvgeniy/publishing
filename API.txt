@@ -1,0 +1,8 @@
+﻿=== Java часть ===
+Опубликована ли статья? http://10.99.33.221:8080/publishing/api/article/isPublished/{articleId}
+Статья по id:
+http://10.99.33.221:8080/publishing/api/article/{articleId}
+Список статей: http://10.99.33.221:8080/publishing/api/articles?publishingId={publishingId}&topicId={topicId}&authorId={authorId}&published={true | false}
+Список id авторов: http://10.99.33.221:8080/publishing/api/authorsIdList?publishingId={publishingId}&topicId={topicId}&published={true | false}
+
+Статистике по автору: http://10.99.33.221:8080/publishing/api/article/statistics/{authorId} 
