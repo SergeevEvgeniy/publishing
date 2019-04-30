@@ -10,7 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<tag:layout>
+<tag:layout pageTitle="Удалить номер">
     <div class="col-sm-offset-2 col-sm-8">
         <div class="row">
             <div class="col-12-sm">

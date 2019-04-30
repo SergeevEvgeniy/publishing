@@ -10,7 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<tag:layout>
+<tag:layout pageTitle="Просмотр номера">
     <script type="text/javascript" src="<c:url value="/resources/js/articleView.js"/>"></script>
     <div class="form-horizontal center-block">
         <input type="hidden" value="${model.articleId}" id="articleId">
