@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tag" %>
 <!DOCTYPE html>
-<tag:layout>
+<tag:layout pageTitle="Ошибка доступа">
     <div class="alert alert-error">
         <div>
             <strong>Okay, Houston, we've had a problem here.</strong>

@@ -1,8 +1,4 @@
-<%--
-    Document   : layout
-    Created on : Mar 14, 2019, 1:03:38 PM
-    Author     : Sergeev Evgeniy
---%>
+<%@ attribute name="pageTitle" required="true" description="Set dynamic page title" %>
 
 <%@tag description="Include style css and nav-bar" pageEncoding="UTF-8" %>
 <html>

@@ -10,7 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<tag:layout>
+<tag:layout pageTitle="Обновить статью">
     <script type="text/javascript" src="<c:url value="/resources/js/updateArticle.js"/>"></script>
     <form:form class="form-horizontal center-block" method="post" modelAttribute="articleForm">
 

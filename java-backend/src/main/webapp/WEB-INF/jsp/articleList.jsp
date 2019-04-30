@@ -11,7 +11,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<tag:layout>
+<tag:layout pageTitle="Статьи">
     <c:if test="${isJournalist}">
         <div class="text-right form-group">
             <a href="article/new" class="btn btn-success ">Добавить статью</a>

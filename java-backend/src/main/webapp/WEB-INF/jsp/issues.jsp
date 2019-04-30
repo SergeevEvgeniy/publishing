@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<tag:layout>
+<tag:layout pageTitle="Номера">
 
     <h3 class="page-header">Номера</h3>
         <div class="text-right form-group">
