@@ -7,7 +7,6 @@ import by.artezio.cloud.publishing.dto.AuthorFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +25,6 @@ public class ArticleDao {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private DataSourceTransactionManager transactionManager;
 
     private RowMapper<Article> articleRowMapper = (rs, i) -> {
         Article article = new Article();
@@ -57,7 +53,7 @@ public class ArticleDao {
      * @return список объектов статей {@link Article}, где указанный пользователь является автором.
      */
     public List<Article> getArticleListByJournalistId(final int authorId) {
-        return jdbcTemplate.query("SELECT * FROM article\n"
+        return jdbcTemplate.query("SELECT * FROM article "
                 + "WHERE author_id = :authorId",
             Collections.singletonMap("authorId", authorId), articleRowMapper);
     }
@@ -95,21 +91,6 @@ public class ArticleDao {
 
 
     /**
-     * @param articleId id статьи
-     * @return {@code true}, если статья опубликована, иначе - {@code false}
-     */
-    public boolean isPublished(final Integer articleId) {
-        Integer id = jdbcTemplate.queryForObject("SELECT COUNT(*) "
-                + "FROM article a "
-                + "INNER JOIN issue_article ia "
-                + "ON ia.article_id = a.id "
-                + "WHERE a.id = :articleId",
-            Collections.singletonMap("articleId", articleId),
-            Integer.class);
-        return id > 0;
-    }
-
-    /**
      * Метод для удаления статьи.
      *
      * @param articleId id статьи, которую нужно удалить
@@ -119,10 +100,6 @@ public class ArticleDao {
         Map<String, Integer> param = new HashMap<>();
         param.put("articleId", articleId);
 
-        jdbcTemplate.update("DELETE FROM issue_article WHERE article_id = :articleId",
-            param);
-        jdbcTemplate.update("DELETE FROM review WHERE article_id = :articleId",
-            param);
         jdbcTemplate.update("DELETE FROM article_coauthors WHERE article_id = :articleId",
             param);
         jdbcTemplate.update("DELETE FROM article WHERE id = :articleId",
@@ -190,10 +167,10 @@ public class ArticleDao {
     /**
      * Обновление статьи, и связзанных с ней записей.
      *
-     * @param article    {@link Article}
-     * @param coauthtors {@link List} of {@link Integer}. Список id соавторов
+     * @param article   {@link Article}
+     * @param coauthors {@link List} of {@link Integer}. Список id соавторов
      */
-    public void update(final Article article, final List<Integer> coauthtors) {
+    public void update(final Article article, final List<Integer> coauthors) {
         Map<String, Object> params = new HashMap<>();
         params.put("articleId", article.getId());
         params.put("topicId", article.getTopicId());
@@ -212,8 +189,8 @@ public class ArticleDao {
         jdbcTemplate.update("DELETE FROM article_coauthors WHERE article_id = :articleId",
             Collections.singletonMap("articleId", article.getId()));
 
-        if (coauthtors != null) {
-            for (Integer id : coauthtors) {
+        if (coauthors != null) {
+            for (Integer id : coauthors) {
                 params = new HashMap<>();
                 params.put("articleId", article.getId());
                 params.put("employeeId", id);
@@ -222,30 +199,6 @@ public class ArticleDao {
                     params);
             }
         }
-    }
-
-    /**
-     * Получить список неопубликованных статей.
-     *
-     * @param publishingId id журнала
-     * @param topicId      id рубрики
-     * @param authorId     id автора
-     * @return список статей
-     */
-    public List<Article> getUnpublishedArticles(final int publishingId,
-                                                final int topicId,
-                                                final int authorId) {
-        Map<String, Integer> params = new HashMap<>();
-        params.put("topicId", topicId);
-        params.put("publishingId", publishingId);
-        params.put("authorId", authorId);
-        return jdbcTemplate.query("SELECT a.* "
-                + "FROM article a "
-                + "WHERE (SELECT COUNT(*) FROM issue_article WHERE article_id = a.id) = 0 "
-                + "AND a.topic_id = :topicId "
-                + "AND a.publishing_id = :publishingId "
-                + "AND a.author_id = :authorId",
-            params, articleRowMapper);
     }
 
     /**
@@ -260,29 +213,6 @@ public class ArticleDao {
                 + "WHERE author_id = :authorId",
             Collections.singletonMap("authorId", authorId),
             Integer.class);
-    }
-
-    /**
-     * Получить карту пар 'Название журнала - количество статей'.
-     *
-     * @param authorId id автора
-     * @return карта пар 'Название журнала - количество статей'
-     */
-    public Map<String, Integer> getCountByPublishingMap(final int authorId) {
-        return jdbcTemplate.queryForObject("SELECT p.title, COUNT(*) as count "
-                + "FROM publishing p "
-                + "INNER JOIN article a "
-                + "ON p.id = a.publishing_id "
-                + "WHERE a.author_id = :authorId "
-                + "GROUP BY p.title",
-            Collections.singletonMap("authorId", authorId),
-            (rs, rowNum) -> {
-                Map<String, Integer> map = new HashMap<>(rowNum);
-                while (rs.next()) {
-                    map.put(rs.getString("title"), rs.getInt("count"));
-                }
-                return map;
-            });
     }
 
     /**
@@ -339,7 +269,7 @@ public class ArticleDao {
      * @return запрос на получение id
      */
     private String generateQueryForFilter(final AuthorFilter filter) {
-        StringBuilder bldr = new StringBuilder("SELECT author_id FROM article");
+        StringBuilder bldr = new StringBuilder("SELECT DISTINCT author_id FROM article");
         boolean needsAnd = false;
 
         if (filter.getTopicId() != null

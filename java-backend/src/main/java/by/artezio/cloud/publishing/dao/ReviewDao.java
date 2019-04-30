@@ -66,4 +66,13 @@ public class ReviewDao {
             params, reviewRowMapper);
     }
 
+    /**
+     * Удаление рецензий, связанных с указанной статьёй.
+     *
+     * @param articleId id статьи
+     */
+    public void deleteReviewByArticleid(final int articleId) {
+        jdbcTemplate.update("DELETE FROM review WHERE article_id = :articleId",
+            Collections.singletonMap("articleId", articleId));
+    }
 }

@@ -134,4 +134,14 @@ public class IssueDao {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM issue_article WHERE article_id = :articleId",
             Collections.singletonMap("articleId", articleId), Integer.class) >= 1;
     }
+
+    /**
+     * Удаление из таблицы issue_article записей, связанных с указанной статьёй.
+     *
+     * @param articleId id статьи
+     */
+    public void deleteIssueArticleByArticleId(final int articleId) {
+        jdbcTemplate.update("DELETE FROM issue_article WHERE article_id = :articleId",
+            Collections.singletonMap("articleId", articleId));
+    }
 }

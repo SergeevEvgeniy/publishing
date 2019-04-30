@@ -78,7 +78,6 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
             ArticleInfo articleInfo = new ArticleInfo();
             articleInfo.setArticleId(a.getId());
             articleInfo.setTitle(a.getTitle());
-            articleInfo.setPublished(articleDao.isPublished(a.getId()));
             articleLists.add(articleInfo);
         }
 
@@ -117,16 +116,6 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     }
 
     @Override
-    public List<ArticleDto> getArticleByTopicAndPublishingId(final int topicId, final int publishingId) {
-        List<Article> articles = articleDao.getArticleByTopicAndPublishingId(topicId, publishingId);
-        List<ArticleDto> articleDtos = new ArrayList<>(articles.size());
-        for (Article a : articles) {
-            articleDtos.add(articleToArticleDtoConverter.convert(a));
-        }
-        return articleDtos;
-    }
-
-    @Override
     public List<Article> getArticlesBytopicAndPublishingAndAuthorId(final int topicId,
                                                                     final int publishingId,
                                                                     final int authorId) {
@@ -161,25 +150,8 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     }
 
     @Override
-    public List<ArticleDto> getUnpublishedArticles(final int publishingId,
-                                                   final int topicId,
-                                                   final int authorId) {
-        List<Article> unpublishedArticles = articleDao.getUnpublishedArticles(publishingId, topicId, authorId);
-        List<ArticleDto> unpublishedList = new ArrayList<>(unpublishedArticles.size());
-        for (Article a : unpublishedArticles) {
-            unpublishedList.add(articleToArticleDtoConverter.convert(a));
-        }
-        return unpublishedList;
-    }
-
-    @Override
     public int getArticleCountByAuthorId(final int authorId) {
         return articleDao.getArticleCountByAuthorId(authorId);
-    }
-
-    @Override
-    public Map<String, Integer> getArticleCountByPublishingMap(final int authorId) {
-        return articleDao.getCountByPublishingMap(authorId);
     }
 
     @Override

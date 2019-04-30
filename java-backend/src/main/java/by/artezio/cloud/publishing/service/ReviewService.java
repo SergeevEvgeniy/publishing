@@ -38,4 +38,11 @@ public interface ReviewService {
      * @return рецензия {@link Review}
      */
     ReviewShortInfo getReviewShortInfo(int articleId, int reviewerId);
+
+    /**
+     * Удаление всех рецензий, связанных с указанной статьёй.
+     *
+     * @param articleId id статьи
+     */
+    void deleteReviewByArticleid(int articleId);
 }

@@ -102,4 +102,11 @@ public interface IssueService {
      * @return {@code true}, если статья уже опубликована, иначе - {@code false}
      */
     boolean isArticlePublished(int articleId);
+
+    /**
+     * Метод для удаления из таблицы issue_article записей, связанных с указанной статьёй.
+     *
+     * @param articleId id статьи
+     */
+    void deleteIssueArticleByArticleId(int articleId);
 }

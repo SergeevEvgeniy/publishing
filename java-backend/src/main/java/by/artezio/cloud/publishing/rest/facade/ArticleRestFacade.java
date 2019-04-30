@@ -10,6 +10,7 @@ import by.artezio.cloud.publishing.service.EmployeeService;
 import by.artezio.cloud.publishing.service.IssueService;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,10 +51,23 @@ public class ArticleRestFacade {
         ArticleStatistics statistics = new ArticleStatistics();
         statistics.setAuthorId(authorId);
 
+        ArticleFilter filter = new ArticleFilter();
+        filter.setAuthorId(authorId);
+
         int articleCount = articleService.getArticleCountByAuthorId(authorId);
         statistics.setArticleCount(articleCount);
 
-        Map<String, Integer> countByPublishing = articleService.getArticleCountByPublishingMap(authorId);
+        List<ArticleDto> dtoList = articleService.getArticleDtoList(filter);
+        Map<String, Integer> countByPublishing = new HashMap<>(dtoList.size());
+        for (ArticleDto dto : dtoList) {
+            countByPublishing.put(dto.getTitle(), 0);
+        }
+        for (ArticleDto dto : dtoList) {
+            Integer count = countByPublishing.get(dto.getTitle());
+            count++;
+            countByPublishing.put(dto.getTitle(), count);
+        }
+
         statistics.setArticleCountByPublishing(countByPublishing);
 
         Map<String, Integer> countByTopic = articleService.getArticleCountByTopicMap(authorId);
@@ -70,17 +84,36 @@ public class ArticleRestFacade {
      */
     public List<Integer> getAuthorsIdList(final AuthorFilter filter) {
         List<Integer> list = articleService.getAuthorsIdList(filter);
+        if (filter.getPublished() != null) {
+            for (int i = 0; i < list.size(); i++) {
 
-//        if(filter.getPublished()!=null) {
-//            for(int i = 0; i < list.size(); i++) {
-//
-//                if(checkForFilter(list()))
-//
-//            }
-//        }
-        //todo Реализовать выборку id авторов с опубликованными (или неопубликованными) статьями
+                if (!checkForFilter(list.get(i), filter.getPublished())) {
+                    list.remove(i);
+                    i--;
+                }
 
+            }
+        }
         return list;
+    }
+
+    /**
+     * Проверка, есть ли у указанного автора опубликованные (или неопубликованные) статьи.
+     *
+     * @param authorId  id автора
+     * @param published {@code true}, если нужно проверить, есть ли у автора опубликованные статьи.
+     *                  {@code false} в обратном случае.
+     * @return {@code true}, если автор прошёл проверку, иначе - {@code false}
+     */
+    private boolean checkForFilter(final int authorId, final Boolean published) {
+        boolean result = false;
+        ArticleFilter newFilter = new ArticleFilter();
+        newFilter.setAuthorId(authorId);
+        List<ArticleDto> dtoList = articleService.getArticleDtoList(newFilter);
+        for (ArticleDto articleDto : dtoList) {
+            result = result || published.equals(issueService.isArticlePublished(articleDto.getId()));
+        }
+        return result;
     }
 
     /**

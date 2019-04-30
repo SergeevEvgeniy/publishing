@@ -53,15 +53,6 @@ public interface ArticleService {
     void deleteArticle(Integer articleId);
 
     /**
-     * Получение статей по id рубрики и журнала.
-     *
-     * @param topicId      id рубрики
-     * @param publishingId id журнала
-     * @return {@link List} of {@link Article}
-     */
-    List<ArticleDto> getArticleByTopicAndPublishingId(int topicId, int publishingId);
-
-    /**
      * Получение статей по id рубрики, журнала и автора.
      *
      * @param topicId      id рубрики
@@ -95,25 +86,10 @@ public interface ArticleService {
     void update(ArticleForm articleForm, Integer articleId);
 
     /**
-     * @param publishingId id журнала
-     * @param topicId      id рубрики
-     * @param authorId     id автора
-     * @return {@link List} of {@link ArticleDto}, список неопубликованных статей
-     */
-    List<ArticleDto> getUnpublishedArticles(int publishingId, int topicId, int authorId);
-
-    /**
      * @param authorId id автора
      * @return количество статей указанного автора
      */
     int getArticleCountByAuthorId(int authorId);
-
-    /**
-     * @param authorId id автора
-     * @return Карта пар 'Название журнала - количество статей' для указанного автора
-     */
-    Map<String, Integer> getArticleCountByPublishingMap(int authorId);
-
 
     /**
      * @param authorId id автора

@@ -14,12 +14,14 @@ import by.artezio.cloud.publishing.service.converter.IssueFormToIssueConverter;
 import by.artezio.cloud.publishing.service.converter.IssueToIssueInfoConverter;
 import by.artezio.cloud.publishing.service.converter.IssueToIssueViewConverter;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Сервис, реализующий бизнес-логику по обработке сущности {@link Issue}.
+ *
  * @author Igor Kuzmin
  */
 @Service
@@ -39,13 +41,14 @@ public class LocalIssueService implements IssueService {
 
     /**
      * Конструктор с параметрами.
-     * @param issueDao {@link IssueDao}
-     * @param issueArticleDao {@link IssueArticleDao}
-     * @param advertisingDao {@link AdvertisingDao}
-     * @param toIssueConverter {@link IssueFormToIssueConverter}
+     *
+     * @param issueDao             {@link IssueDao}
+     * @param issueArticleDao      {@link IssueArticleDao}
+     * @param advertisingDao       {@link AdvertisingDao}
+     * @param toIssueConverter     {@link IssueFormToIssueConverter}
      * @param toIssueInfoConverter {@link IssueToIssueInfoConverter}
      * @param toIssueViewConverter {@link IssueToIssueViewConverter}
-     * */
+     */
     public LocalIssueService(final IssueDao issueDao,
                              final IssueArticleDao issueArticleDao,
                              final AdvertisingDao advertisingDao,
@@ -155,9 +158,13 @@ public class LocalIssueService implements IssueService {
     }
 
 
-
     @Override
     public boolean isArticlePublished(final int articleId) {
         return issueDao.isArticlePublished(articleId);
+    }
+
+    @Override
+    public void deleteIssueArticleByArticleId(final int articleId) {
+        issueDao.deleteIssueArticleByArticleId(articleId);
     }
 }

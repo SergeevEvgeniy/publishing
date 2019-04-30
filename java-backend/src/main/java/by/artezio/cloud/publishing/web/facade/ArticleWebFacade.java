@@ -15,6 +15,7 @@ import by.artezio.cloud.publishing.dto.TopicShortInfo;
 import by.artezio.cloud.publishing.dto.User;
 import by.artezio.cloud.publishing.service.ArticleService;
 import by.artezio.cloud.publishing.service.EmployeeService;
+import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.service.PublishingService;
 import by.artezio.cloud.publishing.service.ReviewService;
 import by.artezio.cloud.publishing.service.TopicService;
@@ -42,6 +43,7 @@ public class ArticleWebFacade {
     private PublishingService publishingService;
     private TopicService topicService;
     private ReviewService reviewService;
+    private IssueService issueService;
     private TopicToTopicShortInfoConverter topicConverter;
     private EmployeeToEmployeeShortInfoConverter employeeConverter;
 
@@ -52,6 +54,7 @@ public class ArticleWebFacade {
      * @param publishingService {@link PublishingService}
      * @param topicService      {@link TopicService}
      * @param reviewService     {@link ReviewService}
+     * @param issueService      {@link IssueService}
      * @param topicConverter    {@link TopicToTopicShortInfoConverter}
      * @param employeeConverter {@link EmployeeToEmployeeShortInfoConverter}
      */
@@ -61,6 +64,7 @@ public class ArticleWebFacade {
                             final PublishingService publishingService,
                             final TopicService topicService,
                             final ReviewService reviewService,
+                            final IssueService issueService,
                             final TopicToTopicShortInfoConverter topicConverter,
                             final EmployeeToEmployeeShortInfoConverter employeeConverter) {
         this.securityService = securityService;
@@ -69,6 +73,7 @@ public class ArticleWebFacade {
         this.publishingService = publishingService;
         this.topicService = topicService;
         this.reviewService = reviewService;
+        this.issueService = issueService;
         this.topicConverter = topicConverter;
         this.employeeConverter = employeeConverter;
     }
@@ -81,6 +86,7 @@ public class ArticleWebFacade {
 
         List<ArticleInfo> list = articleService.getArticleInfoList(current);
         for (ArticleInfo info : list) {
+            info.setPublished(issueService.isArticlePublished(info.getArticleId()));
             ArticleDto article = articleService.getArticleDto(info.getArticleId());
             info.setPublishing(
                 publishingService.getPublishingTitle(
@@ -144,6 +150,8 @@ public class ArticleWebFacade {
      */
     public void deleteArticleById(final int articleId) {
         articleService.deleteArticle(articleId);
+        issueService.deleteIssueArticleByArticleId(articleId);
+        reviewService.deleteReviewByArticleid(articleId);
     }
 
     /**

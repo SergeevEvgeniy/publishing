@@ -58,4 +58,9 @@ public class FakeReviewService implements ReviewService {
     public ReviewShortInfo getReviewShortInfo(final int articleId, final int reviewerId) {
         return reviewConverter.convert(reviewDao.getReview(articleId, reviewerId));
     }
+
+    @Override
+    public void deleteReviewByArticleid(final int articleId) {
+        reviewDao.deleteReviewByArticleid(articleId);
+    }
 }
