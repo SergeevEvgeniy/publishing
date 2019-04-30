@@ -102,7 +102,7 @@ public class ArticleController {
         } else {
             articleFacade.save(articleForm);
         }
-        return "redirect: ../article";
+        return "redirect:/article";
 
     }
 
@@ -148,7 +148,7 @@ public class ArticleController {
                                       @Valid final ArticleForm articleForm,
                                       final BindingResult bindingResult) {
         articleFacade.update(articleForm, articleId);
-        return "redirect: ../../article";
+        return "redirect:/article";
     }
 
     /**
@@ -196,7 +196,7 @@ public class ArticleController {
     @PostMapping(path = "/delete/{articleId}")
     public final String deleteArticle(@PathVariable("articleId") final int articleId) {
         articleFacade.deleteArticleById(articleId);
-        return "articleList";
+        return "redirect:/article";
     }
 
 
@@ -231,6 +231,4 @@ public class ArticleController {
                                      @PathVariable("reviewerId") final int reviewerId) {
         return articleFacade.getReviewShortInfo(articleId, reviewerId);
     }
-
-
 }
