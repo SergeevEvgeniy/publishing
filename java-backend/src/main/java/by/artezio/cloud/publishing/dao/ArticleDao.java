@@ -307,11 +307,23 @@ public class ArticleDao {
             });
     }
 
+    /**
+     * Метод для проверки, существует ли статья с указанным идентификатором.
+     *
+     * @param articleId id статьи
+     * @return {@code true}, если статья с таким id существует, иначе - {@code false}
+     */
     public boolean isArticleExists(final int articleId) {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM article WHERE id = :articleId",
             Collections.singletonMap("articleId", articleId), Integer.class) == 1;
     }
 
+    /**
+     * Получение id авторов, которые проходят указанный фильтр.
+     *
+     * @param filter фильтр, который уточняет id, которые нужно выбрать из базы данных
+     * @return список id авторов
+     */
     public List<Integer> getAuthorsIdList(final AuthorFilter filter) {
         Map<String, Integer> params = new HashMap<>();
         params.put("publishingId", filter.getPublishingId());
@@ -320,6 +332,12 @@ public class ArticleDao {
 
     }
 
+    /**
+     * Метод для генерации запроса на выборку id авторов из базы данных.
+     *
+     * @param filter фильтр, который уточняет id, которые нужно выбрать из базы данных
+     * @return запрос на получение id
+     */
     private String generateQueryForFilter(final AuthorFilter filter) {
         StringBuilder bldr = new StringBuilder("SELECT author_id FROM article");
         boolean needsAnd = false;
@@ -342,6 +360,12 @@ public class ArticleDao {
         return bldr.toString();
     }
 
+    /**
+     * Получение статей, которые проходят указанный фильтр.
+     *
+     * @param filter фильтр, который уточняет статьи, которые нужно выбрать из базы данных
+     * @return список статей
+     */
     public List<Article> getArticlesByFilter(final ArticleFilter filter) {
         Map<String, Object> params = new HashMap<>();
         params.put("authorId", filter.getAuthorId());
@@ -351,6 +375,12 @@ public class ArticleDao {
             params, articleRowMapper);
     }
 
+    /**
+     * Метод для генерации запроса на выборку статей из базы данных.
+     *
+     * @param filter фильтр, который уточняет статьи, которые нужно выбрать из базы данных
+     * @return запрос на получение статей
+     */
     private String generateQueryForFilter(final ArticleFilter filter) {
         StringBuilder bldr = new StringBuilder("SELECT * FROM article");
         boolean needsAnd = false;

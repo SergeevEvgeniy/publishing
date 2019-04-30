@@ -124,6 +124,12 @@ public class IssueDao {
             params);
     }
 
+    /**
+     * Проверка, опубликована ли статья с указанным id.
+     *
+     * @param articleId id статьи
+     * @return {@code true}, если статья с данным id опубликована, иначе - {@code false}
+     */
     public boolean isArticlePublished(final int articleId) {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM issue_article WHERE article_id = :articleId",
             Collections.singletonMap("articleId", articleId), Integer.class) >= 1;

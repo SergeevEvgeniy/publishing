@@ -141,17 +141,12 @@ public class ArticleController {
      * @param articleId     id статьи
      * @param articleForm   {@link ArticleForm}
      * @param bindingResult {@link BindingResult}
-     * @param model         {@link Model}
      * @return страница со списком статей
      */
     @PostMapping(path = "/update/{articleId}")
     public final String updateArticle(@PathVariable("articleId") final Integer articleId,
                                       @Valid final ArticleForm articleForm,
-                                      final BindingResult bindingResult,
-                                      final Model model) {
-        if (bindingResult.hasErrors()) {
-//            model.addAttribute("")/
-        }
+                                      final BindingResult bindingResult) {
         articleFacade.update(articleForm, articleId);
         return "redirect: ../../article";
     }
@@ -172,6 +167,13 @@ public class ArticleController {
     }
 
 
+    /**
+     * Получение страницы для удаления статьи.
+     *
+     * @param articleId id статьи
+     * @param model     {@link Model}
+     * @return название представления для удаления статьи
+     */
     @GetMapping(path = "/delete/{articleId}")
     public final String getDeleteArticlePage(@PathVariable final int articleId,
                                              final Model model) {
@@ -189,6 +191,7 @@ public class ArticleController {
      * Удаление статьи по её идентификатору.
      *
      * @param articleId id статьи
+     * @return название представления со списком статей
      */
     @PostMapping(path = "/delete/{articleId}")
     public final String deleteArticle(@PathVariable("articleId") final int articleId) {

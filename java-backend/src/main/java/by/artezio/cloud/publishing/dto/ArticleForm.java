@@ -124,7 +124,7 @@ public class ArticleForm {
     /**
      * @param shortInfos список рецензий
      */
-    public void setShortInfos(List<ReviewShortInfo> shortInfos) {
+    public void setShortInfos(final List<ReviewShortInfo> shortInfos) {
         this.shortInfos = shortInfos;
     }
 }

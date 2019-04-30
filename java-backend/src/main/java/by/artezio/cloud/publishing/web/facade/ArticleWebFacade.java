@@ -301,6 +301,12 @@ public class ArticleWebFacade {
             .equals('J');
     }
 
+    /**
+     * Проверка, существует ли статья с таким id.
+     *
+     * @param articleId id статьи
+     * @return {@code true}, если статья существует, иначе - {@code false}
+     */
     public boolean isArticleExists(final int articleId) {
         return articleService.isArticleExists(articleId);
     }

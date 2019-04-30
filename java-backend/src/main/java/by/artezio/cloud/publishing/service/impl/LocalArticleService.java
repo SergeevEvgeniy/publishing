@@ -142,11 +142,13 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     public void save(final ArticleForm articleForm) {
         Article article = articleConverter.convert(articleForm);
         List<Integer> coauthors = articleForm.getCoauthors();
-        Integer articleId = articleDao.save(article);
+        if (article != null) {
+            Integer articleId = articleDao.save(article);
 
-        if (coauthors != null) {
-            for (Integer coauthorId : coauthors) {
-                coauthorsDao.save(articleId, coauthorId);
+            if (coauthors != null) {
+                for (Integer coauthorId : coauthors) {
+                    coauthorsDao.save(articleId, coauthorId);
+                }
             }
         }
     }
@@ -199,7 +201,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     }
 
     @Override
-    public ArticleDto getArticleDto(int articleId) {
+    public ArticleDto getArticleDto(final int articleId) {
         return articleToArticleDtoConverter.convert(
             articleDao.getArticleByArticleId(articleId));
     }

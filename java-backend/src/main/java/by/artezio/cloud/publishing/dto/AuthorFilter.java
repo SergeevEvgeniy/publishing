@@ -19,7 +19,7 @@ public class AuthorFilter {
     /**
      * @param publishingId id журнала
      */
-    public void setPublishingId(Integer publishingId) {
+    public void setPublishingId(final Integer publishingId) {
         this.publishingId = publishingId;
     }
 
@@ -33,7 +33,7 @@ public class AuthorFilter {
     /**
      * @param topicId id рубрики
      */
-    public void setTopicId(Integer topicId) {
+    public void setTopicId(final Integer topicId) {
         this.topicId = topicId;
     }
 
@@ -47,9 +47,9 @@ public class AuthorFilter {
 
     /**
      * @param published {@code true}, если нужны авторы, у которых есть хотя бы одна опубликованная статья.
-     *                  * {@code false}, если нужны авторы, у которых есть хотя бы одна неопубликованная статья.
+     *                  {@code false}, если нужны авторы, у которых есть хотя бы одна неопубликованная статья.
      */
-    public void setPublished(Boolean published) {
+    public void setPublished(final Boolean published) {
         this.published = published;
     }
 }

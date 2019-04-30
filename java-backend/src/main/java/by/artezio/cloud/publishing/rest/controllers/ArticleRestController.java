@@ -47,7 +47,7 @@ public class ArticleRestController {
      * @return список {@link ArticleDto}
      */
     @GetMapping("/articles")
-    public List<ArticleDto> findArticles(ArticleFilter filter) {
+    public List<ArticleDto> findArticles(final ArticleFilter filter) {
         return articleFacade.getArticleDtoList(filter);
     }
 
@@ -66,8 +66,7 @@ public class ArticleRestController {
     }
 
     /**
-     * publishingId
-     * topicId
+     * Получение списка id авторов, которые проходят указанный фильтр.
      *
      * @param filter объект, в в котором поля будут устанавливаться из параметров get запроса
      * @return список id авторов, у которых есть статья в указанном журнале, с указанной рубрикой
