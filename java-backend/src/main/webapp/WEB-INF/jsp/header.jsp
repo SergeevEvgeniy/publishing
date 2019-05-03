@@ -17,19 +17,8 @@
             </ul>
             <div class="nav navbar-right navbar-brand">
                 <span>${currentUser.name}</span>
-                <a href="${pageContext.request.contextPath}/logout" data-toggle="modal" data-target="#logoutModal">
-                    <i class="glyphicon glyphicon-off"></i>
-                </a>
+                <jsp:include page="/WEB-INF/jsp/logout.jsp"/>                
             </div>
         </div>
     </div>
 </nav>
-
-<!-- Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
-        </div>
-    </div>
-</div>

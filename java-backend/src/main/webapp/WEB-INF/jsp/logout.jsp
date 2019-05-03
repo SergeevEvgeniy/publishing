@@ -1,36 +1,33 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+<!--Button-->
+<a href="#logoutModal" data-toggle="modal" data-target="#logoutModal">
+    <i class="glyphicon glyphicon-off"></i>
+</a>
 
-        <title>Logout Page</title>
-        <meta charset="UTF-8">        
-    </head>
-    <body>
-        <div class="container">
-            <form class="form-signin" action="${pageContext.request.contextPath}/logout" method="post">
-                <header>
-                    <h1>
-                        Logout
-                    </h1>
-                </header>
+<!-- Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4> Logout </h4>
+            </div>
+            <div class="modal-body">
                 <fieldset>
                     <div class="control-group">
                         <div class="controls text">
-                            You currently logged as '<span>${user.name}</span>'.
+                            You currently logged as '<span>${currentUser.name}</span>'.
                         </div>
                         <div class="controls text">
                             Are you sure you want to logout?
                         </div>
                     </div>
-                    <div class="form-actions">
-                        <button id="logoutButton" class="btn btn-danger" type="submit">Logout</button>
-                        <a class="btn" onclick="javascript:history.back(); return false;">Back</a>
-                    </div>
                 </fieldset>
-            </form>
-        </div> 
-    </body>
-</html>
+            </div>
+            <div class="modal-footer">
+                <form class="form-signin" action="${pageContext.request.contextPath}/logout" method="post">
+                    <button class="btn btn-danger" type="submit">Logout</button>                        
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>                        
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

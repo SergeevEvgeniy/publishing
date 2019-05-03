@@ -28,10 +28,10 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/article/**"/>
-            <mvc:mapping path="/issue/**"/>
+            <mvc:mapping path="/issues/**"/>
             <mvc:mapping path="/mailing/**"/>
             <mvc:mapping path="/logout"/>
-            <mvc:mapping path="/home"/>            
+            <mvc:mapping path="/home"/>
             <bean class="by.artezio.cloud.publishing.web.security.impl.AuthenticationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
