@@ -36,7 +36,7 @@ public class LoginController {
      * @param model объект модели
      * @return название Jsp страницы логина
      */
-    @GetMapping(value = LOGIN_LOCATION)
+    @GetMapping(value = {LOGIN_LOCATION, "/"})
     public String login(final Model model) {
         if (securityService.getCurrentUser() != null) {
             return "redirect:home";

@@ -37,36 +37,36 @@ import java.util.stream.Collectors;
 @Component
 public class ArticleWebFacade {
 
-    private SecurityService securityService;
-    private ArticleService articleService;
-    private EmployeeService employeeService;
-    private PublishingService publishingService;
-    private TopicService topicService;
-    private ReviewService reviewService;
-    private IssueService issueService;
-    private TopicToTopicShortInfoConverter topicConverter;
-    private EmployeeToEmployeeShortInfoConverter employeeConverter;
+    private final SecurityService securityService;
+    private final ArticleService articleService;
+    private final EmployeeService employeeService;
+    private final PublishingService publishingService;
+    private final TopicService topicService;
+    private final ReviewService reviewService;
+    private final IssueService issueService;
+    private final TopicToTopicShortInfoConverter topicConverter;
+    private final EmployeeToEmployeeShortInfoConverter employeeConverter;
 
     /**
-     * @param securityService   {@link SecurityService}
-     * @param articleService    {@link ArticleService}
-     * @param employeeService   {@link EmployeeService}
+     * @param securityService {@link SecurityService}
+     * @param articleService {@link ArticleService}
+     * @param employeeService {@link EmployeeService}
      * @param publishingService {@link PublishingService}
-     * @param topicService      {@link TopicService}
-     * @param reviewService     {@link ReviewService}
-     * @param issueService      {@link IssueService}
-     * @param topicConverter    {@link TopicToTopicShortInfoConverter}
+     * @param topicService {@link TopicService}
+     * @param reviewService {@link ReviewService}
+     * @param issueService {@link IssueService}
+     * @param topicConverter {@link TopicToTopicShortInfoConverter}
      * @param employeeConverter {@link EmployeeToEmployeeShortInfoConverter}
      */
     public ArticleWebFacade(final SecurityService securityService,
-                            final ArticleService articleService,
-                            final EmployeeService employeeService,
-                            final PublishingService publishingService,
-                            final TopicService topicService,
-                            final ReviewService reviewService,
-                            final IssueService issueService,
-                            final TopicToTopicShortInfoConverter topicConverter,
-                            final EmployeeToEmployeeShortInfoConverter employeeConverter) {
+            final ArticleService articleService,
+            final EmployeeService employeeService,
+            final PublishingService publishingService,
+            final TopicService topicService,
+            final ReviewService reviewService,
+            final IssueService issueService,
+            final TopicToTopicShortInfoConverter topicConverter,
+            final EmployeeToEmployeeShortInfoConverter employeeConverter) {
         this.securityService = securityService;
         this.articleService = articleService;
         this.employeeService = employeeService;
@@ -89,31 +89,31 @@ public class ArticleWebFacade {
             info.setPublished(issueService.isArticlePublished(info.getArticleId()));
             ArticleDto article = articleService.getArticleDto(info.getArticleId());
             info.setPublishing(
-                publishingService.getPublishingTitle(
-                    article.getPublishingId()
-                )
+                    publishingService.getPublishingTitle(
+                            article.getPublishingId()
+                    )
             );
             info.setTopic(
-                topicService.getTopicName(
-                    article.getTopicId()
-                )
+                    topicService.getTopicName(
+                            article.getTopicId()
+                    )
             );
             info.setAuthorFullName(
-                employeeService.getShortEmployee(
-                    article.getAuthorId()
-                ).getShortFullName()
+                    employeeService.getShortEmployee(
+                            article.getAuthorId()
+                    ).getShortFullName()
             );
 
             List<ArticleCoauthor> coauthors = articleService.getCoauthorsByArticleId(article.getId());
             List<String> coauthorNames = new ArrayList<>(coauthors.size());
             for (ArticleCoauthor coauthor : coauthors) {
                 coauthorNames.add(employeeService.getShortEmployee(
-                    coauthor.getEmployeeId()
+                        coauthor.getEmployeeId()
                 ).getShortFullName());
             }
             info.setCoauthors(coauthorNames);
 
-            info.setReviewed(reviewService.getReviewsByArticleId(article.getId()).size() != 0);
+            info.setReviewed(!reviewService.getReviewsByArticleId(article.getId()).isEmpty());
         }
         return list;
     }
@@ -133,7 +133,6 @@ public class ArticleWebFacade {
         articleForm.setShortInfos(getReviewShortInfos(articleId));
         return articleForm;
     }
-
 
     /**
      * @param publishingId id журнала/газеты
@@ -185,7 +184,7 @@ public class ArticleWebFacade {
     }
 
     /**
-     * @param articleId  id статьи
+     * @param articleId id статьи
      * @param reviewerId id рецензента
      * @return рецензия {@link Review}
      */
@@ -219,13 +218,13 @@ public class ArticleWebFacade {
      * @return список {@link EmployeeShortInfo}
      */
     public List<EmployeeShortInfo> getAvailableCoauthors(final Integer publishingId) {
-        User current = securityService.getCurrentUser();
+        User currentUser = securityService.getCurrentUser();
         return employeeService.getEmployeesByPublishingId(publishingId)
-            .stream()
-            .filter(employee -> employee.getId() != current.getId())
-            .filter(info -> info.getType() == 'J')
-            .map(employeeConverter::convert)
-            .collect(Collectors.toList());
+                .stream()
+                .filter(employee -> employee.getId() != currentUser.getId())
+                .filter(info -> info.getType() == 'J')
+                .map(employeeConverter::convert)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -250,7 +249,7 @@ public class ArticleWebFacade {
         List<ReviewShortInfo> reviewShortInfoList = reviewService.getReviewShortInfoList(articleId);
         for (ReviewShortInfo shortInfo : reviewShortInfoList) {
             shortInfo.setReviewerShortName(
-                employeeService.getShortEmployee(shortInfo.getReviewerId()).getShortFullName()
+                    employeeService.getShortEmployee(shortInfo.getReviewerId()).getShortFullName()
             );
         }
         return reviewShortInfoList;
@@ -262,7 +261,7 @@ public class ArticleWebFacade {
      */
     public EmployeeShortInfo getShortEmployeeById(final int employeeId) {
         return employeeConverter.convert(
-            employeeService.getEmployeeById(employeeId)
+                employeeService.getEmployeeById(employeeId)
         );
     }
 
@@ -276,14 +275,15 @@ public class ArticleWebFacade {
 
     /**
      * @param articleForm {@link ArticleForm}
-     * @param articleId   id статьи
+     * @param articleId id статьи
      */
     public void update(final ArticleForm articleForm, final Integer articleId) {
         articleService.update(articleForm, articleId);
     }
 
     /**
-     * Проверка, прошёл ли пользователь аутентификацию. Если нет, бросится исключение {@link AccessDeniedException}.
+     * Проверка, прошёл ли пользователь аутентификацию. Если нет, бросится
+     * исключение {@link AccessDeniedException}.
      */
     public void isAuthorized() {
         if (securityService.getCurrentUser() == null) {
@@ -292,7 +292,8 @@ public class ArticleWebFacade {
     }
 
     /**
-     * @return {@code true}, если текущий пользователь является главным редактором
+     * @return {@code true}, если текущий пользователь является главным
+     * редактором
      */
     public boolean isChiefEditor() {
         return securityService.getCurrentUser().isChiefEditor();
@@ -304,9 +305,9 @@ public class ArticleWebFacade {
     public boolean isJournalist() {
 
         return securityService
-            .getCurrentUser()
-            .getType()
-            .equals('J');
+                .getCurrentUser()
+                .getType()
+                .equals('J');
     }
 
     /**
