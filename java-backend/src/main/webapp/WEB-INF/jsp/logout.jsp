@@ -1,8 +1,3 @@
-<!--Button-->
-<a href="#logoutModal" data-toggle="modal" data-target="#logoutModal">
-    <i class="glyphicon glyphicon-off"></i>
-</a>
-
 <!-- Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
