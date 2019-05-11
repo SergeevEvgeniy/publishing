@@ -12,18 +12,18 @@ import java.util.List;
  */
 public class IssueForm {
 
-    @NotNull(message = "Поле не заполнено!")
+    @NotNull
     private Integer publishingId;
 
-    @NotNull(message = "В номере должна присутствовать хотя бы одна статья")
+    @NotNull
     private List<Integer> articlesId;
 
     private List<String> advertisingPath;
 
-    @NotBlank(message = "Поле не заполнено!")
+    @NotBlank
     private String number;
 
-    @NotNull(message = "Поле не заполнено!")
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate localDate;
 

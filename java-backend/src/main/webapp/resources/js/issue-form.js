@@ -85,13 +85,10 @@ $(function () {
             return;
         }
 
-        var url = APP_CONTEXT_PATH + "/issues";
+        var url = APP_CONTEXT_PATH + "/issues/"
+            + $formSelects[nextIndex].id;
         var params = $formSelects.serializeArray();
-        params.forEach(function (item) {
-            url += "/" + item.name + "/" + item.value;
-        });
-
-        $.getJSON(url, getJSONHandler);
+        $.getJSON(url, params, getJSONHandler);
 
         $formSelects.eq(nextIndex)
             .prop("disabled", false);

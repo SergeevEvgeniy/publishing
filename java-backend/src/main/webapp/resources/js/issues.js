@@ -1,16 +1,13 @@
 $(function () {
 
+    $("#resultModal").modal("show");
+
     $(".delete-button").on("click", function () {
-        var $currentTableRow = $(this).closest("tr");
-        var issueId = $currentTableRow.find("input").val();
-        $.ajax(APP_CONTEXT_PATH + "/issues/issue/" + issueId, {
-            type : "delete",
-            success : function () {
-                $currentTableRow.hide("normal", function () {
-                    $currentTableRow.remove();
-                });
-            }
-        });
+        var $issueTableRow = $(this).closest("tr");
+        $("#issueNumber").text($issueTableRow.find(".number").text());
+        $("#issuePublishing").text($issueTableRow.find(".publishingTitle").text());
+        $("#issueId").val($issueTableRow.find("input").val());
+        $("#deleteIssueModal").modal("show");
     });
 
 });

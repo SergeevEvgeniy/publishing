@@ -11,6 +11,7 @@ import by.artezio.cloud.publishing.dto.IssueInfo;
 import by.artezio.cloud.publishing.dto.IssueView;
 import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.service.converter.IssueFormToIssueConverter;
+import by.artezio.cloud.publishing.service.converter.IssueToIssueFormConverter;
 import by.artezio.cloud.publishing.service.converter.IssueToIssueInfoConverter;
 import by.artezio.cloud.publishing.service.converter.IssueToIssueViewConverter;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,13 @@ public class LocalIssueService implements IssueService {
 
     private AdvertisingDao advertisingDao;
 
-    private IssueToIssueViewConverter toIssueViewConverter;
+    private IssueToIssueViewConverter issueToIssueViewConverter;
 
-    private IssueToIssueInfoConverter toIssueInfoConverter;
+    private IssueToIssueInfoConverter issueToIssueInfoConverter;
 
-    private IssueFormToIssueConverter toIssueConverter;
+    private IssueFormToIssueConverter issueFormToIssueConverter;
+
+    private IssueToIssueFormConverter issueToIssueFormConverter;
 
     /**
      * Конструктор с параметрами.
@@ -45,22 +48,35 @@ public class LocalIssueService implements IssueService {
      * @param issueDao             {@link IssueDao}
      * @param issueArticleDao      {@link IssueArticleDao}
      * @param advertisingDao       {@link AdvertisingDao}
-     * @param toIssueConverter     {@link IssueFormToIssueConverter}
-     * @param toIssueInfoConverter {@link IssueToIssueInfoConverter}
-     * @param toIssueViewConverter {@link IssueToIssueViewConverter}
+     * @param issueFormToIssueConverter     {@link IssueFormToIssueConverter}
+     * @param issueToIssueInfoConverter {@link IssueToIssueInfoConverter}
+     * @param issueToIssueViewConverter {@link IssueToIssueViewConverter}
+     * @param issueToIssueFormConverter {@link IssueToIssueFormConverter}
      */
     public LocalIssueService(final IssueDao issueDao,
                              final IssueArticleDao issueArticleDao,
                              final AdvertisingDao advertisingDao,
-                             final IssueToIssueInfoConverter toIssueInfoConverter,
-                             final IssueToIssueViewConverter toIssueViewConverter,
-                             final IssueFormToIssueConverter toIssueConverter) {
+                             final IssueToIssueInfoConverter issueToIssueInfoConverter,
+                             final IssueToIssueViewConverter issueToIssueViewConverter,
+                             final IssueFormToIssueConverter issueFormToIssueConverter,
+                             final IssueToIssueFormConverter issueToIssueFormConverter) {
         this.issueDao = issueDao;
         this.issueArticleDao = issueArticleDao;
         this.advertisingDao = advertisingDao;
-        this.toIssueInfoConverter = toIssueInfoConverter;
-        this.toIssueViewConverter = toIssueViewConverter;
-        this.toIssueConverter = toIssueConverter;
+        this.issueToIssueInfoConverter = issueToIssueInfoConverter;
+        this.issueToIssueViewConverter = issueToIssueViewConverter;
+        this.issueFormToIssueConverter = issueFormToIssueConverter;
+        this.issueToIssueFormConverter = issueToIssueFormConverter;
+    }
+
+    private List<String> getAdvertisingFilePath(final int issueId) {
+        List<Advertising> advertising =
+            advertisingDao.getAdvertisingListByIssueId(issueId);
+        List<String> filePaths = new ArrayList<>();
+        for (Advertising a : advertising) {
+            filePaths.add(a.getFilePath());
+        }
+        return filePaths;
     }
 
     private void insertAdvertisingForIssue(final Integer issueId, final List<String> filePath) {
@@ -79,21 +95,26 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
-    public List<Issue> getListOfAllIssues() {
-        return issueDao.getListOfAllIssues();
-    }
-
-    @Override
     public IssueView getIssueViewByIssueId(final int issueId) {
-        Issue issue = issueDao.getIssueById(issueId);
-        return toIssueViewConverter.convert(issue);
+        IssueView issueView = issueToIssueViewConverter.convert(issueDao.getIssueById(issueId));
+        issueView.setAdvertisingPath(getAdvertisingFilePath(issueId));
+        return issueView;
     }
 
     @Override
-    public void deleteIssueById(final int id) {
+    public IssueForm getIssueFormByIssueId(final int issueId) {
+        IssueForm issueForm = issueToIssueFormConverter.convert(issueDao.getIssueById(issueId));
+        issueForm.setAdvertisingPath(getAdvertisingFilePath(issueId));
+        return issueForm;
+    }
+
+    @Override
+    public Issue deleteIssueById(final int id) {
+        Issue issue = issueDao.getIssueById(id);
         issueArticleDao.deleteIssueArticleByIssueId(id);
         advertisingDao.deleteAdvertisingByIssueId(id);
         issueDao.deleteIssueById(id);
+        return issue;
     }
 
     @Override
@@ -101,7 +122,7 @@ public class LocalIssueService implements IssueService {
         List<Issue> issues = issueDao.getIssueListByPublishingId(publishingId);
         List<IssueInfo> issueInfoList = new ArrayList<>();
         for (Issue issue : issues) {
-            issueInfoList.add(toIssueInfoConverter.convert(issue));
+            issueInfoList.add(issueToIssueInfoConverter.convert(issue));
         }
         return issueInfoList;
     }
@@ -118,32 +139,22 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
-    public List<String> getAdvertisingFilePath(final int issueId) {
-        List<Advertising> advertising =
-            advertisingDao.getAdvertisingListByIssueId(issueId);
-        List<String> filePaths = new ArrayList<>();
-        for (Advertising a : advertising) {
-            filePaths.add(a.getFilePath());
-        }
-        return filePaths;
-    }
-
-    @Override
     public List<Issue> getIssuesByDate(final LocalDate date) {
         return issueDao.getIssueByDate(date);
     }
 
     @Override
-    public void createNewIssue(final IssueForm issueForm) {
-        Issue issue = toIssueConverter.convert(issueForm);
+    public Integer createNewIssue(final IssueForm issueForm) {
+        Issue issue = issueFormToIssueConverter.convert(issueForm);
         Integer issueId = issueDao.insertIssue(issue);
         insertAdvertisingForIssue(issueId, issueForm.getAdvertisingPath());
         insertArticlesForIssue(issueId, issueForm.getArticlesId());
+        return issueId;
     }
 
     @Override
     public void updateIssue(final Integer issueId, final IssueForm issueForm) {
-        Issue issue = toIssueConverter.convert(issueForm);
+        Issue issue = issueFormToIssueConverter.convert(issueForm);
         issue.setId(issueId);
         issueDao.updateIssue(issue);
         advertisingDao.deleteAdvertisingByIssueId(issueId);

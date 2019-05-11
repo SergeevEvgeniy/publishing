@@ -15,19 +15,14 @@ import java.util.List;
  */
 public interface IssueService {
 
-    /**
-     * Получение списка всех номеров.
-     *
-     * @return {@link List} всех {@link Issue};
-     */
-    List<Issue> getListOfAllIssues();
 
     /**
      * Удаление номера по идентификатору.
      *
      * @param id - идентификатор {@link Issue}
+     * @return - удаленный объект {@link Issue}.
      */
-    void deleteIssueById(final int id);
+    Issue deleteIssueById(final int id);
 
     /**
      * Получение {@link by.artezio.cloud.publishing.dto.IssueForm}
@@ -37,6 +32,15 @@ public interface IssueService {
      * @return {@link by.artezio.cloud.publishing.dto.IssueForm}
      */
     IssueView getIssueViewByIssueId(final int issueId);
+
+    /**
+     * Получение объекта dto {@link IssueForm} по id {@link Issue}.
+     * В данном случаи {@link IssueForm} несет информацию для заполнения формы
+     * данными о {@link Issue}.
+     * @param issueId - id {@link Issue}.
+     * @return - {@link IssueForm}.
+     * */
+    IssueForm getIssueFormByIssueId(final int issueId);
 
     /**
      * Метод получения списка {@link by.artezio.cloud.publishing.dto.IssueForm}
@@ -57,14 +61,6 @@ public interface IssueService {
     List<Integer> getArticleIdList(final int issueId);
 
     /**
-     * Метод для получения списка реклам для номера.
-     *
-     * @param issueId - id {@link Issue}.
-     * @return получения списка путей для рекламы.
-     */
-    List<String> getAdvertisingFilePath(final int issueId);
-
-    /**
      * Возвращает все номера, дата публикации которых равна date.
      *
      * @param date Дата выпуска номером
@@ -76,8 +72,9 @@ public interface IssueService {
      * Метод для создания и сохранения в бд информации для нового номера.
      *
      * @param issueForm - {@link IssueForm}.
+     * @return - id созданного {@link Issue}.
      */
-    void createNewIssue(final IssueForm issueForm);
+    Integer createNewIssue(final IssueForm issueForm);
 
     /**
      * Метод для обновления и сохранения в бд информации по уже существующему номеру.

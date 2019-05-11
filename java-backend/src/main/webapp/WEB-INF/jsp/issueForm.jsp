@@ -2,7 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tag" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page pageEncoding="utf-8" contentType="text/html;charset=UTF-8"%>
 
 <tag:layout pageTitle="IssueForm">
 
@@ -10,9 +10,11 @@
         <c:choose>
             <c:when test="${mode == 'create'}">
                 Форма создания
+                <c:url var="actionUrl" value="/issues/new"/>
             </c:when>
             <c:when test="${mode == 'edit'}">
                 Форма редактирования
+                <c:url var="actionUrl" value="/issues/edit/${issueId}"/>
             </c:when>
         </c:choose>
     </h3>
@@ -22,27 +24,23 @@
         <div class="col-sm-offset-2 col-sm-8">
 
             <form:form class="form-horizontal" method="POST"
-                       action="${pageContext.request.contextPath}/issues/issue/${issueId}"
-                       modelAttribute="issueForm">
+                action="${actionUrl}" modelAttribute="issueForm">
 
                 <spring:bind path="publishingId">
-                    <div class="form-group has-feedback ${status.error ? 'has-error' : ''}">
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
                         <label class="control-label col-sm-1" for="publishing">
                             Журналы
                         </label>
                         <div class="col-sm-offset-1 col-sm-10">
                             <form:select cssClass="form-control" path="publishingId" id="publishing">
-                                <c:if test="${mode == 'create'}">
-                                    <form:option value="">>--Выберете журнал--<</form:option>
-                                    <c:forEach var="p" items="${publishing}">
-                                        <form:option value="${p.id}">${p.title}</form:option>
-                                    </c:forEach>
-                                </c:if>
-                                <c:if test="${mode == 'edit'}">
-                                    <form:option value="${issueView.publishingId}">
-                                        ${issueView.publishingTitle}
+                                <form:option value="">
+                                    >--Выберете журнал--<
+                                </form:option>
+                                <c:forEach var="p" items="${publishing}">
+                                    <form:option value="${p.id}">
+                                        ${p.title}
                                     </form:option>
-                                </c:if>
+                                </c:forEach>
                             </form:select>
                             <form:errors path="publishingId" cssClass="text-danger"/>
                         </div>
@@ -52,25 +50,23 @@
 
                 <div class="form-group">
                     <spring:bind path="number">
-                        <div class="has-feedback ${status.error ? 'has-error' : ''}">
+                        <div class="${status.error ? 'has-error' : ''}">
                             <label class="control-label col-sm-1" for="number">
                                 Номер
                             </label>
                             <div class="col-sm-offset-1 col-sm-3">
-                                <form:input type="text" class="form-control" path="number"
-                                    value="${issueView.number}"/>
+                                <form:input type="text" class="form-control" path="number"/>
                                 <form:errors path="number" cssClass="text-danger"/>
                             </div>
                         </div>
                     </spring:bind>
                     <spring:bind path="localDate">
-                        <div class="has-feedback ${status.error ? 'has-error' : ''}">
+                        <div class="${status.error ? 'has-error' : ''}">
                             <label class="control-label col-sm-offset-2 col-sm-2" for="localDate">
                                 Дата
                             </label>
                             <div class="col-sm-3">
-                                <form:input type="date" class="form-control" path="localDate"
-                                    value="${issueView.localDate}"/>
+                                <form:input type="date" class="form-control" path="localDate"/>
                                 <form:errors path="localDate" cssClass="text-danger"/>
                             </div>
                         </div>
@@ -86,15 +82,15 @@
                             <label class="control-label col-sm-2" for="topics">Рубрика</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="topics" name="topicId"
-                                        <c:if test="${topics == null}">disabled</c:if> >
-                                    <option value="">
-                                        >--Выберете рубрику--<
-                                    </option>
-                                    <c:forEach var="topic" items="${topics}">
-                                        <option value="${topic.id}">
-                                                ${topic.name}
+                                    <c:if test="${topics == null}">disabled</c:if> >
+                                        <option value="">
+                                            >--Выберете рубрику--<
                                         </option>
-                                    </c:forEach>
+                                        <c:forEach var="topic" items="${topics}">
+                                            <option value="${topic.id}">
+                                                ${topic.name}
+                                            </option>
+                                        </c:forEach>
                                 </select>
                             </div>
                         </div>
@@ -129,7 +125,7 @@
                     </div>
 
                     <ul class="list-group article-list">
-                        <c:forEach var="article" items="${issueView.articles}">
+                        <c:forEach var="article" items="${articles}">
                             <li class="list-group-item new-element">
                                 <input type="hidden" name="articlesId"
                                        class="input-article" value="${article.id}"/>
@@ -170,7 +166,7 @@
 
 
                     <ul class="list-group advertising-list">
-                        <c:forEach var="advertising" items="${issueView.advertisingPath}">
+                        <c:forEach var="advertising" items="${issueForm.advertisingPath}">
                             <li class="list-group-item new-element">
                                 <input type="hidden" name="advertisingPath" value="${advertising}"/>
                                 <div class="row">

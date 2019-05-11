@@ -1,6 +1,6 @@
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tag" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 
 <tag:layout pageTitle="Просмотр номера">
     <h3 class="page-header">Форма просмотра</h3>

@@ -1,19 +1,10 @@
 package by.artezio.cloud.publishing.web.facade;
 
+import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.domain.Review;
-import by.artezio.cloud.publishing.domain.Article;
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.dto.ArticleDto;
-import by.artezio.cloud.publishing.dto.IssueInfo;
-import by.artezio.cloud.publishing.dto.PublishingDTO;
-import by.artezio.cloud.publishing.dto.User;
-import by.artezio.cloud.publishing.dto.TopicShortInfo;
-import by.artezio.cloud.publishing.dto.IssueView;
-import by.artezio.cloud.publishing.dto.IssueForm;
-import by.artezio.cloud.publishing.service.IssueService;
-import by.artezio.cloud.publishing.service.PublishingService;
-import by.artezio.cloud.publishing.service.ArticleService;
-import by.artezio.cloud.publishing.service.ReviewService;
+import by.artezio.cloud.publishing.dto.*;
+import by.artezio.cloud.publishing.service.*;
 import by.artezio.cloud.publishing.web.security.SecurityService;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -37,65 +28,48 @@ public class IssueWebFacade {
 
     private ReviewService reviewService;
 
+    private EmployeeService employeeService;
+
     /**
      * @param issueService - {@link IssueService}
      * @param publishingService - {@link PublishingService}
      * @param securityService - {@link SecurityService}
      * @param articleService - {@link ArticleService}
      * @param reviewService - {@link ReviewService}
+     * @param employeeService - {@link EmployeeService}
      * */
     public IssueWebFacade(final IssueService issueService,
                           final PublishingService publishingService,
                           final SecurityService securityService,
                           final ArticleService articleService,
-                          final ReviewService reviewService) {
+                          final ReviewService reviewService,
+                          final EmployeeService employeeService) {
 
         this.issueService = issueService;
         this.publishingService = publishingService;
         this.securityService = securityService;
         this.articleService = articleService;
         this.reviewService = reviewService;
+        this.employeeService = employeeService;
     }
 
 
     /**
      * Проверка статьи на допуск в публикацию.
-     * @param article - {@link Article}
+     * @param article - {@link by.artezio.cloud.publishing.domain.Article}
      * @return - флаг допуска статьи.
      * */
-    private boolean articleIsApproved(final Article article) {
+    private boolean articleIsNotApproved(final ArticleDto article) {
         List<Review> reviews =
             reviewService.getReviewsByArticleId(article.getId());
-        if (reviews.size() == 0) {
-            return false;
-        }
         for (Review r : reviews) {
             if (!r.isApproved()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Проверка содержит ли автор статьи допущенные в публикакию.
-     * @param publishingId - id {@link PublishingDTO}.
-     * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
-     * @param authorId - id {@link by.artezio.cloud.publishing.domain.Employee}.
-     * */
-    private boolean journalistIsApproved(final int publishingId,
-                                     final int topicId,
-                                     final int authorId) {
-        List<Article> articles =
-            articleService.getArticlesBytopicAndPublishingAndAuthorId(topicId,
-            publishingId, authorId);
-        for (Article a : articles) {
-            if (articleIsApproved(a)) {
                 return true;
             }
         }
         return false;
     }
+
 
     /**
      * Метод для получения списка {@link IssueInfo} который содержит
@@ -103,8 +77,10 @@ public class IssueWebFacade {
      * @return список {@link IssueInfo}
      * */
     public List<IssueInfo> getIssueInfoList() {
-        securityService.checkIsEditor();
         User user = securityService.getCurrentUser();
+        if (!user.isChiefEditor()) {
+            securityService.checkIsEditor();
+        }
         List<IssueInfo> issueInfoList = new ArrayList<>();
         List<PublishingDTO> publishingList;
         if (user.isChiefEditor()) {
@@ -136,12 +112,12 @@ public class IssueWebFacade {
      * @return список {@link PublishingDTO}
      * */
     public List<PublishingDTO> getPublishingList() {
-        securityService.checkIsEditor();
         User user = securityService.getCurrentUser();
-        if (user.isChiefEditor()) {
-            return publishingService.getPublishingList();
+        if (!user.isChiefEditor()) {
+            securityService.checkIsEditor();
+            return publishingService.getPublishingListByEmployeeId(user.getId());
         }
-        return publishingService.getPublishingListByEmployeeId(user.getId());
+        return publishingService.getPublishingList();
     }
 
     /**
@@ -151,7 +127,10 @@ public class IssueWebFacade {
      * @return {@link IssueForm}
      * */
     public IssueView getIssueViewByIssueId(final int issueId) {
-        securityService.checkIsEditor();
+        User user = securityService.getCurrentUser();
+        if (!user.isChiefEditor()) {
+            securityService.checkIsEditor();
+        }
         IssueView issueView = issueService.getIssueViewByIssueId(issueId);
         List<Integer> articleIdList = issueService.getArticleIdList(issueId);
         List<ArticleDto> articles = new ArrayList<>();
@@ -159,11 +138,42 @@ public class IssueWebFacade {
             articles.add(articleService.getArticleDtoById(id));
         }
         issueView.setArticles(articles);
-        issueView.setAdvertisingPath(issueService.getAdvertisingFilePath(issueId));
         PublishingDTO publishing =
             publishingService.getPublishingById(issueView.getPublishingId());
         issueView.setPublishingTitle(publishing.getTitle());
         return issueView;
+    }
+
+    /**
+     * Получение объекта dto {@link IssueForm} по id {@link Issue}.
+     * В данном случаи {@link IssueForm} несет информацию для заполнения формы
+     * данными о {@link Issue}.
+     * @param issueId - id {@link Issue}.
+     * @return - {@link IssueForm}.
+     * */
+    public IssueForm getIssueFormByIssueId(final int issueId) {
+        User user = securityService.getCurrentUser();
+        if (!user.isChiefEditor()) {
+            securityService.checkIsEditor();
+        }
+        IssueForm issueForm = issueService.getIssueFormByIssueId(issueId);
+        issueForm.setArticlesId(issueService.getArticleIdList(issueId));
+        return issueForm;
+    }
+
+    /**
+     * Метод для получения статей по списку id статей.
+     * @param articlesIdList - список id статей.
+     * @return - {@link ArticleDto}.
+     * */
+    public List<ArticleDto> getArticlesByArticlesIdList(final List<Integer> articlesIdList) {
+        List<ArticleDto> articles = new ArrayList<>();
+        if (articlesIdList != null) {
+            for (Integer id : articlesIdList) {
+                articles.add(articleService.getArticleDtoById(id));
+            }
+        }
+        return articles;
     }
 
     /**
@@ -181,101 +191,94 @@ public class IssueWebFacade {
 
     /**
      * Получение списка допущенных в публикацию авторов.
-     * @param publishingId - id {@link PublishingDTO}.
-     * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
+     * @param authorFilter - {@link AuthorFilter}.
      * @return список {@link Employee}.
      * */
-    public List<Employee> getApprovedJournalist(final int publishingId,
-                                                final int topicId) {
-        List<Employee> journalists =
-            publishingService.getPublishingJournalistByPublishingId(publishingId);
-        List<Employee> approvedJournalist = new ArrayList<>();
-        for (Employee j : journalists) {
-            if (journalistIsApproved(publishingId, topicId, j.getId())) {
-                approvedJournalist.add(j);
-
-            }
+    public List<Employee> getApprovedAuthors(final AuthorFilter authorFilter) {
+        List<Integer> authorsIdList = articleService.getAuthorsIdList(authorFilter);
+        ArticleFilter articleFilter = new ArticleFilter();
+        articleFilter.setPublishingId(authorFilter.getPublishingId());
+        articleFilter.setTopicId(authorFilter.getTopicId());
+        authorsIdList.removeIf(authorId -> {
+            articleFilter.setAuthorId(authorId);
+            return getApprovedArticles(articleFilter).isEmpty();
+        });
+        List<Employee> authors = new ArrayList<>();
+        for (Integer id : authorsIdList) {
+            authors.add(employeeService.getEmployeeById(id));
         }
-        return approvedJournalist;
+        return authors;
     }
 
     /**
-     * Получение списка допущенных в публикацию статей {@link Article}.
-     * @param publishingId - id {@link PublishingDTO}.
-     * @param topicId - id {@link by.artezio.cloud.publishing.domain.Topic}.
-     * @param authorId - id {@link Employee}
-     * @return список {@link Article}.
+     * Получение списка допущенных в публикацию статей {@link by.artezio.cloud.publishing.domain.Article}.
+     * @param articleFilter - {@link ArticleFilter}.
+     * @return список {@link by.artezio.cloud.publishing.domain.Article}.
      * */
-    public List<Article> getApprovedArticles(final int publishingId,
-                                             final int topicId,
-                                             final int authorId) {
-        List<Article> articles =
-            articleService.getArticlesBytopicAndPublishingAndAuthorId(topicId,
-                publishingId, authorId);
-        List<Article> approvedArticles = new ArrayList<>();
-        for (Article a : articles) {
-            if (articleIsApproved(a)) {
-                approvedArticles.add(a);
-            }
-        }
-        return approvedArticles;
+    public List<ArticleDto> getApprovedArticles(final ArticleFilter articleFilter) {
+        List<ArticleDto> articles = articleService.getArticleDtoList(articleFilter);
+        articles.removeIf(this::articleIsNotApproved);
+        return articles;
     }
 
     /**
      * Удаление номра по id, а также всех статей номера и рекламы.
-     * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
+     * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}.
+     * @return - {@link IssueOperationResult}.
      * */
-    public void deleteIssueById(final int issueId) {
-        issueService.deleteIssueById(issueId);
+    public IssueOperationResult deleteIssueById(final int issueId) {
+        User user = securityService.getCurrentUser();
+        if (!user.isChiefEditor()) {
+            securityService.checkIsEditor();
+        }
+        Issue issue = issueService.deleteIssueById(issueId);
+        IssueOperationResult result = new IssueOperationResult();
+        result.setNumber(issue.getNumber());
+        Integer publishingId = issue.getPublishingId();
+        result.setPublishingTitle(publishingService.getPublishingTitle(publishingId));
+        result.setStatus("deleted");
+        return result;
     }
 
     /**
      * Метод для создания нового номера и сохранеия его в бд.
      * @param issueForm - {@link IssueForm}.
+     * @return - {@link IssueOperationResult}.
      * */
-    public void createNewIssue(final IssueForm issueForm) {
-        issueService.createNewIssue(issueForm);
+    public IssueOperationResult createNewIssue(final IssueForm issueForm) {
+        User user = securityService.getCurrentUser();
+        if (!user.isChiefEditor()) {
+            securityService.checkIsEditor();
+        }
+        Integer issueId = issueService.createNewIssue(issueForm);
+        IssueOperationResult result = new IssueOperationResult();
+        PublishingDTO publishingDTO = publishingService.getPublishingById(issueForm.getPublishingId());
+        result.setPublishingTitle(publishingDTO.getTitle());
+        result.setNumber(issueForm.getNumber());
+        result.setIssueId(issueId);
+        result.setStatus("created");
+        return result;
     }
 
     /**
      * Метод для обновления и сохранения в бд информации по уже существующему номеру.
      * @param issueForm - {@link IssueForm}.
      * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}.
+     * @return - {@link IssueOperationResult}.
      * */
-    public void updateIssue(final Integer issueId, final IssueForm issueForm) {
+    public IssueOperationResult updateIssue(final Integer issueId, final IssueForm issueForm) {
+        User user = securityService.getCurrentUser();
+        if (!user.isChiefEditor()) {
+            securityService.checkIsEditor();
+        }
         issueService.updateIssue(issueId, issueForm);
+        PublishingDTO publishingDTO = publishingService.getPublishingById(issueForm.getPublishingId());
+        IssueOperationResult result = new IssueOperationResult();
+        result.setNumber(issueForm.getNumber());
+        result.setPublishingTitle(publishingDTO.getTitle());
+        result.setIssueId(issueId);
+        result.setStatus("updated");
+        return result;
     }
-
-    /**
-     * Данный метод предназначен для преобразования IssueForm в IssueView.
-     * Данное преобразование необходимо в том случаи, когда пользователь
-     * заполнил форму но она не прошла валидацию. И чтобы отобразить состояние
-     * формы до отправки, мы на основе ранее введенных данных формируем объект
-     * dto для отображения {@link IssueView}.
-     * @param issueForm - {@link IssueForm}.
-     * @return - {@link IssueView}.
-     * */
-    public IssueView mapIssueFormToIssueView(final IssueForm issueForm) {
-        IssueView issueView = new IssueView();
-        List<ArticleDto> articles = new ArrayList<>();
-        if (issueForm.getArticlesId() != null) {
-            for (Integer id : issueForm.getArticlesId()) {
-                articles.add(articleService.getArticleDtoById(id));
-            }
-            issueView.setArticles(articles);
-        }
-        issueView.setAdvertisingPath(issueForm.getAdvertisingPath());
-        Integer publishingId = issueForm.getPublishingId();
-        if (publishingId != null) {
-            PublishingDTO publishing =
-                publishingService.getPublishingById(issueForm.getPublishingId());
-            issueView.setPublishingTitle(publishing.getTitle());
-            issueView.setPublishingId(publishing.getId());
-        }
-        issueView.setNumber(issueForm.getNumber());
-        issueView.setLocalDate(issueForm.getLocalDate());
-        return issueView;
-    }
-
 
 }
