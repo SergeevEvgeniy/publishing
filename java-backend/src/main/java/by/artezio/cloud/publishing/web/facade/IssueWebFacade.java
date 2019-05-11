@@ -10,24 +10,20 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.ArrayList;
 
-
 /**
  * Класс IssueWebFacade в котором размещена основная логика работы.
+ *
  * @author Igor Kuzmin
- * */
+ *
+ */
 @Component
 public class IssueWebFacade {
 
-    private IssueService issueService;
-
-    private PublishingService publishingService;
-
-    private ArticleService articleService;
-
-    private SecurityService securityService;
-
-    private ReviewService reviewService;
-
+    private final IssueService issueService;
+    private final PublishingService publishingService;
+    private final ArticleService articleService;
+    private final SecurityService securityService;
+    private final ReviewService reviewService;
     private EmployeeService employeeService;
 
     /**
@@ -53,7 +49,6 @@ public class IssueWebFacade {
         this.employeeService = employeeService;
     }
 
-
     /**
      * Проверка статьи на допуск в публикацию.
      * @param article - {@link by.artezio.cloud.publishing.domain.Article}
@@ -72,10 +67,12 @@ public class IssueWebFacade {
 
 
     /**
-     * Метод для получения списка {@link IssueInfo} который содержит
-     * информацию о номерах доступные текущему пользователю.
+     * Метод для получения списка {@link IssueInfo} который содержит информацию
+     * о номерах доступные текущему пользователю.
+     *
      * @return список {@link IssueInfo}
-     * */
+     *
+     */
     public List<IssueInfo> getIssueInfoList() {
         User user = securityService.getCurrentUser();
         if (!user.isChiefEditor()) {
@@ -86,16 +83,16 @@ public class IssueWebFacade {
         if (user.isChiefEditor()) {
             publishingList = publishingService.getPublishingList();
         } else {
-            publishingList =
-                publishingService.getPublishingListByEmployeeId(user.getId());
+            publishingList
+                    = publishingService.getPublishingListByEmployeeId(user.getId());
         }
         for (PublishingDTO p : publishingList) {
-            List<IssueInfo> listForPublishing =
-                issueService.getIssueListByPublishingId(p.getId());
+            List<IssueInfo> listForPublishing
+                    = issueService.getIssueListByPublishingId(p.getId());
             for (IssueInfo issueInfo : listForPublishing) {
                 issueInfo.setPublishingTitle(p.getTitle());
-                int numberOfArticles =
-                    issueService.getArticleIdList(issueInfo.getIssueId()).size();
+                int numberOfArticles
+                        = issueService.getArticleIdList(issueInfo.getIssueId()).size();
                 issueInfo.setNumberOfArticle(numberOfArticles);
                 issueInfoList.add(issueInfo);
             }
@@ -104,13 +101,13 @@ public class IssueWebFacade {
     }
 
     /**
-     * Метод для получения списка который содержит
-     * информацию о журналах/газетах {@link PublishingDTO}
-     * доступные текущему пользователю. Предназначена лля
-     * выпадающего списка на форме добавления/редактирования
-     * номеров.
+     * Метод для получения списка который содержит информацию о журналах/газетах
+     * {@link PublishingDTO} доступные текущему пользователю. Предназначена лля
+     * выпадающего списка на форме добавления/редактирования номеров.
+     *
      * @return список {@link PublishingDTO}
-     * */
+     *
+     */
     public List<PublishingDTO> getPublishingList() {
         User user = securityService.getCurrentUser();
         if (!user.isChiefEditor()) {
@@ -121,11 +118,13 @@ public class IssueWebFacade {
     }
 
     /**
-     * Метод для получения dto {@link IssueForm}
-     * по id {@link by.artezio.cloud.publishing.domain.Issue}.
+     * Метод для получения dto {@link IssueForm} по id
+     * {@link by.artezio.cloud.publishing.domain.Issue}.
+     *
      * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}
      * @return {@link IssueForm}
-     * */
+     *
+     */
     public IssueView getIssueViewByIssueId(final int issueId) {
         User user = securityService.getCurrentUser();
         if (!user.isChiefEditor()) {
@@ -184,7 +183,8 @@ public class IssueWebFacade {
      * номеров.
      * @param publishingId - id {@link PublishingDTO}
      * @return список {@link by.artezio.cloud.publishing.domain.Topic}
-     * */
+     *
+     */
     public List<TopicShortInfo> getTopicListByPublishingId(final int publishingId) {
         return publishingService.getTopicsByPublishingId(publishingId);
     }
@@ -242,6 +242,7 @@ public class IssueWebFacade {
 
     /**
      * Метод для создания нового номера и сохранеия его в бд.
+     *
      * @param issueForm - {@link IssueForm}.
      * @return - {@link IssueOperationResult}.
      * */
@@ -261,7 +262,9 @@ public class IssueWebFacade {
     }
 
     /**
-     * Метод для обновления и сохранения в бд информации по уже существующему номеру.
+     * Метод для обновления и сохранения в бд информации по уже существующему
+     * номеру.
+     *
      * @param issueForm - {@link IssueForm}.
      * @param issueId - id {@link by.artezio.cloud.publishing.domain.Issue}.
      * @return - {@link IssueOperationResult}.
@@ -280,5 +283,4 @@ public class IssueWebFacade {
         result.setStatus("updated");
         return result;
     }
-
 }

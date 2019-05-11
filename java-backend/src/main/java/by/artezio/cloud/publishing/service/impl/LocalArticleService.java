@@ -38,7 +38,6 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
         this.articleDao = articleDao;
     }
 
-
     /**
      * @param coauthorsDao класс для взаимодействия с таблицей article_coauthors
      */
@@ -117,8 +116,8 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
 
     @Override
     public List<Article> getArticlesBytopicAndPublishingAndAuthorId(final int topicId,
-                                                                    final int publishingId,
-                                                                    final int authorId) {
+            final int publishingId,
+            final int authorId) {
         return articleDao.getArticleByTopicAndPublishingAndAuthorId(topicId, publishingId, authorId);
     }
 
@@ -175,7 +174,7 @@ public class LocalArticleService implements by.artezio.cloud.publishing.service.
     @Override
     public ArticleDto getArticleDto(final int articleId) {
         return articleToArticleDtoConverter.convert(
-            articleDao.getArticleByArticleId(articleId));
+                articleDao.getArticleByArticleId(articleId));
     }
 
     @Override
