@@ -26,6 +26,7 @@
 
     <bean class="org.springframework.context.support.ResourceBundleMessageSource" id="messageSource">
         <property name="basename" value="errorValidationMessage"/>
+        <property name="defaultEncoding" value="utf-8"/>
     </bean>
     
     <!--Interceptor для аутентификации пользователя. Раскомментировать для включения-->

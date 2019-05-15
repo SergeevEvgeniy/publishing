@@ -15,6 +15,8 @@ import by.artezio.cloud.publishing.service.converter.IssueToIssueFormConverter;
 import by.artezio.cloud.publishing.service.converter.IssueToIssueInfoConverter;
 import by.artezio.cloud.publishing.service.converter.IssueToIssueViewConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -109,6 +111,7 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Issue deleteIssueById(final int id) {
         Issue issue = issueDao.getIssueById(id);
         issueArticleDao.deleteIssueArticleByIssueId(id);
@@ -144,6 +147,7 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Integer createNewIssue(final IssueForm issueForm) {
         Issue issue = issueFormToIssueConverter.convert(issueForm);
         Integer issueId = issueDao.insertIssue(issue);
@@ -153,6 +157,7 @@ public class LocalIssueService implements IssueService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateIssue(final Integer issueId, final IssueForm issueForm) {
         Issue issue = issueFormToIssueConverter.convert(issueForm);
         issue.setId(issueId);

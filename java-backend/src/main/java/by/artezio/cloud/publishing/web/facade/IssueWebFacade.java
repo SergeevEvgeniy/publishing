@@ -3,8 +3,21 @@ package by.artezio.cloud.publishing.web.facade;
 import by.artezio.cloud.publishing.domain.Issue;
 import by.artezio.cloud.publishing.domain.Review;
 import by.artezio.cloud.publishing.domain.Employee;
-import by.artezio.cloud.publishing.dto.*;
-import by.artezio.cloud.publishing.service.*;
+import by.artezio.cloud.publishing.dto.IssueInfo;
+import by.artezio.cloud.publishing.dto.TopicShortInfo;
+import by.artezio.cloud.publishing.dto.PublishingDTO;
+import by.artezio.cloud.publishing.dto.AuthorFilter;
+import by.artezio.cloud.publishing.dto.ArticleFilter;
+import by.artezio.cloud.publishing.dto.ArticleDto;
+import by.artezio.cloud.publishing.dto.IssueView;
+import by.artezio.cloud.publishing.dto.IssueForm;
+import by.artezio.cloud.publishing.dto.IssueOperationResult;
+import by.artezio.cloud.publishing.dto.User;
+import by.artezio.cloud.publishing.service.EmployeeService;
+import by.artezio.cloud.publishing.service.ArticleService;
+import by.artezio.cloud.publishing.service.ReviewService;
+import by.artezio.cloud.publishing.service.PublishingService;
+import by.artezio.cloud.publishing.service.IssueService;
 import by.artezio.cloud.publishing.web.security.SecurityService;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -24,7 +37,7 @@ public class IssueWebFacade {
     private final ArticleService articleService;
     private final SecurityService securityService;
     private final ReviewService reviewService;
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     /**
      * @param issueService - {@link IssueService}
@@ -64,7 +77,6 @@ public class IssueWebFacade {
         }
         return false;
     }
-
 
     /**
      * Метод для получения списка {@link IssueInfo} который содержит информацию
@@ -231,12 +243,16 @@ public class IssueWebFacade {
         if (!user.isChiefEditor()) {
             securityService.checkIsEditor();
         }
-        Issue issue = issueService.deleteIssueById(issueId);
         IssueOperationResult result = new IssueOperationResult();
-        result.setNumber(issue.getNumber());
-        Integer publishingId = issue.getPublishingId();
-        result.setPublishingTitle(publishingService.getPublishingTitle(publishingId));
-        result.setStatus("deleted");
+        try {
+            Issue issue = issueService.deleteIssueById(issueId);
+            result.setNumber(issue.getNumber());
+            Integer publishingId = issue.getPublishingId();
+            result.setPublishingTitle(publishingService.getPublishingTitle(publishingId));
+            result.setStatus("deleted");
+        } catch (RuntimeException ex) {
+            result.setStatus("delete error");
+        }
         return result;
     }
 
@@ -251,13 +267,17 @@ public class IssueWebFacade {
         if (!user.isChiefEditor()) {
             securityService.checkIsEditor();
         }
-        Integer issueId = issueService.createNewIssue(issueForm);
         IssueOperationResult result = new IssueOperationResult();
+        result.setNumber(issueForm.getNumber());
         PublishingDTO publishingDTO = publishingService.getPublishingById(issueForm.getPublishingId());
         result.setPublishingTitle(publishingDTO.getTitle());
-        result.setNumber(issueForm.getNumber());
-        result.setIssueId(issueId);
-        result.setStatus("created");
+        try {
+            Integer issueId = issueService.createNewIssue(issueForm);
+            result.setIssueId(issueId);
+            result.setStatus("created");
+        } catch (RuntimeException ex) {
+            result.setStatus("created error");
+        }
         return result;
     }
 
@@ -274,13 +294,17 @@ public class IssueWebFacade {
         if (!user.isChiefEditor()) {
             securityService.checkIsEditor();
         }
-        issueService.updateIssue(issueId, issueForm);
-        PublishingDTO publishingDTO = publishingService.getPublishingById(issueForm.getPublishingId());
         IssueOperationResult result = new IssueOperationResult();
+        PublishingDTO publishingDTO = publishingService.getPublishingById(issueForm.getPublishingId());
         result.setNumber(issueForm.getNumber());
         result.setPublishingTitle(publishingDTO.getTitle());
         result.setIssueId(issueId);
-        result.setStatus("updated");
+        try {
+            issueService.updateIssue(issueId, issueForm);
+            result.setStatus("updated");
+        } catch (RuntimeException ex) {
+            result.setStatus("updated error");
+        }
         return result;
     }
 }

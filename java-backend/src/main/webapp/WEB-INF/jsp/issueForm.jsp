@@ -2,7 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tag" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ page pageEncoding="utf-8" contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 
 <tag:layout pageTitle="IssueForm">
 
