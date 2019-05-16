@@ -12,7 +12,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <tag:layout pageTitle="Статьи">
-    <c:if test="${isJournalist}">
+    <c:if test="${currentUser.isJournalist()}">
         <div class="text-right form-group">
             <a href="article/new" class="btn btn-success ">Добавить статью</a>
         </div>
@@ -24,7 +24,7 @@
             <th>Название</th>
             <th>Журнал/газета</th>
             <th>Рубрика</th>
-            <c:if test="${not isJournalist}">
+            <c:if test="${not currentUser.isJournalist()}">
                 <th>Автор</th>
             </c:if>
             <th>Соавторы</th>
@@ -37,7 +37,7 @@
                 <td><c:out value="${element.title}" /></td>
                 <td>${element.publishing}</td>
                 <td>${element.topic}</td>
-                <c:if test="${not isJournalist}">
+                <c:if test="${not currentUser.isJournalist()}">
                     <td>${element.authorFullName}</td>
                 </c:if>
                 <td>
@@ -48,17 +48,17 @@
                     </ul>
                 </td>
                     <td>
-                        <c:if test="${(isJournalist and element.published) or isChiefEditor}">
+                        <c:if test="${(currentUser.isJournalist() and element.published) or currentUser.isChiefEditor()}">
                             <a href="article/get/${element.articleId}" type="submit"
                                class="glyphicon glyphicon-eye-open btn btn-sm btn-success"></a>
                         </c:if>
 
-                        <c:if test="${isJournalist and not element.published}">
+                        <c:if test="${currentUser.isJournalist() and not element.published}">
                             <a href="article/update/${element.articleId}"
                                class="glyphicon glyphicon-edit btn btn-sm btn-success"></a>
                         </c:if>
 
-                        <c:if test="${isJournalist and not element.reviewed}">
+                        <c:if test="${currentUser.isJournalist() and not element.reviewed}">
                             <a href="article/delete/${element.articleId}" class="glyphicon glyphicon-trash btn btn-sm btn-danger"></a>
                         </c:if>
                     </td>

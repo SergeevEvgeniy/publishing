@@ -36,13 +36,12 @@ public class ArticleController {
     private final ArticleWebFacade articleFacade;
     private final SecurityService securityService;
 
-
     /**
-     * @param articleFacade   {@link ArticleWebFacade}
+     * @param articleFacade {@link ArticleWebFacade}
      * @param securityService {@link SecurityService}
      */
     public ArticleController(final ArticleWebFacade articleFacade,
-                             final SecurityService securityService) {
+            final SecurityService securityService) {
         this.articleFacade = articleFacade;
         this.securityService = securityService;
     }
@@ -55,12 +54,8 @@ public class ArticleController {
      */
     @GetMapping
     public final String articleList(final Model model) {
-        boolean isJournalist = articleFacade.isJournalist();
-        boolean isChiefEditor = articleFacade.isChiefEditor();
         List<ArticleInfo> data = articleFacade.getArticleInfoList();
         model.addAttribute("data", data);
-        model.addAttribute("isJournalist", isJournalist);
-        model.addAttribute("isChiefEditor", isChiefEditor);
         return "articleList";
     }
 
@@ -72,7 +67,7 @@ public class ArticleController {
      */
     @GetMapping(path = "/new")
     public final String createArticle(final Model model) {
-        articleFacade.isJournalist();
+        securityService.checkIsJournalist();
         ArticleForm articleForm = new ArticleForm();
         model.addAttribute("articleForm", articleForm);
         List<PublishingDTO> publishingDtoList = articleFacade.getPublishingDtoList();
@@ -90,13 +85,13 @@ public class ArticleController {
     /**
      * Сохранение статьи и открытие списка статей.
      *
-     * @param articleForm   {@link ArticleForm}
+     * @param articleForm {@link ArticleForm}
      * @param bindingResult {@link BindingResult}
      * @return страница со списком статей
      */
     @PostMapping(path = "/new")
     public final String saveArticle(@ModelAttribute("articleForm") @Valid final ArticleForm articleForm,
-                                    final BindingResult bindingResult) {
+            final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println("Ошибка привязки ArticleForm в методе ArticleController.saveArticle()");
         } else {
@@ -110,7 +105,7 @@ public class ArticleController {
      * Получение формы для редактирования статьи.
      *
      * @param articleId идентификатор статьи (берётся из URI)
-     * @param model     модель, в которую будет положена форма.
+     * @param model модель, в которую будет положена форма.
      * @return имя представления
      */
     @GetMapping(path = "/update/{articleId}")
@@ -122,7 +117,6 @@ public class ArticleController {
         List<EmployeeShortInfo> availableCoauthors = articleFacade.getAvailableCoauthors(form.getPublishingId());
         List<EmployeeShortInfo> currentCoauthors = articleFacade.getCurrentCoauthors(articleId);
         List<ReviewShortInfo> reviewShortInfos = articleFacade.getReviewShortInfos(articleId);
-
 
         for (int i = 0; i < availableCoauthors.size(); i++) {
             for (EmployeeShortInfo currentCoauthor : currentCoauthors) {
@@ -145,15 +139,15 @@ public class ArticleController {
     }
 
     /**
-     * @param articleId     id статьи
-     * @param articleForm   {@link ArticleForm}
+     * @param articleId id статьи
+     * @param articleForm {@link ArticleForm}
      * @param bindingResult {@link BindingResult}
      * @return страница со списком статей
      */
     @PostMapping(path = "/update/{articleId}")
     public final String updateArticle(@PathVariable("articleId") final Integer articleId,
-                                      @Valid final ArticleForm articleForm,
-                                      final BindingResult bindingResult) {
+            @Valid final ArticleForm articleForm,
+            final BindingResult bindingResult) {
         articleFacade.update(articleForm, articleId);
         return "redirect:/article";
     }
@@ -162,28 +156,27 @@ public class ArticleController {
      * Вернёт страницу со статьёй в режиме просмотра.
      *
      * @param articleId id статьи
-     * @param model     {@link Model}
+     * @param model {@link Model}
      * @return имя представления
      */
     @GetMapping(path = "/get/{articleId}")
     public final String getArticleView(@PathVariable("articleId") final int articleId,
-                                       final Model model) {
+            final Model model) {
         ArticleView articleView = articleFacade.getArticleViewById(articleId);
         model.addAttribute("model", articleView);
         return "articleView";
     }
 
-
     /**
      * Получение страницы для удаления статьи.
      *
      * @param articleId id статьи
-     * @param model     {@link Model}
+     * @param model {@link Model}
      * @return название представления для удаления статьи
      */
     @GetMapping(path = "/delete/{articleId}")
     public final String getDeleteArticlePage(@PathVariable final int articleId,
-                                             final Model model) {
+            final Model model) {
         if (articleFacade.isArticleExists(articleId)) {
             ArticleView view = articleFacade.getArticleViewById(articleId);
             model.addAttribute("article", view);
@@ -206,7 +199,6 @@ public class ArticleController {
         return "redirect:/article";
     }
 
-
     /**
      * @param publishingId id журнала
      * @return список рубрик для указанного журнала
@@ -228,14 +220,14 @@ public class ArticleController {
     }
 
     /**
-     * @param articleId  id статьи
+     * @param articleId id статьи
      * @param reviewerId id рецензента
      * @return json рецензия {@link ReviewShortInfo}
      */
     @GetMapping(value = "/review/{articleId}/{reviewerId}")
     @ResponseBody
     public ReviewShortInfo getReview(@PathVariable("articleId") final int articleId,
-                                     @PathVariable("reviewerId") final int reviewerId) {
+            @PathVariable("reviewerId") final int reviewerId) {
         return articleFacade.getReviewShortInfo(articleId, reviewerId);
     }
 }

@@ -292,25 +292,6 @@ public class ArticleWebFacade {
     }
 
     /**
-     * @return {@code true}, если текущий пользователь является главным
-     * редактором
-     */
-    public boolean isChiefEditor() {
-        return securityService.getCurrentUser().isChiefEditor();
-    }
-
-    /**
-     * @return {@code true}, если текущий пользователь является журналистом
-     */
-    public boolean isJournalist() {
-
-        return securityService
-                .getCurrentUser()
-                .getType()
-                .equals('J');
-    }
-
-    /**
      * Проверка, существует ли статья с таким id.
      *
      * @param articleId id статьи

@@ -14,6 +14,7 @@ public class User {
     private final String name;
     private final Character type;
     private final boolean isChiefEditor;
+    private final boolean isJournalist;
 
     /**
      *
@@ -24,6 +25,7 @@ public class User {
         name = employee.getFirstName() + " " + employee.getLastName();
         type = employee.getType();
         isChiefEditor = employee.isChiefEditor();
+        isJournalist = employee.getType().equals('J');
     }
 
     /**
@@ -58,4 +60,11 @@ public class User {
         return id;
     }
 
+    /**
+     *
+     * @return Boolean является ли пользователь журналистом
+     */
+    public boolean isJournalist() {
+        return isJournalist;
+    }
 }
